@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+:root {
+  /* Navy Blue - Primary */
+  --color-navy-900: #1A202C;
+  --color-navy-800: #2D3748;
+  
+  /* Gold - Accent */
+  --color-gold-500: #F59E0B;
+  --color-gold-400: #FBBF24;
+
+  /* Backgrounds */
+  --background: #ffffff;
+  --foreground: #1A202C; /* Navy 900 as default text */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  --color-navy-900: var(--color-navy-900);
+  --color-navy-800: var(--color-navy-800);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-400: var(--color-gold-400);
+
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-poppins);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
