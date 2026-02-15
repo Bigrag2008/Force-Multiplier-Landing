@@ -1,57 +1,87 @@
-import React from "react";
-import Section from "@/components/ui/Section";
-import { Award, Briefcase, Book } from "lucide-react";
-
-const Instructor: React.FC = () => {
-    return (
-        <Section bg="white">
-            <div className="grid md:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
-                {/* Placeholder Photo */}
-                <div className="order-2 md:order-1 relative">
-                    <div className="absolute top-4 left-4 w-full h-full border-2 border-gold-500 rounded-lg z-0 translate-x-4 translate-y-4"></div>
-                    <div className="relative z-10 bg-navy-100 rounded-lg aspect-[3/4] flex items-center justify-center overflow-hidden shadow-lg">
-                        <span className="text-6xl">👤</span>
-                        <div className="absolute bottom-0 w-full bg-navy-900/80 p-4 text-white text-center backdrop-blur-sm">
-                            <p className="font-bold">Your Instructor</p>
-                            <p className="text-xs text-gold-500 uppercase tracking-widest">Force Multiplier Founder</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="order-1 md:order-2">
-                    <h2 className="text-3xl md:text-4xl font-heading font-bold text-navy-900 mb-6">
-                        Who Created Force Multiplier?
-                    </h2>
-                    <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
-                        <p>
-                            Force Multiplier was created by [Your Name], an expert in administrative law and settling workplace disputes.
-                        </p>
-                        <p>
-                            After seeing countless employees lose winnable cases due to lack of knowledge, I built this comprehensive training system to level the playing field.
-                        </p>
-                        <p>
-                            My mission is simple: Make regulatory tactics accessible to individuals who can't afford expensive lawyers but deserve justice.
-                        </p>
-                    </div>
-
-                    <div className="mt-8 flex flex-col gap-4">
-                        <div className="flex items-center gap-3">
-                            <Briefcase className="w-5 h-5 text-gold-500" />
-                            <span className="font-bold text-navy-900">Former [Relevant Role]</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <Award className="w-5 h-5 text-gold-500" />
-                            <span className="font-bold text-navy-900">[X Years] Experience</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <Book className="w-5 h-5 text-gold-500" />
-                            <span className="font-bold text-navy-900">Author of [Book/Guide]</span>
-                        </div>
-                    </div>
-                </div>
+export default function Instructor() {
+  return (
+    <section className="py-20 bg-white">
+      <div className="container mx-auto px-4 max-w-6xl">
+        <div className="grid md:grid-cols-[300px_1fr] gap-12 items-start">
+          
+          {/* Creator Photo */}
+          <div className="text-center">
+            <img
+              src="/creator-photo.jpg"
+              alt="LaMont, Founder of Force Multiplier HQ"
+              className="w-64 h-64 rounded-full object-cover mx-auto shadow-xl border-4 border-indigo-600"
+            />
+          </div>
+          
+          {/* Creator Bio */}
+          <div>
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">About LaMont</h2>
+            <p className="text-lg text-indigo-600 mb-6 font-semibold">
+              Founder & CEO, Force Multiplier HQ
+            </p>
+            
+            <div className="space-y-4 text-gray-700 text-lg leading-relaxed">
+              <p>
+                Former college football athlete. B.S. Information Systems. Worked everywhere 
+                from warehouses to Amazon Web Services—DHL, 7-Eleven Corporate, AWS. 
+                Saw the same pattern everywhere: employees facing discrimination with no 
+                affordable path to fight back.
+              </p>
+              
+              <p>
+                The barrier was always the same. $10,000 for a lawyer most people don't have. 
+                So they quit, get fired, or accept injustice. That pattern needed to break.
+              </p>
+              
+              <p>
+                Spent three years systematically analyzing 500+ EEOC settlement outcomes. 
+                Found what wins, what loses, what gets $70k vs $20k. Built frameworks—The 
+                Evidence Hierarchy, Settlement Math, Regulatory Stacking—that turn legal 
+                knowledge into repeatable systems.
+              </p>
+              
+              <p>
+                Force Multiplier students have recovered millions in settlements without 
+                paying attorney fees. Individual Democracy isn't philosophy—it's proven methodology.
+              </p>
+              
+              <div className="mt-8 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 border-l-4 border-orange-500 rounded-lg">
+                <p className="text-xl italic text-gray-800">
+                  "From Dayton, Ohio—the birthplace of innovation. The Wright Brothers didn't 
+                  just dream about flight. They systematically experimented until they cracked 
+                  the code. That's what Force Multiplier does for workplace justice."
+                </p>
+              </div>
             </div>
-        </Section>
-    );
-};
+          </div>
+          
+        </div>
+      </div>
+    </section>
+  );
+}
+```
+```
+SAVE THIS:
+□ Scroll to bottom
+□ Commit message: "Update instructor bio with LaMont's story"
+□ Click "Commit changes"
+```
 
-export default Instructor;
+---
+
+# 🦸 STEP 3: UPDATE HERO.TSX (ADD YOUR LOGO)
+```
+FIND THE FILE:
+□ Click "Hero.tsx"
+□ Click pencil to edit
+
+LOOK FOR THE HERO SECTION
+You'll see something like:
+<section className="...">
+  <h1>...</h1>
+  <p>...</p>
+  <button>...</button>
+</section>
+
+ADD YOUR LOGO IMAGE AT THE TOP:
