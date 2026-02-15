@@ -1,6 +1,6 @@
 import React from "react";
-import Section from "@/components/ui/Section";
-import Button from "@/components/ui/Button";
+import Section from "./Section";
+import Button from "./Button";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 

@@ -1,6 +1,6 @@
 import React from "react";
-import Section from "@/components/ui/Section";
-import Accordion from "@/components/ui/Accordion";
+import Section from "./Section";
+import Accordion from "./Accordion";
 
 const FAQ: React.FC = () => {
     const faqItems = [

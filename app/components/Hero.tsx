@@ -1,6 +1,6 @@
 import React from "react";
-import Button from "@/components/ui/Button";
-import Section from "@/components/ui/Section";
+import Button from "./Button";
+import Section from "./Section";
 import { CheckCircle, Clock, FileText } from "lucide-react";
 import Link from "next/link";
 

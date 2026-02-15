@@ -1,5 +1,5 @@
 import React from "react";
-import Section from "@/components/ui/Section";
+import Section from "./Section";
 import { Star } from "lucide-react";
 
 const Testimonials: React.FC = () => {

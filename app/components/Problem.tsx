@@ -1,5 +1,5 @@
 import React from "react";
-import Section from "@/components/ui/Section";
+import Section from "./Section";
 import { Scale, Users, AlertCircle } from "lucide-react";
 
 const Problem: React.FC = () => {

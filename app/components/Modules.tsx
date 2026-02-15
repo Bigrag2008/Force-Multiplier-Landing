@@ -1,5 +1,5 @@
 import React from "react";
-import Section from "@/components/ui/Section";
+import Section from "./Section";
 import { BookOpen, Folder, Scale, Clock, DollarSign, AlertTriangle, Flag } from "lucide-react";
 
 const Modules: React.FC = () => {

@@ -1,5 +1,5 @@
 import React from "react";
-import Section from "@/components/ui/Section";
+import Section from "./Section";
 import { Users, TrendingUp, ShieldCheck } from "lucide-react";
 
 const SocialProof: React.FC = () => {
