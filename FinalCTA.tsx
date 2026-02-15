@@ -15,7 +15,7 @@ const FinalCTA: React.FC = () => {
                     Join <span className="text-gold-500 font-bold">300+ students</span> learning to win $40K-$60K settlements without hiring a lawyer.
                 </p>
 
-                <Link href="https://forcemultiplier.teachable.com/purchase" target="_blank">
+                <Link href="https://forcemultiplierhq.teachable.com/p/force-multiplier" target="_blank">
                     <Button variant="primary" size="xl" className="w-full md:w-auto px-12 py-5 text-xl shadow-gold-500/20 shadow-xl mb-8">
                         Enroll in Force Multiplier - $497
                     </Button>
@@ -41,3 +41,4 @@ const FinalCTA: React.FC = () => {
 };
 
 export default FinalCTA;
+
