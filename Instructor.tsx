@@ -61,27 +61,3 @@ export default function Instructor() {
   );
 }
 ```
-```
-SAVE THIS:
-□ Scroll to bottom
-□ Commit message: "Update instructor bio with LaMont's story"
-□ Click "Commit changes"
-```
-
----
-
-# 🦸 STEP 3: UPDATE HERO.TSX (ADD YOUR LOGO)
-```
-FIND THE FILE:
-□ Click "Hero.tsx"
-□ Click pencil to edit
-
-LOOK FOR THE HERO SECTION
-You'll see something like:
-<section className="...">
-  <h1>...</h1>
-  <p>...</p>
-  <button>...</button>
-</section>
-
-ADD YOUR LOGO IMAGE AT THE TOP:
