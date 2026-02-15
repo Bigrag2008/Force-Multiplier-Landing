@@ -9,7 +9,6 @@ export default function Hero() {
     <section className="relative bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 text-white py-20 overflow-hidden">
       <div className="container mx-auto px-4 max-w-6xl relative z-10">
         
-        {/* ADD THIS - YOUR LOGO */}
         <div className="text-center mb-8">
           <img
             src="/hero-image.jpg"
@@ -33,7 +32,6 @@ export default function Hero() {
             in 90-180 days.
           </p>
           
-          {/* CTA BUTTON */}
           
             href="https://forcemultiplierhq.teachable.com/p/force-multiplier"
             className="inline-block bg-orange-500 hover:bg-orange-600 text-white text-xl font-bold py-4 px-10 rounded-lg shadow-2xl transform hover:scale-105 transition-all duration-200"
@@ -47,12 +45,5 @@ export default function Hero() {
         </div>
       </div>
     </section>
-  );
+  )
 }
-```
-```
-    );
-};
-
-export default Hero;
-
