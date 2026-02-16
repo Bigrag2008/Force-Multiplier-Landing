@@ -23,7 +23,7 @@ export default function Instructor() {
             <div className="space-y-4 text-gray-700 text-lg leading-relaxed">
               <p>
                 Former college football athlete. B.S. Information Systems. Worked everywhere 
-                from warehouses to Amazon Web Services—DHL, 7-Eleven Corporate, AWS. 
+                from small company warehouses to Amazon Web Services—DHL, 7-Eleven Corporate, AWS. 
                 Saw the same pattern everywhere: employees facing discrimination with no 
                 affordable path to fight back.
               </p>
