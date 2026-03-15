@@ -1,8 +1,4 @@
 import React from "react"
-import Button from "./Button"
-import Section from "./Section"
-import { CheckCircle, Clock, FileText } from "lucide-react"
-import Link from "next/link"
 
 export default function Hero() {
   return (
@@ -25,7 +21,7 @@ export default function Hero() {
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-95">
             The proven system for navigating workplace discrimination, building ironclad evidence, and negotiating $40k-$70k settlements in 90-180 days.
           </p>
-          <a href="<script async data-uid="90ae105bce" src="https://forcemultiplier.kit.com/90ae105bce/index.js"></script>" className="inline-block bg-orange-500 hover:bg-orange-600 text-white text-xl font-bold py-4 px-10 rounded-lg shadow-2xl transform hover:scale-105 transition-all duration-200">
+          <a href="https://forcemultiplier.kit.com/90ae105bce" className="inline-block bg-orange-500 hover:bg-orange-600 text-white text-xl font-bold py-4 px-10 rounded-lg shadow-2xl transform hover:scale-105 transition-all duration-200">
             Enter Email for FREE PDF
           </a>
           <p className="mt-6 text-lg opacity-90">
