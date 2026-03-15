@@ -20,12 +20,14 @@ const LeadMagnet: React.FC = () => {
                         </p>
                     </div>
                     <div className="w-full md:w-auto flex-shrink-0 md:w-80">
-                        <Script
+
+                            <Script
                             async
-                            data-uid="YOUR_KIT_UID_HERE"
-                            src="YOUR_KIT_SCRIPT_URL_HERE"
+                            data-uid="90ae105bce"
+                            src="https://forcemultiplier.kit.com/90ae105bce/index.js"
                             strategy="lazyOnload"
                         />
+
                     </div>
                 </div>
             </Section>
