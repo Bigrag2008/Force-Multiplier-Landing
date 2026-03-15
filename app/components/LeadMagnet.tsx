@@ -1,7 +1,6 @@
 import React from "react";
 import Section from "./Section";
-import Button from "./Button";
-import { Download } from "lucide-react";
+import Script from "next/script";
 
 const LeadMagnet: React.FC = () => {
     return (
@@ -14,26 +13,19 @@ const LeadMagnet: React.FC = () => {
                         </div>
                         <h3 className="text-2xl font-bold text-navy-900 mb-2">Not Ready to Enroll? Start Here.</h3>
                         <p className="text-gray-600 mb-4">
-                            Get our free <strong>Evidence System Guide</strong> and learn the 5-Tier Documentation Hierarchy that wins 90% of cases.
+                            Get our free <strong>Evidence Hierarchy Guide</strong> and learn the 5-Tier Documentation Framework that wins 90% of cases.
                         </p>
                         <p className="text-xs text-gray-400">
                             We respect your privacy. Unsubscribe anytime.
                         </p>
                     </div>
-
-                    <div className="w-full md:w-auto flex-shrink-0">
-                        <form className="flex flex-col gap-3 w-full md:w-80">
-                            <input
-                                type="email"
-                                placeholder="Enter your email address"
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-navy-900 focus:border-transparent outline-none transition-all"
-                                required
-                            />
-                            <Button variant="secondary" size="md" className="w-full justify-center">
-                                <Download className="w-4 h-4 mr-2" />
-                                Download Free Guide
-                            </Button>
-                        </form>
+                    <div className="w-full md:w-auto flex-shrink-0 md:w-80">
+                        <Script
+                            async
+                            data-uid="YOUR_KIT_UID_HERE"
+                            src="YOUR_KIT_SCRIPT_URL_HERE"
+                            strategy="lazyOnload"
+                        />
                     </div>
                 </div>
             </Section>
