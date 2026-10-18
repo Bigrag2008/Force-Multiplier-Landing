@@ -46,7 +46,7 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 - [x] **8. `CAMPAIGN.md`: the Legacy campaign through the eras**
   Reconstruction → the Great Migration to Dayton → Redlining → Civil Rights → The Plants Close → Today. The same Owner wears a different face in each chapter.
 
-- [ ] **9. `ART_DIRECTION.md`: the look**
+- [x] **9. `ART_DIRECTION.md`: the look**
   - Palette and influences: AfriCOBRA's "Kool-Aid colors," 1970s Black Power poster art (as inspiration only), Jacob Lawrence and Romare Bearden, quilt geometry, hand-painted sign lettering, and Dayton funk record sleeves.
   - Components: Grandma's reading glasses (the lens), church hand fans (the character cards), real-paperwork deal cards, and bottle-cap tokens.
 
