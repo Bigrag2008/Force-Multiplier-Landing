@@ -142,7 +142,7 @@ The base box is a **75-card deal deck — 12 real, documented traps and 3 honest
 
 **The lens, physically:** the hidden second number is printed in cyan under a red camouflage hatch — a muddy blur to the naked eye. Hold up a **red lens** (red acetate, gel, even a red candy wrapper) and the red hatch washes out while the cyan darkens: the number appears. It's the real decoder-ink trick, and the **print-and-play kit is built so it works on a home inkjet tonight.** The deluxe/manufactured edition uses proper decoder registration — and a three-filter version (red / amber / blue) where each lens layer has its own physical reveal.
 
-*(`deck_cards.py` holds the full 75-card deck with levers. The earlier `The_Second_Number_PRINT_AND_PLAY.pdf` kit was built for the 86-card v2 rules — regenerate it from `deck_cards.py` and `RULES.md` before the next playtest so the lever keys, 15 honest deals and setup table are on the cards.)*
+*(Both exist now: `deck_cards.py` holds the full 75-card deck with levers, and `The_Second_Number_PRINT_AND_PLAY.pdf` is the complete v3 cut-and-play kit — cover, lens how-to and printer test strip, rulebook and quick reference, board, five player boards, all 75 deals with working reveal zones (the lever hidden in the red zone), 26 role/Owner/scenario/pattern cards with backs, a facilitator answer key, and a playtest log. Rebuild it any time with `python3 print_kit/build_print_and_play.py`.)*
 
 ## PATH TO REAL (so this isn't just a 4am dream)
 Honest version — a board game's hard 80% is *playtesting*, not the idea, and the idea is the rare part you already have:

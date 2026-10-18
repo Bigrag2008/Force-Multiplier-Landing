@@ -96,8 +96,10 @@ class Table:
 
     # ---- a live deal ----
     def show_card(self, pl, d, card):
-        print(f"\n  {DCOL[d]}{B}[{pl.name}] faces a deal in {d}{R}   "
-              + (f"{DIM}lever: {R}{LKEY[card['lever']]}" if card["lever"] else f"{DIM}lever: —{R}"))
+        # the lever is printed inside the red zone, so it takes Sight 1 to see it
+        lev=("" if pl.sight[d]<1 else f"   {DIM}lever: {R}{LKEY[card['lever']]}" if card["lever"]
+             else f"   {GREEN}honest deal — no lever{R}")
+        print(f"\n  {DCOL[d]}{B}[{pl.name}] faces a deal in {d}{R}{lev}")
         print(f"  {WHITE}{B}WHAT YOU SEE:{R} {WHITE}{card['front']}{R}")
         for n,label,text in self.g.visible(pl,d,card):
             if text: print(f"  {LCOL[n]}{label}:{R} {CREAM}{text}{R}")

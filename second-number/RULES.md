@@ -13,6 +13,7 @@ These rules match `sn_engine.py` exactly. If you change one, change the other, t
 - **The board:** five districts. Each has a Clarity track (0–3) and a Machine track (0–3).
 - Player boards with Trust (0–5), Corruption (0–6) and Sight (0–3 per district) tracks.
 - **A red decoder lens.** The deluxe edition adds amber and blue lenses.
+- About 40 small tokens (coins, beans or beads) for the tracks.
 
 ### Reading a Deal card
 | Part | What it is | You can read it at |
@@ -21,7 +22,9 @@ These rules match `sn_engine.py` exactly. If you change one, change the other, t
 | 🔴 Red | The real **cost** | Sight 1 in that district |
 | 🟠 Amber | The **clock**: the deadline or your rights window | Sight 2 |
 | 🔵 Blue | The **connection**: who's really behind it | Sight 3 |
-| 🔑 Lever icon (corner) | Which layer holds the leverage to **beat** it | — |
+| 🔑 Lever (inside the red zone) | Which layer holds the leverage to **beat** it, or "honest deal" | Sight 1 |
+
+**Read only what your Sight allows.** Hold the lens over the zones your Sight in that district unlocks, and no deeper. On your honor, and with the table watching.
 
 **Seeing is not beating.** Sight 1 tells you whether a deal is a trap or honest. To *negotiate* a trap down, you need Sight that reaches its **lever**: red (1), amber (2) or blue (3). Honest deals have no lever.
 

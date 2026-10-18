@@ -10,7 +10,7 @@ Each deal card:
   blue  : 🔵 the CONNECTION to the Underworld (Sight 3 reveals)
 
   lever : which layer holds the leverage to beat it (1 red · 2 amber · 3 blue).
-          Printed as a small colored key icon on the card's corner.
+          Printed inside the hidden red zone, so it takes Sight 1 to see it.
 
 Seeing is not the same as beating it. Sight 1 (red) tells you a deal is a trap.
 To NEGOTIATE it down you need Sight up to the card's lever layer.
