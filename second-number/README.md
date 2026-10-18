@@ -12,6 +12,7 @@ A cooperative board game about reading the hidden cost in every deal, and teachi
 | `chapters.py` | Campaign chapter content: Chapter 3, *The Map* (era decks, the League, the Appraiser). |
 | `The_Long_Ledger_Chapter3_The_Map.pdf` | The printable Chapter 3 envelope: rules, 30 era deals, chapter cards, lineage sheet, stickers. |
 | `print_kit/build_chapter_pack.py` | Rebuilds the Chapter 3 envelope. |
+| `web/` | **The online game:** its own Next.js site, playable in the browser. See `web/README.md` to run, play and deploy it. |
 | `COMMUNITY.md` | People, partners, permissions and the fact-check list. |
 | `deck_cards.py` | All card content: 76 deals (60 traps with levers + 16 honest), roles, Owners, scenarios, patterns, History, Commons places, the Dayton setting. |
 | `sn_engine.py` | The rules engine. The single source of truth. |
@@ -30,4 +31,4 @@ python3 balance_test.py                    # balance report; re-run after any ru
 python3 print_kit/build_print_and_play.py  # rebuild the print-and-play PDF (needs reportlab + pypdf)
 ```
 
-Python 3.8+, no dependencies.
+Python 3.8+, no dependencies. The online game (`web/`) needs Node.js 20+: `cd web && npm install && npm run dev`.

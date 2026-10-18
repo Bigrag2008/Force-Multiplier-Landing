@@ -75,6 +75,16 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 - [x] **17. Chapter 3 playable** in the terminal game.
 - [x] **18. The Chapter 3 envelope** (printable) and docs.
 
+## Part F: The online game
+
+- [x] **19. Its own website** (`web/`): a separate Next.js app, kept out of the landing site's build.
+- [x] **20. Content exported** from the Python source of truth to JSON.
+- [x] **21. The engine in TypeScript**, locked to the Python engine by 63 golden games.
+- [x] **22. The turn flow** for one device passed around the table.
+- [x] **23. The playable site:** board, lens, every decision, all three modes, phone layout; tested in a real browser.
+- [ ] **24. Online multiplayer:** rooms, each player on their own phone (needs a realtime service).
+- [ ] **25. Save and resume, a guided first game, illustrations.**
+
 ---
 
 ## Facts to verify locally before printing
