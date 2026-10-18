@@ -1,18 +1,22 @@
 # The Second Number
 
-A cooperative board game about reading the hidden cost in every deal, and teaching your whole block to read it too. Part of the Individual Democracy / Civic Armor universe.
+A cooperative board game about reading the hidden cost in every deal, and teaching your whole block to read it too. **West Dayton Edition:** set on the West Side of Dayton, Ohio, and built from Black American culture. Part of the Individual Democracy / Civic Armor universe.
 
 | File | What it is |
 |---|---|
 | `RULES.md` | The table rulebook (v3). Matches the engine rule for rule. |
 | `The_Second_Number_BOARD_GAME.md` | The design brief: vision, soul, roadmap. |
-| `deck_cards.py` | All card content: 75 deals (60 traps with levers + 15 honest), roles, Owners, scenarios, patterns. |
+| `ROADMAP.md` | The West Dayton Edition change list, one commit per item. |
+| `ART_DIRECTION.md` | The look: palette, influences, components, drawing people. |
+| `CAMPAIGN.md` | The Legacy campaign design, *The Long Ledger* (not yet built). |
+| `COMMUNITY.md` | People, partners, permissions and the fact-check list. |
+| `deck_cards.py` | All card content: 76 deals (60 traps with levers + 16 honest), roles, Owners, scenarios, patterns, History, Commons places, the Dayton setting. |
 | `sn_engine.py` | The rules engine. The single source of truth. |
 | `second_number_play.py` | Playable, colorized terminal edition (hotseat, 2–5 players, co-op or Overlord). |
 | `balance_test.py` | Plays thousands of computer games and reports whether the game is solved. |
 | `test_rules.py` | One check per rule, pinning `RULES.md` to the code. |
 | `balance_report.txt` | The latest balance run (1,500 games per row). |
-| `The_Second_Number_PRINT_AND_PLAY.pdf` | The 29-page print-and-play kit (v3). |
+| `The_Second_Number_PRINT_AND_PLAY.pdf` | The 36-page West Dayton print-and-play kit. |
 | `print_kit/build_print_and_play.py` | Rebuilds the kit from `deck_cards.py` and `RULES.md`. Re-run after any card or rule change. |
 
 ```bash
