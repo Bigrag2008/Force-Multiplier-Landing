@@ -178,6 +178,13 @@ When every district in a combination is at Pressure 2 or more, flip that Pattern
 ## Overlord mode (optional, 1 vs. many)
 One player *is* the Machine. There is no hidden Owner and no automatic Machine phase. Each round the Overlord takes the moves on the setup table (Extract +1 Pressure, Obscure −1 Clarity, Tempt −1 Trust), obeying the spread rule. After the Underworld opens, the Overlord may Obscure one woken, untraced district per round. Everything else is the same.
 
+## Campaign: *The Long Ledger* (prototype)
+The base game is also the first chapter you can play of a six-chapter Legacy campaign following one West Dayton family (see `CAMPAIGN.md`). **Chapter 3, *The Map* (1930s–1960s), is built and playable now**, with its own printed envelope:
+- **Setup:** swap in the era Housing and Lending decks; start both at Pressure 2 (REDLINING is active); the Owner is *The Appraiser*.
+- **The twist:** from round 2, while REDLINING is active, it tightens a second time every round.
+- **The League:** an action to sign. If every player signs in the same round, it forms: Housing −2 at once, Housing −1 every second round after, and Housing and Lending traps are beatable at Sight 1. If anyone hasn't signed by the Machine phase, the pledges fall apart.
+- **After the game:** fill in the Family Ledger and make the Family Decision.
+
 ## Scoring
 Win or lose, the most **Legendary** player is the one who lifted the most people. Legend comes only from studying, teaching, defusing, reaching and tracing, never from taking.
 

@@ -65,6 +65,14 @@ Each needs a source on file (an archive, a newspaper or an official site) before
 - [ ] Wilberforce University: founded 1856; bought by the AME Church in 1863.
 - [ ] Greenwood (1921): the massacre and the rebuilding.
 
+**Chapter 3 era cards** (`chapters.py`)
+- [ ] Blockbusting and contract selling: the "marked up by half or more" wording.
+- [ ] Redlined fire insurance; urban renewal payouts and highways through Black neighborhoods (and whether any Dayton specifics should be added).
+- [ ] *Shelley v. Kraemer* (1948) and the Fair Housing Act (1968).
+- [ ] FHA-era appraisal and underwriting rules grading Black neighborhoods down.
+- [ ] Small-loan company rates ("around 3% a month"); industrial burial insurance lapsing; wage assignments; salary buyers.
+- [ ] GI Bill home loans and their denial to many Black veterans.
+
 **Trap cards:** a financial-literacy reviewer re-checks all 60 traps' numbers and laws for the current year, in Ohio and federally.
 
 ## 6. Playtesting in Dayton

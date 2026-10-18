@@ -66,6 +66,15 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 - [x] **12. Final balance run and docs sync**
   A fresh `balance_report.txt`, plus `RULES.md`, the brief and the README all matching the build.
 
+## Part E: The campaign prototype
+
+- [x] **13. Revise `CAMPAIGN.md`:** a rubber-band Ledger, healing scars, Chapter 5's choice, Chapter 1 handled with care, a standalone ending, Family Decisions, and Falls redeemed across generations.
+- [x] **14. Chapter 3 content** (`chapters.py`): era Housing and Lending decks, the League, the Appraiser, and the Family Decision.
+- [x] **15. Chapter 3 in the engine**, with rule checks.
+- [x] **16. Chapter 3 balance:** 47–50% wins at every player count; organizing is worth +4 to +30 points.
+- [x] **17. Chapter 3 playable** in the terminal game.
+- [x] **18. The Chapter 3 envelope** (printable) and docs.
+
 ---
 
 ## Facts to verify locally before printing

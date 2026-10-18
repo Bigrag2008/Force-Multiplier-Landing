@@ -159,15 +159,15 @@ def card_frame(c,x,y,rgb,top,right,title_size=8):
     c.setFont("DV",6.5); c.drawRightString(x+CARD_W-10,y+CARD_H-18,right)
 
 # ================= deal cards =================
-def deal_card(c,x,y,d,i,card):
+def deal_card(c,x,y,d,i,card,era="",era_years=""):
     """A deal styled as real paperwork: a form number, ruled fine print, a signature line."""
     cid=f"{DABBR[d]}-{i+1:02d}"
-    card_frame(c,x,y,DCOL[d],d,f"FORM {cid}")
+    card_frame(c,x,y,DCOL[d],d,f"{era+' · ' if era else ''}FORM {cid}")
     ix=x+10; iw=CARD_W-20
     stroke(c,LGREY); c.setLineWidth(0.5); c.setDash(1.5,2)                  # perforation
     c.line(x+8,y+CARD_H-29,x+CARD_W-8,y+CARD_H-29); c.setDash()
     fill(c,GREY); c.setFont("DVB",5.4); c.drawString(ix,y+CARD_H-37,"WHAT YOU SEE")
-    c.setFont("DVI",5.4); c.drawRightString(x+CARD_W-10,y+CARD_H-37,Dk.DAYTON[d]["sub"])
+    c.setFont("DVI",5.4); c.drawRightString(x+CARD_W-10,y+CARD_H-37,era_years or Dk.DAYTON[d]["sub"])
     lines,size=fit_lines(card["front"],"DVB",8.4,iw,3,6.4)
     fill(c,INK); c.setFont("DVB",size); ty=y+CARD_H-47
     for ln in lines: c.drawString(ix,ty,ln); ty-=size+1.6
