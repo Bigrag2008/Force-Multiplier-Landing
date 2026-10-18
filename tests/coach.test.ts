@@ -19,7 +19,9 @@ function toAction(s: Session, pick: TurnPick): Action {
       const card = maxBy(cards, rank);
       return { k: "face", d: pick.d, card, choice: adviseDeal(g, p, pick.d, card).pick };
     }
-    case "teach": return { k: "teach", d: pick.d, t: g.players.find((x) => x.name === pick.t)!, response: true };
+    case "teach":
+      g.draw(pick.d); // the call-and-response card the UI shows
+      return { k: "teach", d: pick.d, t: g.players.find((x) => x.name === pick.t)!, response: true };
     case "reach": return { k: "reach", t: g.players.find((x) => x.name === pick.t)! };
     default: return pick as Action;
   }
@@ -36,6 +38,22 @@ function coached(mode: Mode, n: number, seed: number, scenario?: string) {
       case "fallen": s.fallenAct(g.machineAiMove(g.struck)); break;
       case "sousou": s.sousou(adviseSousou(s).pick, maxBy(DISTRICTS, (d) => g.pressure[d])); break;
       case "overlord": s.overlordAct(g.machineAiMove(g.struck)); break;
+      case "machine": s.nextRound(); break;
+    }
+  }
+  return s;
+}
+
+/** the same table played by the engine's default bot, for comparison */
+function botGame(mode: Mode, n: number, seed: number, scenario?: string) {
+  const s = new Session({ mode, roster: C.roster.slice(0, n), seed, scenario });
+  for (let step = 0; step < 5000 && s.phase !== "over"; step++) {
+    const g = s.g;
+    switch (s.phase) {
+      case "cookout": s.cookout(g.cookoutAi()); break;
+      case "turn": s.act(g.blockAi(s.player, "human")); break;
+      case "fallen": s.fallenAct(g.machineAiMove(g.struck)); break;
+      case "sousou": s.sousou(g.sousouAi()); break;
       case "machine": s.nextRound(); break;
     }
   }
@@ -112,21 +130,23 @@ describe("The Coach", () => {
     }
   });
 
-  it("wins more often than not when a table follows it", () => {
-    const results: Record<string, number> = {};
-    for (const mode of ["coop", "chapter"] as Mode[]) {
+  it("wins far more often than the default bot when a table follows it", () => {
+    // g.won only means the game is over; a block win is result === "BLOCK_WIN"
+    const rate = (mode: Mode, scenario: string | undefined, follow: boolean) => {
       let wins = 0;
-      const games = 60;
-      for (let i = 0; i < games; i++) {
-        const s = coached(mode, 2 + (i % 4), 1000 + i, mode === "coop" ? "The Audit" : undefined);
+      for (let i = 0; i < 120; i++) {
+        const s = follow ? coached(mode, 3, 1000 + i, scenario) : botGame(mode, 3, 1000 + i, scenario);
         expect(s.phase).toBe("over");
-        if (s.g.won) wins++;
+        if (s.g.result === "BLOCK_WIN") wins++;
       }
-      results[mode] = wins / games;
-    }
-    console.log("Coach win rates", results);
-    expect(results.coop).toBeGreaterThanOrEqual(0.5);
-    expect(results.chapter).toBeGreaterThanOrEqual(0.35);
+      return wins / 120;
+    };
+    const audit = rate("coop", "The Audit", true);
+    const chapter = rate("chapter", undefined, true);
+    console.log("Coach win rates", { audit, auditBot: rate("coop", "The Audit", false), chapter });
+    expect(audit).toBeGreaterThanOrEqual(0.7);
+    expect(audit).toBeGreaterThan(rate("coop", "The Audit", false) + 0.2);
+    expect(chapter).toBeGreaterThanOrEqual(0.3);
   });
 
   it("teaches the welcome first, then the deal lessons when a deal is open", () => {
