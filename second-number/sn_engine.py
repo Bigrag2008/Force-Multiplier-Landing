@@ -172,7 +172,8 @@ class Game:
             pl.flipped=True
             self.emit(f"  ⚠⚠ {pl.name} HAS FALLEN. The Machine now moves through them.")
 
-    def teach(self, pl, t, d):
+    def teach(self, pl, t, d, response=True):
+        """response: did the learner say the second number back? (call and response)"""
         free=(pl.role=="Translator") or pl.free_teach
         if pl.sight[d]<=t.sight[d]: self.emit(f"  {pl.name} can't teach {t.name} {d} — you can only teach what you read better."); return
         if not free and pl.trust<1: self.emit(f"  {pl.name} lacks Trust to teach."); return
@@ -180,7 +181,10 @@ class Game:
         if not free: pl.trust-=1
         elif pl.role!="Translator": pl.free_teach=False
         pl.legend+=2
-        self.emit(f"{pl.name} teaches {t.name} to read {d}. Sight {old}→{t.sight[d]}{' (free, Translator)' if free else ''}. Legend +2.")
+        self.emit(f"{pl.name} teaches {t.name} to read {d}. Sight {old}→{t.sight[d]}{' (free)' if free else ''}. Legend +2.")
+        if response:
+            pl.legend+=1; t.legend+=1
+            self.emit(f"  Call and response: {t.name} says the second number back. Legend +1 each.")
 
     def commons(self, pl, place="BARBERSHOP"):
         """+2 Trust, −1 Corruption, plus the place's bonus."""
@@ -427,7 +431,7 @@ class Game:
         k=a[0]
         if   k=="study":    self.study(pl,a[1])
         elif k=="face":     self.face(pl,a[1],a[2],a[3] if len(a)>3 else None)
-        elif k=="teach":    self.teach(pl,a[1],a[2])
+        elif k=="teach":    self.teach(pl,a[1],a[2],a[3] if len(a)>3 else True)
         elif k=="commons":  self.commons(pl, a[1] if len(a)>1 and a[1] else "BARBERSHOP")
         elif k=="reach":    self.reach(pl,a[1])
         elif k=="history":  self.history(pl,a[1])

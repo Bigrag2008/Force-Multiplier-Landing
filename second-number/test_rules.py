@@ -129,6 +129,11 @@ def test_green_book_waits_for_a_capture():
     g,p=game(); g.round=1; g.pressure["HEALTH"]=1
     g.m_extract("M","HEALTH"); assert g.pressure["HEALTH"]==2 and g.green_book
 
+def test_call_and_response():
+    g,p=game(); t=g.players[2]; p.sight["LABOR"]=2; p.trust=3
+    g.teach(p,t,"LABOR"); assert t.legend==1 and p.legend==3
+    t2=g.players[3]; g.teach(p,t2,"LABOR",response=False); assert t2.legend==0 and p.legend==5
+
 def test_clock_is_a_loss():
     g=E.new_game(seed=3); g.run_auto(max_rounds=1)
     assert g.result in ("MACHINE_WIN","BLOCK_WIN")

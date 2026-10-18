@@ -27,7 +27,7 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 - [x] **4. The Green Book**
   The block holds one copy. Once per game, when a Machine strike would capture a district, open it: that strike takes a safe route and lands nowhere.
 
-- [ ] **5. Call and response**
+- [x] **5. Call and response**
   When you Teach, read the red layer aloud and your learner says the second number back. If they do, you both gain +1 Legend.
 
 ## Part B: History and place

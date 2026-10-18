@@ -144,7 +144,15 @@ class Table:
             if k=="2": d=self.pick_district("face a deal where"); return self.human_face(pl,d) if d else None
             if k=="3":
                 t=self.pick_player([p for p in g.active() if p is not pl],"teach who"); d=t and self.pick_district()
-                return ("teach",t,d) if t and d else None
+                if not (t and d): return None
+                if pl.sight[d]<=t.sight[d]:
+                    print(f"  {GREY}You read {d} at Sight {pl.sight[d]}, {t.name} at {t.sight[d]}. "
+                          f"You can only teach what you read better.{R}"); return None
+                card=g.draw(d)
+                print(f"\n  {GOLD}{B}CALL AND RESPONSE{R}  {DIM}{pl.name}, read this aloud to {t.name}:{R}")
+                print(f"  {WHITE}\"{card['front']}\"{R}  {LCOL[1]}— the second number:{R} {CREAM}{card['red']}{R}")
+                said=ask(f"   Did {t.name} say the second number back? ({GOLDB}y{R}/n): ")!="n"
+                return ("teach",t,d,said)
             if k=="4":
                 places=list(E.PLACES)
                 for i,key in enumerate(places):

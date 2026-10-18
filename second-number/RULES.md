@@ -54,7 +54,7 @@ These rules match `sn_engine.py` exactly. If you change one, change the other, t
 |---|---|
 | **Study** | +1 Sight in one district. +1 Legend. |
 | **Face a deal** | Draw a card from a district, read what your Sight allows, then choose **TAKE / WALK / NEGOTIATE** (below). |
-| **Teach** | Give a teammate +1 Sight in a district where you read *better* than they do (never above your own Sight). Costs 1 Trust; free for the Translator. +2 Legend. |
+| **Teach** | Give a teammate +1 Sight in a district where you read *better* than they do (never above your own Sight). Costs 1 Trust; free for the Translator. +2 Legend. **Call and response:** draw a deal from that district and read its red layer aloud. If your learner says the second number back, you both gain +1 Legend. |
 | **Commons** | Gather at a place on the West Side: +2 Trust (max 5) and −1 Corruption, plus that place's bonus (below). |
 | **Reach** | Pull a Fallen player home: costs 2 Trust; they return with Corruption 4. +3 Legend. |
 | **Trace** *(Underworld open only)* | Needs Sight 3 in a woken district. Place a blue thread there. +2 Legend. |
