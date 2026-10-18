@@ -4,6 +4,16 @@ import type { Session } from "../game/session";
 
 type Run = (fn: (s: Session) => void) => void;
 
+/** The Coach is a helper: if its advice ever fails, it goes quiet instead of taking the game down. */
+export function safe<T>(fn: () => T): T | null {
+  try {
+    return fn();
+  } catch (e) {
+    console.error("The Coach stepped out:", e);
+    return null;
+  }
+}
+
 /** ring and badge for the button the Coach recommends */
 export const coachRing = "ring-2 ring-[#7CFFB2] ring-offset-2 ring-offset-night shadow-[0_0_18px_rgba(124,255,178,0.55)]";
 export function CoachBadge() {
@@ -14,7 +24,7 @@ export const picked = (on: boolean) => (on ? ` ${coachRing}` : "");
 /** The Coach's corner: the next rule worth learning right now, then what it would do and why. */
 export function CoachBox({ s, run, view = "board", sight = 0, advice }: { s: Session; run: Run; view?: "board" | "deal"; sight?: number; advice?: { title: string; why: string } | null }) {
   if (!s.coach) return null;
-  const lesson = lessonsDue(s, view, sight).find((l) => !s.seenLessons.has(l.id));
+  const lesson = safe(() => lessonsDue(s, view, sight).find((l) => !s.seenLessons.has(l.id)));
   if (!lesson && !advice) return null;
   return (
     <aside aria-label="The Coach" aria-live="polite" className="space-y-2 rounded-lg border border-[#7CFFB2]/50 bg-[#7CFFB2]/10 p-3 text-sm">
