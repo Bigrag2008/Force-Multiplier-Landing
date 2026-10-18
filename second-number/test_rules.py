@@ -76,6 +76,20 @@ def test_underworld_final_act():
         p.sight[d]=3; g.trace(p,d)
     assert g.can_expose(); g.expose_uw(p); assert g.result=="BLOCK_WIN"
 
+def test_sousou_pays_a_clean_hand():
+    g=E.new_game(seed=1, scenario="A Quiet Year", owner="The Algorithm", roster=E.ROSTER[:4])
+    for p in g.players: p.trust=2
+    g.pressure["LENDING"]=3
+    g.throw_hand(pick=lambda pl:"LENDING")
+    assert g.pressure["LENDING"]==1 and g.pot==0 and g.circle==1
+    assert all(p.corruption==0 and p.trust==1 for p in g.players)
+    assert g.players[0].legend==1                                          # first hand goes to the first seat
+
+def test_sousou_pot_carries_over():
+    g=E.new_game(seed=1, scenario="A Quiet Year", owner="The Algorithm", roster=E.ROSTER[:2])
+    g.pressure["HEALTH"]=2; g.throw_hand(); assert g.pot==2 and g.pressure["HEALTH"]==2
+    g.throw_hand(); assert g.pot==0 and g.pressure["HEALTH"]==0
+
 def test_clock_is_a_loss():
     g=E.new_game(seed=3); g.run_auto(max_rounds=1)
     assert g.result in ("MACHINE_WIN","BLOCK_WIN")

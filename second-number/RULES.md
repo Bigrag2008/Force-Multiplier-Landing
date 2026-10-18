@@ -39,7 +39,7 @@ These rules match `sn_engine.py` exactly. If you change one, change the other, t
 | Players | Actions per turn | Machine strikes per round | Overlord moves per round |
 |---|---|---|---|
 | 2 | 3 | 1 | 2 |
-| 3 | 3 | 2 | 3, or 4 on even rounds |
+| 3 | 3 | 3 | 3, or 4 on even rounds |
 | 4 | 2 | 1 | 2 |
 | 5 | 2 | 2 | 3 |
 
@@ -58,14 +58,16 @@ These rules match `sn_engine.py` exactly. If you change one, change the other, t
 | **Trace** *(Underworld open only)* | Needs Sight 3 in a woken district. Place a blue thread there. +2 Legend. |
 | **Expose** *(once enough threads are traced)* | You win. |
 
-**2. Check.** If total Clarity across the board is **9 or more**, the Underworld cracks open (see below).
+**2. The Sou-Sou (optional).** The table may throw a hand (see below).
 
-**3. The Machine moves.**
+**3. Check.** If total Clarity across the board is **9 or more**, the Underworld cracks open (see below).
+
+**4. The Machine moves.**
 - It **strikes** the unwoken district closest to waking: +1 Pressure. It makes as many strikes as the table says, **each on a different district**.
 - It **muddies** the strongest unwoken district: −1 Clarity.
 - Then the Scenario, the hidden Owner, and any Patterns act.
 
-**4. Check for loss.** You lose if **2 districts are captured** (Pressure 3), if **everyone has Fallen**, or if **round 12 ends**. The clock is the Machine's best friend.
+**5. Check for loss.** You lose if **2 districts are captured** (Pressure 3), if **everyone has Fallen**, or if **round 12 ends**. The clock is the Machine's best friend.
 
 ### The spread rule
 The Machine, the Overlord and the Fallen together may act on **each district at most once per round**. The Machine spreads; it doesn't snipe.
@@ -90,6 +92,14 @@ TAKE on a trap really is the fastest way to save a district one strike from capt
 - If the Machine wins with you Fallen, you "won the board" and earned **0 Legend**. You don't win by becoming the thing you fight.
 
 ---
+
+## The Sou-Sou: the honest payday loan
+A rotating savings circle, the way families and church members have long pooled money (also called a susu, "the hand," or "the club"). At the end of the block's turns, the table may **throw a hand**:
+- Everyone who has Trust puts **1 Trust** into the pot.
+- When the pot reaches **4**, the next player in the circle (going around the table) **takes the hand**: clear **2 Pressure** from any district, even a captured one. That debt is paid off clean, with **no Corruption**. +1 Legend to the player who takes the hand.
+- Leftover Trust stays in the pot for next time.
+
+The Sou-Sou does what the payday shortcut does, slower and together, and nobody Falls for it.
 
 ## The Underworld: the final act
 When total Clarity reaches 9, flip the Owner card. **It fights in the open:**

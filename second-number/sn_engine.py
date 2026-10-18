@@ -42,10 +42,11 @@ NEG_COST        = 1    # Trust spent to NEGOTIATE
 START_TRUST     = 2
 MAX_TRUST       = 5    # Trust is spent, not hoarded
 MAX_ROUNDS      = 12   # the amber clock: survive past this and the Machine still wins
+SOUSOU_HAND     = 4    # Trust in the Sou-Sou pot that pays out one hand
 # per player count: actions per turn, Machine hits per round, Overlord actions per round
 # (tuned with balance_test.py so every count plays in the 40–70% band)
 ACTIONS         = {1:4, 2:3, 3:3, 4:2, 5:2}
-MACHINE_HITS    = {1:1, 2:1, 3:2, 4:1, 5:2}
+MACHINE_HITS    = {1:1, 2:1, 3:3, 4:1, 5:2}
 OVERLORD_MOVES  = {1:1.5, 2:2, 3:3.5, 4:2, 5:3}   # x.5 = one extra move on even rounds
 
 class Player:
@@ -65,6 +66,7 @@ class Game:
         self.round=0; self.uw_open=False; self.owner_shown=overlord
         self.threads=set(); self.struck=set()   # districts extracted from this round
         self.covered=False                     # the Owner's one cover-up per round
+        self.pot=0; self.circle=0              # the Sou-Sou: Trust in the pot, whose hand is next
         self.won=False; self.result=None; self.log=[]; self.patterns_seen=set()
         self.human_overlord=False
         self.scenario = scenario or random.choice(list(SCENARIOS))
@@ -165,6 +167,31 @@ class Game:
     def commons(self, pl):
         pl.trust=min(MAX_TRUST,pl.trust+2); back=1 if pl.corruption>0 else 0; pl.corruption=max(0,pl.corruption-1)
         self.emit(f"{pl.name} gathers at the Commons. Trust +2{', Corruption −1' if back else ''}.")
+
+    # ---- the Sou-Sou: a rotating savings circle, the honest payday loan ----
+    def next_hand(self):
+        act=self.active()
+        return act[self.circle%len(act)] if act else None
+
+    def throw_hand(self, pick=None):
+        """Everyone who can puts 1 Trust in the pot. A full pot pays the next player's hand:
+        clear 2 Pressure from one district, no Corruption. pick(pl) -> district."""
+        payers=[p for p in self.active() if p.trust>=1]
+        for p in payers: p.trust-=1
+        self.pot+=len(payers)
+        self.emit(f"The block throws a hand in the Sou-Sou: {len(payers)} Trust in. Pot {self.pot}/{SOUSOU_HAND}.")
+        if self.pot<SOUSOU_HAND: return
+        pl=self.next_hand(); self.circle+=1; self.pot-=SOUSOU_HAND
+        d=(pick(pl) if pick else None) or max(DISTRICTS,key=lambda x:self.pressure[x])
+        before=self.pressure[d]; self.pressure[d]=max(0,before-2); pl.legend+=1
+        self.emit(f"  It's {pl.name}'s hand. The debt in {d} gets paid off clean: "
+                  f"Pressure {before}→{self.pressure[d]}, no Corruption. Legend +1.")
+
+    def sousou_ai(self):
+        """Throw when there's debt to pay and nobody goes broke putting in."""
+        act=self.active()
+        return (any(0<self.pressure[d] for d in DISTRICTS)
+                and all(p.trust>=2 for p in act))
 
     def reach(self, pl, t):
         if pl.trust<2: self.emit(f"  {pl.name} needs 2 Trust to reach someone."); return
@@ -434,6 +461,7 @@ class Game:
                         if self.won or pl.flipped: break
                 if self.won: break
             if self.won: break
+            if self.sousou_ai(): self.throw_hand()
             self.end_of_block_turns()
             if self.machine_phase(): break
         if not self.result: self.time_up()

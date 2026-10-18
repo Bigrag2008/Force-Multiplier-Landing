@@ -80,6 +80,7 @@ class Table:
                   + (f"   Owner: {B}{g.owner}{R} {DIM}{E.OWNERS[g.owner]}{R}" if g.owner_shown and not g.overlord else ""))
         else:
             print(f"  {DIM}Underworld cracks at total Clarity {E.UNDERWORLD_AT} (now {g.total_clarity()}).{R}")
+        print(f"  {GOLD}Sou-Sou pot{R} {bar(g.pot,E.SOUSOU_HAND,'●',GOLD)}  {DIM}next hand: {g.next_hand().name if g.active() else '—'}{R}")
         print(line)
         if header: print("  "+header)
 
@@ -146,6 +147,22 @@ class Table:
         if k=="3": t=self.pick_player(g.active(),"tempt who"); return ("m_tempt",t,None) if t else ("pass",None,None)
         return ("pass",None,None)
 
+    # ---- the Sou-Sou ----
+    def sousou(self):
+        g=self.g; act=g.active()
+        if not act: return
+        human=any(p.name in self.humans for p in act)
+        if not human:
+            if g.sousou_ai(): g.throw_hand()
+            return
+        nxt=g.next_hand()
+        print(f"\n  {GOLD}{B}THE SOU-SOU{R}  {DIM}pot {g.pot}/{E.SOUSOU_HAND} · next hand: {nxt.name}{R}")
+        if ask(f"   Throw a hand? Everyone with Trust puts in 1. ({GOLDB}y{R}/n): ")!="y": return
+        def pick(pl):
+            print(f"   {pl.name} takes the hand: clear 2 Pressure, no Corruption.")
+            return self.pick_district("pay off which district") or max(D,key=lambda x:g.pressure[x])
+        g.throw_hand(pick)
+
     # ---- the round ----
     def player_turn(self, pl):
         g=self.g; human=pl.name in self.humans
@@ -173,7 +190,7 @@ class Table:
                 self.player_turn(pl)
                 if g.won: break
             if g.won: break
-            g.end_of_block_turns(); self.flush(); pause()
+            self.sousou(); g.end_of_block_turns(); self.flush(); pause()
             self.board(RED+"— THE MACHINE MOVES —"+R)
             ov=g.ov(); human_ov=ov is not None and ov.name in self.humans
             g.machine_phase((lambda: self.machine_menu(ov)) if human_ov else None)

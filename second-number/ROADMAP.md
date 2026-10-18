@@ -8,7 +8,7 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 
 ## Part A: Mechanics from the culture
 
-- [ ] **1. The Sou-Sou** (also called a susu, "the hand," or "the club")
+- [x] **1. The Sou-Sou** (also called a susu, "the hand," or "the club")
   A rotating savings circle. At the end of the block's turns the table may throw a hand: everyone who can puts in 1 Trust. When the pot reaches the hand size, the next player in the circle takes it and clears 2 Pressure from any district, with **no Corruption**. It's the honest version of the payday shortcut.
 
 - [ ] **2. Commons places, at West Dayton landmarks**
