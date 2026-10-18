@@ -1,35 +1,15 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google"; // Import standard Google Fonts
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const poppins = Poppins({
-  variable: "--font-poppins",
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "Force Multiplier - Workplace Discrimination Settlement System",
-  description: "Win $40,000-$60,000 settlements without hiring a lawyer. The step-by-step system for individual democracy.",
+  title: "The Second Number — West Dayton Edition",
+  description: "A cooperative game about reading the hidden cost in every deal, and teaching your whole block to read it too.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${poppins.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body className="min-h-screen antialiased">{children}</body>
     </html>
   );
 }

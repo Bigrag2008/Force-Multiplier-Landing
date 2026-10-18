@@ -1,34 +1,34 @@
 @import "tailwindcss";
 
+/* West Dayton palette (ART_DIRECTION.md) */
 :root {
-  /* Navy Blue - Primary */
-  --color-navy-900: #1A202C;
-  --color-navy-800: #2D3748;
-  
-  /* Gold - Accent */
-  --color-gold-500: #F59E0B;
-  --color-gold-400: #FBBF24;
-
-  /* Backgrounds */
-  --background: #ffffff;
-  --foreground: #1A202C; /* Navy 900 as default text */
+  --after-hours: #1B1530;
+  --program: #F6EEDC;
+  --funk-gold: #F2B632;
+  --lending: #3FA34D;
+  --housing: #E03C31;
+  --labor: #1F7AE0;
+  --health: #8E3BB8;
+  --education: #F28C1B;
+  --layer-red: #E63946;
+  --layer-amber: #E0A526;
+  --layer-blue: #2F8FD8;
+  --ink: #1b1b1f;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  
-  --color-navy-900: var(--color-navy-900);
-  --color-navy-800: var(--color-navy-800);
-  --color-gold-500: var(--color-gold-500);
-  --color-gold-400: var(--color-gold-400);
-
-  --font-sans: var(--font-inter);
-  --font-heading: var(--font-poppins);
+  --color-night: var(--after-hours);
+  --color-program: var(--program);
+  --color-gold: var(--funk-gold);
+  --color-lending: var(--lending);
+  --color-housing: var(--housing);
+  --color-labor: var(--labor);
+  --color-health: var(--health);
+  --color-education: var(--education);
+  --color-ink: var(--ink);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
+  background: var(--after-hours);
+  color: var(--program);
 }
