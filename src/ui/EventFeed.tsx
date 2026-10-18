@@ -11,7 +11,10 @@ function tone(line: string) {
 
 export function EventFeed({ s, version }: { s: Session; version: number }) {
   const end = useRef<HTMLDivElement>(null);
-  useEffect(() => end.current?.scrollIntoView({ block: "nearest" }), [version]);
+  // braces matter: newer browsers return a Promise from scrollIntoView, and React would call it as a cleanup
+  useEffect(() => {
+    end.current?.scrollIntoView({ block: "nearest" });
+  }, [version]);
   const lines = s.g.log.slice(-60);
   const offset = s.g.log.length - lines.length;
   return (
