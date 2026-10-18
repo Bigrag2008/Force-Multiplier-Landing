@@ -147,6 +147,32 @@ def test_dayton_scenarios():
     assert g.pressure["HEALTH"]==2 and g.neg_cost("HEALTH")==2 and g.neg_cost("LABOR")==1
     p.sight["HEALTH"]=3; p.trust=2; g.face(p,"HEALTH","NEGOTIATE",card(lever=1)); assert p.trust==0
 
+def test_chapter_the_map_setup():
+    g=E.new_game(seed=1, chapter="THE_MAP")
+    assert g.pressure["HOUSING"]==2 and g.pressure["LENDING"]==2
+    assert any(n=="REDLINING" for _,n,_ in g.active_patterns())            # active from round 1
+    assert g.owner=="The Lobbyist" and g.owner_face=="The Appraiser" and g.scenario.startswith("Chapter 3")
+    assert g.draw("HOUSING") in g.deck["HOUSING"] and g.deck["LABOR"] is Dk.DECK["LABOR"]
+
+def test_the_league_forms_and_lowers_the_levers():
+    g=E.new_game(seed=1, chapter="THE_MAP", roster=E.ROSTER[:2]); a,b=g.players
+    a.trust=b.trust=2; g.sign_league(a); assert not g.league_formed
+    g.sign_league(a); assert len(g.league)==1                              # one signature each
+    g.sign_league(b); assert g.league_formed and g.pressure["HOUSING"]==0
+    a.sight["LENDING"]=1; a.trust=2; g.pressure["LENDING"]=2
+    g.face(a,"LENDING","NEGOTIATE",card(lever=3)); assert g.pressure["LENDING"]==1   # blue lever beaten at Sight 1
+
+def test_no_league_outside_the_chapter():
+    g,p=game(); p.trust=3; g.sign_league(p); assert not g.league and p.trust==3
+
+def test_chapter_result_writes_the_ledger():
+    g=E.new_game(seed=1, chapter="THE_MAP"); g.result="BLOCK_WIN"
+    g.clarity["HEALTH"]=E.WAKE; g.pressure["HOUSING"]=0; g.league_formed=True
+    r=g.chapter_result()
+    assert r["won"] and r["ledger"]==3 and r["rebuilt"]==["HEALTH"] and "The Contract Buyers League" in r["unlocks"]
+    g.result="MACHINE_WIN"; g.pressure["LABOR"]=3; r=g.chapter_result()
+    assert r["ledger"]==-3 and r["rally"] and r["scarred"]==["LABOR"]
+
 def test_clock_is_a_loss():
     g=E.new_game(seed=3); g.run_auto(max_rounds=1)
     assert g.result in ("MACHINE_WIN","BLOCK_WIN")

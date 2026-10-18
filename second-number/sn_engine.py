@@ -20,6 +20,7 @@ No I/O at import; methods mutate state and append plain-text events to self.log.
 """
 import random
 import deck_cards as D
+import chapters as CH
 
 DISTRICTS = list(D.DECK.keys())
 ROLES     = dict(D.ROLES)
@@ -61,8 +62,9 @@ class Player:
         self.free_teach = False; self.shop_around = False; self.practice = False   # Commons set-ups, this turn only
 
 class Game:
-    def __init__(self, overlord=False, scenario=None, owner=None, verbose=False, seed=None):
+    def __init__(self, overlord=False, scenario=None, owner=None, verbose=False, seed=None, chapter=None):
         if seed is not None: random.seed(seed)
+        self.chapter=CH.CHAPTERS[chapter] if chapter else None
         self.overlord = overlord; self.verbose = verbose
         self.clarity  = {d:0 for d in DISTRICTS}
         self.pressure = {d:0 for d in DISTRICTS}
@@ -76,12 +78,18 @@ class Game:
         self.use_green_book=lambda d: True     # front-ends can ask the table instead
         self.won=False; self.result=None; self.log=[]; self.patterns_seen=set()
         self.human_overlord=False
-        self.scenario = scenario or random.choice(list(SCENARIOS))
+        ch=self.chapter
+        self.scenario = (f"Chapter {ch['number']}: {ch['title']}" if ch else scenario or random.choice(list(SCENARIOS)))
+        self.deck = {d:(ch["decks"].get(d,D.DECK[d]) if ch else D.DECK[d]) for d in DISTRICTS}
+        self.league=set(); self.league_formed=False                 # chapter 3: the Contract Buyers League
+        if ch:
+            for d,p in ch["pressure"].items(): self.pressure[d]=p
         for d,p in {"The Eviction Wave":{"HOUSING":2},"The Closure":{"EDUCATION":3},
                     "The Plants Close":{"LABOR":2},"The Hospital Closes":{"HEALTH":2}}.get(self.scenario,{}).items():
             self.pressure[d]=p
         self.grace = 1 if self.scenario=="The Audit" else 0
-        self.owner = "The Overlord" if overlord else (owner or random.choice(list(OWNERS)))
+        self.owner = "The Overlord" if overlord else (ch["owner"] if ch else owner or random.choice(list(OWNERS)))
+        self.owner_face = ch["face"] if ch and not overlord else self.owner          # the Owner's era face
         self.players=[]
 
     # ---- helpers ----
@@ -103,6 +111,30 @@ class Game:
     def can_trace(self,pl,d):
         return self.uw_open and pl.sight[d]>=3 and self.clarity[d]>=WAKE and d not in self.threads
     def can_expose(self): return self.uw_open and len(self.threads)>=self.threads_needed()
+    def lever(self, d, card):
+        """The League reads contracts together: Housing and Lending traps beatable at Sight 1."""
+        if self.league_formed and d in ("HOUSING","LENDING") and card["trap"]: return min(card["lever"],1)
+        return card["lever"]
+
+    # ---- the League (Chapter 3): sign the pledge to withhold together ----
+    def has_league(self): return bool(self.chapter and self.chapter.get("league"))
+    def league_needed(self): return max(2,len(self.active()))
+
+    def sign_league(self, pl):
+        if not self.has_league() or self.league_formed:
+            self.emit("  There's no League to sign right now."); return
+        if pl.name in self.league: self.emit(f"  {pl.name} has already signed."); return
+        if pl.trust<1: self.emit(f"  {pl.name} needs 1 Trust to sign the pledge."); return
+        pl.trust-=1; self.league.add(pl.name); pl.legend+=1
+        self.emit(f"{pl.name} signs the League pledge: we withhold together. "
+                  f"Signatures {len(self.league)}/{self.league_needed()}. Legend +1.")
+        if len(self.league)>=self.league_needed():
+            self.league_formed=True; before=self.pressure["HOUSING"]
+            self.pressure["HOUSING"]=max(0,before-2)
+            self.emit(f"✦ THE LEAGUE FORMS. Housing Pressure {before}→{self.pressure['HOUSING']}. "
+                      f"The families read their contracts together: every Housing and Lending trap can now be "
+                      f"negotiated with Sight 1.")
+
     def neg_cost(self, d):
         return NEG_COST+(1 if self.scenario=="The Hospital Closes" and d=="HEALTH" else 0)
     def take_cost(self):
@@ -122,7 +154,7 @@ class Game:
         self.emit(f"{pl.name} studies {d}{' (practiced at Adventure Central)' if g==2 else ''}. "
                   f"Sight now {pl.sight[d]}/3. Legend +1.")
 
-    def draw(self, d): return random.choice(D.DECK[d])
+    def draw(self, d): return random.choice(self.deck[d])
 
     def start_turn(self, pl):
         pl.free_teach=False; pl.shop_around=False; pl.practice=False
@@ -130,12 +162,12 @@ class Game:
     def deals_for(self, pl, d):
         """The deal(s) a player looks at: two if they shopped at Gem City Market this turn."""
         if pl.shop_around:
-            pl.shop_around=False; return random.sample(D.DECK[d],2)
+            pl.shop_around=False; return random.sample(self.deck[d],2)
         return [self.draw(d)]
 
     def face(self, pl, d, choice, card=None):
         """Face a live deal. choice in TAKE/WALK/NEGOTIATE."""
-        card=card or self.draw(d); trap=card["trap"]; lever=card["lever"]; see=pl.sight[d]
+        card=card or self.draw(d); trap=card["trap"]; lever=self.lever(d,card); see=pl.sight[d]
         self.emit(f"{pl.name} faces a deal in {d}: \"{card['front']}\"  → {choice}")
         if choice=="TAKE":
             if not trap:
@@ -284,7 +316,7 @@ class Game:
     def expose_uw(self, pl):
         if not self.can_expose():
             self.emit(f"  Not enough threads traced to expose the Owner ({len(self.threads)}/{self.threads_needed()})."); return
-        self.emit(f"{pl.name} drags the UNDERWORLD into the light. One Owner — {self.owner}. It was always one machine.")
+        self.emit(f"{pl.name} drags the UNDERWORLD into the light. One Owner — {self.owner_face}. It was always one machine.")
         self.won=True; self.result="BLOCK_WIN"
 
     # ================= MACHINE / FALLEN / OVERLORD =================
@@ -398,11 +430,12 @@ class Game:
 
     def reveal_owner(self):
         self.owner_shown=True
-        self.emit(f"⚑ THE UNDERWORLD CRACKS OPEN. The Owner is {self.owner} — {OWNERS[self.owner]}")
+        text=self.chapter["face_text"] if self.chapter else f"{self.owner} — {OWNERS[self.owner]}"
+        self.emit(f"⚑ THE UNDERWORLD CRACKS OPEN. The Owner is {text}")
         self.emit(f"  Trace {self.threads_needed()} threads (Sight 3 in a woken district) and expose it before it buries you.")
         if self.owner=="The Lobbyist":
             awake=[d for d in DISTRICTS if self.clarity[d]>=WAKE]
-            if awake: d=random.choice(awake); self.clarity[d]=1; self.emit(f"  ✖ The Lobbyist re-captures {d}.")
+            if awake: d=random.choice(awake); self.clarity[d]=1; self.emit(f"  ✖ {self.owner_face} re-captures {d}.")
 
     def open_underworld(self):
         self.uw_open=True
@@ -445,6 +478,7 @@ class Game:
         elif k=="history":  self.history(pl,a[1])
         elif k=="trace":    self.trace(pl,a[1])
         elif k=="expose_uw":self.expose_uw(pl)
+        elif k=="league":   self.sign_league(pl)
         elif k=="m_extract":self.m_extract(pl.name,a[2])
         elif k=="m_obscure":self.m_obscure(pl.name,a[2])
         elif k=="m_tempt":  self.m_tempt(pl.name,a[1])
@@ -505,6 +539,9 @@ class Game:
             if pl.role=="Elder" and not pl.elder_used: return ("history",d,None)
             if pl.sight[d]>=1 or style!="never": return self.bot_face(pl,d,style)
             return ("study",d,None)
+        # Chapter 3: sign the League pledge — collective action first
+        if self.has_league() and not self.league_formed and pl.name not in self.league and pl.trust>=1:
+            return ("league",None,None)
         # final act: get someone to Sight 3 in a woken, untraced district
         if self.uw_open:
             open_d=[d for d in DISTRICTS if self.clarity[d]>=WAKE and d not in self.threads]
@@ -569,14 +606,31 @@ class Game:
         if not self.result: self.time_up()
         return self.result
 
+    def chapter_result(self):
+        """What this game writes into the Family Ledger (CAMPAIGN.md)."""
+        won=self.result=="BLOCK_WIN"
+        awake=[d for d in DISTRICTS if self.clarity[d]>=WAKE]
+        captured=[d for d in DISTRICTS if self.pressure[d]>=CAPTURE]
+        falls=sum("HAS FALLEN" in l for l in self.log); reaches=sum("pulls them home" in l for l in self.log)
+        ledger=(2+len(awake)) if won else (-2-len(captured))
+        ledger+=reaches-falls
+        redlining=any(n=="REDLINING" for _,n,_ in self.active_patterns())
+        unlocks=[]
+        if self.chapter:
+            unlocks+=self.chapter["unlocks_always"]
+            if self.league_formed and not redlining: unlocks+=self.chapter["unlocks_if_league_broke_redlining"]
+        return dict(won=won, ledger=ledger, rebuilt=awake, scarred=captured, falls=falls, reaches=reaches,
+                    league=self.league_formed, redlining_broken=not redlining, unlocks=unlocks,
+                    rally=not won)                      # the community rallies after a loss
+
     def time_up(self):
         self.won=True; self.result="MACHINE_WIN"
         self.emit("⏳ The clock ran out. The Machine doesn't need to win — it only needs you to run out of time.")
 
 ROSTER=[("Marcus","Translator"),("Nia","Student"),("Simone","Elder"),("Zay","Veteran"),("Dre","Organizer")]
 
-def new_game(overlord=False, scenario=None, owner=None, verbose=False, seed=None, roster=None):
-    g=Game(overlord=overlord, scenario=scenario, owner=owner, verbose=verbose, seed=seed)
+def new_game(overlord=False, scenario=None, owner=None, verbose=False, seed=None, roster=None, chapter=None):
+    g=Game(overlord=overlord, scenario=scenario, owner=owner, verbose=verbose, seed=seed, chapter=chapter)
     g.players=[Player(n,r) for n,r in (roster or ROSTER)]
     if g.scenario=="The Plants Close":
         for p in g.players: p.trust=1
