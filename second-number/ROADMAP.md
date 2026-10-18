@@ -43,7 +43,7 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 
 ## Part C: Design documents
 
-- [ ] **8. `CAMPAIGN.md`: the Legacy campaign through the eras**
+- [x] **8. `CAMPAIGN.md`: the Legacy campaign through the eras**
   Reconstruction → the Great Migration to Dayton → Redlining → Civil Rights → The Plants Close → Today. The same Owner wears a different face in each chapter.
 
 - [ ] **9. `ART_DIRECTION.md`: the look**
