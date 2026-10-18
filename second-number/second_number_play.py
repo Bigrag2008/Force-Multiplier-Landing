@@ -160,6 +160,23 @@ class Table:
         if k=="3": t=self.pick_player(g.active(),"tempt who"); return ("m_tempt",t,None) if t else ("pass",None,None)
         return ("pass",None,None)
 
+    # ---- the Cookout ----
+    def call_cookout(self):
+        g=self.g; act=g.active()
+        if g.cookout_used or not act or max(g.pressure.values())>=CAPTURE-1: return False
+        if not any(p.name in self.humans for p in act):
+            if g.cookout_ai(): g.cookout(); self.flush(); return True
+            return False
+        self.board(f"{GOLD}— round {g.round} —{R}")
+        if ask(f"\n  {GOLD}{B}Call the COOKOUT?{R} {DIM}(once per game: no actions this round; everyone +2 Trust, "
+               f"−1 Corruption, and Sight in one district up to the table's best){R} (y/{GOLDB}n{R}): ")!="y": return False
+        picks={}
+        for p in act:
+            d,gain=g.cookout_gain(p)
+            print(f"   {p.name}: best catch-up is {d} (+{gain}).")
+            picks[p.name]=self.pick_district(f"{p.name} catches up in") or d
+        g.cookout(picks); self.flush(); pause(); return True
+
     # ---- the Sou-Sou ----
     def sousou(self):
         g=self.g; act=g.active()
@@ -198,8 +215,9 @@ class Table:
         g=self.g; intro(g)
         while g.round<E.MAX_ROUNDS and not g.won:
             g.round+=1; g.struck=set(); g.covered=False
+            feast=self.call_cookout()
             for pl in g.players:
-                if pl.role=="Overlord": continue
+                if pl.role=="Overlord" or (feast and not pl.flipped): continue
                 self.player_turn(pl)
                 if g.won: break
             if g.won: break

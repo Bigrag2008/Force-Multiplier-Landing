@@ -70,6 +70,7 @@ class Game:
         self.covered=False                     # the Owner's one cover-up per round
         self.pot=0; self.circle=0              # the Sou-Sou: Trust in the pot, whose hand is next
         self.kitchen_used=False                # Grandma's table feeds the block once a game
+        self.cookout_used=False                # the Cookout: once a game, a whole round together
         self.won=False; self.result=None; self.log=[]; self.patterns_seen=set()
         self.human_overlord=False
         self.scenario = scenario or random.choice(list(SCENARIOS))
@@ -216,6 +217,32 @@ class Game:
         before=self.pressure[d]; self.pressure[d]=max(0,before-2); pl.legend+=1
         self.emit(f"  It's {pl.name}'s hand. The debt in {d} gets paid off clean: "
                   f"Pressure {before}→{self.pressure[d]}, no Corruption. Legend +1.")
+
+    # ---- the Cookout: once per game, the whole round is spent together ----
+    def cookout_gain(self, pl):
+        """The district where this player gains most by reading off the best reader at the table."""
+        best={d:max(p.sight[d] for p in self.active()) for d in DISTRICTS}
+        d=max(DISTRICTS,key=lambda x:(best[x]-pl.sight[x], self.clarity[x]>=WAKE))
+        return d, best[d]-pl.sight[d]
+
+    def cookout(self, picks=None):
+        """No block actions this round. Everyone +2 Trust, −1 Corruption, and raises their
+        Sight in one district to the table's best there. picks: {player name: district}."""
+        self.cookout_used=True
+        self.emit("🍖 THE COOKOUT. Everybody's invited. Nobody works this round — the block eats, laughs, and compares paperwork.")
+        best={d:max(p.sight[d] for p in self.active()) for d in DISTRICTS}
+        for pl in self.active():
+            pl.trust=min(MAX_TRUST,pl.trust+2); pl.corruption=max(0,pl.corruption-1); pl.legend+=1
+            d=(picks or {}).get(pl.name) or self.cookout_gain(pl)[0]
+            old=pl.sight[d]; pl.sight[d]=max(old,best[d])
+            self.emit(f"  {pl.name}: Trust +2, Corruption −1, Legend +1"
+                      + (f", Sight in {d} {old}→{pl.sight[d]}." if pl.sight[d]>old else "."))
+
+    def cookout_ai(self):
+        """Call it when the table's knowledge is lopsided enough to be worth a whole round."""
+        if self.cookout_used or max(self.pressure.values())>=CAPTURE-1: return False
+        act=self.active(); gain=sum(self.cookout_gain(p)[1] for p in act)
+        return gain>=len(act)*self.actions()*0.75
 
     def sousou_ai(self):
         """Throw when there's debt to pay and nobody goes broke putting in."""
@@ -498,9 +525,12 @@ class Game:
     def run_auto(self, max_rounds=MAX_ROUNDS, style="careful"):
         while self.round<max_rounds and not self.won:
             self.round+=1; self.struck=set(); self.covered=False
+            feast=self.cookout_ai()
+            if feast: self.cookout()
             for pl in self.players:
                 if pl.role=="Overlord": continue
                 if pl.flipped: self.fallen_turn(pl, self.actions())
+                elif feast: continue
                 else:
                     self.start_turn(pl)
                     for _ in range(self.actions()):

@@ -46,6 +46,8 @@ These rules match `sn_engine.py` exactly. If you change one, change the other, t
 ---
 
 ## A round
+**0. The Cookout (once per game).** At the start of a round the table may call the Cookout instead of taking turns (see below).
+
 **1. Block turns.** Each player in turn takes their actions, choosing from these (repeats allowed):
 
 | Action | What it does |
@@ -103,6 +105,13 @@ Every Commons action happens somewhere. You get the base effect plus the place's
 | **Adventure Central** | Wesleyan MetroPark | Your next Study this turn gives +2 Sight. |
 | **Gem City Market** | the co-op grocery on Salem Avenue | Your next deal this turn: draw 2, face 1. |
 | **Grandma's Kitchen Table** | the house everybody ends up at | Once per game: every player gets +2 Trust. |
+
+## The Cookout: once per game
+Call it at the start of any round, unless a district is one strike from capture. **Nobody takes block actions that round**; the whole block shows up, eats, and compares paperwork. Each player:
+- gets +2 Trust, −1 Corruption and +1 Legend, and
+- raises their Sight in **one district** to the best Sight anyone at the table has there.
+
+The Fallen don't come; the Machine still moves through them, and the Machine phase happens as usual. Call it when what one of you knows needs to become what all of you know.
 
 ## The Sou-Sou: the honest payday loan
 A rotating savings circle, the way families and church members have long pooled money (also called a susu, "the hand," or "the club"). At the end of the block's turns, the table may **throw a hand**:

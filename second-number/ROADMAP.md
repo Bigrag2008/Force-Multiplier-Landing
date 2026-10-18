@@ -21,8 +21,8 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
   | Gem City Market (the co-op grocery on Salem Avenue) | Your next deal this turn: draw 2, face 1. |
   | Grandma's kitchen table | Once per game: every player gets +2 Trust. |
 
-- [ ] **3. The Cookout**
-  Once per game, the table calls it at the start of a round. Nobody takes normal actions that round. Everyone gets +2 Trust and −1 Corruption, and each player raises their Sight in one district to the best Sight anyone at the table has there. The Machine still moves.
+- [x] **3. The Cookout**
+  Once per game, the table calls it at the start of a round. Nobody takes normal actions that round. Everyone gets +2 Trust, −1 Corruption and +1 Legend, and each player raises their Sight in one district to the best Sight anyone at the table has there. The Machine still moves.
 
 - [ ] **4. The Green Book**
   The block holds one copy. Once per game, play it when the Machine strikes: that strike takes a safe route and lands nowhere.

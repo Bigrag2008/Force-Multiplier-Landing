@@ -113,6 +113,13 @@ def test_sousou_pot_carries_over():
     g.pressure["HEALTH"]=2; g.throw_hand(); assert g.pot==2 and g.pressure["HEALTH"]==2
     g.throw_hand(); assert g.pot==0 and g.pressure["HEALTH"]==0
 
+def test_cookout_shares_the_best_sight():
+    g=E.new_game(seed=1, scenario="A Quiet Year", owner="The Algorithm", roster=E.ROSTER[:3])
+    a,b,c=g.players; a.sight["HOUSING"]=3; b.corruption=2; c.trust=4
+    g.cookout(picks={b.name:"HOUSING",c.name:"HOUSING"})
+    assert b.sight["HOUSING"]==3 and c.sight["HOUSING"]==3 and b.corruption==1 and c.trust==E.MAX_TRUST
+    assert g.cookout_used
+
 def test_clock_is_a_loss():
     g=E.new_game(seed=3); g.run_auto(max_rounds=1)
     assert g.result in ("MACHINE_WIN","BLOCK_WIN")
