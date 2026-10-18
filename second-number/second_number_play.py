@@ -9,6 +9,7 @@ balance tester measures — the two can't drift).
   python3 second_number_play.py --nocolor  play (plain)
   python3 second_number_play.py --auto     watch a computer-played demo
   python3 second_number_play.py --auto --overlord
+  python3 second_number_play.py --auto --map       watch Chapter 3 of the campaign, The Map
 
 Read the machine. Teach the block. Crack the Underworld. Don't become it.
 Part of the Individual Democracy / Civic Armor universe.
@@ -87,6 +88,10 @@ class Table:
                   + (f"   Owner: {B}{g.owner}{R} {DIM}{E.OWNERS[g.owner]}{R}" if g.owner_shown and not g.overlord else ""))
         else:
             print(f"  {DIM}Underworld cracks at total Clarity {E.UNDERWORLD_AT} (now {g.total_clarity()}).{R}")
+        if g.has_league():
+            print(f"  {GOLD}{B}THE LEAGUE{R} "
+                  + (f"{GREEN}formed — Housing −1 every 2nd round; Housing & Lending traps beatable at Sight 1{R}" if g.league_formed
+                     else f"{DIM}{len(g.league)}/{g.league_needed()} signed this round — everyone must sign before the Machine moves{R}"))
         print(f"  {GOLD}Sou-Sou pot{R} {bar(g.pot,E.SOUSOU_HAND,'●',GOLD)}  {DIM}next hand: {g.next_hand().name if g.active() else '—'}{R}"
               f"   {GREEN if g.green_book else GREY}📗 Green Book {'ready' if g.green_book else 'used'}{R}"
               f"   {GOLD if not g.cookout_used else GREY}🍖 Cookout {'ready' if not g.cookout_used else 'had'}{R}")
@@ -136,6 +141,8 @@ class Table:
         if any(p.flipped for p in g.blk()): opts.append(f"{GOLDB}5{R})Reach a Fallen")
         if pl.role=="Elder" and not pl.elder_used: opts.append(f"{GOLD}h{R})History")
         if g.uw_open: opts.append(f"{CYAN}6{R})Trace a thread")
+        if g.has_league() and not g.league_formed and pl.name not in g.league:
+            opts.append(f"{GOLDB}L{R})Sign the League pledge ({len(g.league)}/{g.league_needed()})")
         if g.can_expose(): opts.append(f"{GOLD}{B}8{R})EXPOSE THE UNDERWORLD (win)")
         opts.append(f"{DIM}0)Pass{R}")
         print("   "+"   ".join(opts))
@@ -165,6 +172,7 @@ class Table:
             if k=="h" and pl.role=="Elder": d=self.pick_district("whose History"); return ("history",d,None) if d else None
             if k=="6" and g.uw_open: d=self.pick_district("trace where"); return ("trace",d,None) if d else None
             if k=="8" and g.can_expose(): return ("expose_uw",None,None)
+            if k=="l" and g.has_league() and not g.league_formed and pl.name not in g.league: return ("league",None,None)
             if k=="0": return ("pass",None,None)
 
     def machine_menu(self, who):
@@ -249,7 +257,7 @@ class Table:
     def finish(self):
         g=self.g; self.board()
         if g.result=="BLOCK_WIN":
-            print("\n"+GOLD+"★"*72+R); print(f"  {B}{GOLD}THE BLOCK WINS.{R}  Owner exposed: {B}{g.owner}{R}. It was always one machine.")
+            print("\n"+GOLD+"★"*72+R); print(f"  {B}{GOLD}THE BLOCK WINS.{R}  Owner exposed: {B}{g.owner_face}{R}. It was always one machine.")
             w=[p for p in g.blk() if not p.flipped]
             if w:
                 m=max(w,key=lambda p:p.legend)
@@ -262,15 +270,37 @@ class Table:
                 print(RED+wrap(f"{fallen[0].name} won the board as the Machine — and earned 0 Legend. "
                                "The Owner just wore their face. You win nothing by becoming it.")+R)
             print(RED+"✖"*72+R)
+        if g.chapter: self.ledger()
         print(f"\n  {DIM}How high did you climb before you turned into the thing you were fighting?{R}")
+
+    def ledger(self):
+        """Chapter end: what this game writes into the Family Ledger (CAMPAIGN.md)."""
+        g=self.g; r=g.chapter_result(); ch=g.chapter
+        print(f"\n  {GOLD}{B}THE FAMILY LEDGER — Chapter {ch['number']}: {ch['title']}{R}")
+        print(f"  Ledger {GOLD if r['ledger']>=0 else RED}{r['ledger']:+d}{R}   "
+              f"{DIM}(win/loss, awake or captured districts, Falls −1, Reaches +1){R}")
+        if r["rebuilt"]: print(f"  {GREEN}Rebuilt (or heal a Scar):{R} {', '.join(r['rebuilt'])}")
+        if r["scarred"]: print(f"  {RED}Scarred:{R} {', '.join(r['scarred'])}")
+        print(f"  The League {'formed' if r['league'] else 'never formed'} · REDLINING {'broken' if r['redlining_broken'] else 'still standing'}")
+        print(f"  {GOLD}History unlocked:{R} {', '.join(r['unlocks'])}")
+        if r["rally"]: print(f"  {GREEN}The community rallies:{R} next chapter, everyone starts with +1 Trust and one free Commons action.")
+        print(f"\n  {GOLD}{B}FAMILY DECISION{R}\n"+CREAM+wrap(ch["decision"])+R)
+        print(f"  {DIM}Write it on the lineage sheet.{R}")
 
 def intro(g):
     cls()
     print(f"\n{GOLD}{B}      THE SECOND NUMBER{R}")
     print(f"{CREAM}      read the machine · wake the block · don't become it{R}")
     print(f"{DIM}      {E.D.EDITION} — the block is the West Side.{R}\n")
-    print("  "+((RED+"OVERLORD MODE — one player IS the Machine."+R) if g.overlord
-                else f"{CREAM}Scenario: {B}{g.scenario}{R} — {E.SCENARIOS[g.scenario]}"))
+    if g.chapter:
+        ch=g.chapter
+        print(f"  {GOLD}{B}THE LONG LEDGER · Chapter {ch['number']}: {ch['title']}{R} {DIM}({ch['era']}){R}")
+        print(CREAM+wrap(ch["intro"],"  ")+R)
+        print(f"  {RED}{B}The twist:{R} "+CREAM+wrap(ch["twist"],"  ").strip()+R)
+        print(f"  {GOLD}{B}{ch['league']['name']}:{R} "+CREAM+wrap(ch["league"]["text"],"  ").strip()+R)
+    else:
+        print("  "+((RED+"OVERLORD MODE — one player IS the Machine."+R) if g.overlord
+                    else f"{CREAM}Scenario: {B}{g.scenario}{R} — {E.SCENARIOS[g.scenario]}"))
     print(f"  {DIM}Seeing isn't beating: Sight 1 shows a trap; beating it takes Sight up to its lever.{R}")
     print(f"  {DIM}Wake districts → crack the Underworld at Clarity {E.UNDERWORLD_AT} → trace {g.threads_needed()} blue threads → expose the Owner.{R}")
     print(f"  {DIM}Lose if 2 districts are captured, everyone Falls, or round {E.MAX_ROUNDS} ends.{R}\n")
@@ -279,20 +309,22 @@ def intro(g):
 def main():
     if AUTO:
         random.seed(int(next((a for a in sys.argv if a.isdigit()),"5")))
-        g=E.new_game(overlord=("--overlord" in sys.argv), roster=E.ROSTER[:4])
+        g=E.new_game(overlord=("--overlord" in sys.argv), roster=E.ROSTER[:4],
+                     chapter="THE_MAP" if "--map" in sys.argv else None)
         Table(g,set()).run(); return
     while True:
         cls(); print("\n"+GOLD+"═"*72+R); print(f"  {B}{GOLD}THE  SECOND  NUMBER{R}   {CREAM}a cooperative game of reading the machine{R}")
         print(GOLD+"═"*72+R)
         print(f"\n  {GOLDB}1{R}) Co-op      — the block vs the Machine")
         print(f"  {GOLDB}2{R}) Overlord   — one player IS the Machine, 1-vs-many")
+        print(f"  {GOLDB}3{R}) Campaign   — The Long Ledger, Chapter 3: The Map (1930s–1960s)")
         print(f"  {DIM}q) Quit{R}\n")
         ch=ask("  choose: ")
         if ch=="q": print("  Stay sharp out there. 🔋"); return
-        if ch not in ("1","2"): continue
+        if ch not in ("1","2","3"): continue
         try: k=max(2,min(5,int(ask("  How many players on the block (2–5)? ") or "4")))
         except ValueError: k=4
-        g=E.new_game(overlord=(ch=="2"), roster=random.sample(E.ROSTER,k))
+        g=E.new_game(overlord=(ch=="2"), roster=random.sample(E.ROSTER,k), chapter="THE_MAP" if ch=="3" else None)
         humans={p.name for p in g.blk()}
         if g.overlord and ask(f"  Who plays the Overlord?  {GOLDB}1{R}) a person   {GOLDB}2{R}) the computer: ")=="1":
             humans.add(g.ov().name)
