@@ -22,11 +22,14 @@ npm run dev        # then open http://localhost:3000
 To run the production build instead: `npm run build && npm start`.
 
 ## How to play
+**First time?** Choose **Learn to play** on the home page. It starts a guided three-player game with the Coach: on every decision, the Coach glows on the move it would make and says why, and each rule is explained the first time it comes up. You can always choose your own move.
+
 1. Open the site and choose **Play now**.
 2. **Set the table:** choose a mode, then the number of players (2–5), each player's name and role, and (in co-op) a scenario. Start with *The Audit* or *A Quiet Year*.
    - **Co-op:** the block against the Machine.
    - **Overlord:** one player is the Machine, or the computer is.
    - **Campaign:** *The Long Ledger*, Chapter 3: *The Map*.
+   - **Coach me as we play** is on by default; untick it to play without hints. The 🧑🏾‍🏫 Coach box in the game's header switches it on or off mid-game.
 3. **Take turns on one device.** The action panel shows whose turn it is and what they can do. Pass the device on when your turn ends.
 4. **Read deals with the glasses.** When you face a deal, drag Grandma's red reading glasses over the card to read the layers your Sight has unlocked, or press **Put glasses on**. Layers you haven't unlocked stay locked.
 5. **Between turns** the game asks the table about the **Sou-Sou** and, at the start of a round, the **Cookout**, then shows what the Machine did.
@@ -47,7 +50,7 @@ The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of tr
 |---|---|
 | `npm run content` | Re-export every card, place, scenario, chapter and tuning constant from `game/` to `src/content/content.json`. |
 | `npm run golden` | Record 63 complete games from the Python engine (all modes, player counts, bot styles, scenarios and Owners) to `tests/golden.json`. |
-| `npm test` | Replay every golden game in TypeScript (each log line and the final state must match), plus 38 tests that drive the browser turn flow through whole games. |
+| `npm test` | Replay every golden game in TypeScript (each log line and the final state must match), 38 tests that drive the browser turn flow through whole games, and 5 Coach tests: it never changes the game or draws a card, never peeks at hidden layers, recommends only legal moves, and a table that follows it wins far more often than the default bot. |
 | `npm run lint` / `npm run typecheck` | ESLint and TypeScript. |
 
 **After any rules or card change:** edit the Python in `game/`, then run `npm run content`, `npm run golden` and `npm test`. If a test fails, mirror the change in `src/engine/engine.ts`.
@@ -55,16 +58,17 @@ The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of tr
 ## Layout
 | Path | What |
 |---|---|
-| `app/` | Website pages: home, `/play`, `/how-to-play`. |
+| `app/` | Website pages: home, `/play`, `/learn` (the guided game; `?seed=` replays one), `/how-to-play`. |
 | `src/engine/` | The rules engine (TypeScript port), its content types and the shared RNG. |
 | `src/game/session.ts` | The round-by-round flow: who acts next, and what the table is asked. |
-| `src/ui/` | The board, players, deal card and lens, action panels, end screen. |
+| `src/game/coach.ts` | The Coach: the recommended move with its reason, and the lessons, all read-only. |
+| `src/ui/` | The board, players, deal card and lens, action panels, the Coach box, end screen. |
 | `scripts/` | Content export, golden-game recorder, the Python twin of the shared RNG. |
-| `tests/` | Parity and session tests. |
+| `tests/` | Parity, session and Coach tests. |
 | `game/` | The game itself (see above). |
 
 ## Next steps
 - **Online multiplayer:** each player joins a room from their own phone. This needs a small realtime service (for example PartyKit, Supabase Realtime, or a Node server on Fly.io); the engine and turn flow already run anywhere JavaScript does.
-- Save and resume a game in progress; a guided first game; sound and the art direction's illustrations.
+- Save and resume a game in progress; sound and the art direction's illustrations.
 
 Part of the Individual Democracy / Civic Armor universe.

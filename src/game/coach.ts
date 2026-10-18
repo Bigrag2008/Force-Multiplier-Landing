@@ -87,7 +87,7 @@ export function adviseTurn(g: Game, p: Player, actionsLeft: number): Advice<Turn
       if (p.sight[d] >= 2 && learner && (p.role === "Translator" || p.freeTeach || p.trust >= 2))
         return { pick: { k: "teach", d, t: learner.name }, title: `Teach ${learner.name} to read ${T(d)}`, why: `The Underworld is open. Threads need Sight 3 in an awake district; get more of the block reading ${T(d)}.` };
       if (p.sight[d] <= 1 && actionsLeft >= 2)
-        return commons("ADVENTURE", `The Underworld is open and you need Sight 3 in ${T(d)}. Practice first, then Study.`);
+        return commons("ADVENTURE", `The Underworld is open and you need Sight 3 in ${T(d)}. Practice first, then Study it.`);
       return { pick: { k: "study", d }, title: `Study ${T(d)}`, why: `The Underworld is open. ${T(d)} is awake: reach Sight 3 (blue) there and you can trace its thread.` };
     }
   }
@@ -103,7 +103,7 @@ export function adviseTurn(g: Game, p: Player, actionsLeft: number): Advice<Turn
     return { pick: { k: "face", d: tgt }, title: `Face a deal in ${T(tgt)}`, why: `${T(tgt)} has the least Clarity, and you can read its red layer. Defusing a trap or taking honest help raises Clarity toward waking it.` };
   }
   if (actionsLeft >= 2 && !p.practice)
-    return commons("ADVENTURE", `You can't read ${T(tgt)} yet. Practice at the park first and your next Study gives +2 Sight.`);
+    return commons("ADVENTURE", `You can't read ${T(tgt)} yet. Practice at the park first, then Study it.`);
   return { pick: { k: "study", d: tgt }, title: `Study ${T(tgt)}`, why: `You can't read ${T(tgt)} yet (Sight 0). Sight 1 unlocks the red layer: the cost, and whether a deal is a trap at all.` };
 }
 

@@ -7,7 +7,7 @@ type Run = (fn: (s: Session) => void) => void;
 /** ring and badge for the button the Coach recommends */
 export const coachRing = "ring-2 ring-[#7CFFB2] ring-offset-2 ring-offset-night shadow-[0_0_18px_rgba(124,255,178,0.55)]";
 export function CoachBadge() {
-  return <span className="mt-0.5 block text-[10px] font-black uppercase tracking-wider text-[#7CFFB2]">★ Coach&apos;s pick</span>;
+  return <span className="mt-1 inline-block rounded-full bg-night px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#7CFFB2]">★ Coach&apos;s pick</span>;
 }
 export const picked = (on: boolean) => (on ? ` ${coachRing}` : "");
 
