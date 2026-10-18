@@ -16,8 +16,9 @@ def card(trap=True, lever=1):
 
 def test_deck_shape():
     for d,cards in Dk.DECK.items():
-        assert len(cards)==15, d
-        assert sum(not c["trap"] for c in cards)==3, d
+        honest=4 if d=="HEALTH" else 3                     # + Gem City Market in Health
+        assert len(cards)==12+honest, d
+        assert sum(not c["trap"] for c in cards)==honest, d
         assert sorted(c["lever"] for c in cards if c["trap"])==[1]*5+[2]*4+[3]*3, d
 
 def test_seeing_is_not_beating():
@@ -138,6 +139,13 @@ def test_history_deck_wakes_and_tells():
     assert all(len(Dk.HISTORY[d])>=2 for d in E.DISTRICTS) and Dk.HISTORY["ANY"]
     g,p=game(); p.role="Elder"; g.history(p,"HOUSING")
     assert g.clarity["HOUSING"]==E.WAKE and g.history_card in Dk.HISTORY["HOUSING"]+Dk.HISTORY["ANY"]
+
+def test_dayton_scenarios():
+    g=E.new_game(seed=1, scenario="The Plants Close")
+    assert g.pressure["LABOR"]==2 and all(p.trust==1 for p in g.players)
+    g=E.new_game(seed=1, scenario="The Hospital Closes"); p=g.players[0]
+    assert g.pressure["HEALTH"]==2 and g.neg_cost("HEALTH")==2 and g.neg_cost("LABOR")==1
+    p.sight["HEALTH"]=3; p.trust=2; g.face(p,"HEALTH","NEGOTIATE",card(lever=1)); assert p.trust==0
 
 def test_clock_is_a_loss():
     g=E.new_game(seed=3); g.run_auto(max_rounds=1)

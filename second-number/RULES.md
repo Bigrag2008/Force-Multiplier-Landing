@@ -1,4 +1,4 @@
-# THE SECOND NUMBER — Rulebook (v3)
+# THE SECOND NUMBER — Rulebook (v3, West Dayton Edition)
 
 *A cooperative game for 2–5 players, ages 12+, about 45–60 minutes.*
 *Read the machine. Wake the block. Crack the Underworld. Don't become it.*
@@ -8,8 +8,8 @@ These rules match `sn_engine.py` exactly. If you change one, change the other, t
 ---
 
 ## What's in the box
-- **75 Deal cards**, 15 per district (Lending, Housing, Labor, Health, Education): 12 real traps and 3 honest deals each.
-- **5 Role cards**, **4 Owner cards** (one is shuffled face-down under the board), **5 Scenario cards**, **12 Pattern cards**.
+- **76 Deal cards**: 12 real traps per district (Lending, Housing, Labor, Health, Education), plus 3 honest deals each and a 4th in Health (Gem City Market).
+- **5 Role cards**, **4 Owner cards** (one is shuffled face-down under the board), **7 Scenario cards**, **12 Pattern cards**, **12 History cards**.
 - **The board:** five districts. Each has a Clarity track (0–3) and a Machine track (0–3).
 - Player boards with Trust (0–5), Corruption (0–6) and Sight (0–3 per district) tracks.
 - **A red decoder lens.** The deluxe edition adds amber and blue lenses.
@@ -142,8 +142,24 @@ When the Elder teaches the History of a district, shuffle that district's Histor
 - **The Debt Buyer:** every TAKE on a trap costs +1 Corruption. Each round, collections calls: anyone carrying Corruption loses 1 Trust. The Fallen take double moves.
 - **The Recruiter:** each round, a random player loses 1 Sight in a district they can read.
 
-## Scenarios (an easy-to-hard ladder)
-*The Audit* (one grace round) → *A Quiet Year* → *The Eviction Wave* (Housing starts at Pressure 2) → *The Closure* (Education starts captured; reclaim it) → *Payday Season* (every 3rd round, an extra Lending hit).
+## The block: West Dayton
+Every district is a part of the West Side.
+
+| District | On the West Side |
+|---|---|
+| **Lending:** payday on every corner | Where the bank branches thin out, the storefront lenders fill in. |
+| **Housing:** Wright-Dunbar to Madden Hills | Historic homes, empty lots, and families who never left. |
+| **Labor:** after the plants closed | GM's Moraine plant closed in 2008 and NCR moved its headquarters out in 2009. |
+| **Health:** a hospital gone | Good Samaritan Hospital in northwest Dayton closed in 2018. |
+| **Education:** Dunbar High to Central State | Paul Laurence Dunbar High School, Sinclair downtown, Wilberforce and Central State down the road. |
+
+## Scenarios
+**Easiest:** *The Audit* (one grace round). **Hardest:** *Payday Season* (every 2nd round, an extra Lending hit). In between, these play close to one another:
+- *A Quiet Year:* no special pressure. Learn the ropes.
+- *The Eviction Wave:* Housing starts at Pressure 2.
+- *The Closure:* Education starts captured. Reclaim it.
+- *The Hospital Closes* (Dayton, 2018): Health starts at Pressure 2, and negotiating a Health deal costs 2 Trust.
+- *The Plants Close* (Dayton, 2008): Labor starts at Pressure 2, and everyone starts with 1 Trust.
 
 ## Patterns
 When every district in a combination is at Pressure 2 or more, flip that Pattern card (Redlining, the Medical-Debt Spiral, and the rest). Read its explainer aloud.

@@ -35,11 +35,11 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 - [x] **6. The History deck**
   "Teach the History" draws a true story, with the community fighting back as well as being hurt. The deck includes the Contract Buyers League, the Freedman's Savings Bank, Greenwood, HOLC redlining maps, the Montgomery bus boycott and mutual-aid societies, plus Dayton's own: Paul Laurence Dunbar and the Wright brothers' print shop, and James H. McGee, Dayton's first Black mayor.
 
-- [ ] **7. The West Dayton setting**
+- [x] **7. The West Dayton setting**
   - Each district gets a Dayton subtitle and a line of local flavor.
   - Two Dayton scenarios: **The Hospital Closes** (Health starts under pressure) and **The Plants Close** (Labor starts under pressure).
   - Gem City Market joins the honest deals.
-  - Balance is re-tuned with the new scenarios in the mix.
+  - Balance is re-tuned with the new scenarios in the mix (Payday Season returns to every 2nd round, so it stays the hardest rung).
 
 ## Part C: Design documents
 

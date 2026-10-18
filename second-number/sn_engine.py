@@ -77,7 +77,8 @@ class Game:
         self.won=False; self.result=None; self.log=[]; self.patterns_seen=set()
         self.human_overlord=False
         self.scenario = scenario or random.choice(list(SCENARIOS))
-        for d,p in {"The Eviction Wave":{"HOUSING":2},"The Closure":{"EDUCATION":3}}.get(self.scenario,{}).items():
+        for d,p in {"The Eviction Wave":{"HOUSING":2},"The Closure":{"EDUCATION":3},
+                    "The Plants Close":{"LABOR":2},"The Hospital Closes":{"HEALTH":2}}.get(self.scenario,{}).items():
             self.pressure[d]=p
         self.grace = 1 if self.scenario=="The Audit" else 0
         self.owner = "The Overlord" if overlord else (owner or random.choice(list(OWNERS)))
@@ -102,6 +103,8 @@ class Game:
     def can_trace(self,pl,d):
         return self.uw_open and pl.sight[d]>=3 and self.clarity[d]>=WAKE and d not in self.threads
     def can_expose(self): return self.uw_open and len(self.threads)>=self.threads_needed()
+    def neg_cost(self, d):
+        return NEG_COST+(1 if self.scenario=="The Hospital Closes" and d=="HEALTH" else 0)
     def take_cost(self):
         return TAKE_CORRUPT+(1 if self.owner=="The Debt Buyer" else 0)
 
@@ -152,9 +155,10 @@ class Game:
                 pl.trust=max(0,pl.trust-1)
                 self.emit(f"  WALK: it was honest help you refused out of fear. Trust −1.")
         else:  # NEGOTIATE
-            if pl.trust<NEG_COST:
-                self.emit(f"  {pl.name} has no Trust to negotiate with — the deal walks."); return
-            pl.trust-=NEG_COST
+            cost=self.neg_cost(d)
+            if pl.trust<cost:
+                self.emit(f"  {pl.name} hasn't the Trust to negotiate with — the deal walks."); return
+            pl.trust-=cost
             if trap and see>=lever:
                 amt=2 if pl.role=="Organizer" else 1
                 self.pressure[d]=max(0,self.pressure[d]-amt); self.clarity[d]=min(WAKE,self.clarity[d]+1)
@@ -164,10 +168,10 @@ class Game:
             elif trap:
                 self.pressure[d]=min(CAPTURE,self.pressure[d]+1)
                 self.emit(f"  NEGOTIATE without the {LEVER_NAME[lever]} layer (Sight {see}): you got played. "
-                          f"Pressure +1, Trust −{NEG_COST}.")
+                          f"Pressure +1, Trust −{cost}.")
                 if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
             else:
-                self.emit(f"  NEGOTIATE on an honest deal: you haggled away real help. Trust −{NEG_COST}.")
+                self.emit(f"  NEGOTIATE on an honest deal: you haggled away real help. Trust −{cost}.")
         pl.trust=min(pl.trust,MAX_TRUST)
         if pl.corruption>=FLIP and not pl.flipped:
             pl.flipped=True
@@ -363,7 +367,7 @@ class Game:
         if self.owner=="The Algorithm": hits+=1     # the relentless one: an extra strike
         if self.owner_shown: hits+=1                # the Owner fights in the open
         struck=self.struck
-        if (self.scenario=="Payday Season" and self.round%3==0 and "LENDING" not in struck
+        if (self.scenario=="Payday Season" and self.round%2==0 and "LENDING" not in struck
                 and self.pressure["LENDING"]<CAPTURE):
             struck.add("LENDING"); self.emit(f"  ✖ Payday Season: payday again — an extra LENDING hit.")
             self.hit("LENDING")
@@ -456,7 +460,7 @@ class Game:
         urgent=self.pressure[d]>=CAPTURE-1
         if see>=1:                                   # red layer: you can tell trap from honest
             if not card["trap"]: return "TAKE"
-            if see>=card["lever"] and pl.trust>=NEG_COST: return "NEGOTIATE"
+            if see>=card["lever"] and pl.trust>=self.neg_cost(d): return "NEGOTIATE"
             if style=="greedy" and pl.corruption+self.take_cost()<FLIP+2: return "TAKE"
             if style=="careful" and urgent and safe: return "TAKE"
             return "WALK"
@@ -574,5 +578,7 @@ ROSTER=[("Marcus","Translator"),("Nia","Student"),("Simone","Elder"),("Zay","Vet
 def new_game(overlord=False, scenario=None, owner=None, verbose=False, seed=None, roster=None):
     g=Game(overlord=overlord, scenario=scenario, owner=owner, verbose=verbose, seed=seed)
     g.players=[Player(n,r) for n,r in (roster or ROSTER)]
+    if g.scenario=="The Plants Close":
+        for p in g.players: p.trust=1
     if overlord: g.players.append(Player("The Owner","Overlord"))
     return g

@@ -27,6 +27,22 @@ DISTRICT_COLORS = {
  "HEALTH":"#8e44ad","EDUCATION":"#e0a526",
 }
 
+# THE WEST DAYTON SETTING — every district is a part of the West Side.
+EDITION = "West Dayton Edition"
+DAYTON = {
+ "LENDING":  dict(sub="Payday on every corner",
+                  flavor="Where the bank branches thin out, the storefront lenders fill in."),
+ "HOUSING":  dict(sub="Wright-Dunbar to Madden Hills",
+                  flavor="Historic homes, empty lots, and families who never left."),
+ "LABOR":    dict(sub="After the plants closed",
+                  flavor="GM's Moraine plant closed in 2008 and NCR moved its headquarters out in 2009. "
+                         "The good jobs left; the fine print didn't."),
+ "HEALTH":   dict(sub="A hospital gone",
+                  flavor="Good Samaritan Hospital in northwest Dayton closed in 2018. Care got farther away; the bills didn't."),
+ "EDUCATION":dict(sub="Dunbar High to Central State",
+                  flavor="Paul Laurence Dunbar High School, Sinclair downtown, Wilberforce and Central State down the road."),
+}
+
 DECK = {
  "LENDING": [
   dict(front="Quick Cash: $375 today. One flat fee — $56.25.",
@@ -412,10 +428,12 @@ PLACES = {
 
 SCENARIOS = {
  "The Eviction Wave":"Housing starts under siege (2 pressure). Hold the line.",
- "Payday Season":"Every third round is payday: Lending takes an extra hit. The hardest rung.",
+ "Payday Season":"Every second round is payday: Lending takes an extra hit. The hardest rung.",
  "The Closure":"A school starts captured (3 Pressure). Reclaim it — fast.",
  "The Audit":"The Machine is distracted — the block gets a one-round head start.",
  "A Quiet Year":"No special pressure. Learn the ropes.",
+ "The Plants Close":"Dayton, 2008: Labor starts at Pressure 2, and everyone starts with 1 Trust instead of 2.",
+ "The Hospital Closes":"Dayton, 2018: Health starts at Pressure 2, and negotiating a Health deal costs 2 Trust.",
 }
 
 # ---------------------------------------------------------------------------
@@ -471,6 +489,10 @@ HONEST = {
        red="You likely qualify — the real cost could be $0 to a small fraction.",
        amber="Apply within the window and the balance can be wiped.",
        blue="Nonprofit hospitals are required to offer this; it's your right."),
+  dict(front="Join Gem City Market: a grocery the neighborhood owns.",
+       red="Membership is a share in the store, not a subscription. Fresh food close to home.",
+       amber="No teaser price, no auto-renew trap. The rules are the co-op's bylaws, in the open.",
+       blue="Member-owned: the store answers to the people it feeds."),
   dict(front="Community clinic, sliding-scale fee.",
        red="The price is matched to your income — no surprise markup.",
        amber="Set your fee up front; no bill ambush later.",

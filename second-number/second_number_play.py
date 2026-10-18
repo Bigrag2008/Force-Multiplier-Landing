@@ -64,14 +64,15 @@ class Table:
     def board(self, header=""):
         g=self.g; cls(); line=GOLD+"═"*72+R
         tag=(RED+"OVERLORD MODE"+R) if g.overlord else (CREAM+g.scenario+R)
-        print(line); print(f"  {B}{GOLD}THE SECOND NUMBER{R}  {DIM}·{R}  {tag}  {DIM}·{R}  "
+        print(line); print(f"  {B}{GOLD}THE SECOND NUMBER{R} {DIM}{E.D.EDITION}{R}  {DIM}·{R}  {tag}  {DIM}·{R}  "
                            f"{CREAM}round {g.round}/{E.MAX_ROUNDS}{R}"); print(line)
         for d in D:
             c,p=g.clarity[d],g.pressure[d]
             st=(RED+B+"✖ CAPTURED"+R if p>=CAPTURE else GOLD+B+"✦ AWAKE"+R if c>=WAKE
                 else RED+"● gripped"+R if g.gripped(d) else "")
             th=CYAN+" 🔵thread"+R if d in g.threads else ""
-            print(f"  {DCOL[d]}{B}{d:<10}{R} Clarity {bar(c,WAKE,'●',DCOL[d])}  Machine {bar(p,CAPTURE,'▣',RED)}  {st}{th}")
+            print(f"  {DCOL[d]}{B}{d:<10}{R} {DIM}{E.D.DAYTON[d]['sub']:<30}{R} Clarity {bar(c,WAKE,'●',DCOL[d])}  "
+                  f"Machine {bar(p,CAPTURE,'▣',RED)}  {st}{th}")
         print(GOLD+"─"*72+R)
         for pl in g.players:
             if pl.role=="Overlord": print(f"  {RED}{B}{pl.name:<10}{R}{RED} ⚑ THE OVERLORD — the Machine, in the flesh{R}"); continue
@@ -266,7 +267,8 @@ class Table:
 def intro(g):
     cls()
     print(f"\n{GOLD}{B}      THE SECOND NUMBER{R}")
-    print(f"{CREAM}      read the machine · wake the block · don't become it{R}\n")
+    print(f"{CREAM}      read the machine · wake the block · don't become it{R}")
+    print(f"{DIM}      {E.D.EDITION} — the block is the West Side.{R}\n")
     print("  "+((RED+"OVERLORD MODE — one player IS the Machine."+R) if g.overlord
                 else f"{CREAM}Scenario: {B}{g.scenario}{R} — {E.SCENARIOS[g.scenario]}"))
     print(f"  {DIM}Seeing isn't beating: Sight 1 shows a trap; beating it takes Sight up to its lever.{R}")
