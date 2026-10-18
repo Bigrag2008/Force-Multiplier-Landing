@@ -44,6 +44,12 @@ def bar(n,total,ch,col): return col+ch*min(n,total)+DIM+"·"*max(0,total-n)+R
 class Table:
     def __init__(self, g, humans):
         self.g=g; self.humans=humans; self.seen=0
+        if any(p.name in humans for p in g.blk()):
+            def ask_book(d):
+                self.flush()
+                return ask(f"\n  {GREEN}{B}📗 A strike is about to capture {d}.{R} Open the Green Book (once per game)? "
+                           f"({GOLDB}y{R}/n): ")!="n"
+            g.use_green_book=ask_book
 
     # ---- output ----
     def flush(self):
@@ -80,7 +86,9 @@ class Table:
                   + (f"   Owner: {B}{g.owner}{R} {DIM}{E.OWNERS[g.owner]}{R}" if g.owner_shown and not g.overlord else ""))
         else:
             print(f"  {DIM}Underworld cracks at total Clarity {E.UNDERWORLD_AT} (now {g.total_clarity()}).{R}")
-        print(f"  {GOLD}Sou-Sou pot{R} {bar(g.pot,E.SOUSOU_HAND,'●',GOLD)}  {DIM}next hand: {g.next_hand().name if g.active() else '—'}{R}")
+        print(f"  {GOLD}Sou-Sou pot{R} {bar(g.pot,E.SOUSOU_HAND,'●',GOLD)}  {DIM}next hand: {g.next_hand().name if g.active() else '—'}{R}"
+              f"   {GREEN if g.green_book else GREY}📗 Green Book {'ready' if g.green_book else 'used'}{R}"
+              f"   {GOLD if not g.cookout_used else GREY}🍖 Cookout {'ready' if not g.cookout_used else 'had'}{R}")
         print(line)
         if header: print("  "+header)
 

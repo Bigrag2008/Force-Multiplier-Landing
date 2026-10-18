@@ -24,8 +24,8 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 - [x] **3. The Cookout**
   Once per game, the table calls it at the start of a round. Nobody takes normal actions that round. Everyone gets +2 Trust, −1 Corruption and +1 Legend, and each player raises their Sight in one district to the best Sight anyone at the table has there. The Machine still moves.
 
-- [ ] **4. The Green Book**
-  The block holds one copy. Once per game, play it when the Machine strikes: that strike takes a safe route and lands nowhere.
+- [x] **4. The Green Book**
+  The block holds one copy. Once per game, when a Machine strike would capture a district, open it: that strike takes a safe route and lands nowhere.
 
 - [ ] **5. Call and response**
   When you Teach, read the red layer aloud and your learner says the second number back. If they do, you both gain +1 Legend.

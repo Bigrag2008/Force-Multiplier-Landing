@@ -47,8 +47,8 @@ SOUSOU_HAND     = 4    # Trust in the Sou-Sou pot that pays out one hand
 # per player count: actions per turn, Machine hits per round, Overlord actions per round
 # (tuned with balance_test.py so every count plays in the 40–70% band)
 ACTIONS         = {1:4, 2:3, 3:3, 4:2, 5:2}
-MACHINE_HITS    = {1:1, 2:1, 3:3, 4:1, 5:2}
-OVERLORD_MOVES  = {1:1.5, 2:2, 3:3.5, 4:2.5, 5:3}   # x.5 = one extra move on even rounds
+MACHINE_HITS    = {1:1, 2:1, 3:3, 4:1.5, 5:2.5}      # x.5 = one extra strike on even rounds
+OVERLORD_MOVES  = {1:1.5, 2:2, 3:4, 4:2.5, 5:3.5}   # x.5 = one extra move on even rounds
 
 class Player:
     def __init__(self, name, role):
@@ -71,6 +71,8 @@ class Game:
         self.pot=0; self.circle=0              # the Sou-Sou: Trust in the pot, whose hand is next
         self.kitchen_used=False                # Grandma's table feeds the block once a game
         self.cookout_used=False                # the Cookout: once a game, a whole round together
+        self.green_book=True                   # one safe route, once a game
+        self.use_green_book=lambda d: True     # front-ends can ask the table instead
         self.won=False; self.result=None; self.log=[]; self.patterns_seen=set()
         self.human_overlord=False
         self.scenario = scenario or random.choice(list(SCENARIOS))
@@ -274,10 +276,19 @@ class Game:
         self.won=True; self.result="BLOCK_WIN"
 
     # ================= MACHINE / FALLEN / OVERLORD =================
+    def safe_route(self, d):
+        """The Green Book: once per game, a strike that would capture a district lands nowhere."""
+        if self.green_book and self.pressure[d]==CAPTURE-1 and self.use_green_book(d):
+            self.green_book=False
+            self.emit(f"  📗 The block opens the Green Book: a safe route around {d}. That strike lands nowhere.")
+            return True
+        return False
+
     def m_extract(self, who, d):
         if d in self.struck:
             self.emit(f"[{who}] already moved on {d} this round — the Machine spreads, it doesn't snipe."); return
         self.struck.add(d)
+        if self.safe_route(d): return
         if self.pressure[d]<CAPTURE:
             self.pressure[d]+=1; self.emit(f"[{who}] feeds the Machine in {d}. Pressure {self.pressure[d]}/{CAPTURE}.")
             if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
@@ -335,11 +346,12 @@ class Game:
     def hit(self, d):
         vet=next((p for p in self.active() if p.role=="Veteran" and p.shields>0),None)
         if vet: vet.shields-=1; self.emit(f"  ⛨ {vet.name} shields {d}. ({vet.shields} left)"); return
+        if self.safe_route(d): return
         self.pressure[d]+=1; self.emit(f"  ✖ The Machine extracts from {d}. Pressure {self.pressure[d]}/{CAPTURE}.")
         if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
 
     def auto_machine_phase(self):
-        hits=MACHINE_HITS[self.n()]
+        h=MACHINE_HITS[self.n()]; hits=int(h)+(1 if h%1 and self.round%2==0 else 0)
         if self.owner=="The Algorithm": hits+=1     # the relentless one: an extra strike
         if self.owner_shown: hits+=1                # the Owner fights in the open
         struck=self.struck
@@ -522,7 +534,8 @@ class Game:
         self.check_patterns()
         return self.check_end()
 
-    def run_auto(self, max_rounds=MAX_ROUNDS, style="careful"):
+    def run_auto(self, max_rounds=None, style="careful"):
+        max_rounds=max_rounds or MAX_ROUNDS     # read at call time so tuning the clock works
         while self.round<max_rounds and not self.won:
             self.round+=1; self.struck=set(); self.covered=False
             feast=self.cookout_ai()

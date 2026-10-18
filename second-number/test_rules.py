@@ -120,6 +120,15 @@ def test_cookout_shares_the_best_sight():
     assert b.sight["HOUSING"]==3 and c.sight["HOUSING"]==3 and b.corruption==1 and c.trust==E.MAX_TRUST
     assert g.cookout_used
 
+def test_green_book_saves_one_capture():
+    g,p=game(); g.round=1; g.pressure["HOUSING"]=2; g.pressure["LABOR"]=2
+    g.m_extract("M","HOUSING"); assert g.pressure["HOUSING"]==2 and not g.green_book
+    g.m_extract("M","LABOR"); assert g.pressure["LABOR"]==3                # only once per game
+
+def test_green_book_waits_for_a_capture():
+    g,p=game(); g.round=1; g.pressure["HEALTH"]=1
+    g.m_extract("M","HEALTH"); assert g.pressure["HEALTH"]==2 and g.green_book
+
 def test_clock_is_a_loss():
     g=E.new_game(seed=3); g.run_auto(max_rounds=1)
     assert g.result in ("MACHINE_WIN","BLOCK_WIN")

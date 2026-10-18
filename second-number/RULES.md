@@ -39,9 +39,9 @@ These rules match `sn_engine.py` exactly. If you change one, change the other, t
 | Players | Actions per turn | Machine strikes per round | Overlord moves per round |
 |---|---|---|---|
 | 2 | 3 | 1 | 2 |
-| 3 | 3 | 3 | 3, or 4 on even rounds |
-| 4 | 2 | 1 | 2, or 3 on even rounds |
-| 5 | 2 | 2 | 3 |
+| 3 | 3 | 3 | 4 |
+| 4 | 2 | 1, or 2 on even rounds | 2, or 3 on even rounds |
+| 5 | 2 | 2, or 3 on even rounds | 3, or 4 on even rounds |
 
 ---
 
@@ -112,6 +112,9 @@ Call it at the start of any round, unless a district is one strike from capture.
 - raises their Sight in **one district** to the best Sight anyone at the table has there.
 
 The Fallen don't come; the Machine still moves through them, and the Machine phase happens as usual. Call it when what one of you knows needs to become what all of you know.
+
+## The Green Book: one safe route
+The block holds one copy of the Green Book, after the guide Black travelers used for decades to find the places that would serve them safely. **Once per game**, when a Machine strike (a strike, an Extract, or a scenario hit) would **capture** a district, you may open it: that strike takes a safe route and lands nowhere. It still counts as the Machine's move on that district this round.
 
 ## The Sou-Sou: the honest payday loan
 A rotating savings circle, the way families and church members have long pooled money (also called a susu, "the hand," or "the club"). At the end of the block's turns, the table may **throw a hand**:
