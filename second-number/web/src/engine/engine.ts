@@ -816,8 +816,7 @@ export class Game {
     this.leagueRound();
     const ov = this.ov();
     if (this.overlord && ov) {
-      const m = K.OVERLORD_MOVES[this.n()];
-      const moves = Math.floor(m) + (m % 1 && this.round % 2 === 0 ? 1 : 0);
+      const moves = this.overlordMoveCount();
       for (let i = 0; i < moves; i++) this.do(ov, overlordMove ? overlordMove() : this.machineAiMove(this.struck));
       this.tighten();
     } else if (this.grace > 0) {
@@ -827,6 +826,17 @@ export class Game {
       this.autoMachinePhase();
       this.tighten();
     }
+    this.checkPatterns();
+    return this.checkEnd();
+  }
+  // ---- web-only glue (not in the Python engine): a person playing the Overlord moves one at a time ----
+  overlordMoveCount() {
+    const m = K.OVERLORD_MOVES[this.n()];
+    return Math.floor(m) + (m % 1 && this.round % 2 === 0 ? 1 : 0);
+  }
+  /** After a person's Overlord moves: the same wrap-up machinePhase() does. */
+  finishOverlordPhase(): string | null {
+    this.tighten();
     this.checkPatterns();
     return this.checkEnd();
   }
