@@ -22,9 +22,9 @@ Every deal offers the same three choices (defined in the rules, not per card):
                  below it you get played.
 """
 
-DISTRICT_COLORS = {
- "LENDING":"#2e8b63","HOUSING":"#c75b39","LABOR":"#3a6ea5",
- "HEALTH":"#8e44ad","EDUCATION":"#e0a526",
+DISTRICT_COLORS = {   # AfriCOBRA "Kool-Aid" brights — see ART_DIRECTION.md
+ "LENDING":"#3FA34D","HOUSING":"#E03C31","LABOR":"#1F7AE0",
+ "HEALTH":"#8E3BB8","EDUCATION":"#F28C1B",
 }
 
 # THE WEST DAYTON SETTING — every district is a part of the West Side.

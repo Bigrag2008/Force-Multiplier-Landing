@@ -11,7 +11,7 @@ Needs: reportlab, pypdf, and the DejaVu Sans fonts (standard on Linux).
 The hidden second number uses the decoder-ink trick: text in cyan, buried under
 dense red decoy letters. A red lens washes the red out and darkens the cyan.
 """
-import os, re, sys, random, io
+import os, re, sys, random, io, zlib
 HERE=os.path.dirname(os.path.abspath(__file__)); ROOT=os.path.dirname(HERE)
 sys.path.insert(0,ROOT)
 import deck_cards as Dk
@@ -40,8 +40,10 @@ registerFontFamily("DV",normal="DV",bold="DVB",italic="DVI",boldItalic="DVB")
 
 # ---------------- palette ----------------
 def hx(h): h=h.lstrip("#"); return tuple(int(h[i:i+2],16)/255 for i in (0,2,4))
-NAVY=hx("0c1b30"); GOLD=hx("d4af37"); GOLDL=hx("e8c766"); CREAM=hx("f5efe0"); INK=hx("1b1b1f")
-GREY=hx("6b7078"); LGREY=hx("d9dbe0")
+# West Dayton palette (ART_DIRECTION.md): After Hours, Church Program, Funk Gold
+NAVY=hx("1B1530"); GOLD=hx("F2B632"); GOLDL=hx("F7CF6B"); CREAM=hx("F6EEDC"); INK=hx("1b1b1f")
+GREY=hx("6b6676"); LGREY=hx("dcd6cc")
+EDITION=Dk.EDITION
 LAYER_COL={1:hx("e63946"),2:hx("e0a526"),3:hx("2f8fd8")}
 LAYER_NAME={1:"COST",2:"CLOCK",3:"CONNECTION"}
 LEVER_WORD={1:"RED",2:"AMBER",3:"BLUE"}
@@ -67,11 +69,11 @@ def fit_lines(text, font, size, width, max_lines, min_size=5.6):
 
 def footer(c, label, w=PAGE_W):
     c.setFont("DV",7); fill(c,GREY)
-    c.drawCentredString(w/2,0.3*inch,f"THE SECOND NUMBER · Print & Play v3 · {label}")
+    c.drawCentredString(w/2,0.3*inch,f"THE SECOND NUMBER · {EDITION} · Print & Play · {label}")
 
 def sheet_label(c, label):
     c.setFont("DV",6); fill(c,GREY)
-    c.drawString(GRID_X0+0.12*inch,PAGE_H-0.15*inch,f"Second Number v3 · {label}")
+    c.drawString(GRID_X0+0.12*inch,PAGE_H-0.15*inch,f"Second Number · West Dayton · {label}")
 
 # ================= decoder zone =================
 LETTERS="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$%"
@@ -107,6 +109,28 @@ def decoder_zone(c, x, y, w, h, text, seed, size=7.9, lead=9.1, decoy=7.2):
     stroke(c,LGREY); c.setLineWidth(0.4); c.rect(x,y,w,h,stroke=1,fill=0)
 
 def dot(c,x,y,r,rgb): fill(c,rgb); c.circle(x,y,r,stroke=0,fill=1)
+def seed_of(*parts): return zlib.crc32("|".join(map(str,parts)).encode())   # stable across runs
+
+def quilt(c,x,y,w,h,cols,size=0.5*inch,alpha=0.18):
+    """A patchwork of half-square triangles in the district colors."""
+    rng=random.Random(seed_of("quilt",x,y)); c.saveState(); c.setFillAlpha(alpha)
+    p=c.beginPath(); p.rect(x,y,w,h); c.clipPath(p,stroke=0)
+    yy=y
+    while yy<y+h:
+        xx=x
+        while xx<x+w:
+            a,b=rng.sample(cols,2); fill(c,a); c.rect(xx,yy,size,size,stroke=0,fill=1)
+            fill(c,b); t=c.beginPath(); t.moveTo(xx,yy)
+            if rng.random()<.5: t.lineTo(xx+size,yy); t.lineTo(xx+size,yy+size)
+            else: t.lineTo(xx,yy+size); t.lineTo(xx+size,yy+size)
+            t.close(); c.drawPath(t,stroke=0,fill=1); xx+=size
+        yy+=size
+    c.restoreState()
+
+def stitch(c,x,y,w,h,rgb,r=8):
+    """Quilt stitching: a dashed line just inside a shape's edge."""
+    c.saveState(); stroke(c,rgb); c.setLineWidth(0.8); c.setDash(3,2.5)
+    c.roundRect(x,y,w,h,r,stroke=1,fill=0); c.restoreState()
 
 # ================= card grid helpers =================
 GRID_X0=(PAGE_W-3*CARD_W)/2; GRID_Y0=(PAGE_H-3*CARD_H)/2
@@ -127,7 +151,7 @@ def crop_marks(c):
     c.setDash()
 
 def card_frame(c,x,y,rgb,top,right,title_size=8):
-    stroke(c,INK); c.setLineWidth(0.6); fill(c,(1,1,1))
+    stroke(c,INK); c.setLineWidth(0.6); fill(c,CREAM)
     c.roundRect(x+3,y+3,CARD_W-6,CARD_H-6,6,stroke=1,fill=1)
     fill(c,rgb); c.roundRect(x+3,y+CARD_H-25,CARD_W-6,22,6,stroke=0,fill=1)
     c.rect(x+3,y+CARD_H-25,CARD_W-6,8,stroke=0,fill=1)
@@ -136,30 +160,38 @@ def card_frame(c,x,y,rgb,top,right,title_size=8):
 
 # ================= deal cards =================
 def deal_card(c,x,y,d,i,card):
+    """A deal styled as real paperwork: a form number, ruled fine print, a signature line."""
     cid=f"{DABBR[d]}-{i+1:02d}"
-    card_frame(c,x,y,DCOL[d],d,f"DEAL · {cid}")
+    card_frame(c,x,y,DCOL[d],d,f"FORM {cid}")
     ix=x+10; iw=CARD_W-20
-    fill(c,GREY); c.setFont("DVB",5.6); c.drawString(ix,y+CARD_H-34,"WHAT YOU SEE")
+    stroke(c,LGREY); c.setLineWidth(0.5); c.setDash(1.5,2)                  # perforation
+    c.line(x+8,y+CARD_H-29,x+CARD_W-8,y+CARD_H-29); c.setDash()
+    fill(c,GREY); c.setFont("DVB",5.4); c.drawString(ix,y+CARD_H-37,"WHAT YOU SEE")
+    c.setFont("DVI",5.4); c.drawRightString(x+CARD_W-10,y+CARD_H-37,Dk.DAYTON[d]["sub"])
     lines,size=fit_lines(card["front"],"DVB",8.4,iw,3,6.4)
-    fill(c,INK); c.setFont("DVB",size); ty=y+CARD_H-44
+    fill(c,INK); c.setFont("DVB",size); ty=y+CARD_H-47
     for ln in lines: c.drawString(ix,ty,ln); ty-=size+1.6
-    top=y+CARD_H-74; zone_h=40; gap=12
+    top=y+CARD_H-76; zone_h=39; gap=12
     for n,key in ((1,"red"),(2,"amber"),(3,"blue")):
         hy=top-(n-1)*(zone_h+gap)
         dot(c,ix+3,hy-2.5,2.6,LAYER_COL[n])
         fill(c,INK); c.setFont("DVB",5.8)
         c.drawString(ix+9,hy-4.5,f"SIGHT {n} · THE {LAYER_NAME[n]}")
+        if n==1: fill(c,GREY); c.setFont("DV",4.6); c.drawRightString(x+CARD_W-10,hy-4.5,"(fine print — use your glasses)")
         txt=card[key]
         if n==1:
             txt+=("   ▸ HONEST DEAL — no trap, no lever." if not card["trap"]
                   else f"   ▸ LEVER: {LEVER_WORD[card['lever']]}")
-        decoder_zone(c,ix,hy-8-zone_h,iw,zone_h,txt,seed=hash((d,i,n))&0xffffff)
-    fill(c,GREY); c.setFont("DV",5.2)
-    c.drawCentredString(x+CARD_W/2,y+10,"TAKE · WALK · NEGOTIATE (1 Trust, Sight ≥ lever)")
+        decoder_zone(c,ix,hy-8-zone_h,iw,zone_h,txt,seed=seed_of(d,i,n))
+    stroke(c,INK); c.setLineWidth(0.5); c.line(ix+8,y+17,ix+70,y+17)
+    fill(c,INK); c.setFont("DVB",7); c.drawString(ix,y+18,"X")
+    fill(c,GREY); c.setFont("DV",5.2); c.drawRightString(x+CARD_W-10,y+18,"TAKE · WALK · NEGOTIATE")
+    c.setFont("DV",4.6); c.drawRightString(x+CARD_W-10,y+11,"Negotiate: 1 Trust, Sight ≥ lever")
 
 def card_back(c,x,y,label="THE SECOND NUMBER",sub="read the machine"):
     stroke(c,INK); c.setLineWidth(0.6); fill(c,NAVY)
     c.roundRect(x+3,y+3,CARD_W-6,CARD_H-6,6,stroke=1,fill=1)
+    quilt(c,x+10,y+10,CARD_W-20,CARD_H-20,list(DCOL.values()),size=0.42*inch,alpha=0.22)
     stroke(c,GOLD); c.setLineWidth(1.2); c.roundRect(x+10,y+10,CARD_W-20,CARD_H-20,4,stroke=1,fill=0)
     cx,cy=x+CARD_W/2,y+CARD_H/2
     stroke(c,GOLD); c.setLineWidth(1); c.circle(cx,cy+18,22,stroke=1,fill=0)
@@ -200,60 +232,202 @@ ROLE_FLAVOR={"Translator":"The bridge.","Student":"The hungry one.","Elder":"The
              "Veteran":"Came home to protect it.","Organizer":"Rallies the block."}
 def build_other_cards(c):
     cards=[]
-    for r,txt in Dk.ROLES.items():
-        start="Start: 2 Trust · Sight 1 in every district." if r=="Elder" else "Start: 2 Trust · Sight 0."
-        cards.append(("role",(GOLD,"ROLE","character",f"The {r}",txt,start)))
     for o,txt in Dk.OWNERS.items():
-        cards.append(("owner",(hx("7a1f2b"),"THE OWNER","hidden",o,txt,
-                     "Revealed when total Clarity reaches 9. Until then, watch the board and deduce it.")))
-    for s,txt in Dk.SCENARIOS.items():
-        cards.append(("scen",(hx("3b4a63"),"SCENARIO","setup",s,txt,None)))
+        cards.append((hx("7a1f2b"),"THE OWNER","hidden",o,txt,
+                     "Revealed when total Clarity reaches 9. Until then, watch the board and deduce it."))
+    for s_,txt in Dk.SCENARIOS.items():
+        dayton="Dayton" in txt
+        cards.append((hx("3b2f5c") if not dayton else GOLD,"SCENARIO","West Dayton" if dayton else "setup",s_,txt,None))
     for combo,name,lesson in Dk.PATTERNS:
-        cards.append(("pattern",(hx("8b1e1e"),"MACHINE PATTERN"," + ".join(DABBR[d] for d in combo),
+        cards.append((hx("8b1e1e"),"MACHINE PATTERN"," + ".join(DABBR[d] for d in combo),
                       name.title() if name.isupper() else name,lesson,
-                      "Forms when every district listed is at Pressure 2+. Tightens each round. Break it by pulling one district below 2.")))
+                      "Forms when every district listed is at Pressure 2+. Tightens each round. Break it by pulling one district below 2."))
+    for d,hs in Dk.HISTORY.items():
+        for h in hs:
+            cards.append((hx("5a3d1e"),"HISTORY",("any district" if d=="ANY" else d.lower()),h["title"],
+                          f"{h['year']} · {h['place']}. {h['story']}",f"“{h['lesson']}”",7))
+    cards.append((hx("2f7a4a"),"THE GREEN BOOK","once per game","A Safe Route",
+                  "When a Machine strike, Extract or scenario hit would capture a district, open the Green Book: "
+                  "that strike lands nowhere. It still counts as the Machine's move there this round.",
+                  "After The Negro Motorist Green Book (1936–1966), the guide Black travelers used to find the places that would serve them safely."))
     pages=[cards[k:k+9] for k in range(0,len(cards),9)]
     for pi,pg in enumerate(pages):
         crop_marks(c)
-        for (x,y),(_,a) in zip(card_slots(),pg): text_card(c,x,y,*a)
+        for (x,y),a in zip(card_slots(),pg): text_card(c,x,y,*a)
         sheet_label(c,f"Character cards {pi+1}/{len(pages)}"); c.showPage()
     crop_marks(c)
     for x,y in card_slots(): card_back(c,x,y,"THE OWNER","one machine · one hand")
     sheet_label(c,"Owner card backs"); c.showPage()
 
+# ================= hand fans & pieces =================
+def hand_fan(c,cx,cy,role,gift):
+    """A church hand fan: a round paddle on a stick. Front: the role. 'Sponsor' panel: the gift."""
+    r=1.55*inch
+    fill(c,hx("c9a26b")); stroke(c,INK); c.setLineWidth(0.8)
+    c.roundRect(cx-0.16*inch,cy-r-1.55*inch,0.32*inch,1.75*inch,4,stroke=1,fill=1)       # the stick
+    fill(c,CREAM); c.circle(cx,cy,r,stroke=1,fill=1)
+    c.saveState(); p=c.beginPath(); p.circle(cx,cy,r-3); c.clipPath(p,stroke=0)
+    quilt(c,cx-r,cy-r,2*r,2*r,[GOLD,hx("E03C31"),hx("8E3BB8"),hx("1F7AE0")],size=0.38*inch,alpha=0.16)
+    c.restoreState()
+    stroke(c,GOLD); c.setLineWidth(1.4); c.circle(cx,cy,r-6,stroke=1,fill=0)
+    fill(c,NAVY); c.circle(cx,cy+0.45*inch,0.5*inch,stroke=0,fill=1)                        # portrait
+    fill(c,GOLDL); c.setFont("DVI",5.5); c.drawCentredString(cx,cy+0.47*inch,"portrait —")
+    c.drawCentredString(cx,cy+0.38*inch,"commission")
+    fill(c,INK); c.setFont("DVB",13); c.drawCentredString(cx,cy-0.25*inch,f"The {role}")
+    lines,size=fit_lines(gift,"DV",7.4,2*r-0.75*inch,5,6)
+    c.setFont("DV",size); ty=cy-0.45*inch
+    for ln in lines: c.drawCentredString(cx,ty,ln); ty-=size+2
+    start="Start: 2 Trust · Sight 1 everywhere" if role=="Elder" else "Start: 2 Trust · Sight 0"
+    fill(c,GREY); c.setFont("DVI",6); c.drawCentredString(cx,cy-r+0.28*inch,start)
+    fill(c,INK); c.setFont("DVB",6); c.drawCentredString(cx,cy-r-0.3*inch,"ROLE")
+
+def paper_plate(c,cx,cy):
+    r=1.45*inch
+    import math
+    fill(c,(1,1,1)); stroke(c,GREY); c.setLineWidth(0.6)
+    for k in range(48):                                              # fluted rim
+        a=2*math.pi*k/48
+        c.circle(cx+(r-1)*math.cos(a),cy+(r-1)*math.sin(a),6,stroke=1,fill=1)
+    c.setLineWidth(0); c.circle(cx,cy,r-2,stroke=0,fill=1)
+    stroke(c,LGREY); c.setLineWidth(1); c.circle(cx,cy,r-0.32*inch,stroke=1,fill=0)
+    fill(c,hx("E03C31")); c.setFont("DVB",15); c.drawCentredString(cx,cy+0.5*inch,"THE COOKOUT")
+    fill(c,INK); c.setFont("DV",7)
+    for k,ln in enumerate(["Once per game, at the start of a round.","No block actions this round.",
+                           "Everyone: +2 Trust, −1 Corruption, +1 Legend,","and Sight in one district up to",
+                           "the best reader at the table.","Flip this plate over when it's been had."]):
+        c.drawCentredString(cx,cy+0.22*inch-k*10,ln)
+
+def sousou_label(c,x,y,w,h):
+    fill(c,GOLD); stroke(c,INK); c.setLineWidth(0.8); c.rect(x,y,w,h,stroke=1,fill=1)
+    quilt(c,x,y,w,h,[hx("E03C31"),hx("3FA34D"),NAVY],size=0.3*inch,alpha=0.12)
+    fill(c,NAVY); c.setFont("DVB",18); c.drawString(x+0.25*inch,y+h-0.45*inch,"THE SOU-SOU")
+    c.setFont("DV",8)
+    for k,ln in enumerate(["Tape this around a coffee can. At the end of the block's turns, the table may throw a hand:",
+                           "everyone with Trust drops 1 in the can. At 4, the next player in the circle takes the hand",
+                           "and clears 2 Pressure from any district — paid off clean, no Corruption."]):
+        c.drawString(x+0.25*inch,y+h-0.68*inch-k*10.5,ln)
+    fill(c,INK); c.setFont("DVI",7); c.drawRightString(x+w-0.2*inch,y+0.12*inch,"also called a susu, “the hand,” or “the club”")
+
+def build_fans_and_pieces(c):
+    roles=list(Dk.ROLES.items())
+    top,bot=PAGE_H-2.05*inch,4.05*inch                     # sticks clear the footer
+    spots=[(PAGE_W*0.27,top),(PAGE_W*0.73,top),(PAGE_W*0.27,bot),(PAGE_W*0.73,bot)]
+    for (cx,cy),(r,g) in zip(spots,roles[:4]): hand_fan(c,cx,cy,r,g)
+    footer(c,"Role cards as church hand fans 1/2 — cut out, glue to a craft stick"); c.showPage()
+    hand_fan(c,PAGE_W*0.27,PAGE_H-2.05*inch,*roles[4])
+    paper_plate(c,PAGE_W*0.73,PAGE_H-2.05*inch)
+    sousou_label(c,0.5*inch,0.75*inch,PAGE_W-inch,1.25*inch)
+    fill(c,GREY); c.setFont("DVI",8)
+    c.drawCentredString(PAGE_W/2,2.35*inch,"Hand fans, a paper plate and a coffee can: the game's pieces are the things already on the table.")
+    footer(c,"Role fans 2/2 · the Cookout plate · the Sou-Sou can"); c.showPage()
+
+# ================= Grandma's reading glasses =================
+def build_glasses(c):
+    fill(c,INK); c.setFont("DVB",20); c.drawString(inch,PAGE_H-inch,"Grandma's reading glasses")
+    fill(c,GREY); c.setFont("DV",9.5); y=PAGE_H-1.35*inch
+    for ln in simpleSplit("The decoder lens, the way every family knows it: \"Put your glasses on and read it again.\" "
+                          "Print on cardstock. Cut out the frame and both arms. Cut out the two lens holes, tape red film "
+                          "over them from behind, fold the arm tabs and tape them to the frame's ends. One pair per table is "
+                          "enough; pass them to whoever is facing a deal.","DV",9.5,PAGE_W-2*inch):
+        c.drawString(inch,y,ln); y-=12.5
+    cx=PAGE_W/2; cy=PAGE_H-3.6*inch
+    stroke(c,INK); c.setLineWidth(1.2); fill(c,NAVY)
+    c.roundRect(cx-3.1*inch,cy-0.85*inch,6.2*inch,1.7*inch,0.5*inch,stroke=1,fill=1)       # frame
+    fill(c,(1,1,1))
+    for dx in (-1.45*inch,1.45*inch):
+        c.roundRect(cx+dx-1.15*inch,cy-0.62*inch,2.3*inch,1.24*inch,0.45*inch,stroke=1,fill=1)   # lens holes
+        fill(c,LAYER_COL[1]); c.setFont("DVB",8); c.drawCentredString(cx+dx,cy-0.05*inch,"cut out · red film behind"); fill(c,(1,1,1))
+    stroke(c,GOLD); c.setLineWidth(1); c.setDash(2,2)
+    c.roundRect(cx-3.0*inch,cy-0.75*inch,6.0*inch,1.5*inch,0.45*inch,stroke=1,fill=0); c.setDash()
+    fill(c,GOLD); c.setFont("DVB",7); c.drawCentredString(cx,cy-0.98*inch,"THE SECOND NUMBER · cut along the outer edge")
+    for k in range(2):                                                                         # arms
+        ay=cy-2.0*inch-k*0.9*inch
+        stroke(c,INK); c.setLineWidth(1.2); fill(c,NAVY)
+        c.roundRect(cx-3.1*inch,ay,5.6*inch,0.42*inch,0.2*inch,stroke=1,fill=1)
+        c.roundRect(cx+2.4*inch,ay-0.35*inch,0.55*inch,0.77*inch,0.2*inch,stroke=1,fill=1)  # ear hook
+        stroke(c,GOLD); c.setDash(2,2); c.line(cx-2.7*inch,ay,cx-2.7*inch,ay+0.42*inch); c.setDash()
+        fill(c,GOLDL); c.setFont("DV",6.5); c.drawString(cx-3.05*inch,ay+0.16*inch,"fold")
+        c.drawString(cx-2.5*inch,ay+0.16*inch,f"arm {k+1} — tape the folded tab to the frame's end")
+    y=cy-4.1*inch
+    fill(c,INK); c.setFont("DVB",11); c.drawString(inch,y,"No glue? Make a hand lens instead"); y-=14
+    fill(c,GREY); c.setFont("DV",9.5); c.drawString(inch,y,"Cut out a holder, tape red film over the window, and hold it over the card."); y-=10
+    for k in range(3):
+        x0=inch+k*2.25*inch; stroke(c,INK); c.setLineWidth(1); fill(c,NAVY)
+        c.roundRect(x0,y-1.65*inch,2*inch,1.4*inch,10,stroke=1,fill=1)
+        fill(c,(1,1,1)); c.roundRect(x0+0.2*inch,y-1.45*inch,1.6*inch,0.9*inch,8,stroke=1,fill=1)
+        fill(c,GOLD); c.setFont("DVB",6.5); c.drawCentredString(x0+inch,y-0.45*inch,"READ THE SECOND NUMBER")
+    footer(c,"The lens: Grandma's reading glasses"); c.showPage()
+
+# ================= tokens =================
+def bottle_cap(c,cx,cy,r,rgb,label):
+    import math
+    fill(c,rgb); stroke(c,INK); c.setLineWidth(0.4)
+    pts=[]
+    for k in range(42):
+        a=2*math.pi*k/42; rr=r if k%2==0 else r*0.9; pts.append((cx+rr*math.cos(a),cy+rr*math.sin(a)))
+    p=c.beginPath(); p.moveTo(*pts[0])
+    for pt in pts[1:]: p.lineTo(*pt)
+    p.close(); c.drawPath(p,stroke=1,fill=1)
+    stroke(c,(1,1,1)); c.setLineWidth(0.6); c.circle(cx,cy,r*0.68,stroke=1,fill=0)
+    fill(c,(1,1,1)); c.setFont("DVB",r*0.55); c.drawCentredString(cx,cy-r*0.2,label)
+
+def build_tokens(c):
+    fill(c,INK); c.setFont("DVB",16); c.drawString(0.6*inch,PAGE_H-0.75*inch,"Tokens: bottle caps, chips and markers")
+    fill(c,GREY); c.setFont("DV",8.5)
+    c.drawString(0.6*inch,PAGE_H-0.98*inch,"Print on cardstock and punch or cut out. Real bottle caps, coins or beans work just as well.")
+    rows=[("TRUST — bottle caps",GOLD,"T",30),("CORRUPTION — the gold-chain chips",hx("b8860b"),"$",20),
+          ("SIGHT markers (player boards)",hx("5a5470"),"S",25),("CLARITY markers",hx("3FA34D"),"C",10),
+          ("PRESSURE markers",LAYER_COL[1],"P",10),("UNDERWORLD THREADS & round marker",LAYER_COL[3],"✦",5)]
+    y=PAGE_H-1.35*inch
+    for label,col,ch,n in rows:
+        fill(c,INK); c.setFont("DVB",8.5); c.drawString(0.6*inch,y,label); y-=0.32*inch
+        per=15; r=0.2*inch
+        for k in range(n):
+            cx=0.6*inch+r+(k%per)*0.49*inch; cy=y-(k//per)*0.48*inch
+            bottle_cap(c,cx,cy,r,col,ch)
+        y-=((n-1)//per+1)*0.48*inch+0.12*inch
+    footer(c,"Tokens"); c.showPage()
+
 # ================= cover & lens page =================
 def build_cover(c):
     fill(c,NAVY); c.rect(0,0,PAGE_W,PAGE_H,stroke=0,fill=1)
-    stroke(c,GOLD); c.setLineWidth(1.5); c.rect(0.5*inch,0.5*inch,PAGE_W-inch,PAGE_H-inch,stroke=1,fill=0)
+    quilt(c,0,0,PAGE_W,PAGE_H,list(DCOL.values())+[GOLD],size=0.75*inch,alpha=0.13)
+    fill(c,NAVY); c.roundRect(0.85*inch,1.0*inch,PAGE_W-1.7*inch,PAGE_H-2.0*inch,14,stroke=0,fill=1)
+    stitch(c,0.95*inch,1.1*inch,PAGE_W-1.9*inch,PAGE_H-2.2*inch,GOLD,12)
     cx=PAGE_W/2
     for i,(dx,dy) in enumerate(((-30,0),(30,0),(0,48))):
-        fill(c,LAYER_COL[i+1]); c.circle(cx+dx,PAGE_H-3.1*inch+dy,30,stroke=0,fill=1)
-    fill(c,GOLD); c.setFont("DVB",40); c.drawCentredString(cx,PAGE_H-4.4*inch,"THE SECOND")
-    c.drawCentredString(cx,PAGE_H-5.0*inch,"NUMBER")
-    fill(c,CREAM); c.setFont("DVI",14)
-    c.drawCentredString(cx,PAGE_H-5.6*inch,"read the machine · wake the block · don't become it")
-    c.setFont("DV",11)
-    c.drawCentredString(cx,PAGE_H-6.3*inch,"A cooperative game for 2–5 players · ages 12+ · 45–60 minutes")
-    c.drawCentredString(cx,PAGE_H-6.6*inch,"PRINT & PLAY KIT · rules v3")
-    fill(c,GOLDL); c.setFont("DVB",10); c.drawCentredString(cx,PAGE_H-7.4*inch,"IN THIS KIT")
-    fill(c,CREAM); c.setFont("DV",9.5)
-    items=["How to make the decoder lens + printer test","Rulebook and quick reference","Game board",
-           "5 player boards","75 Deal cards (60 real traps, 15 honest deals) + backs",
-           "5 Roles · 4 Owners · 5 Scenarios · 12 Machine Patterns","Facilitator answer key","Playtest log"]
-    y=PAGE_H-7.75*inch
-    for it in items: c.drawCentredString(cx,y,it); y-=14
+        fill(c,LAYER_COL[i+1]); c.circle(cx+dx,PAGE_H-2.9*inch+dy,30,stroke=0,fill=1)
+    fill(c,GOLD); c.setFont("DVB",42); c.drawCentredString(cx,PAGE_H-4.15*inch,"THE SECOND")
+    c.drawCentredString(cx,PAGE_H-4.78*inch,"NUMBER")
+    fill(c,hx("E03C31")); c.roundRect(cx-1.55*inch,PAGE_H-5.28*inch,3.1*inch,0.34*inch,6,stroke=0,fill=1)
+    fill(c,CREAM); c.setFont("DVB",12); c.drawCentredString(cx,PAGE_H-5.18*inch,EDITION.upper())
+    c.setFont("DVI",13); c.drawCentredString(cx,PAGE_H-5.75*inch,"read the machine · wake the block · don't become it")
+    c.setFont("DV",10.5)
+    c.drawCentredString(cx,PAGE_H-6.2*inch,"A cooperative game for 2–5 players · ages 12+ · 45–60 minutes")
+    n_deals=sum(len(v) for v in Dk.DECK.values()); n_hon=sum(1 for v in Dk.DECK.values() for x in v if not x["trap"])
+    n_hist=sum(len(v) for v in Dk.HISTORY.values())
+    fill(c,GOLDL); c.setFont("DVB",10); c.drawCentredString(cx,PAGE_H-6.85*inch,"IN THIS KIT")
+    fill(c,CREAM); c.setFont("DV",9.2)
+    items=["The lens: printer test + Grandma's reading glasses to cut out","Rulebook and quick reference",
+           "The West Dayton board · 5 player boards · tokens",
+           "Role cards as church hand fans · the Cookout plate · the Sou-Sou can",
+           f"{n_deals} Deal cards ({n_deals-n_hon} real traps, {n_hon} honest deals) + backs",
+           f"4 Owners · {len(Dk.SCENARIOS)} Scenarios · {len(Dk.PATTERNS)} Patterns · {n_hist} History cards · the Green Book",
+           "Facilitator answer key · playtest log"]
+    y=PAGE_H-7.15*inch
+    for it in items: c.drawCentredString(cx,y,it); y-=13.5
     fill(c,GREY); c.setFont("DVI",8)
-    c.drawCentredString(cx,0.8*inch,"Part of the Individual Democracy / Civic Armor universe.")
+    c.drawCentredString(cx,1.3*inch,"Made for the West Side of Dayton, Ohio. Part of the Individual Democracy / Civic Armor universe.")
     c.showPage()
 
 def build_lens_page(c):
     fill(c,INK); c.setFont("DVB",20); c.drawString(inch,PAGE_H-inch,"Before you cut: the decoder lens")
     fill(c,GREY); c.setFont("DV",10)
     paras=[
-     ("What you need","A color printer, plain paper or light cardstock, scissors, about 40 small tokens (coins, beans, beads), and a sheet of RED transparent film — red acetate, a red lighting gel, red cellophane, or even a red candy wrapper. Two layers of thin cellophane work better than one."),
+     ("What you need","A color printer, plain paper and some cardstock, scissors, tape, a few craft sticks (for the hand fans), an empty coffee can (for the Sou-Sou), and a sheet of RED transparent film — red acetate, a red lighting gel, red cellophane, or even a red candy wrapper. Two layers of thin cellophane work better than one. Tokens are in the kit, or use bottle caps, coins or beans."),
      ("How the trick works","Each hidden layer is printed in cyan, buried under dense red decoy letters. To the naked eye it's a red blur. Through the red lens the red washes out to the color of the paper and the cyan turns dark, so the second number appears."),
      ("Print settings","Print at 100% / 'Actual size' (not 'fit to page') in COLOR on the best quality setting. Card sheets are 2.5 × 3.5 in poker size, so they fit standard sleeves. Sleeving each card in front of an old playing card keeps cards opaque and shuffleable. Cut on the solid crop marks. Card backs are optional (print them on the reverse of any card sheet), but the Owner backs matter: glue or sleeve one onto each Owner card so the Owner stays hidden."),
-     ("Test your printer first","Print this page and look at the three strips below through your lens. You should read each line clearly through the lens and NOT read it without one. If you can read the hidden line without the lens, use cardstock, a darker red film, or double up the film."),
+     ("Test your printer first","Print this page and look at the three strips below through your lens (make it from the next page: Grandma's reading glasses). You should read each line clearly through the lens and NOT read it without one. If you can read the hidden line without the lens, use cardstock, a darker red film, or double up the film."),
     ]
     y=PAGE_H-1.45*inch
     for h,t in paras:
@@ -282,24 +456,26 @@ def build_lens_page(c):
 def build_board(c):
     W,H=landscape(letter); c.setPageSize((W,H))
     fill(c,CREAM); c.rect(0,0,W,H,stroke=0,fill=1)
+    quilt(c,0,0,W,H-0.75*inch,list(DCOL.values()),size=0.6*inch,alpha=0.07)
     fill(c,NAVY); c.rect(0,H-0.75*inch,W,0.75*inch,stroke=0,fill=1)
     fill(c,GOLD); c.setFont("DVB",20); c.drawString(0.5*inch,H-0.45*inch,"THE SECOND NUMBER")
-    fill(c,CREAM); c.setFont("DVI",8.5); c.drawString(0.5*inch,H-0.64*inch,"the block · five districts, one machine")
-    # round track
+    fill(c,CREAM); c.setFont("DVI",8.5); c.drawString(0.5*inch,H-0.64*inch,f"{EDITION} · five districts, one machine")
     c.setFont("DVB",8); fill(c,CREAM); c.drawString(W-5.9*inch,H-0.32*inch,"ROUND")
     for r in range(1,13):
         bx=W-5.4*inch+(r-1)*0.4*inch
         stroke(c,GOLD); fill(c,NAVY); c.rect(bx,H-0.62*inch,0.34*inch,0.34*inch,stroke=1,fill=1)
         fill(c,GOLD if r<12 else LAYER_COL[1]); c.setFont("DVB",9); c.drawCentredString(bx+0.17*inch,H-0.5*inch,str(r))
     fill(c,CREAM); c.setFont("DV",6.5); c.drawRightString(W-0.5*inch,H-0.72*inch,"end of round 12 = the Machine wins")
-    # districts
-    colw=(W-inch)/5; top=H-0.95*inch; ch=4.35*inch
+    # districts as quilt blocks
+    colw=(W-inch)/5; top=H-0.9*inch; ch=3.2*inch
     for k,d in enumerate(E.DISTRICTS):
         x=0.5*inch+k*colw; rgb=DCOL[d]
         fill(c,(1,1,1)); stroke(c,rgb); c.setLineWidth(2); c.roundRect(x+4,top-ch,colw-8,ch,8,stroke=1,fill=1)
-        fill(c,rgb); c.roundRect(x+4,top-0.42*inch,colw-8,0.42*inch,8,stroke=0,fill=1)
-        c.rect(x+4,top-0.42*inch,colw-8,0.2*inch,stroke=0,fill=1)
-        fill(c,(1,1,1)); c.setFont("DVB",12); c.drawCentredString(x+colw/2,top-0.3*inch,d)
+        stitch(c,x+8,top-ch+4,colw-16,ch-8,rgb,6)
+        fill(c,rgb); c.roundRect(x+4,top-0.5*inch,colw-8,0.5*inch,8,stroke=0,fill=1)
+        c.rect(x+4,top-0.5*inch,colw-8,0.2*inch,stroke=0,fill=1)
+        fill(c,(1,1,1)); c.setFont("DVB",12); c.drawCentredString(x+colw/2,top-0.27*inch,d)
+        c.setFont("DVI",6.6); c.drawCentredString(x+colw/2,top-0.42*inch,Dk.DAYTON[d]["sub"])
         def track(label,yy,col,last):
             fill(c,INK); c.setFont("DVB",7.5); c.drawString(x+14,yy+0.36*inch,label)
             for n in range(4):
@@ -308,42 +484,51 @@ def build_board(c):
                 c.rect(bx,yy,bw,0.3*inch,stroke=1,fill=1)
                 fill(c,col if n<3 else (1,1,1)); c.setFont("DVB",9); c.drawCentredString(bx+bw/2,yy+0.1*inch,str(n))
             fill(c,col); c.setFont("DVB",6.5); c.drawRightString(x+colw-14,yy+0.36*inch,last)
-        track("CLARITY",top-1.05*inch,rgb,"3 = AWAKE")
+        track("CLARITY",top-1.1*inch,rgb,"3 = AWAKE")
         track("MACHINE",top-1.8*inch,LAYER_COL[1],"3 = CAPTURED")
-        fill(c,GREY); c.setFont("DV",6.5); c.drawString(x+14,top-1.95*inch,"2+ = gripped (counts for Patterns)")
-        # deal pile
+        fill(c,GREY); c.setFont("DV",6.3); c.drawString(x+14,top-1.95*inch,"2+ = gripped (counts for Patterns)")
         stroke(c,rgb); c.setDash(3,3); c.setLineWidth(1)
-        c.roundRect(x+colw/2-0.55*inch,top-3.55*inch,1.1*inch,1.45*inch,6,stroke=1,fill=0); c.setDash()
-        fill(c,rgb); c.setFont("DVB",7); c.drawCentredString(x+colw/2,top-2.85*inch,f"{d.title()}")
-        c.drawCentredString(x+colw/2,top-2.98*inch,"deal pile")
-        # thread spot
-        stroke(c,LAYER_COL[3]); c.setLineWidth(1.4); fill(c,(1,1,1)); c.circle(x+colw/2,top-3.95*inch,0.2*inch,stroke=1,fill=1)
-        fill(c,LAYER_COL[3]); c.setFont("DVB",5); c.drawCentredString(x+colw/2,top-3.97*inch,"THREAD")
-        fill(c,GREY); c.setFont("DV",5.8); c.drawCentredString(x+colw/2,top-4.27*inch,"Sight 3 + awake → trace")
-    # underworld strip
-    uy=0.45*inch; uh=1.75*inch
+        c.roundRect(x+16,top-3.0*inch,0.85*inch,0.9*inch,5,stroke=1,fill=0); c.setDash()
+        fill(c,rgb); c.setFont("DVB",6.5); c.drawCentredString(x+16+0.425*inch,top-2.52*inch,"deal pile")
+        stroke(c,LAYER_COL[3]); c.setLineWidth(1.4); fill(c,(1,1,1)); c.circle(x+colw-0.55*inch,top-2.55*inch,0.24*inch,stroke=1,fill=1)
+        fill(c,LAYER_COL[3]); c.setFont("DVB",5); c.drawCentredString(x+colw-0.55*inch,top-2.57*inch,"THREAD")
+        fill(c,GREY); c.setFont("DV",5.5); c.drawCentredString(x+colw-0.55*inch,top-2.95*inch,"Sight 3 + awake")
+    # the Commons row: five West Side places
+    cy=top-ch-0.12*inch; chh=1.05*inch; tw=(W-inch)/5
+    fill(c,NAVY); c.setFont("DVB",8); c.drawString(0.55*inch,cy-0.1*inch,"THE COMMONS — gather here: +2 Trust, −1 Corruption, plus the place's bonus")
+    for k,(key,P) in enumerate(Dk.PLACES.items()):
+        x=0.5*inch+k*tw; y=cy-chh-0.15*inch
+        fill(c,CREAM); stroke(c,GOLD); c.setLineWidth(1.4); c.roundRect(x+4,y,tw-8,chh,8,stroke=1,fill=1)
+        stitch(c,x+8,y+4,tw-16,chh-8,GOLD,6)
+        fill(c,INK); c.setFont("DVB",8.2); lines,_=fit_lines(P["name"],"DVB",8.2,tw-26,2)
+        ty=y+chh-0.2*inch
+        for ln in lines: c.drawString(x+13,ty,ln); ty-=10
+        fill(c,GREY); c.setFont("DVI",6.2); c.drawString(x+13,ty,P["where"]); ty-=10
+        fill(c,INK); c.setFont("DV",6.6)
+        for ln in simpleSplit(P["bonus"],"DV",6.6,tw-26): c.drawString(x+13,ty,ln); ty-=8.4
+    # the Underworld strip with the Sou-Sou can, Green Book and Cookout slots
+    uy=0.3*inch; uh=1.62*inch
     fill(c,NAVY); c.roundRect(0.5*inch,uy,W-inch,uh,8,stroke=0,fill=1)
     fill(c,GOLD); c.setFont("DVB",12); c.drawString(0.7*inch,uy+uh-0.3*inch,"THE UNDERWORLD")
-    fill(c,CREAM); c.setFont("DV",7.5)
-    c.drawString(0.7*inch,uy+uh-0.48*inch,"Total Clarity across all five districts. At 9 it cracks open: flip the Owner,")
-    c.drawString(0.7*inch,uy+uh-0.62*inch,"it fights in the open (+1 strike, one cover-up per round). Trace 3 threads, then EXPOSE to win.")
+    fill(c,CREAM); c.setFont("DV",7.2)
+    c.drawString(0.7*inch,uy+uh-0.47*inch,"Total Clarity across all five districts. At 9 it cracks open: flip the Owner; it fights in the open")
+    c.drawString(0.7*inch,uy+uh-0.6*inch,"(+1 strike, one cover-up per round). Trace 3 threads, then EXPOSE to win.")
     for n in range(16):
-        bx=0.7*inch+n*0.38*inch; by=uy+0.62*inch
-        col=GOLD if n>=9 else hx("3b4a63")
-        fill(c,col); c.rect(bx,by,0.32*inch,0.32*inch,stroke=0,fill=1)
-        fill(c,NAVY if n>=9 else CREAM); c.setFont("DVB",9); c.drawCentredString(bx+0.16*inch,by+0.1*inch,str(n))
-    fill(c,GOLD); c.setFont("DVB",7); c.drawString(0.7*inch+9*0.38*inch,uy+0.45*inch,"▲ 9: CRACKS OPEN")
-    # owner + patterns slots
-    ox=W-3.65*inch
-    stroke(c,GOLD); c.setDash(3,3); c.roundRect(ox,uy+0.15*inch,1.1*inch,1.45*inch,6,stroke=1,fill=0)
-    c.roundRect(ox+1.25*inch,uy+0.15*inch,1.75*inch,1.45*inch,6,stroke=1,fill=0); c.setDash()
-    fill(c,GOLD); c.setFont("DVB",7.5); c.drawCentredString(ox+0.55*inch,uy+0.95*inch,"OWNER")
-    c.setFont("DV",6.5); c.drawCentredString(ox+0.55*inch,uy+0.82*inch,"face-down")
-    c.setFont("DVB",7.5); c.drawCentredString(ox+2.12*inch,uy+0.95*inch,"ACTIVE PATTERNS")
-    c.setFont("DV",6.5); c.drawCentredString(ox+2.12*inch,uy+0.82*inch,"read them aloud")
-    fill(c,CREAM); c.setFont("DV",6.5)
-    c.drawString(0.7*inch,uy+0.27*inch,"The spread rule: the Machine, the Overlord and the Fallen act on each district at most once per round.")
-    c.drawString(0.7*inch,uy+0.14*inch,"Lose: 2 districts captured · everyone Falls · round 12 ends.")
+        bx=0.7*inch+n*0.31*inch; by=uy+0.55*inch
+        col=GOLD if n>=9 else hx("3b2f5c")
+        fill(c,col); c.rect(bx,by,0.27*inch,0.27*inch,stroke=0,fill=1)
+        fill(c,NAVY if n>=9 else CREAM); c.setFont("DVB",7.5); c.drawCentredString(bx+0.135*inch,by+0.085*inch,str(n))
+    fill(c,GOLD); c.setFont("DVB",6.5); c.drawString(0.7*inch+9*0.31*inch,uy+0.42*inch,"▲ 9: CRACKS OPEN")
+    fill(c,CREAM); c.setFont("DV",6)
+    c.drawString(0.7*inch,uy+0.24*inch,"Spread rule: the Machine acts on each district at most once per round.")
+    c.drawString(0.7*inch,uy+0.12*inch,"Lose: 2 districts captured · everyone Falls · round 12 ends.")
+    slots=[("OWNER","face-down"),("PATTERNS","read aloud"),("SOU-SOU","the can · pot 0–4"),("GREEN BOOK","once per game"),("COOKOUT","the plate")]
+    sx=W-0.6*inch-len(slots)*0.86*inch
+    for k,(t,sub) in enumerate(slots):
+        x0=sx+k*0.86*inch
+        stroke(c,GOLD); c.setDash(3,3); c.roundRect(x0,uy+0.15*inch,0.8*inch,1.25*inch,6,stroke=1,fill=0); c.setDash()
+        fill(c,GOLD); c.setFont("DVB",6.5); c.drawCentredString(x0+0.4*inch,uy+0.85*inch,t)
+        fill(c,CREAM); c.setFont("DV",5.4); c.drawCentredString(x0+0.4*inch,uy+0.72*inch,sub)
     c.showPage(); c.setPageSize(letter)
 
 # ================= player boards =================
@@ -351,6 +536,7 @@ def player_board(c,y0,role,gift):
     x0=0.5*inch; w=PAGE_W-inch; h=4.85*inch
     stroke(c,NAVY); c.setLineWidth(1.4); fill(c,(1,1,1)); c.roundRect(x0,y0,w,h,10,stroke=1,fill=1)
     fill(c,NAVY); c.roundRect(x0,y0+h-0.55*inch,w,0.55*inch,10,stroke=0,fill=1)
+    quilt(c,x0,y0+h-0.55*inch,w,0.55*inch,list(DCOL.values()),size=0.28*inch,alpha=0.12)
     c.rect(x0,y0+h-0.55*inch,w,0.2*inch,stroke=0,fill=1)
     fill(c,GOLD); c.setFont("DVB",15); c.drawString(x0+0.25*inch,y0+h-0.38*inch,f"THE {role.upper()}")
     fill(c,CREAM); c.setFont("DV",8)
@@ -385,8 +571,8 @@ def player_board(c,y0,role,gift):
     fill(c,INK); c.setFont("DVB",9); c.drawString(ax,ay,"ACTIONS"); ay-=13
     acts=[("Study","+1 Sight in a district. +1 Legend."),
           ("Face a deal","Read what your Sight allows → TAKE / WALK / NEGOTIATE."),
-          ("Teach","+1 Sight to a teammate where you read better. 1 Trust (Translator: free). +2 Legend."),
-          ("Commons","+2 Trust, −1 Corruption."),
+          ("Teach","+1 Sight to a teammate where you read better. 1 Trust (Translator: free). +2 Legend. Call and response: +1 Legend each."),
+          ("Commons","Gather at a West Side place: +2 Trust, −1 Corruption, plus its bonus (see the board)."),
           ("Reach","2 Trust: a Fallen friend comes home at Corruption 4. +3 Legend."),
           ("Trace","Underworld open, Sight 3, district awake → place a thread. +2 Legend."),
           ("Expose","3 threads traced → the block wins.")]
@@ -466,12 +652,16 @@ def rules_story():
     return story
 
 def reference_story():
-    s=[PageBreak(),Paragraph("Quick reference",ST["h1"])]
+    s=[PageBreak(),Paragraph("Quick reference — West Dayton Edition",ST["h1"])]
     rows=[["Your turn","Take your actions (2–3, see setup table): Study · Face a deal · Teach · Commons · Reach · Trace · Expose."],
           ["Facing a deal","Draw from a district. Lens over the zones your Sight unlocks. Then TAKE / WALK / NEGOTIATE."],
           ["Honest deal","TAKE: +2 Trust, +1 Clarity, +1 Legend. WALK: −1 Trust. NEGOTIATE: the Trust is wasted."],
           ["Trap","TAKE: −2 Pressure now (or +2 Clarity if no Pressure), +2 Corruption. WALK: safe. NEGOTIATE (1 Trust): Sight ≥ lever → −1 Pressure (Organizer −2), +1 Clarity, +2 Legend; else +1 Pressure."],
-          ["After all turns","Total Clarity ≥ 9 → the Underworld cracks open: flip the Owner."],
+          ["Commons places","Barbershop (next Teach free) · Church (−2 Corruption) · Adventure Central (next Study +2) · Gem City Market (next deal: draw 2, face 1) · Grandma's table (once: all +2 Trust)."],
+          ["Teach","Call and response: read a red layer aloud; if your learner says the second number back, +1 Legend each."],
+          ["Start of a round","Once per game, call the Cookout instead of turns: everyone +2 Trust, −1 Corruption, +1 Legend, Sight in one district up to the table's best."],
+          ["After all turns","The Sou-Sou (optional): everyone with Trust puts 1 in the can; at 4 the next player's hand clears 2 Pressure, no Corruption. Then: total Clarity ≥ 9 → the Underworld cracks open."],
+          ["The Green Book","Once per game, a strike that would capture a district lands nowhere."],
           ["Machine phase","Strikes (setup table), each on a different unwoken district, closest to waking first. Muddy the strongest unwoken district (−1 Clarity). Scenario, Owner, Patterns."],
           ["Owner in the open","+1 strike; once per round −1 Clarity on a woken district without a thread."],
           ["Lose","2 districts captured · everyone Fallen · round 12 ends."],
@@ -484,7 +674,7 @@ def reference_story():
     s+=[t,Spacer(1,10),Paragraph("Setup by player count",ST["h2"])]
     def mv(m): return str(int(m)) if m==int(m) else f"{int(m)}, or {int(m)+1} on even rounds"
     s+=md_table(["| Players | Actions per turn | Machine strikes | Overlord moves |"]+
-                [f"| {k} | {E.ACTIONS[k]} | {E.MACHINE_HITS[k]} | {mv(E.OVERLORD_MOVES[k])} |" for k in (2,3,4,5)])
+                [f"| {k} | {E.ACTIONS[k]} | {mv(E.MACHINE_HITS[k])} | {mv(E.OVERLORD_MOVES[k])} |" for k in (2,3,4,5)])
     return s
 
 def key_story():
@@ -537,15 +727,15 @@ def canvas_pdf(*builders):
     c.save(); buf.seek(0); return buf
 
 def main():
-    parts=[canvas_pdf(build_cover,build_lens_page),
+    parts=[canvas_pdf(build_cover,build_lens_page,build_glasses),
            platypus_pdf(rules_story()+reference_story(),"Rulebook"),
-           canvas_pdf(build_board,build_player_boards,build_deal_pages,build_other_cards),
+           canvas_pdf(build_board,build_player_boards,build_fans_and_pieces,build_tokens,build_deal_pages,build_other_cards),
            platypus_pdf(key_story()[1:],"Answer key"),
            platypus_pdf(log_story()[1:],"Playtest log")]
     w=PdfWriter()
     for p in parts:
         for page in PdfReader(p).pages: w.add_page(page)
-    w.add_metadata({"/Title":"The Second Number — Print & Play Kit (v3)","/Author":"The Second Number",
+    w.add_metadata({"/Title":f"The Second Number — {EDITION} — Print & Play Kit","/Author":"The Second Number",
                     "/Subject":"A cooperative game about reading the hidden cost in every deal."})
     with open(OUT,"wb") as f: w.write(f)
     print(f"wrote {OUT} ({len(w.pages)} pages)")

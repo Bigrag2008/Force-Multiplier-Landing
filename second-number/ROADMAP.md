@@ -59,7 +59,7 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 
 ## Part D: The print kit
 
-- [ ] **11. Restyle the print-and-play kit for West Dayton**
+- [x] **11. Restyle the print-and-play kit for West Dayton**
   - New palette, plus a West Dayton board with the Commons places, the Sou-Sou pot, the Cookout and the Green Book.
   - Printable reading-glasses lens frames, hand-fan character cards, paperwork-style deal cards, a token sheet, and History cards.
 
