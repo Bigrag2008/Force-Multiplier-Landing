@@ -50,7 +50,7 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
   - Palette and influences: AfriCOBRA's "Kool-Aid colors," 1970s Black Power poster art (as inspiration only), Jacob Lawrence and Romare Bearden, quilt geometry, hand-painted sign lettering, and Dayton funk record sleeves.
   - Components: Grandma's reading glasses (the lens), church hand fans (the character cards), real-paperwork deal cards, and bottle-cap tokens.
 
-- [ ] **10. `COMMUNITY.md`: doing it right**
+- [x] **10. `COMMUNITY.md`: doing it right**
   - Hire Black illustrators and writers.
   - Partner with Wilberforce University and Central State University.
   - Get permission before printing any real business's name.
@@ -69,11 +69,4 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 ---
 
 ## Facts to verify locally before printing
-These are used in the game and should be confirmed by a Dayton historian or the business named (see `COMMUNITY.md`):
-- Gem City Market's address and permission to use its name.
-- Adventure Central at Wesleyan MetroPark: its current name and programs.
-- Good Samaritan Hospital (northwest Dayton) closing in 2018, and how the community describes it.
-- The GM Moraine plant closing (2008) and NCR moving its headquarters out of Dayton (2009).
-- The 1890 *Dayton Tattler*: Paul Laurence Dunbar's paper, printed by Orville and Wilbur Wright.
-- James H. McGee's years as mayor (1970–1982).
-- Every History card (`deck_cards.py`, `HISTORY`): dates, places and wording. In particular: that Dayton has a 1930s HOLC map; that Dunbar and Orville Wright were Central High classmates; the Contract Buyers League outcome ("forced many sellers to renegotiate"); and Greenwood's rebuilding.
+The full checklist, with permissions and partners, lives in `COMMUNITY.md`.
