@@ -129,16 +129,19 @@ CHAPTERS = {
     intro=("The federal maps shade the West Side red. The banks won't lend here, the insurers won't write here, "
            "and the only way to buy a house is on contract. Families start reading their contracts together."),
     pressure={"HOUSING":2, "LENDING":2},          # REDLINING is active from round 1
+    twist=("REDLINING is active from round 1, and from round 2, while it stays active, the map compounds: it tightens a second "
+           "time every round (+1 Pressure on the weaker of Housing and Lending). Break it, or it breaks you."),
     owner="The Lobbyist", face="The Appraiser",
     face_text=("The Appraiser: leans on your strongest unfinished district every round (+1 Pressure); "
                "on reveal, knocks one woken district back to Clarity 1."),
     decks={"HOUSING":THE_MAP_HOUSING, "LENDING":THE_MAP_LENDING},
     league=dict(name="The League",
                 text=("Like the Contract Buyers League (Chicago, 1968): sign the pledge to withhold together "
-                      "(an action and 1 Trust). When as many families have signed as there are players, the League "
-                      "forms: Housing Pressure −2, and every Housing and Lending trap can be negotiated with Sight 1.")),
+                      "(an action). Every family must sign in the same round, or the sellers scare them off "
+                      "and the pledges fall apart. Once it forms: Housing Pressure −2 at once, Housing −1 every second round "
+                      "after, and every Housing and Lending trap can be negotiated with Sight 1.")),
     unlocks_always=["The Redlining Maps"],
-    unlocks_if_league_broke_redlining=["The Contract Buyers League"],
+    unlocks_if_league_won=["The Contract Buyers League"],
     decision=("Stay and fight for the house, or move to where the map says you can? Stay: Housing keeps its sticker, "
               "and the Organizer gains +1 Legend per League signature in Chapter 4. Move: remove one Scar from Housing, "
               "but the Elder role skips a generation."),

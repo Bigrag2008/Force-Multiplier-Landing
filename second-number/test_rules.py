@@ -157,17 +157,30 @@ def test_chapter_the_map_setup():
 def test_the_league_forms_and_lowers_the_levers():
     g=E.new_game(seed=1, chapter="THE_MAP", roster=E.ROSTER[:2]); a,b=g.players
     a.trust=b.trust=2; g.sign_league(a); assert not g.league_formed
-    g.sign_league(a); assert len(g.league)==1                              # one signature each
+    g.sign_league(a); assert len(g.league)==1 and a.trust==2               # one signature each; costs an action, not Trust
     g.sign_league(b); assert g.league_formed and g.pressure["HOUSING"]==0
     a.sight["LENDING"]=1; a.trust=2; g.pressure["LENDING"]=2
     g.face(a,"LENDING","NEGOTIATE",card(lever=3)); assert g.pressure["LENDING"]==1   # blue lever beaten at Sight 1
+
+def test_league_pledges_fall_apart_if_not_same_round():
+    g=E.new_game(seed=1, chapter="THE_MAP", roster=E.ROSTER[:3]); a,b,c=g.players
+    a.trust=b.trust=c.trust=2; g.sign_league(a); g.sign_league(b)
+    g.league_round(); assert not g.league_formed and not g.league         # scared off at the Machine phase
+
+def test_the_map_compounds_redlining():
+    g=E.new_game(seed=1, chapter="THE_MAP"); g.round=2; g.pressure["HOUSING"]=2; g.pressure["LENDING"]=2
+    g.tighten(); assert g.pressure["HOUSING"]+g.pressure["LENDING"]==6       # compounds, then tightens
+    g=E.new_game(seed=1, chapter="THE_MAP"); g.round=2; g.pressure["HOUSING"]=1
+    g.tighten(); assert g.pressure["HOUSING"]==1                           # broken: no compounding
+    g=E.new_game(seed=1, chapter="THE_MAP"); g.round=1
+    g.tighten(); assert g.pressure["HOUSING"]+g.pressure["LENDING"]==5      # round 1: tightens only once
 
 def test_no_league_outside_the_chapter():
     g,p=game(); p.trust=3; g.sign_league(p); assert not g.league and p.trust==3
 
 def test_chapter_result_writes_the_ledger():
     g=E.new_game(seed=1, chapter="THE_MAP"); g.result="BLOCK_WIN"
-    g.clarity["HEALTH"]=E.WAKE; g.pressure["HOUSING"]=0; g.league_formed=True
+    g.clarity["HEALTH"]=E.WAKE; g.league_formed=True
     r=g.chapter_result()
     assert r["won"] and r["ledger"]==3 and r["rebuilt"]==["HEALTH"] and "The Contract Buyers League" in r["unlocks"]
     g.result="MACHINE_WIN"; g.pressure["LABOR"]=3; r=g.chapter_result()

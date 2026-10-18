@@ -51,6 +51,30 @@ def run_batch(n, k, overlord=False, style="careful", seed0=0):
         for p in g.blk(): role[p.role][0]+=1; role[p.role][1]+=win
     return st, rounds, owner, scen, role
 
+def chapter_report(n, chapter="THE_MAP"):
+    """Win rate by player count, and whether organizing matters: the same bot that never signs."""
+    rows=[]
+    for k in (2,3,4,5):
+        def batch(sign):
+            st=collections.Counter(); ob=E.Game.block_ai
+            if not sign:
+                def ai(self,pl,style="careful"):
+                    a=ob(self,pl,style)
+                    if a[0]=="league": self.league_formed=True; a=ob(self,pl,style); self.league_formed=False
+                    return a
+                E.Game.block_ai=ai
+            for i in range(n):
+                rng=random.Random(i*7919+k*31)
+                g=E.new_game(seed=rng.randrange(10**9),roster=roster_for(k,rng),chapter=chapter); g.run_auto()
+                r=g.chapter_result(); st["win"]+=r["won"]; st["league"]+=r["league"]
+                st["broke"]+=r["redlining_broken"]; st["ledger"]+=r["ledger"]; st["r1"]+=g.round==1 and not r["won"]
+            E.Game.block_ai=ob; return st
+        a=batch(True); b=batch(False)
+        print(f"  {k} players  win {pct(a['win'],n)}  never-organize {pct(b['win'],n)}  League formed {pct(a['league'],n)}  "
+              f"REDLINING broken {pct(a['broke'],n)}  Ledger {a['ledger']/n:+.1f}  r1-loss {pct(a['r1'],n)}")
+        rows.append((k,a['win']/n,b['win']/n,a['r1']/n))
+    return rows
+
 def pct(a,b): return f"{100*a/b:5.1f}%" if b else "   -  "
 def wr(st,n): return st["BLOCK_WIN"]/n
 
@@ -95,12 +119,18 @@ if __name__=="__main__":
     print("\n=== ROLES — block win rate when the role is at the table (co-op, 4 players, human-like bot) ===")
     for r,(c,w) in sorted(role.items()): print(f"  {r:<12}{pct(w,c)}")
 
+    print("\n=== CHAPTER 3: THE MAP (careful bot) ===")
+    chap=chapter_report(n)
+
     print("\n--- verdict ---")
     for name,w,ok in verdict:
         print(f"  {name:<12} {'healthy' if ok else 'NEEDS TUNING'}  ({w*100:.0f}% block wins)")
     tempt = style_wr["careful"]>style_wr["never"] and style_wr["greedy"]<style_wr["careful"]
     print(f"  Shortcut     {'tempting AND dangerous' if tempt else 'NEEDS TUNING'}  "
           f"(never {style_wr['never']*100:.0f}% · careful {style_wr['careful']*100:.0f}% · greedy {style_wr['greedy']*100:.0f}%)")
+    for k,w,never,r1 in chap:
+        ok=0.40<=w<=0.70 and w>never and r1<0.02
+        print(f"  Chapter 3 {k}p {'healthy' if ok else 'NEEDS TUNING'}  ({w*100:.0f}% wins; organizing worth {100*(w-never):+.0f} pts)")
     deep = tot and st['neg_amber']/tot>=0.15
     print(f"  Deep Sight   {'matters' if deep else 'NEEDS TUNING'}  (amber = {pct(st['neg_amber'],tot).strip()} of defusals; "
           f"blue/Sight 3 is required to trace every winning thread)")

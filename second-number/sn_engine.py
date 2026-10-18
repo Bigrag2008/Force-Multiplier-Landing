@@ -46,6 +46,7 @@ START_TRUST     = 2
 MAX_TRUST       = 5    # Trust is spent, not hoarded
 MAX_ROUNDS      = 12   # the amber clock: survive past this and the Machine still wins
 SOUSOU_HAND     = 4    # Trust in the Sou-Sou pot that pays out one hand
+LEAGUE_PUSH     = ("HOUSING",)        # Chapter 3: where a formed League pushes back, each Machine phase
 # per player count: actions per turn, Machine hits per round, Overlord actions per round
 # (tuned with balance_test.py so every count plays in the 40–70% band)
 ACTIONS         = {1:4, 2:3, 3:3, 4:2, 5:2}
@@ -124,16 +125,33 @@ class Game:
         if not self.has_league() or self.league_formed:
             self.emit("  There's no League to sign right now."); return
         if pl.name in self.league: self.emit(f"  {pl.name} has already signed."); return
-        if pl.trust<1: self.emit(f"  {pl.name} needs 1 Trust to sign the pledge."); return
-        pl.trust-=1; self.league.add(pl.name); pl.legend+=1
+        self.league.add(pl.name); pl.legend+=1
         self.emit(f"{pl.name} signs the League pledge: we withhold together. "
                   f"Signatures {len(self.league)}/{self.league_needed()}. Legend +1.")
-        if len(self.league)>=self.league_needed():
+        self.try_form_league()
+
+    def try_form_league(self):
+        """It forms the moment every family has signed in the same round."""
+        if self.league_formed or not self.has_league() or len(self.league)<self.league_needed(): return
+        if True:
             self.league_formed=True; before=self.pressure["HOUSING"]
             self.pressure["HOUSING"]=max(0,before-2)
             self.emit(f"✦ THE LEAGUE FORMS. Housing Pressure {before}→{self.pressure['HOUSING']}. "
                       f"The families read their contracts together: every Housing and Lending trap can now be "
                       f"negotiated with Sight 1.")
+
+    def league_round(self):
+        """Each Machine phase: a formed League pushes back; a forming one draws retaliation."""
+        if not self.has_league(): return
+        if self.league_formed and self.round%2==0:            # withholding bites every other round
+            d=max(LEAGUE_PUSH,key=lambda x:self.pressure[x])
+            if self.pressure[d]>0:
+                self.pressure[d]-=1
+                self.emit(f"  ✦ The League withholds together: Pressure in {d} −1 ({self.pressure[d]}/{CAPTURE}).")
+        elif self.league:
+            self.emit(f"  ⚑ The sellers scare families off: the pledges fall apart ({len(self.league)}/"
+                      f"{self.league_needed()} signed). Everyone has to sign in the same round.")
+            self.league=set()
 
     def neg_cost(self, d):
         return NEG_COST+(1 if self.scenario=="The Hospital Closes" and d=="HEALTH" else 0)
@@ -444,6 +462,7 @@ class Game:
         else: self.reveal_owner()
 
     def tighten(self):
+        self.map_compounds()
         aps=self.active_patterns()
         if not aps: return
         c,n,_=max(aps,key=lambda x:len(x[0]))
@@ -451,6 +470,16 @@ class Game:
         if cand:
             d=min(cand,key=lambda x:self.pressure[x]); self.pressure[d]+=1
             self.emit(f"  ⚠ {n} tightens on {d}. Pressure {self.pressure[d]}/{CAPTURE}.")
+            if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
+
+    def map_compounds(self):
+        """Chapter 3: while REDLINING is active, the map tightens it again every round."""
+        if not self.has_league() or self.round<2: return            # the family gets one round to read the map
+        if not any(n=="REDLINING" for _,n,_ in self.active_patterns()): return
+        d=min(("HOUSING","LENDING"),key=lambda x:self.pressure[x])
+        if self.pressure[d]<CAPTURE:
+            self.pressure[d]+=1
+            self.emit(f"  ⚠ The map compounds: REDLINING tightens again on {d}. Pressure {self.pressure[d]}/{CAPTURE}.")
             if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
 
     def check_patterns(self):
@@ -540,7 +569,8 @@ class Game:
             if pl.sight[d]>=1 or style!="never": return self.bot_face(pl,d,style)
             return ("study",d,None)
         # Chapter 3: sign the League pledge — collective action first
-        if self.has_league() and not self.league_formed and pl.name not in self.league and pl.trust>=1:
+        if (self.has_league() and not self.league_formed and pl.name not in self.league
+                and max(self.pressure["HOUSING"],self.pressure["LENDING"])>=1):
             return ("league",None,None)
         # final act: get someone to Sight 3 in a woken, untraced district
         if self.uw_open:
@@ -571,6 +601,7 @@ class Game:
         if not self.uw_open and self.total_clarity()>=UNDERWORLD_AT: self.open_underworld()
 
     def machine_phase(self, overlord_move=None):
+        self.league_round()
         if self.overlord and self.ov():
             m=OVERLORD_MOVES[self.n()]; moves=int(m)+(1 if m%1 and self.round%2==0 else 0)
             for _ in range(moves):
@@ -618,7 +649,7 @@ class Game:
         unlocks=[]
         if self.chapter:
             unlocks+=self.chapter["unlocks_always"]
-            if self.league_formed and not redlining: unlocks+=self.chapter["unlocks_if_league_broke_redlining"]
+            if self.league_formed and won: unlocks+=self.chapter["unlocks_if_league_won"]
         return dict(won=won, ledger=ledger, rebuilt=awake, scarred=captured, falls=falls, reaches=reaches,
                     league=self.league_formed, redlining_broken=not redlining, unlocks=unlocks,
                     rally=not won)                      # the community rallies after a loss
