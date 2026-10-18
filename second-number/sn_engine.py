@@ -487,8 +487,8 @@ class Game:
         for c,n,l in self.active_patterns():
             if n not in self.patterns_seen:
                 self.patterns_seen.add(n); self.emit(f"⚠⚠ MACHINE PATTERN — {n}  [{' + '.join(c)}]: {l}")
-        for n in list(self.patterns_seen):
-            if n not in active:
+        for _,n,_ in PATTERNS:                                  # fixed order, so every run (and port) matches
+            if n in self.patterns_seen and n not in active:
                 self.patterns_seen.discard(n); self.emit(f"✦ PATTERN BROKEN — {n}.")
 
     def check_end(self):
