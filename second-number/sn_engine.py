@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
 """
 THE SECOND NUMBER — rules engine (single source of truth).
-v2: cards are decisions. Addresses the design review:
-  • every deal is a choice: TAKE / WALK / NEGOTIATE, resolved by what you can SEE
-  • Sight genuinely gates play (you must learn to read before you can act well)
-  • honest deals are mixed in, so blind suspicion has a cost
-  • corruption recovers (Commons), so players flirt with the line and actually Fall
-  • roles rebalanced (Translator transfers, Student one power, Organizer defuses harder)
-  • Owners act from round 1 (hidden), so they change the game
-  • Overlord Underworld bug fixed — the block can win in both modes
+v3: makes reading the real skill, and the shortcut a real temptation.
+  • SEEING ≠ BEATING. Sight 1 (red) tells you a deal is a trap. To NEGOTIATE it
+    down you need Sight up to the card's lever layer (red / amber / blue), so
+    Sight 2 and Sight 3 finally matter.
+  • NEGOTIATE costs 1 Trust and can fail; WALK is the safe exit; TAKE the honest
+    deals. Reading the card decides which.
+  • TAKE is tempting again: on a trap it patches the district NOW (Pressure −2) or
+    rushes clarity (+2) — and puts Corruption on you. Corruption-as-salvation.
+  • The Machine scales with player count (2–5 all playable).
+  • The Underworld is a final act: once it cracks open the Owner fights in the
+    open, and the block must TRACE the thread (Sight 3, blue) in woken districts
+    before it can expose the Owner and win.
+  • Owners all bite from round 1 (Debt Buyer bug fixed).
 
-The front-end (interactive) and the balance tester both import this. No I/O at
-import; methods mutate state and append plain-text events to self.log.
+The front-end (second_number_play.py) and the balance tester both import this.
+No I/O at import; methods mutate state and append plain-text events to self.log.
 """
 import random
 import deck_cards as D
@@ -21,6 +26,8 @@ ROLES     = dict(D.ROLES)
 PATTERNS  = list(D.PATTERNS)
 OWNERS    = dict(D.OWNERS)
 SCENARIOS = dict(D.SCENARIOS)
+LAYERS    = [(1,"red","🔴 RED — the cost"),(2,"amber","🟠 AMBER — the clock"),(3,"blue","🔵 BLUE — the connection")]
+LEVER_NAME= {0:"—",1:"red",2:"amber",3:"blue"}
 
 # ---- tunable constants (the balance tester sweeps these) ----
 WAKE            = 3    # district clarity needed to wake it
@@ -28,11 +35,18 @@ CAPTURE         = 3    # pressure that captures a district
 FLIP            = 6    # corruption that flips a player to the Machine
 GRIP            = 2    # pressure at which a district counts toward a Pattern
 LOSE_CAPTURED   = 2    # captured districts that lose the game
-UNDERWORLD_AT   = 14   # total clarity that cracks the Underworld open
-AWAKE_TO_WIN    = 4    # districts awake needed (with UW open) to expose & win
+UNDERWORLD_AT   = 9    # total clarity that cracks the Underworld open
+THREADS_TO_WIN  = 3    # Underworld threads traced before you can expose the Owner
 TAKE_CORRUPT    = 2    # corruption gained per TAKE on a trap
-MACHINE_HITS    = 2    # base pressure hits per Machine phase (+1 per fallen)
+NEG_COST        = 1    # Trust spent to NEGOTIATE
 START_TRUST     = 2
+MAX_TRUST       = 5    # Trust is spent, not hoarded
+MAX_ROUNDS      = 12   # the amber clock: survive past this and the Machine still wins
+# per player count: actions per turn, Machine hits per round, Overlord actions per round
+# (tuned with balance_test.py so every count plays in the 40–70% band)
+ACTIONS         = {1:4, 2:3, 3:3, 4:2, 5:2}
+MACHINE_HITS    = {1:1, 2:1, 3:2, 4:1, 5:2}
+OVERLORD_MOVES  = {1:1.5, 2:2, 3:3.5, 4:2, 5:3}   # x.5 = one extra move on even rounds
 
 class Player:
     def __init__(self, name, role):
@@ -49,6 +63,8 @@ class Game:
         self.clarity  = {d:0 for d in DISTRICTS}
         self.pressure = {d:0 for d in DISTRICTS}
         self.round=0; self.uw_open=False; self.owner_shown=overlord
+        self.threads=set(); self.struck=set()   # districts extracted from this round
+        self.covered=False                     # the Owner's one cover-up per round
         self.won=False; self.result=None; self.log=[]; self.patterns_seen=set()
         self.human_overlord=False
         self.scenario = scenario or random.choice(list(SCENARIOS))
@@ -65,78 +81,90 @@ class Game:
     def blk(self):    return [p for p in self.players if p.role!="Overlord"]
     def active(self): return [p for p in self.blk() if not p.flipped]
     def ov(self):     return next((p for p in self.players if p.role=="Overlord"), None)
+    def n(self):      return max(1,min(5,len(self.blk())))
+    def actions(self):return ACTIONS[self.n()]
     def total_clarity(self): return sum(self.clarity.values())
     def awake(self):  return sum(1 for d in DISTRICTS if self.clarity[d]>=WAKE)
     def captured(self): return sum(1 for d in DISTRICTS if self.pressure[d]>=CAPTURE)
     def gripped(self,d): return self.pressure[d]>=GRIP
     def active_patterns(self):
         return [(c,n,l) for c,n,l in PATTERNS if all(self.gripped(d) for d in c)]
-    def dbg_owner(self): return self.owner  # for tests
+    def threads_needed(self): return THREADS_TO_WIN
+    def can_trace(self,pl,d):
+        return self.uw_open and pl.sight[d]>=3 and self.clarity[d]>=WAKE and d not in self.threads
+    def can_expose(self): return self.uw_open and len(self.threads)>=self.threads_needed()
+    def take_cost(self):
+        return TAKE_CORRUPT+(1 if self.owner=="The Debt Buyer" else 0)
+
+    # ---- what a player can see on a card (front-ends render this) ----
+    def visible(self, pl, d, card):
+        """[(layer_no, label, text_or_None)] — None means locked at this Sight."""
+        return [(n,lab,card[k] if pl.sight[d]>=n else None) for n,k,lab in LAYERS]
 
     # ================= BLOCK ACTIONS =================
     def study(self, pl, d):
         if pl.sight[d] >= 3:
             self.emit(f"{pl.name} already reads {d} fully."); return
-        pl.sight[d]=min(3,pl.sight[d]+1); pl.legend+=1
+        pl.sight[d]+=1; pl.legend+=1
         self.emit(f"{pl.name} studies {d}. Sight now {pl.sight[d]}/3. Legend +1.")
 
     def draw(self, d): return random.choice(D.DECK[d])
 
     def face(self, pl, d, choice, card=None):
         """Face a live deal. choice in TAKE/WALK/NEGOTIATE."""
-        card=card or self.draw(d); trap=card["trap"]; see=pl.sight[d]
+        card=card or self.draw(d); trap=card["trap"]; lever=card["lever"]; see=pl.sight[d]
         self.emit(f"{pl.name} faces a deal in {d}: \"{card['front']}\"  → {choice}")
         if choice=="TAKE":
-            if trap:
-                pl.trust+=2
-                self.pressure[d]=min(CAPTURE,self.pressure[d]+1)
-                cost=TAKE_CORRUPT+(1 if (self.owner_shown and self.owner=="The Debt Buyer") else 0)
-                pl.corruption+=cost
-                self.emit(f"  TAKE the trap: quick Trust +2 for YOU — but Pressure +1 on {d} and Corruption +{cost}. "
-                          f"(It helped you, not the block.)")
-                if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
+            if not trap:
+                pl.trust+=2; self.clarity[d]=min(WAKE,self.clarity[d]+1); pl.legend+=1
+                self.emit(f"  It was an HONEST deal — real help. Trust +2, {d} clarity +1, Legend +1.")
             else:
-                pl.trust+=2; self.emit(f"  It was an HONEST deal — real help. Trust +2, no harm.")
+                cost=self.take_cost(); pl.corruption+=cost
+                if self.pressure[d]>0:
+                    self.pressure[d]=max(0,self.pressure[d]-2)
+                    self.emit(f"  TAKE the trap to patch {d} NOW: Pressure −2… Corruption +{cost} on you. (Legend +0)")
+                else:
+                    self.clarity[d]=min(WAKE,self.clarity[d]+2)
+                    self.emit(f"  TAKE the trap for fast power: {d} clarity +2… Corruption +{cost} on you. (Legend +0)")
         elif choice=="WALK":
             if trap: self.emit(f"  WALK: you dodged a trap. Safe, nothing gained.")
             else:
                 pl.trust=max(0,pl.trust-1)
-                self.emit(f"  WALK: it was honest help you refused out of fear. Trust -1.")
+                self.emit(f"  WALK: it was honest help you refused out of fear. Trust −1.")
         else:  # NEGOTIATE
-            if see<1:
-                if trap:
-                    self.pressure[d]=min(CAPTURE,self.pressure[d]+1); pl.trust=max(0,pl.trust-1)
-                    self.emit(f"  NEGOTIATE blind: you couldn't read it and got played. Pressure +1, Trust -1.")
-                    if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
-                else:
-                    pl.trust=max(0,pl.trust-1)
-                    self.emit(f"  NEGOTIATE blind on a fair deal: you soured it. Trust -1.")
+            if pl.trust<NEG_COST:
+                self.emit(f"  {pl.name} has no Trust to negotiate with — the deal walks."); return
+            pl.trust-=NEG_COST
+            if trap and see>=lever:
+                amt=2 if pl.role=="Organizer" else 1
+                self.pressure[d]=max(0,self.pressure[d]-amt); self.clarity[d]=min(WAKE,self.clarity[d]+1)
+                pl.legend+=2
+                self.emit(f"  NEGOTIATE on the {LEVER_NAME[lever]} lever (Sight {see}): defused. "
+                          f"Pressure −{amt}, {d} clarity +1, Legend +2.")
+            elif trap:
+                self.pressure[d]=min(CAPTURE,self.pressure[d]+1)
+                self.emit(f"  NEGOTIATE without the {LEVER_NAME[lever]} layer (Sight {see}): you got played. "
+                          f"Pressure +1, Trust −{NEG_COST}.")
+                if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
             else:
-                if trap:
-                    amt=2 if pl.role=="Organizer" else 1
-                    self.pressure[d]=max(0,self.pressure[d]-amt)
-                    self.clarity[d]=min(WAKE,self.clarity[d]+1); pl.sight[d]=min(3,pl.sight[d]+1); pl.legend+=2
-                    self.emit(f"  NEGOTIATE (Sight {see}): you spotted the second number and defused it. "
-                              f"Pressure -{amt}, {d} clarity +1, Sight +1, Legend +2.")
-                else:
-                    pl.trust+=1; self.clarity[d]=min(WAKE,self.clarity[d]+1); pl.legend+=1
-                    self.emit(f"  NEGOTIATE a fair deal: confirmed it's clean. Trust +1, {d} clarity +1, Legend +1.")
+                self.emit(f"  NEGOTIATE on an honest deal: you haggled away real help. Trust −{NEG_COST}.")
+        pl.trust=min(pl.trust,MAX_TRUST)
         if pl.corruption>=FLIP and not pl.flipped:
             pl.flipped=True
             self.emit(f"  ⚠⚠ {pl.name} HAS FALLEN. The Machine now moves through them.")
 
     def teach(self, pl, t, d):
         free=(pl.role=="Translator")
-        if pl.sight[d]<1: self.emit(f"  {pl.name} can't teach {d} without reading it first."); return
+        if pl.sight[d]<=t.sight[d]: self.emit(f"  {pl.name} can't teach {t.name} {d} — you can only teach what you read better."); return
         if not free and pl.trust<1: self.emit(f"  {pl.name} lacks Trust to teach."); return
-        g=2 if t.role=="Student" else 1; t.sight[d]=min(3,t.sight[d]+g)
+        g=2 if t.role=="Student" else 1; old=t.sight[d]; t.sight[d]=min(pl.sight[d],t.sight[d]+g)
         if not free: pl.trust-=1
         pl.legend+=2
-        self.emit(f"{pl.name} teaches {t.name} to read {d}. Sight +{g}{' (free, Translator)' if free else ''}. Legend +2.")
+        self.emit(f"{pl.name} teaches {t.name} to read {d}. Sight {old}→{t.sight[d]}{' (free, Translator)' if free else ''}. Legend +2.")
 
     def commons(self, pl):
-        pl.trust+=2; back=1 if pl.corruption>0 else 0; pl.corruption=max(0,pl.corruption-1)
-        self.emit(f"{pl.name} gathers at the Commons. Trust +2{', Corruption -1' if back else ''}.")
+        pl.trust=min(MAX_TRUST,pl.trust+2); back=1 if pl.corruption>0 else 0; pl.corruption=max(0,pl.corruption-1)
+        self.emit(f"{pl.name} gathers at the Commons. Trust +2{', Corruption −1' if back else ''}.")
 
     def reach(self, pl, t):
         if pl.trust<2: self.emit(f"  {pl.name} needs 2 Trust to reach someone."); return
@@ -148,81 +176,131 @@ class Game:
         pl.elder_used=True; self.clarity[d]=WAKE; pl.legend+=2
         self.emit(f"{pl.name} teaches the History of {d}. {d} AWAKE. Legend +2.")
 
+    def trace(self, pl, d):
+        if not self.can_trace(pl,d):
+            self.emit(f"  {pl.name} can't trace {d} (needs the Underworld open, Sight 3, and {d} awake)."); return
+        self.threads.add(d); pl.legend+=2
+        self.emit(f"{pl.name} traces the blue thread under {d} down into the Underworld. "
+                  f"Threads {len(self.threads)}/{self.threads_needed()}. Legend +2.")
+
     def expose_uw(self, pl):
+        if not self.can_expose():
+            self.emit(f"  Not enough threads traced to expose the Owner ({len(self.threads)}/{self.threads_needed()})."); return
         self.emit(f"{pl.name} drags the UNDERWORLD into the light. One Owner — {self.owner}. It was always one machine.")
         self.won=True; self.result="BLOCK_WIN"
 
     # ================= MACHINE / FALLEN / OVERLORD =================
     def m_extract(self, who, d):
+        if d in self.struck:
+            self.emit(f"[{who}] already moved on {d} this round — the Machine spreads, it doesn't snipe."); return
+        self.struck.add(d)
         if self.pressure[d]<CAPTURE:
             self.pressure[d]+=1; self.emit(f"[{who}] feeds the Machine in {d}. Pressure {self.pressure[d]}/{CAPTURE}.")
             if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
     def m_obscure(self, who, d):
+        if d in self.struck:
+            self.emit(f"[{who}] already moved on {d} this round — the Machine spreads, it doesn't snipe."); return
+        if self.clarity[d]>=WAKE:   # a woken district is out of reach — except one cover-up per round, in the open
+            if not self.uw_open or self.covered or d in self.threads:
+                self.emit(f"[{who}] can't bury {d} — the block is awake there."); return
+            self.covered=True
         if self.clarity[d]>0:
-            self.clarity[d]-=1; self.emit(f"[{who}] buries the second number in {d}. Clarity -1.")
+            self.struck.add(d); self.clarity[d]-=1; self.emit(f"[{who}] buries the second number in {d}. Clarity −1.")
     def m_tempt(self, who, t):
-        if t and t.trust>0: t.trust-=1; self.emit(f"[{who}] whispers a sweeter deal to {t.name}. Trust -1.")
+        if t and t.trust>0: t.trust-=1; self.emit(f"[{who}] whispers a sweeter deal to {t.name}. Trust −1.")
 
-    def machine_ai_move(self):
-        near=[d for d in DISTRICTS if self.pressure[d]==CAPTURE-1]
+    def machine_ai_move(self, struck=()):
+        """The Machine's choice for a Fallen player or the computer Overlord.
+        Obeys the spread rule: at most one Machine move per district per round."""
+        free=[d for d in DISTRICTS if d not in struck]
+        near=[d for d in free if self.pressure[d]==CAPTURE-1]
         if near: return ("m_extract",None,near[0])
-        vuln=[d for d in DISTRICTS if self.clarity[d]>0 and self.pressure[d]<CAPTURE]
+        if self.uw_open and not self.covered:   # protect the Owner: bury a woken district before it's traced
+            exp=[d for d in free if self.clarity[d]>=WAKE and d not in self.threads]
+            if exp: return ("m_obscure",None,exp[0])
+        vuln=[d for d in free if 0<self.clarity[d]<WAKE and self.pressure[d]<CAPTURE]
         if vuln:
             d=max(vuln,key=lambda x:self.clarity[x])
             return ("m_obscure" if self.clarity[d]>=2 else "m_extract",None,d)
         t=max(self.active(),key=lambda p:p.trust,default=None)
         if t and t.trust>0: return ("m_tempt",t,None)
-        return ("m_extract",None,min(DISTRICTS,key=lambda x:self.pressure[x]))
+        free=[d for d in free if self.pressure[d]<CAPTURE]
+        return ("m_extract",None,min(free,key=lambda x:self.pressure[x])) if free else ("pass",None,None)
 
     def owner_passive(self):
         """Owner acts from round 1 (hidden). Skipped in Overlord mode."""
         if self.overlord: return
         o=self.owner
         if o=="The Lobbyist":
-            best=[d for d in DISTRICTS if self.clarity[d]>0 and self.pressure[d]<CAPTURE]
+            best=[d for d in DISTRICTS if 0<self.clarity[d]<WAKE and self.pressure[d]<CAPTURE and d not in self.struck]
             if best:
-                d=max(best,key=lambda x:self.clarity[x]); self.pressure[d]+=1
+                d=max(best,key=lambda x:self.clarity[x]); self.struck.add(d); self.pressure[d]+=1
                 self.emit(f"  ⚑ (hidden hand) pressure creeps onto your strongest work in {d}. {self.pressure[d]}/{CAPTURE}.")
+                if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
         elif o=="The Recruiter":
-            built=[d for d in DISTRICTS if 0<self.clarity[d]<WAKE]
-            if built:
-                d=random.choice(built); self.clarity[d]-=1
-                self.emit(f"  ⚑ (hidden hand) peels people from {d}. Clarity -1.")
-        # Algorithm & Debt Buyer passives are applied where they bite (targeting / TAKE cost)
+            pool=[(p,d) for p in self.active() for d in DISTRICTS if p.sight[d]>0]
+            if pool:
+                p,d=random.choice(pool); p.sight[d]-=1
+                self.emit(f"  ⚑ (hidden hand) a recruiter peels {p.name} away from {d}. Sight −1.")
+        elif o=="The Debt Buyer":
+            owed=[p for p in self.active() if p.corruption>0 and p.trust>0]
+            for p in owed: p.trust-=1
+            if owed: self.emit(f"  ⚑ (hidden hand) collections calls: {', '.join(p.name for p in owed)} lose 1 Trust.")
+        # The Algorithm's extra strike applies in the Machine phase
+
+    def hit(self, d):
+        vet=next((p for p in self.active() if p.role=="Veteran" and p.shields>0),None)
+        if vet: vet.shields-=1; self.emit(f"  ⛨ {vet.name} shields {d}. ({vet.shields} left)"); return
+        self.pressure[d]+=1; self.emit(f"  ✖ The Machine extracts from {d}. Pressure {self.pressure[d]}/{CAPTURE}.")
+        if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
 
     def auto_machine_phase(self):
-        hits=MACHINE_HITS+sum(1 for p in self.blk() if p.flipped)
-        if self.owner=="The Algorithm": hits+=1   # the relentless one: an extra strike
-        for _ in range(hits):
-            vuln=[d for d in DISTRICTS if self.clarity[d]<WAKE and self.pressure[d]<CAPTURE]
+        hits=MACHINE_HITS[self.n()]
+        if self.owner=="The Algorithm": hits+=1     # the relentless one: an extra strike
+        if self.owner_shown: hits+=1                # the Owner fights in the open
+        struck=self.struck
+        if (self.scenario=="Payday Season" and self.round%3==0 and "LENDING" not in struck
+                and self.pressure["LENDING"]<CAPTURE):
+            struck.add("LENDING"); self.emit(f"  ✖ Payday Season: payday again — an extra LENDING hit.")
+            self.hit("LENDING")
+        for _ in range(max(0,hits)):
+            vuln=[d for d in DISTRICTS if self.clarity[d]<WAKE and self.pressure[d]<CAPTURE and d not in struck]
             if not vuln: break
-            # contest the block's progress: pressure the district closest to waking
-            d=max(vuln,key=lambda x:self.clarity[x])
-            vet=next((p for p in self.active() if p.role=="Veteran" and p.shields>0),None)
-            if vet: vet.shields-=1; self.emit(f"  ⛨ {vet.name} shields {d}. ({vet.shields} left)"); continue
-            self.pressure[d]+=1; self.emit(f"  ✖ The Machine extracts from {d}. Pressure {self.pressure[d]}/{CAPTURE}.")
-            if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
+            # contest the block's progress: pressure the district closest to waking.
+            # One strike per district per phase — the Machine spreads, it doesn't snipe.
+            d=max(vuln,key=lambda x:(self.clarity[x],-self.pressure[x])); struck.add(d); self.hit(d)
         # erode the block's best unfinished work, so clarity isn't a one-way ratchet
-        building=[d for d in DISTRICTS if 0<self.clarity[d]<WAKE]
+        building=[d for d in DISTRICTS if 0<self.clarity[d]<WAKE and d not in struck]
         if building:
-            d=max(building,key=lambda x:self.clarity[x]); self.clarity[d]-=1
-            self.emit(f"  ✖ The Machine muddies {d}. Clarity -1.")
-        # as the block closes on the Underworld, the Machine fights back harder
-        if self.total_clarity()>=UNDERWORLD_AT-4:
-            b2=[d for d in DISTRICTS if 0<self.clarity[d]<WAKE]
-            if b2:
-                d=max(b2,key=lambda x:self.clarity[x]); self.clarity[d]-=1
-                self.emit(f"  ✖ The Machine panics near the Underworld — {d} clarity -1.")
-        if self.scenario=="Payday Season" and self.pressure["LENDING"]<CAPTURE:
-            self.pressure["LENDING"]+=1; self.emit(f"  ✖ Payday Season: extra LENDING hit.")
+            d=max(building,key=lambda x:self.clarity[x]); self.clarity[d]-=1; struck.add(d)
+            self.emit(f"  ✖ The Machine muddies {d}. Clarity −1.")
+        # in the open, the Owner buries a woken district before you can trace it
+        if self.owner_shown:
+            exp=[d for d in DISTRICTS if self.clarity[d]>=WAKE and d not in self.threads and d not in struck]
+            if exp and not self.covered:
+                d=random.choice(exp); self.clarity[d]-=1; self.covered=True; struck.add(d)
+                self.emit(f"  ⚑ The Owner covers its tracks in {d}. Clarity −1 (no longer awake).")
         self.owner_passive()
+
+    def fallen_turn(self, pl, n):
+        """The Machine moves through a Fallen player (n actions; Debt Buyer doubles them)."""
+        mult=2 if (self.owner=="The Debt Buyer" and not self.overlord) else 1
+        for _ in range(n*mult):
+            self.do(pl, self.machine_ai_move(self.struck))
 
     def reveal_owner(self):
         self.owner_shown=True
         self.emit(f"⚑ THE UNDERWORLD CRACKS OPEN. The Owner is {self.owner} — {OWNERS[self.owner]}")
+        self.emit(f"  Trace {self.threads_needed()} threads (Sight 3 in a woken district) and expose it before it buries you.")
         if self.owner=="The Lobbyist":
             awake=[d for d in DISTRICTS if self.clarity[d]>=WAKE]
             if awake: d=random.choice(awake); self.clarity[d]=1; self.emit(f"  ✖ The Lobbyist re-captures {d}.")
+
+    def open_underworld(self):
+        self.uw_open=True
+        if self.overlord:
+            self.emit(f"⚑ THE UNDERWORLD CRACKS OPEN. Trace {self.threads_needed()} threads and expose the Overlord.")
+        else: self.reveal_owner()
 
     def tighten(self):
         aps=self.active_patterns()
@@ -244,90 +322,131 @@ class Game:
                 self.patterns_seen.discard(n); self.emit(f"✦ PATTERN BROKEN — {n}.")
 
     def check_end(self):
-        if self.captured()>=LOSE_CAPTURED: self.won=True; self.result="MACHINE_WIN"; return "Two districts fell."
-        if not self.active():              self.won=True; self.result="MACHINE_WIN"; return "The whole block fell."
+        if self.captured()>=LOSE_CAPTURED: self.won=True; self.result="MACHINE_WIN"; return "Two districts fell. The Machine holds the block."
+        if not self.active():              self.won=True; self.result="MACHINE_WIN"; return "The whole block fell. The Machine won wearing your faces."
         return None
 
     # ================= DISPATCH =================
     def do(self, pl, a):
         k=a[0]
         if   k=="study":    self.study(pl,a[1])
-        elif k=="face":     self.face(pl,a[1],a[2])
+        elif k=="face":     self.face(pl,a[1],a[2],a[3] if len(a)>3 else None)
         elif k=="teach":    self.teach(pl,a[1],a[2])
         elif k=="commons":  self.commons(pl)
         elif k=="reach":    self.reach(pl,a[1])
         elif k=="history":  self.history(pl,a[1])
+        elif k=="trace":    self.trace(pl,a[1])
         elif k=="expose_uw":self.expose_uw(pl)
         elif k=="m_extract":self.m_extract(pl.name,a[2])
         elif k=="m_obscure":self.m_obscure(pl.name,a[2])
         elif k=="m_tempt":  self.m_tempt(pl.name,a[1])
         # "pass" -> nothing
 
-    # ---- block AI (deliberately imperfect; leaves real losing lines) ----
-    def block_ai(self, pl):
-        # win if possible
-        if self.uw_open and self.awake()>=AWAKE_TO_WIN: return ("expose_uw",None,None)
-        # rescue a fallen friend if safe
+    # ================= BLOCK AI =================
+    # style: "careful" (TAKE only to save a district, never past the edge),
+    #        "never"   (refuses every shortcut), "greedy" (takes fast power freely),
+    #        "human"   (careful, but gives in to temptation about one move in five).
+    def bot_choice(self, pl, d, card, style="careful"):
+        """Decide TAKE/WALK/NEGOTIATE using only what this player can see."""
+        see=pl.sight[d]; safe=pl.corruption+self.take_cost()<FLIP
+        urgent=self.pressure[d]>=CAPTURE-1
+        if see>=1:                                   # red layer: you can tell trap from honest
+            if not card["trap"]: return "TAKE"
+            if see>=card["lever"] and pl.trust>=NEG_COST: return "NEGOTIATE"
+            if style=="greedy" and pl.corruption+self.take_cost()<FLIP+2: return "TAKE"
+            if style=="careful" and urgent and safe: return "TAKE"
+            return "WALK"
+        # blind: the front is all you have
+        if style=="greedy" or (style=="careful" and urgent and safe): return "TAKE"
+        return "WALK"
+
+    def bot_face(self, pl, d, style):
+        card=self.draw(d); return ("face",d,self.bot_choice(pl,d,card,style),card)
+
+    def block_ai(self, pl, style="careful"):
+        if style=="human": style="greedy" if random.random()<0.2 else "careful"
+        if self.can_expose(): return ("expose_uw",None,None)
+        for d in DISTRICTS:
+            if self.can_trace(pl,d): return ("trace",d,None)
         fallen=[p for p in self.blk() if p.flipped]
         if fallen and pl.trust>=2 and max(self.pressure.values())<CAPTURE-1:
             return ("reach",fallen[0],None)
-        # recover only near the edge, so players flirt with the line
-        if pl.corruption>=FLIP-1: return ("commons",None,None)
-        if pl.trust<1: return ("commons",None,None)
-        # urgent: a district about to capture
-        hot=[d for d in DISTRICTS if self.pressure[d]==CAPTURE-1 and self.clarity[d]<WAKE]
+        if pl.corruption>=FLIP-2 and style!="greedy": return ("commons",None,None)
+        if pl.trust<NEG_COST: return ("commons",None,None)
+        # urgent: a district about to capture (or captured — reclaim it)
+        hot=sorted([d for d in DISTRICTS if self.pressure[d]>=CAPTURE-1 and self.clarity[d]<WAKE],
+                   key=lambda d:-self.pressure[d])
         if hot:
             d=hot[0]
-            if pl.sight[d]>=1: return ("face",d,"NEGOTIATE")      # defuse (the skilled save)
             if pl.role=="Elder" and not pl.elder_used: return ("history",d,None)
-            return ("study",d,None)                               # learn, accept the risk
+            if pl.sight[d]>=1 or style!="never": return self.bot_face(pl,d,style)
+            return ("study",d,None)
+        # final act: get someone to Sight 3 in a woken, untraced district
+        if self.uw_open:
+            open_d=[d for d in DISTRICTS if self.clarity[d]>=WAKE and d not in self.threads]
+            if open_d:
+                d=max(open_d,key=lambda x:pl.sight[x])
+                learner=next((p for p in self.active() if p is not pl and p.sight[d]<pl.sight[d]),None)
+                if pl.sight[d]>=2 and learner and (pl.role=="Translator" or pl.trust>=2):
+                    return ("teach",learner,d)
+                return ("study",d,None)
         # build clarity toward the Underworld
         building=[d for d in DISTRICTS if self.clarity[d]<WAKE]
-        tgt=min(building,key=lambda d:self.clarity[d]) if building else DISTRICTS[0]
+        if not building: return ("commons",None,None)
+        tgt=min(building,key=lambda d:(self.clarity[d],-pl.sight[d]))
         if pl.sight[tgt]>=1:
-            learner=next((p for p in self.active() if p.sight[tgt]==0 and p is not pl),None)
-            if learner and (pl.role=="Translator" or pl.trust>=1) and random.random()<0.4:
+            learner=next((p for p in self.active() if p.sight[tgt]<pl.sight[tgt] and p is not pl),None)
+            if learner and (pl.role=="Translator" or (pl.trust>=2 and learner.sight[tgt]==0)):
                 return ("teach",learner,tgt)
-            return ("face",tgt,"NEGOTIATE")       # informed -> raises clarity
-        # don't know it yet: usually study, but sometimes take the greedy shortcut
-        if random.random()<0.14: return ("face",tgt,"TAKE")   # rush clarity, corrupt yourself
+            if pl.sight[tgt]==1 and pl.role!="Elder" and random.random()<0.35:
+                return ("study",tgt,None)        # deepen your lens before facing amber/blue levers
+            return self.bot_face(pl,tgt,style)
+        if style=="greedy": return self.bot_face(pl,tgt,style)
         return ("study",tgt,None)
 
     # ================= RUN (headless, for the tester) =================
-    def run_auto(self, max_rounds=16):
+    def end_of_block_turns(self):
+        self.check_patterns()
+        if not self.uw_open and self.total_clarity()>=UNDERWORLD_AT: self.open_underworld()
+
+    def machine_phase(self, overlord_move=None):
+        if self.overlord and self.ov():
+            m=OVERLORD_MOVES[self.n()]; moves=int(m)+(1 if m%1 and self.round%2==0 else 0)
+            for _ in range(moves):
+                self.do(self.ov(), overlord_move() if overlord_move else self.machine_ai_move(self.struck))
+            self.tighten()
+        elif self.grace>0:
+            self.grace-=1; self.emit("  (The Machine is distracted — grace round.)")
+        else:
+            self.auto_machine_phase(); self.tighten()
+        self.check_patterns()
+        return self.check_end()
+
+    def run_auto(self, max_rounds=MAX_ROUNDS, style="careful"):
         while self.round<max_rounds and not self.won:
-            self.round+=1
+            self.round+=1; self.struck=set(); self.covered=False
             for pl in self.players:
                 if pl.role=="Overlord": continue
-                n=2
-                for _ in range(n):
-                    if pl.flipped: self.do(pl, self.machine_ai_move())
-                    else:          self.do(pl, self.block_ai(pl))
-                    if self.won: break
+                if pl.flipped: self.fallen_turn(pl, self.actions())
+                else:
+                    for _ in range(self.actions()):
+                        self.do(pl, self.block_ai(pl, style))
+                        if self.won or pl.flipped: break
                 if self.won: break
             if self.won: break
-            self.check_patterns()
-            if not self.uw_open and self.total_clarity()>=UNDERWORLD_AT:
-                self.uw_open=True
-                if self.overlord: self.emit("⚑ THE UNDERWORLD CRACKS OPEN. Expose it to break the Overlord.")
-                else: self.reveal_owner()
-            # machine phase
-            if self.overlord and self.ov():
-                for _ in range(3): self.do(self.ov(), self.machine_ai_move())
-                self.tighten()
-            elif self.grace>0:
-                self.grace-=1
-            else:
-                self.auto_machine_phase(); self.tighten()
-            self.check_patterns()
-            if self.check_end(): break
-        if not self.result: self.result="DRAW"
+            self.end_of_block_turns()
+            if self.machine_phase(): break
+        if not self.result: self.time_up()
         return self.result
+
+    def time_up(self):
+        self.won=True; self.result="MACHINE_WIN"
+        self.emit("⏳ The clock ran out. The Machine doesn't need to win — it only needs you to run out of time.")
+
+ROSTER=[("Marcus","Translator"),("Nia","Student"),("Simone","Elder"),("Zay","Veteran"),("Dre","Organizer")]
 
 def new_game(overlord=False, scenario=None, owner=None, verbose=False, seed=None, roster=None):
     g=Game(overlord=overlord, scenario=scenario, owner=owner, verbose=verbose, seed=seed)
-    roster=roster or [("Marcus","Translator"),("Nia","Student"),("Simone","Elder"),
-                      ("Zay","Veteran"),("Dre","Organizer")]
-    g.players=[Player(n,r) for n,r in roster]
+    g.players=[Player(n,r) for n,r in (roster or ROSTER)]
     if overlord: g.players.append(Player("The Owner","Overlord"))
     return g

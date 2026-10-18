@@ -1,0 +1,56 @@
+THE SECOND NUMBER — balance report (v3)
+1500 computer-played games per row. Rosters are random role subsets.
+
+=== CO-OP — by player count (careful bot) ===
+  2 players  win  44.7%  rounds  9.9 (wins avg 10.5)  r1-loss   0.0%  clock-outs  18.5%  UW opened  97.3%  Fall-games   0.0%  reaches/game 0.00
+  3 players  win  64.9%  rounds  7.1 (wins avg  7.9)  r1-loss   0.0%  clock-outs   0.1%  UW opened  97.9%  Fall-games   0.0%  reaches/game 0.00
+  4 players  win  56.0%  rounds  9.8 (wins avg 10.6)  r1-loss   0.0%  clock-outs   9.3%  UW opened  97.1%  Fall-games   0.0%  reaches/game 0.00
+  5 players  win  50.7%  rounds  7.9 (wins avg  9.1)  r1-loss   0.0%  clock-outs   0.1%  UW opened  98.0%  Fall-games   0.0%  reaches/game 0.00
+
+=== OVERLORD — by player count (careful bot) ===
+  2 players  win  48.5%  rounds  9.7 (wins avg 11.0)  r1-loss   0.0%  clock-outs  30.9%  UW opened  80.6%  Fall-games   0.0%  reaches/game 0.00
+  3 players  win  60.8%  rounds  8.2 (wins avg 10.3)  r1-loss   0.0%  clock-outs   7.3%  UW opened  79.5%  Fall-games   0.0%  reaches/game 0.00
+  4 players  win  67.1%  rounds  9.4 (wins avg 11.0)  r1-loss   0.0%  clock-outs  11.4%  UW opened  78.9%  Fall-games   0.0%  reaches/game 0.00
+  5 players  win  53.4%  rounds  8.4 (wins avg 11.0)  r1-loss   0.0%  clock-outs  10.7%  UW opened  72.9%  Fall-games   0.0%  reaches/game 0.00
+
+=== IS THE SHORTCUT TEMPTING? (co-op, 4 players) ===
+  never      win  31.3%  rounds  8.2 (wins avg 10.3)  r1-loss   0.0%  clock-outs   2.7%  UW opened  91.6%  Fall-games   0.0%  reaches/game 0.00  TAKEs/game 0.0
+  careful    win  56.0%  rounds  9.8 (wins avg 10.6)  r1-loss   0.0%  clock-outs   9.3%  UW opened  97.1%  Fall-games   0.0%  reaches/game 0.00  TAKEs/game 2.2
+  human      win  48.0%  rounds  9.1 (wins avg 10.2)  r1-loss   0.0%  clock-outs   6.5%  UW opened  98.7%  Fall-games  29.6%  reaches/game 0.32  TAKEs/game 5.8
+  greedy     win  17.5%  rounds  8.0 (wins avg  8.8)  r1-loss   0.0%  clock-outs  14.7%  UW opened 100.0%  Fall-games  95.3%  reaches/game 4.68  TAKEs/game 13.6
+
+=== DOES DEEPER SIGHT MATTER? (co-op, 4 players, human-like bot) ===
+  successful NEGOTIATEs by lever:  red  78.8%  amber  20.8%  blue   0.3%
+  Underworld threads traced (needs Sight 3 / blue): 2.21 per game · every win needs 3
+
+=== OWNERS (co-op, 4 players, human-like bot) ===
+  The Algorithm    38.6%
+  The Debt Buyer   53.5%
+  The Lobbyist     47.2%
+  The Recruiter    52.3%
+
+=== SCENARIOS (co-op, 4 players, human-like bot) ===
+  The Audit          62.5%
+  A Quiet Year       53.4%
+  The Eviction Wave  45.7%
+  The Closure        41.7%
+  Payday Season      35.9%
+
+=== ROLES — block win rate when the role is at the table (co-op, 4 players, human-like bot) ===
+  Elder        48.1%
+  Organizer    47.2%
+  Student      47.3%
+  Translator   47.7%
+  Veteran      49.0%
+
+--- verdict ---
+  CO-OP 2p     healthy  (45% block wins)
+  CO-OP 3p     healthy  (65% block wins)
+  CO-OP 4p     healthy  (56% block wins)
+  CO-OP 5p     healthy  (51% block wins)
+  OVERLORD 2p  healthy  (48% block wins)
+  OVERLORD 3p  healthy  (61% block wins)
+  OVERLORD 4p  healthy  (67% block wins)
+  OVERLORD 5p  healthy  (53% block wins)
+  Shortcut     tempting AND dangerous  (never 31% · careful 56% · greedy 18%)
+  Deep Sight   matters  (amber = 20.8% of defusals; blue/Sight 3 is required to trace every winning thread)

@@ -9,10 +9,17 @@ Each deal card:
   amber : 🟠 the CLOCK / deadline (Sight 2 reveals)
   blue  : 🔵 the CONNECTION to the Underworld (Sight 3 reveals)
 
+  lever : which layer holds the leverage to beat it (1 red · 2 amber · 3 blue).
+          Printed as a small colored key icon on the card's corner.
+
+Seeing is not the same as beating it. Sight 1 (red) tells you a deal is a trap.
+To NEGOTIATE it down you need Sight up to the card's lever layer.
+
 Every deal offers the same three choices (defined in the rules, not per card):
-  TAKE it      — get the short-term thing; feed the Machine / risk corruption
-  WALK         — safe, but you don't get what you came for
-  NEGOTIATE    — only if you have the Sight to read the second number; defuses the trap
+  TAKE it      — honest deal: real help. Trap: fast relief now, Corruption on you.
+  WALK         — always safe on a trap; walking away from honest help costs Trust.
+  NEGOTIATE    — spend 1 Trust; with Sight ≥ the lever you defuse the trap,
+                 below it you get played.
 """
 
 DISTRICT_COLORS = {
@@ -274,11 +281,11 @@ DECK = {
 }
 
 ROLES = {
- "Translator":"Teaches for free and can teach a district even with no Sight there. The bridge — spreads the Sight fastest.",
- "Student":"Gains DOUBLE Sight when taught and reads one lens-layer deeper. The hungry one.",
- "Elder":"Starts with Sight everywhere; once per game, 'Teach the History' wakes a whole district instantly.",
- "Veteran":"Shields the block from the Machine twice per game. Came home to protect it.",
- "Organizer":"Exposes twice as hard — Pressure −2 (collective action). Rallies the block.",
+ "Translator":"Teaches for free (no Trust cost). Still has to read a district to teach it. The bridge — spreads the Sight fastest.",
+ "Student":"Gains DOUBLE Sight when taught. The hungry one.",
+ "Elder":"Starts with Sight 1 everywhere; once per game, 'Teach the History' wakes a whole district instantly.",
+ "Veteran":"Shields the block from two Machine hits per game. Came home to protect it.",
+ "Organizer":"A successful NEGOTIATE drops Pressure by 2, not 1 (collective action). Rallies the block.",
 }
 
 PATTERNS = [
@@ -309,16 +316,16 @@ PATTERNS = [
 ]
 
 OWNERS = {
- "The Algorithm":"Strikes your STRONGEST district, not your weakest. It hunts your best work.",
- "The Lobbyist":"On reveal, it re-captures one district you had already woken up.",
- "The Debt Buyer":"Every shortcut (TAKE) costs you +1 extra Corruption.",
- "The Recruiter":"Each round it also drains Sight from a district you're still building.",
+ "The Algorithm":"Relentless. The Machine strikes one extra time every round.",
+ "The Lobbyist":"Each round it leans on your strongest unfinished district (+1 Pressure). On reveal it knocks one woken district back to Clarity 1.",
+ "The Debt Buyer":"Every TAKE on a trap costs +1 extra Corruption. Each round, collections calls: anyone carrying Corruption loses 1 Trust. The Fallen strike twice as hard.",
+ "The Recruiter":"Each round it peels someone away: a random player loses 1 Sight in a district they can read.",
 }
 
 SCENARIOS = {
  "The Eviction Wave":"Housing starts under siege (2 pressure). Hold the line.",
- "Payday Season":"Lending takes an extra hit every round. The clock runs hot.",
- "The Closure":"A school starts captured (3 pressure). Reclaim it.",
+ "Payday Season":"Every third round is payday: Lending takes an extra hit. The hardest rung.",
+ "The Closure":"A school starts captured (3 Pressure). Reclaim it — fast.",
  "The Audit":"The Machine is distracted — the block gets a one-round head start.",
  "A Quiet Year":"No special pressure. Learn the ropes.",
 }
@@ -338,6 +345,10 @@ HONEST = {
        red="No interest and no debt — you only pay the sticker price.",
        amber="Miss payments and you just get your money back, minus a small fee.",
        blue="Old-school model with nobody profiting off your debt."),
+  dict(front="Free tax prep (VITA) + your refund by direct deposit.",
+       red="$0 to file, and the full refund is yours — no advance fee.",
+       amber="E-file with direct deposit and it usually lands in about 3 weeks.",
+       blue="An IRS-backed volunteer program; nobody earns a cut of your refund."),
  ],
  "HOUSING":[
   dict(front="A fair lease: normal deposit, clear terms.",
@@ -348,6 +359,10 @@ HONEST = {
        red="Your share of rent is capped to your income — the real cost is low.",
        amber="Annual recertification, clearly scheduled.",
        blue="A public program built to keep you housed, not to extract."),
+  dict(front="Community land trust home: buy at a price you can afford.",
+       red="A real mortgage you can carry; you build equity as you pay.",
+       amber="Resale is capped, and that's spelled out on day one.",
+       blue="The trust holds the land so the next family can afford it too."),
  ],
  "LABOR":[
   dict(front="A real W-2 job: overtime, benefits, clear pay.",
@@ -358,6 +373,10 @@ HONEST = {
        red="You're paid to learn, and the skill and raises are yours for good.",
        amber="A clear schedule of raises as you hit milestones.",
        blue="Collective bargaining puts the leverage on your side."),
+  dict(front="File a wage claim with the state labor office.",
+       red="Free to file — and it's illegal for the boss to retaliate.",
+       amber="The deadline is long, but file soon while the records are fresh.",
+       blue="The public enforcer works for you, not the employer."),
  ],
  "HEALTH":[
   dict(front="Charity-care application at a nonprofit hospital.",
@@ -368,6 +387,10 @@ HONEST = {
        red="The price is matched to your income — no surprise markup.",
        amber="Set your fee up front; no bill ambush later.",
        blue="Federally supported care designed to reach everyone."),
+  dict(front="Marketplace plan with an income-based subsidy.",
+       red="Covers pre-existing conditions; the subsidy cuts the premium.",
+       amber="Sign up in open enrollment, or within 60 days of a life change.",
+       blue="A public program with real rules; the plan can't deny you for being sick."),
  ],
  "EDUCATION":[
   dict(front="Federal student aid (FAFSA): fixed rate, protections.",
@@ -378,13 +401,29 @@ HONEST = {
        red="Real, recognized skills for $0 — the cost is just your time.",
        amber="Go at your own pace; no refund deadline to beat.",
        blue="A public good with nobody profiting off your enrollment."),
+  dict(front="Community college with a guaranteed-transfer agreement.",
+       red="Low tuition, and the credits are guaranteed to count at the state school.",
+       amber="Follow the transfer map from semester one.",
+       blue="A public partnership — the schools are built to pass you along, not trap you."),
  ],
+}
+
+# LEVERS — which layer holds the leverage to beat each trap, in deck order.
+# 1 = red (the cost is the weak point), 2 = amber (the clock / your rights window),
+# 3 = blue (you have to name who's behind it). 5 / 4 / 3 per district, so Sight 2
+# and Sight 3 each unlock real plays.
+LEVERS = {
+ "LENDING":  [1,2,2,2,1,3,1,3,1,3,2,1],
+ "HOUSING":  [1,2,3,1,2,2,3,3,1,1,1,2],
+ "LABOR":    [2,3,1,1,2,1,2,1,2,3,1,3],
+ "HEALTH":   [2,1,2,3,1,1,2,1,3,2,1,3],
+ "EDUCATION":[2,1,2,2,1,3,1,1,3,1,3,2],
 }
 
 # tag everything: existing deck = traps; honest deals = not traps; fold honest in
 for _d in DECK:
-    for _c in DECK[_d]:
-        _c.setdefault("trap", True)
+    for _c,_l in zip(DECK[_d],LEVERS[_d]):
+        _c.setdefault("trap", True); _c["lever"]=_l
     for _c in HONEST[_d]:
-        _c["trap"] = False
+        _c["trap"] = False; _c["lever"]=0
     DECK[_d].extend(HONEST[_d])
