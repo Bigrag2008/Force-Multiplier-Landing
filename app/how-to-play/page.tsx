@@ -38,6 +38,9 @@ export default function HowToPlay() {
     <main className="mx-auto max-w-3xl px-4 py-10">
       <Link href="/" className="text-sm text-gold underline">← The Second Number</Link>
       <h1 className="mt-4 text-4xl font-black text-gold">How to play</h1>
+      <p className="mt-4 rounded-lg border border-[#7CFFB2]/50 bg-[#7CFFB2]/10 p-3 text-program/90">
+        Rather learn by playing? <Link href="/learn" className="font-black text-[#7CFFB2] underline">Learn to play</Link> starts a guided game: the Coach glows on the move it would make, says why, and explains each rule the first time it comes up.
+      </p>
       {sections.map(([h, ps]) => (
         <section key={h} className="mt-8">
           <h2 className="text-xl font-black text-gold">{h}</h2>

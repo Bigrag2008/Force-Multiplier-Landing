@@ -22,6 +22,9 @@ export default function Home() {
         <Link href="/play" className="rounded-xl bg-gold px-6 py-3 text-lg font-black text-night hover:brightness-110">
           Play now
         </Link>
+        <Link href="/learn" className="rounded-xl border-2 border-[#7CFFB2] px-6 py-3 text-lg font-black text-[#7CFFB2] hover:bg-[#7CFFB2]/10">
+          Learn to play
+        </Link>
         <Link href="/how-to-play" className="rounded-xl border border-gold/60 px-6 py-3 text-lg font-bold text-gold hover:bg-gold/10">
           How to play
         </Link>

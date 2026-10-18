@@ -82,8 +82,9 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 - [x] **21. The engine in TypeScript**, locked to the Python engine by 63 golden games.
 - [x] **22. The turn flow** for one device passed around the table.
 - [x] **23. The playable site:** board, lens, every decision, all three modes, phone layout; tested in a real browser.
-- [ ] **24. Online multiplayer:** rooms, each player on their own phone (needs a realtime service).
-- [ ] **25. Save and resume, a guided first game, illustrations.**
+- [x] **24. The Coach, a guided first game:** the game recommends each move and says why, glows on the button it would press, and teaches each rule the first time it comes up. Deal advice uses only the layers the player can read. A table that follows it wins about 94% of *The Audit* games, against 69% for the default bot. **Learn to play** on the home page starts one.
+- [ ] **25. Online multiplayer:** rooms, each player on their own phone (needs a realtime service).
+- [ ] **26. Save and resume, illustrations.**
 
 ---
 

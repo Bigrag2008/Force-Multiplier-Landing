@@ -22,6 +22,8 @@ export interface SessionConfig {
   scenario?: string;
   overlordHuman?: boolean;
   seed?: number;
+  /** the Coach recommends moves and teaches the rules as they come up */
+  coach?: boolean;
 }
 
 export class Session {
@@ -37,6 +39,9 @@ export class Session {
   /** first log line of the current step, so the UI can show "what just happened" */
   stepStart = 0;
   endMessage: string | null = null;
+  coach: boolean;
+  /** the Coach's lessons this table has already read */
+  seenLessons = new Set<string>();
 
   constructor(public config: SessionConfig) {
     this.g = newGame({
@@ -47,6 +52,7 @@ export class Session {
       seed: config.seed,
     });
     this.overlordHuman = !!config.overlordHuman;
+    this.coach = !!config.coach;
     this.g.useGreenBook = () => this.autoGreenBook;
     this.startRound();
   }
