@@ -50,6 +50,29 @@ def test_trust_cap_and_commons():
     g,p=game(); p.trust=4; p.corruption=2; g.commons(p)
     assert p.trust==E.MAX_TRUST and p.corruption==1
 
+def test_church_lifts_more_corruption():
+    g,p=game(); p.corruption=4; g.commons(p,"CHURCH"); assert p.corruption==2
+
+def test_barbershop_makes_next_teach_free():
+    g,p=game(); t=g.players[1]; p.role="Student"; p.trust=0; p.sight["LABOR"]=2
+    g.commons(p,"BARBERSHOP"); trust=p.trust; g.teach(p,t,"LABOR")
+    assert p.trust==trust and t.sight["LABOR"]>=1 and not p.free_teach
+
+def test_adventure_central_doubles_next_study():
+    g,p=game(); g.commons(p,"ADVENTURE"); g.study(p,"HEALTH"); assert p.sight["HEALTH"]==2
+    g.study(p,"HEALTH"); assert p.sight["HEALTH"]==3                     # only the next one
+
+def test_gem_city_market_draws_two():
+    g,p=game(); g.commons(p,"MARKET"); assert len(g.deals_for(p,"LENDING"))==2
+    assert len(g.deals_for(p,"LENDING"))==1
+
+def test_kitchen_table_once_per_game():
+    g,p=game()
+    for q in g.players: q.trust=0
+    g.commons(p,"KITCHEN"); assert all(q.trust>=2 for q in g.players)
+    other=g.players[1]; other.trust=0; g.commons(other,"KITCHEN")         # already used: falls back
+    assert g.players[2].trust==2
+
 def test_teach_only_what_you_read_better():
     g,p=game(); t=g.players[1]; p.sight["EDUCATION"]=1; t.sight["EDUCATION"]=1
     g.teach(p,t,"EDUCATION"); assert t.sight["EDUCATION"]==1

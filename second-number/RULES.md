@@ -40,7 +40,7 @@ These rules match `sn_engine.py` exactly. If you change one, change the other, t
 |---|---|---|---|
 | 2 | 3 | 1 | 2 |
 | 3 | 3 | 3 | 3, or 4 on even rounds |
-| 4 | 2 | 1 | 2 |
+| 4 | 2 | 1 | 2, or 3 on even rounds |
 | 5 | 2 | 2 | 3 |
 
 ---
@@ -53,7 +53,7 @@ These rules match `sn_engine.py` exactly. If you change one, change the other, t
 | **Study** | +1 Sight in one district. +1 Legend. |
 | **Face a deal** | Draw a card from a district, read what your Sight allows, then choose **TAKE / WALK / NEGOTIATE** (below). |
 | **Teach** | Give a teammate +1 Sight in a district where you read *better* than they do (never above your own Sight). Costs 1 Trust; free for the Translator. +2 Legend. |
-| **Commons** | +2 Trust (max 5) and −1 Corruption. |
+| **Commons** | Gather at a place on the West Side: +2 Trust (max 5) and −1 Corruption, plus that place's bonus (below). |
 | **Reach** | Pull a Fallen player home: costs 2 Trust; they return with Corruption 4. +3 Legend. |
 | **Trace** *(Underworld open only)* | Needs Sight 3 in a woken district. Place a blue thread there. +2 Legend. |
 | **Expose** *(once enough threads are traced)* | You win. |
@@ -92,6 +92,17 @@ TAKE on a trap really is the fastest way to save a district one strike from capt
 - If the Machine wins with you Fallen, you "won the board" and earned **0 Legend**. You don't win by becoming the thing you fight.
 
 ---
+
+## The Commons: where the block gathers
+Every Commons action happens somewhere. You get the base effect plus the place's bonus. Three places set up your **next action this same turn**, so plan your turn around them.
+
+| Place | Where | Bonus |
+|---|---|---|
+| **The Barbershop & Beauty Shop** | West Third Street | Your next Teach this turn is free. |
+| **The Church** | on the corner, every Sunday | −2 Corruption instead of −1. |
+| **Adventure Central** | Wesleyan MetroPark | Your next Study this turn gives +2 Sight. |
+| **Gem City Market** | the co-op grocery on Salem Avenue | Your next deal this turn: draw 2, face 1. |
+| **Grandma's Kitchen Table** | the house everybody ends up at | Once per game: every player gets +2 Trust. |
 
 ## The Sou-Sou: the honest payday loan
 A rotating savings circle, the way families and church members have long pooled money (also called a susu, "the hand," or "the club"). At the end of the block's turns, the table may **throw a hand**:

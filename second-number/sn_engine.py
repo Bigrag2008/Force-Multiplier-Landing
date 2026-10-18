@@ -26,6 +26,7 @@ ROLES     = dict(D.ROLES)
 PATTERNS  = list(D.PATTERNS)
 OWNERS    = dict(D.OWNERS)
 SCENARIOS = dict(D.SCENARIOS)
+PLACES    = dict(D.PLACES)
 LAYERS    = [(1,"red","🔴 RED — the cost"),(2,"amber","🟠 AMBER — the clock"),(3,"blue","🔵 BLUE — the connection")]
 LEVER_NAME= {0:"—",1:"red",2:"amber",3:"blue"}
 
@@ -47,7 +48,7 @@ SOUSOU_HAND     = 4    # Trust in the Sou-Sou pot that pays out one hand
 # (tuned with balance_test.py so every count plays in the 40–70% band)
 ACTIONS         = {1:4, 2:3, 3:3, 4:2, 5:2}
 MACHINE_HITS    = {1:1, 2:1, 3:3, 4:1, 5:2}
-OVERLORD_MOVES  = {1:1.5, 2:2, 3:3.5, 4:2, 5:3}   # x.5 = one extra move on even rounds
+OVERLORD_MOVES  = {1:1.5, 2:2, 3:3.5, 4:2.5, 5:3}   # x.5 = one extra move on even rounds
 
 class Player:
     def __init__(self, name, role):
@@ -56,6 +57,7 @@ class Player:
         self.sight = {d:(1 if role=="Elder" else 0) for d in DISTRICTS}
         self.corruption = 0; self.legend = 0; self.flipped = False
         self.shields = 2 if role=="Veteran" else 0; self.elder_used = False
+        self.free_teach = False; self.shop_around = False; self.practice = False   # Commons set-ups, this turn only
 
 class Game:
     def __init__(self, overlord=False, scenario=None, owner=None, verbose=False, seed=None):
@@ -67,6 +69,7 @@ class Game:
         self.threads=set(); self.struck=set()   # districts extracted from this round
         self.covered=False                     # the Owner's one cover-up per round
         self.pot=0; self.circle=0              # the Sou-Sou: Trust in the pot, whose hand is next
+        self.kitchen_used=False                # Grandma's table feeds the block once a game
         self.won=False; self.result=None; self.log=[]; self.patterns_seen=set()
         self.human_overlord=False
         self.scenario = scenario or random.choice(list(SCENARIOS))
@@ -107,10 +110,21 @@ class Game:
     def study(self, pl, d):
         if pl.sight[d] >= 3:
             self.emit(f"{pl.name} already reads {d} fully."); return
-        pl.sight[d]+=1; pl.legend+=1
-        self.emit(f"{pl.name} studies {d}. Sight now {pl.sight[d]}/3. Legend +1.")
+        g=2 if pl.practice else 1; pl.practice=False
+        pl.sight[d]=min(3,pl.sight[d]+g); pl.legend+=1
+        self.emit(f"{pl.name} studies {d}{' (practiced at Adventure Central)' if g==2 else ''}. "
+                  f"Sight now {pl.sight[d]}/3. Legend +1.")
 
     def draw(self, d): return random.choice(D.DECK[d])
+
+    def start_turn(self, pl):
+        pl.free_teach=False; pl.shop_around=False; pl.practice=False
+
+    def deals_for(self, pl, d):
+        """The deal(s) a player looks at: two if they shopped at Gem City Market this turn."""
+        if pl.shop_around:
+            pl.shop_around=False; return random.sample(D.DECK[d],2)
+        return [self.draw(d)]
 
     def face(self, pl, d, choice, card=None):
         """Face a live deal. choice in TAKE/WALK/NEGOTIATE."""
@@ -156,17 +170,33 @@ class Game:
             self.emit(f"  ⚠⚠ {pl.name} HAS FALLEN. The Machine now moves through them.")
 
     def teach(self, pl, t, d):
-        free=(pl.role=="Translator")
+        free=(pl.role=="Translator") or pl.free_teach
         if pl.sight[d]<=t.sight[d]: self.emit(f"  {pl.name} can't teach {t.name} {d} — you can only teach what you read better."); return
         if not free and pl.trust<1: self.emit(f"  {pl.name} lacks Trust to teach."); return
         g=2 if t.role=="Student" else 1; old=t.sight[d]; t.sight[d]=min(pl.sight[d],t.sight[d]+g)
         if not free: pl.trust-=1
+        elif pl.role!="Translator": pl.free_teach=False
         pl.legend+=2
         self.emit(f"{pl.name} teaches {t.name} to read {d}. Sight {old}→{t.sight[d]}{' (free, Translator)' if free else ''}. Legend +2.")
 
-    def commons(self, pl):
-        pl.trust=min(MAX_TRUST,pl.trust+2); back=1 if pl.corruption>0 else 0; pl.corruption=max(0,pl.corruption-1)
-        self.emit(f"{pl.name} gathers at the Commons. Trust +2{', Corruption −1' if back else ''}.")
+    def commons(self, pl, place="BARBERSHOP"):
+        """+2 Trust, −1 Corruption, plus the place's bonus."""
+        if place=="KITCHEN" and self.kitchen_used: place="BARBERSHOP"
+        pl.trust=min(MAX_TRUST,pl.trust+2)
+        drop=2 if place=="CHURCH" else 1; had=pl.corruption; pl.corruption=max(0,pl.corruption-drop)
+        P=PLACES[place]
+        self.emit(f"{pl.name} gathers at {P['name']} ({P['where']}). Trust +2"
+                  + (f", Corruption −{had-pl.corruption}" if had else "") + ".")
+        if place=="BARBERSHOP":
+            pl.free_teach=True; self.emit("  Somebody in the chair can help: your next Teach this turn is free.")
+        elif place=="MARKET":
+            pl.shop_around=True; self.emit("  You shop around: your next deal this turn, draw 2 and face 1.")
+        elif place=="ADVENTURE":
+            pl.practice=True; self.emit("  Practice in the park: your next Study this turn gives +2 Sight.")
+        elif place=="KITCHEN":
+            self.kitchen_used=True
+            for p in self.active(): p.trust=min(MAX_TRUST,p.trust+2)
+            self.emit("  Grandma feeds the whole block. Every player +2 Trust. (Once per game.)")
 
     # ---- the Sou-Sou: a rotating savings circle, the honest payday loan ----
     def next_hand(self):
@@ -359,7 +389,7 @@ class Game:
         if   k=="study":    self.study(pl,a[1])
         elif k=="face":     self.face(pl,a[1],a[2],a[3] if len(a)>3 else None)
         elif k=="teach":    self.teach(pl,a[1],a[2])
-        elif k=="commons":  self.commons(pl)
+        elif k=="commons":  self.commons(pl, a[1] if len(a)>1 and a[1] else "BARBERSHOP")
         elif k=="reach":    self.reach(pl,a[1])
         elif k=="history":  self.history(pl,a[1])
         elif k=="trace":    self.trace(pl,a[1])
@@ -388,7 +418,23 @@ class Game:
         return "WALK"
 
     def bot_face(self, pl, d, style):
-        card=self.draw(d); return ("face",d,self.bot_choice(pl,d,card,style),card)
+        def score(c):
+            if pl.sight[d]<1: return 0
+            if not c["trap"]: return 2
+            return 3 if pl.sight[d]>=c["lever"] else 0
+        card=max(self.deals_for(pl,d),key=score)
+        return ("face",d,self.bot_choice(pl,d,card,style),card)
+
+    def bot_place(self, pl):
+        """Where the bot gathers. Barbershop, park and market set up your next action."""
+        act=self.active()
+        if pl.corruption>=2: return ("CHURCH",)
+        if not self.kitchen_used and sum(p.trust for p in act)<=len(act): return ("KITCHEN",)
+        if self.uw_open and any(pl.sight[x]<3 and self.clarity[x]>=WAKE and x not in self.threads for x in DISTRICTS):
+            return ("ADVENTURE",)
+        if any(p.sight[x]<pl.sight[x] for p in act if p is not pl for x in DISTRICTS): return ("BARBERSHOP",)
+        if any(pl.sight[x]==0 and self.clarity[x]<WAKE for x in DISTRICTS): return ("ADVENTURE",)
+        return ("MARKET",)
 
     def block_ai(self, pl, style="careful"):
         if style=="human": style="greedy" if random.random()<0.2 else "careful"
@@ -398,8 +444,8 @@ class Game:
         fallen=[p for p in self.blk() if p.flipped]
         if fallen and pl.trust>=2 and max(self.pressure.values())<CAPTURE-1:
             return ("reach",fallen[0],None)
-        if pl.corruption>=FLIP-2 and style!="greedy": return ("commons",None,None)
-        if pl.trust<NEG_COST: return ("commons",None,None)
+        if pl.corruption>=FLIP-2 and style!="greedy": return ("commons",)+self.bot_place(pl)
+        if pl.trust<NEG_COST: return ("commons",)+self.bot_place(pl)
         # urgent: a district about to capture (or captured — reclaim it)
         hot=sorted([d for d in DISTRICTS if self.pressure[d]>=CAPTURE-1 and self.clarity[d]<WAKE],
                    key=lambda d:-self.pressure[d])
@@ -419,7 +465,7 @@ class Game:
                 return ("study",d,None)
         # build clarity toward the Underworld
         building=[d for d in DISTRICTS if self.clarity[d]<WAKE]
-        if not building: return ("commons",None,None)
+        if not building: return ("commons",)+self.bot_place(pl)
         tgt=min(building,key=lambda d:(self.clarity[d],-pl.sight[d]))
         if pl.sight[tgt]>=1:
             learner=next((p for p in self.active() if p.sight[tgt]<pl.sight[tgt] and p is not pl),None)
@@ -456,6 +502,7 @@ class Game:
                 if pl.role=="Overlord": continue
                 if pl.flipped: self.fallen_turn(pl, self.actions())
                 else:
+                    self.start_turn(pl)
                     for _ in range(self.actions()):
                         self.do(pl, self.block_ai(pl, style))
                         if self.won or pl.flipped: break

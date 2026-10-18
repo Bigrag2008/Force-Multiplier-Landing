@@ -96,11 +96,11 @@ class Table:
         except (ValueError,IndexError): return None
 
     # ---- a live deal ----
-    def show_card(self, pl, d, card):
+    def show_card(self, pl, d, card, label=None):
         # the lever is printed inside the red zone, so it takes Sight 1 to see it
         lev=("" if pl.sight[d]<1 else f"   {DIM}lever: {R}{LKEY[card['lever']]}" if card["lever"]
              else f"   {GREEN}honest deal — no lever{R}")
-        print(f"\n  {DCOL[d]}{B}[{pl.name}] faces a deal in {d}{R}{lev}")
+        print(f"\n  {DCOL[d]}{B}[{pl.name}] {label or 'faces a deal'} in {d}{R}{lev}")
         print(f"  {WHITE}{B}WHAT YOU SEE:{R} {WHITE}{card['front']}{R}")
         for n,label,text in self.g.visible(pl,d,card):
             if text: print(f"  {LCOL[n]}{label}:{R} {CREAM}{text}{R}")
@@ -108,7 +108,14 @@ class Table:
         print(f"  {DIM}TAKE = accept · WALK = refuse · NEGOTIATE = spend 1 Trust; beats a trap only with Sight ≥ its lever{R}")
 
     def human_face(self, pl, d):
-        card=self.g.draw(d); self.show_card(pl,d,card)
+        cards=self.g.deals_for(pl,d)
+        if len(cards)>1:                      # shopped at Gem City Market: pick one of two
+            print(f"\n  {GREEN}You shopped around. Two deals on the table:{R}")
+            for i,c in enumerate(cards): self.show_card(pl,d,c,label=f"deal {i+1}")
+            card=cards[1] if ask("   face which deal (1/2): ")=="2" else cards[0]
+            print(f"  {DIM}You face deal {cards.index(card)+1}.{R}")
+        else:
+            card=cards[0]; self.show_card(pl,d,card)
         k=ask(f"   {GOLDB}t{R})TAKE  {GOLDB}w{R})WALK  {GOLDB}n{R})NEGOTIATE: ")
         return ("face",d,{"t":"TAKE","n":"NEGOTIATE"}.get(k,"WALK"),card)
 
@@ -130,7 +137,13 @@ class Table:
             if k=="3":
                 t=self.pick_player([p for p in g.active() if p is not pl],"teach who"); d=t and self.pick_district()
                 return ("teach",t,d) if t and d else None
-            if k=="4": return ("commons",None,None)
+            if k=="4":
+                places=list(E.PLACES)
+                for i,key in enumerate(places):
+                    P=E.PLACES[key]; used=" (used)" if key=="KITCHEN" and g.kitchen_used else ""
+                    print(f"   {GOLDB}{i+1}{R}) {P['name']} {DIM}— {P['where']}: {P['bonus']}{used}{R}")
+                try: return ("commons",places[int(ask("   gather where: "))-1])
+                except (ValueError,IndexError): return None
             if k=="5": t=self.pick_player([p for p in g.blk() if p.flipped],"reach who"); return ("reach",t,None) if t else None
             if k=="h" and pl.role=="Elder": d=self.pick_district("whose History"); return ("history",d,None) if d else None
             if k=="6" and g.uw_open: d=self.pick_district("trace where"); return ("trace",d,None) if d else None
@@ -173,7 +186,7 @@ class Table:
             for _ in range(g.actions()*mult):
                 g.do(pl, self.machine_menu(pl) if human else g.machine_ai_move(g.struck)); self.flush()
             return
-        left=g.actions()
+        left=g.actions(); g.start_turn(pl)
         while left>0 and not g.won and not pl.flipped:
             a=self.block_menu(pl,left) if human else g.block_ai(pl,"human")
             if a is None: print(f"  {GREY}(cancelled){R}"); continue

@@ -11,13 +11,13 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 - [x] **1. The Sou-Sou** (also called a susu, "the hand," or "the club")
   A rotating savings circle. At the end of the block's turns the table may throw a hand: everyone who can puts in 1 Trust. When the pot reaches the hand size, the next player in the circle takes it and clears 2 Pressure from any district, with **no Corruption**. It's the honest version of the payday shortcut.
 
-- [ ] **2. Commons places, at West Dayton landmarks**
+- [x] **2. Commons places, at West Dayton landmarks**
   The Commons action now happens *somewhere*. Each place gives the base Commons effect (+2 Trust, −1 Corruption) plus its own bonus:
   | Place | Bonus |
   |---|---|
   | Barbershop / beauty shop on West Third Street | Your next Teach this turn is free. |
   | The church | −2 Corruption instead of −1. |
-  | Adventure Central at Wesleyan MetroPark | +1 Sight in a district you can already read. |
+  | Adventure Central at Wesleyan MetroPark | Your next Study this turn gives +2 Sight. |
   | Gem City Market (the co-op grocery on Salem Avenue) | Your next deal this turn: draw 2, face 1. |
   | Grandma's kitchen table | Once per game: every player gets +2 Trust. |
 

@@ -322,6 +322,26 @@ OWNERS = {
  "The Recruiter":"Each round it peels someone away: a random player loses 1 Sight in a district they can read.",
 }
 
+# COMMONS PLACES — where the block gathers, on the West Side of Dayton.
+# Every Commons action gives +2 Trust and −1 Corruption, plus the place's bonus.
+PLACES = {
+ "BARBERSHOP":dict(name="The Barbershop & Beauty Shop", where="West Third Street",
+                   bonus="Your next Teach this turn is free.",
+                   flavor="Where the news really travels. Somebody in the chair already read the fine print."),
+ "CHURCH":    dict(name="The Church", where="on the corner, every Sunday",
+                   bonus="−2 Corruption instead of −1.",
+                   flavor="Come as you are. Leave a little lighter."),
+ "ADVENTURE": dict(name="Adventure Central", where="Wesleyan MetroPark",
+                   bonus="Your next Study this turn gives +2 Sight.",
+                   flavor="The young people's learning center in the park. Practice makes sight."),
+ "MARKET":    dict(name="Gem City Market", where="the co-op grocery on Salem Avenue",
+                   bonus="Your next deal this turn: draw 2, face 1.",
+                   flavor="Owned by the neighborhood it feeds. Shop around before you sign."),
+ "KITCHEN":   dict(name="Grandma's Kitchen Table", where="the house everybody ends up at",
+                   bonus="Once per game: every player gets +2 Trust.",
+                   flavor="Sit down. Eat. Now show me the paper they gave you."),
+}
+
 SCENARIOS = {
  "The Eviction Wave":"Housing starts under siege (2 pressure). Hold the line.",
  "Payday Season":"Every third round is payday: Lending takes an extra hit. The hardest rung.",
