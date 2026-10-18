@@ -134,6 +134,11 @@ def test_call_and_response():
     g.teach(p,t,"LABOR"); assert t.legend==1 and p.legend==3
     t2=g.players[3]; g.teach(p,t2,"LABOR",response=False); assert t2.legend==0 and p.legend==5
 
+def test_history_deck_wakes_and_tells():
+    assert all(len(Dk.HISTORY[d])>=2 for d in E.DISTRICTS) and Dk.HISTORY["ANY"]
+    g,p=game(); p.role="Elder"; g.history(p,"HOUSING")
+    assert g.clarity["HOUSING"]==E.WAKE and g.history_card in Dk.HISTORY["HOUSING"]+Dk.HISTORY["ANY"]
+
 def test_clock_is_a_loss():
     g=E.new_game(seed=3); g.run_auto(max_rounds=1)
     assert g.result in ("MACHINE_WIN","BLOCK_WIN")

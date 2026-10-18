@@ -32,7 +32,7 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 
 ## Part B: History and place
 
-- [ ] **6. The History deck**
+- [x] **6. The History deck**
   "Teach the History" draws a true story, with the community fighting back as well as being hurt. The deck includes the Contract Buyers League, the Freedman's Savings Bank, Greenwood, HOLC redlining maps, the Montgomery bus boycott and mutual-aid societies, plus Dayton's own: Paul Laurence Dunbar and the Wright brothers' print shop, and James H. McGee, Dayton's first Black mayor.
 
 - [ ] **7. The West Dayton setting**
@@ -76,3 +76,4 @@ These are used in the game and should be confirmed by a Dayton historian or the 
 - The GM Moraine plant closing (2008) and NCR moving its headquarters out of Dayton (2009).
 - The 1890 *Dayton Tattler*: Paul Laurence Dunbar's paper, printed by Orville and Wilbur Wright.
 - James H. McGee's years as mayor (1970–1982).
+- Every History card (`deck_cards.py`, `HISTORY`): dates, places and wording. In particular: that Dayton has a 1930s HOLC map; that Dunbar and Orville Wright were Central High classmates; the Contract Buyers League outcome ("forced many sellers to renegotiate"); and Greenwood's rebuilding.

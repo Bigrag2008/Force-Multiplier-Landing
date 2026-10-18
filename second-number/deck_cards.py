@@ -322,6 +322,74 @@ OWNERS = {
  "The Recruiter":"Each round it peels someone away: a random player loses 1 Sight in a district they can read.",
 }
 
+# HISTORY — the Elder's deck. "Teach the History" wakes a district and draws a
+# true story from that district's pile (or the ANY pile). The block has always
+# fought back; most of these are about how. Verify every card before printing.
+HISTORY = {
+ "LENDING":[
+  dict(title="The Freedman's Savings Bank", year="1865–1874", place="Washington, D.C., with branches across the South",
+       story="Congress chartered a bank for the formerly enslaved, and tens of thousands opened accounts. Its white trustees "
+             "moved the deposits into risky loans and speculation. When it failed in 1874, many families lost savings they "
+             "had worked for since freedom.",
+       lesson="Always ask whose hands are on your money."),
+  dict(title="Maggie L. Walker's Penny Savings Bank", year="1903", place="Richmond, Virginia",
+       story="Maggie Lena Walker chartered the St. Luke Penny Savings Bank so Black families could save, borrow and buy "
+             "homes on fair terms. She was the first woman of any race to charter a bank in the United States.",
+       lesson="If they won't lend to you fairly, build the bank."),
+ ],
+ "HOUSING":[
+  dict(title="The Redlining Maps", year="1930s", place="Every major city, Dayton included",
+       story="The federal Home Owners' Loan Corporation graded neighborhoods for lending risk. Black neighborhoods were "
+             "routinely shaded red, \"hazardous,\" which cut them off from fair mortgages for generations.",
+       lesson="The map was drawn on purpose. It can be redrawn on purpose."),
+  dict(title="The Contract Buyers League", year="1968", place="West Side of Chicago",
+       story="Shut out of mortgages, Black families bought homes \"on contract\" at inflated prices, losing everything "
+             "after one missed payment. They organized, withheld payments together and went to court, and forced many "
+             "sellers to renegotiate.",
+       lesson="Read the contract together. Then fight it together."),
+ ],
+ "LABOR":[
+  dict(title="I AM A MAN", year="1968", place="Memphis, Tennessee",
+       story="Black sanitation workers struck after two co-workers were killed by a faulty truck. Their signs read "
+             "\"I AM A MAN.\" Dr. King came to Memphis to stand with them. The strike won union recognition and a raise.",
+       lesson="Dignity is a wage demand."),
+  dict(title="The Montgomery Bus Boycott", year="1955–1956", place="Montgomery, Alabama",
+       story="For 381 days, Black riders walked, carpooled and organized rather than ride segregated buses. The lost "
+             "fares hurt the bus company, and the Supreme Court struck down bus segregation.",
+       lesson="Your money is a vote. Spend it like one."),
+ ],
+ "HEALTH":[
+  dict(title="The People's Free Medical Clinics", year="Late 1960s–1970s", place="Oakland and cities nationwide",
+       story="The Black Panther Party opened free community clinics and ran a national screening campaign for sickle "
+             "cell anemia, a disease the medical system had long neglected.",
+       lesson="When care won't come to the block, the block brings care."),
+  dict(title="Dr. Charles Drew", year="1940s", place="New York and Washington, D.C.",
+       story="Dr. Drew pioneered ways to store blood plasma and ran a major wartime blood-bank program. He spoke out "
+             "against the Red Cross separating donated blood by race.",
+       lesson="Expertise is protection. Learn the system better than it knows you."),
+ ],
+ "EDUCATION":[
+  dict(title="Wilberforce University", year="founded 1856", place="Wilberforce, Ohio (next to Xenia)",
+       story="In 1863 the AME Church bought Wilberforce, making it the first college owned and operated by African "
+             "Americans. Central State University grew up beside it. Both are minutes from Dayton.",
+       lesson="We have always built our own schools."),
+  dict(title="Dunbar, the Wrights and the Dayton Tattler", year="1890", place="West Third Street, Dayton",
+       story="Paul Laurence Dunbar and Orville Wright were classmates at Dayton's Central High School. In 1890 the "
+             "Wright brothers printed Dunbar's newspaper for Dayton's Black community, the Dayton Tattler.",
+       lesson="The block reads, and the block writes its own story."),
+ ],
+ "ANY":[
+  dict(title="Mayor James H. McGee", year="1970–1982", place="Dayton, Ohio",
+       story="Dayton elected James H. McGee its first Black mayor. He served for twelve years, and a West Dayton "
+             "boulevard carries his name.",
+       lesson="Get a voice in the room where the rules are written."),
+  dict(title="Greenwood: Black Wall Street", year="1921", place="Tulsa, Oklahoma",
+       story="Greenwood was a thriving Black business district of banks, theaters and shops. A white mob destroyed it "
+             "in the 1921 massacre. Residents rebuilt much of it within years, with little help.",
+       lesson="What we build can be taken. What we know can't."),
+ ],
+}
+
 # COMMONS PLACES — where the block gathers, on the West Side of Dayton.
 # Every Commons action gives +2 Trust and −1 Corruption, plus the place's bonus.
 PLACES = {

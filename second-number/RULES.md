@@ -133,6 +133,9 @@ To win, trace **3 blue threads**. Each needs **Sight 3 (blue)** in a woken distr
 
 ---
 
+## The History deck
+When the Elder teaches the History of a district, shuffle that district's History cards with the two "any district" cards and draw one. Read the story and its lesson aloud. These are true stories, and most of them are about how the community fought back: the Contract Buyers League, Maggie L. Walker's bank, the Memphis sanitation strike, the Black Panther Party's free clinics, Wilberforce University, Paul Laurence Dunbar and the Wright brothers' print shop, Mayor James H. McGee, and more.
+
 ## Owners (hidden from round 1, so deduce them)
 - **The Algorithm:** relentless. +1 Machine strike every round.
 - **The Lobbyist:** leans on your strongest unwoken district every round (+1 Pressure). On reveal, it knocks one woken district back to Clarity 1.
@@ -152,7 +155,7 @@ When every district in a combination is at Pressure 2 or more, flip that Pattern
 |---|---|
 | **Translator** | Teaches for free (still needs to read the district better than the learner). |
 | **Student** | Gains double Sight when taught. |
-| **Elder** | Starts with Sight 1 everywhere. Once per game, *Teach the History*: a district wakes instantly. |
+| **Elder** | Starts with Sight 1 everywhere. Once per game, *Teach the History*: a district wakes instantly. Draw a History card for that district and read it aloud. |
 | **Veteran** | Shields two Machine strikes per game. |
 | **Organizer** | A successful NEGOTIATE drops Pressure by 2. |
 

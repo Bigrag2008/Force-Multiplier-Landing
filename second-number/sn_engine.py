@@ -27,6 +27,7 @@ PATTERNS  = list(D.PATTERNS)
 OWNERS    = dict(D.OWNERS)
 SCENARIOS = dict(D.SCENARIOS)
 PLACES    = dict(D.PLACES)
+HISTORY   = dict(D.HISTORY)
 LAYERS    = [(1,"red","🔴 RED — the cost"),(2,"amber","🟠 AMBER — the clock"),(3,"blue","🔵 BLUE — the connection")]
 LEVER_NAME= {0:"—",1:"red",2:"amber",3:"blue"}
 
@@ -264,7 +265,10 @@ class Game:
     def history(self, pl, d):
         if pl.role!="Elder" or pl.elder_used: self.emit("  No History to teach."); return
         pl.elder_used=True; self.clarity[d]=WAKE; pl.legend+=2
-        self.emit(f"{pl.name} teaches the History of {d}. {d} AWAKE. Legend +2.")
+        h=self.history_card=random.choice(HISTORY[d]+HISTORY["ANY"])
+        self.emit(f"{pl.name} teaches the History of {d}: {h['title']} ({h['year']}, {h['place']}).")
+        self.emit(f"  {h['story']}")
+        self.emit(f"  \"{h['lesson']}\"  {d} AWAKE. Legend +2.")
 
     def trace(self, pl, d):
         if not self.can_trace(pl,d):
