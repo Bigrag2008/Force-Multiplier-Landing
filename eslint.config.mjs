@@ -12,8 +12,6 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // The game is its own Next.js site with its own lint config.
-    "second-number/**",
   ]),
 ]);
 

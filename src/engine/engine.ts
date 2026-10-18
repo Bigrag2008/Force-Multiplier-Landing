@@ -1,5 +1,5 @@
 /**
- * THE SECOND NUMBER — rules engine, TypeScript port of second-number/sn_engine.py.
+ * THE SECOND NUMBER — rules engine, TypeScript port of game/sn_engine.py.
  *
  * The Python engine is the source of truth (balance tester, rule checks). This port
  * mirrors it method for method and must reproduce its golden games exactly

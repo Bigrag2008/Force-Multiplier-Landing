@@ -9,7 +9,7 @@ Re-run after any change to cards, chapters or constants. The parity tests fail
 if the TypeScript engine and this file disagree with the Python engine.
 """
 import json, os, sys
-HERE=os.path.dirname(os.path.abspath(__file__)); GAME=os.path.dirname(os.path.dirname(HERE))
+HERE=os.path.dirname(os.path.abspath(__file__)); GAME=os.path.join(os.path.dirname(HERE),"game")
 sys.path.insert(0,GAME)
 import deck_cards as D, chapters as CH, sn_engine as E
 

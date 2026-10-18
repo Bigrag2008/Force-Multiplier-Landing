@@ -9,7 +9,7 @@ Python's `random`, so the TypeScript engine (same RNG) must reproduce every log 
 and the final state exactly. Re-run after any engine change, then `npm test`.
 """
 import json, os, sys
-HERE=os.path.dirname(os.path.abspath(__file__)); GAME=os.path.dirname(os.path.dirname(HERE))
+HERE=os.path.dirname(os.path.abspath(__file__)); GAME=os.path.join(os.path.dirname(HERE),"game")
 sys.path.insert(0,GAME); sys.path.insert(0,HERE)
 import sn_engine as E
 from shared_rng import SharedRng

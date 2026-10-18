@@ -1,7 +1,7 @@
 """
 A tiny deterministic RNG (mulberry32) shared by the Python and TypeScript engines
 for parity tests. It stands in for Python's `random` module: seed, random, choice
-and sample are the only calls the engine makes. web/src/engine/rng.ts must match.
+and sample are the only calls the engine makes. src/engine/rng.ts must match.
 """
 M=0xFFFFFFFF
 

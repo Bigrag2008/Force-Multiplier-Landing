@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# The Second Number — West Dayton Edition
 
-## Getting Started
+*Read the machine. Wake the block. Crack the Underworld. Don't become it.*
 
-First, run the development server:
+A cooperative game for 2–5 players about the hidden cost in every deal: the payday loan, the rent-to-own couch, the "free" first month. Learn to read the second number, teach your whole block to read it, and drag the one machine behind them all into the light. Set on the West Side of Dayton, Ohio, and built from Black American culture.
+
+This repo holds everything: the **website where you play it online**, and the **game itself** (rules engine, rulebook, print-and-play kit, campaign and design docs).
+
+| Where | What |
+|---|---|
+| *(this folder)* | **The online game:** a Next.js website. Play it in a browser on one device passed around the table. |
+| [`game/`](game/) | **The game:** the rules engine (Python, the source of truth), the rulebook, the balance tester, the terminal edition, the print-and-play PDFs, the campaign and the design docs. Start with [`game/README.md`](game/README.md). |
+
+## Play it on your computer
+You need [Node.js](https://nodejs.org) 20 or newer.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install        # first time only
+npm run dev        # then open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To run the production build instead: `npm run build && npm start`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How to play
+1. Open the site and choose **Play now**.
+2. **Set the table:** choose a mode, then the number of players (2–5), each player's name and role, and (in co-op) a scenario. Start with *The Audit* or *A Quiet Year*.
+   - **Co-op:** the block against the Machine.
+   - **Overlord:** one player is the Machine, or the computer is.
+   - **Campaign:** *The Long Ledger*, Chapter 3: *The Map*.
+3. **Take turns on one device.** The action panel shows whose turn it is and what they can do. Pass the device on when your turn ends.
+4. **Read deals with the glasses.** When you face a deal, drag Grandma's red reading glasses over the card to read the layers your Sight has unlocked, or press **Put glasses on**. Layers you haven't unlocked stay locked.
+5. **Between turns** the game asks the table about the **Sou-Sou** and, at the start of a round, the **Cookout**, then shows what the Machine did.
+6. **The Green Book** opens automatically when a strike would capture a district. Untick the box at the top if you'd rather save it.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**How to play** on the home page has the short rules; [`game/RULES.md`](game/RULES.md) has the full rulebook. Prefer paper? Print [`game/The_Second_Number_PRINT_AND_PLAY.pdf`](game/The_Second_Number_PRINT_AND_PLAY.pdf).
 
-## Learn More
+## Put it online (Vercel, free tier)
+1. At [vercel.com/new](https://vercel.com/new), import this repo. Vercel detects Next.js; leave the settings as they are.
+2. Deploy. Every push to `main` updates the live link, and each pull request gets its own preview link.
 
-To learn more about Next.js, take a look at the following resources:
+Every page is static, so any static host works too (Netlify, Cloudflare Pages).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## How the website stays true to the rules
+The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of truth: the balance tester and rule checks run against it. The website uses a TypeScript port ([`src/engine/engine.ts`](src/engine/engine.ts)) that must replay the Python engine's games exactly.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Command | What it does |
+|---|---|
+| `npm run content` | Re-export every card, place, scenario, chapter and tuning constant from `game/` to `src/content/content.json`. |
+| `npm run golden` | Record 63 complete games from the Python engine (all modes, player counts, bot styles, scenarios and Owners) to `tests/golden.json`. |
+| `npm test` | Replay every golden game in TypeScript (each log line and the final state must match), plus 38 tests that drive the browser turn flow through whole games. |
+| `npm run lint` / `npm run typecheck` | ESLint and TypeScript. |
 
-## Deploy on Vercel
+**After any rules or card change:** edit the Python in `game/`, then run `npm run content`, `npm run golden` and `npm test`. If a test fails, mirror the change in `src/engine/engine.ts`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Layout
+| Path | What |
+|---|---|
+| `app/` | Website pages: home, `/play`, `/how-to-play`. |
+| `src/engine/` | The rules engine (TypeScript port), its content types and the shared RNG. |
+| `src/game/session.ts` | The round-by-round flow: who acts next, and what the table is asked. |
+| `src/ui/` | The board, players, deal card and lens, action panels, end screen. |
+| `scripts/` | Content export, golden-game recorder, the Python twin of the shared RNG. |
+| `tests/` | Parity and session tests. |
+| `game/` | The game itself (see above). |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Next steps
+- **Online multiplayer:** each player joins a room from their own phone. This needs a small realtime service (for example PartyKit, Supabase Realtime, or a Node server on Fly.io); the engine and turn flow already run anywhere JavaScript does.
+- Save and resume a game in progress; a guided first game; sound and the art direction's illustrations.
+
+Part of the Individual Democracy / Civic Armor universe.

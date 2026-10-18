@@ -77,7 +77,7 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 
 ## Part F: The online game
 
-- [x] **19. Its own website** (`web/`): a separate Next.js app, kept out of the landing site's build.
+- [x] **19. Its own website:** a Next.js app, now the whole repo (it replaced the Force Multiplier landing page).
 - [x] **20. Content exported** from the Python source of truth to JSON.
 - [x] **21. The engine in TypeScript**, locked to the Python engine by 63 golden games.
 - [x] **22. The turn flow** for one device passed around the table.
