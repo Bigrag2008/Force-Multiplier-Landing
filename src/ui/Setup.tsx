@@ -13,6 +13,7 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig) => void }) {
   const [roles, setRoles] = useState<string[]>(C.roster.map((r) => r.role));
   const [scenario, setScenario] = useState("A Quiet Year");
   const [overlordHuman, setOverlordHuman] = useState(false);
+  const [coach, setCoach] = useState(true);
   const field = "rounded-lg border border-white/20 bg-white/10 px-3 py-2";
   const dupRoles = new Set(roles.slice(0, count)).size < count;
 
@@ -27,6 +28,7 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig) => void }) {
           roster: Array.from({ length: count }, (_, i) => ({ name: names[i].trim() || DEFAULT_NAMES[i], role: roles[i] })),
           scenario: mode === "coop" ? (scenario === "random" ? undefined : scenario) : undefined,
           overlordHuman: mode === "overlord" && overlordHuman,
+          coach,
         });
       }}
     >
@@ -91,6 +93,14 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig) => void }) {
           A person plays the Overlord (otherwise the computer does)
         </label>
       )}
+
+      <label className="flex items-start gap-2">
+        <input type="checkbox" className="mt-1" checked={coach} onChange={(e) => setCoach(e.target.checked)} />
+        <span>
+          <b>Coach me as we play</b>
+          <span className="block text-xs text-program/70">The Coach glows on the move it would make, says why, and explains each rule the first time it comes up. Turn it off any time.</span>
+        </span>
+      </label>
 
       <button type="submit" disabled={dupRoles} className="w-full rounded-xl bg-gold px-4 py-3 text-lg font-black text-night disabled:opacity-50">
         Start the game

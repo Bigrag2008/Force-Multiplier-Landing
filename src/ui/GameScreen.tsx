@@ -26,6 +26,10 @@ export function GameScreen({ config, onQuit }: { config: SessionConfig; onQuit: 
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 text-sm">
+          <label className="flex items-center gap-2" title="The Coach recommends a move, explains why, and teaches each rule the first time it comes up.">
+            <input type="checkbox" checked={s.coach} onChange={(e) => run((x) => (x.coach = e.target.checked))} />
+            🧑🏾‍🏫 Coach
+          </label>
           <label className="flex items-center gap-2" title="When a Machine strike would capture a district, open the Green Book automatically (once per game).">
             <input type="checkbox" checked={s.autoGreenBook} onChange={(e) => run((x) => (x.autoGreenBook = e.target.checked))} />
             📗 Open the Green Book when a capture is coming
