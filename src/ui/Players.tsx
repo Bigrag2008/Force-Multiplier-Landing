@@ -2,6 +2,7 @@
 import { C, DISTRICTS, K } from "../engine/content";
 import type { Session } from "../game/session";
 import { say } from "../game/words";
+import { RolePortrait } from "./art/RolePortrait";
 import { Float, type Changes } from "./Board";
 import { Icon, Pips } from "./icons";
 import { DISTRICT_COLOR } from "./theme";
@@ -22,9 +23,12 @@ export function Players({ s, changes = null }: { s: Session; changes?: Changes }
         const ch = changes?.delta.players[p.name];
         return (
           <div key={p.name} className={`relative rounded-xl border p-3 ${current ? "border-gold bg-gold/10" : "border-white/15 bg-white/5"}`}>
-            <div className="flex items-baseline justify-between">
-              <div>
-                <span className="font-black">{p.name}</span> <span className="text-xs text-program/70">the {p.role}</span>
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <RolePortrait role={p.role} size={40} title={`${p.name}, the ${p.role}`} />
+                <div>
+                  <span className="font-black">{p.name}</span> <span className="text-xs text-program/70">the {p.role}</span>
+                </div>
               </div>
               {p.flipped ? (
                 <span className="text-xs font-black text-[#ff8a8a]">FALLEN</span>

@@ -64,7 +64,8 @@ The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of tr
 | `src/engine/` | The rules engine (TypeScript port), its content types and the shared RNG. |
 | `src/game/session.ts` | The round-by-round flow: who acts next, and what the table is asked. |
 | `src/game/coach.ts` | The Coach: the recommended move with its reason, and the lessons, all read-only. |
-| `src/ui/` | The board, players, deal card and lens, action panels, the Coach box, end screen. |
+| `src/ui/` | The board, players, deal card and lens, action panels, the Coach box, the story comic, end screen. |
+| `src/ui/art/` | The drawn district scenes and role portraits, and `manifest.ts`, where commissioned art drops in (brief: [`game/ART_BRIEF.md`](game/ART_BRIEF.md)). |
 | `scripts/` | Content export, golden-game recorder, the Python twin of the shared RNG. |
 | `tests/` | Parity, session and Coach tests. |
 | `game/` | The game itself (see above). |
