@@ -2,7 +2,6 @@
 import type { ReactNode } from "react";
 import { C, DISTRICTS, K, type District } from "../engine/content";
 import type { Session } from "../game/session";
-import { say } from "../game/words";
 import { DistrictArt } from "./art/DistrictArt";
 import { signed, type Delta } from "./changes";
 import { Icon, Pips, type IconName } from "./icons";
@@ -103,7 +102,7 @@ export function Board({ s, highlight, changes = null }: { s: Session; highlight?
       {patterns.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {patterns.map((p) => (
-            <span key={p.name} title={say(p.lesson)} className="rounded-full bg-[#8b1e1e] px-3 py-1 text-xs font-bold text-white">
+            <span key={p.name} title={p.lesson} className="rounded-full bg-[#8b1e1e] px-3 py-1 text-xs font-bold text-white">
               ⚠ {p.name} · {p.combo.map(titleCase).join(" + ")}
             </span>
           ))}

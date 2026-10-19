@@ -26,9 +26,9 @@ Every **Deal card** (loan, lease, job, tuition, car note, hospital bill) has:
 - a **price you can see**, printed in black on the front, and
 - a **second number** — the real cost — printed in **red** that is *invisible to the naked eye*.
 
-The box comes with a **red decoder lens.** You cannot read the second number until you've earned the **Sight** to use the lens on that type of deal. New players are blind to what's being taken from them. As they develop Sight, the hidden cost *appears.*
+The box comes with a **red decoder lens.** You cannot read the second number until you've earned the **Read** to use the lens on that type of deal. New players are blind to what's being taken from them. As they develop Read, the hidden cost *appears.*
 
-**Seeing is not beating.** Sight 1 (red) tells you a deal is a trap. But every trap carries a small **lever key** in its corner — red, amber, or blue — the layer that holds the leverage to beat it. To *negotiate* it down you need Sight that deep. Spotting the payday loan's 391% is the first step; beating the "free first month" means reading the clawback clock (amber); beating the debt-relief mill means naming who's behind it (blue).
+**Seeing is not beating.** Read 1 (red) tells you a deal is a trap. But every trap carries a small **lever key** in its corner — red, amber, or blue — the layer that holds the leverage to beat it. To *negotiate* it down you need Read that deep. Spotting the payday loan's 391% is the first step; beating the "free first month" means reading the clawback clock (amber); beating the debt-relief mill means naming who's behind it (blue).
 
 > Information asymmetry = power asymmetry, made physical. You literally cannot see what the machine takes until you learn to look.
 
@@ -37,11 +37,11 @@ The box comes with a **red decoder lens.** You cannot read the second number unt
 ## THE PLAYERS (the village)
 Cooperative, 2–5 players. Each picks a **role** with a unique gift — because no one sees the whole machine alone, and you *need* each other:
 
-- **The Translator** — teaches for free (you still have to read a district better than your learner to teach it); the bridge that spreads Sight fastest.
-- **The Student** — gains double Sight when taught; the hungry one.
-- **The Elder** — starts with Sight 1 everywhere; once per game, "Teach the History" wakes a whole district.
+- **The Translator** — teaches for free (you still have to read a district better than your learner to teach it); the bridge that spreads Read fastest.
+- **The Student** — gains double Read when taught; the hungry one.
+- **The Elder** — starts with Read 1 everywhere; once per game, "Teach the History" wakes a whole district.
 - **The Veteran** — shields the block from two Machine strikes per game (came home to protect it).
-- **The Organizer** — a successful negotiation drops Pressure by 2, not 1 (collective action); rallies the block.
+- **The Organizer** — a successful negotiation drops Squeeze by 2, not 1 (collective action); rallies the block.
 
 *(The five roles as built. There is no separate "Builder" — the Commons is an action any player can take, not a role.)*
 
@@ -51,7 +51,7 @@ A central engine/tower that grows each round and plays **Extraction cards** on t
 ## YOUR TURN: EXIT · VOICE · LOYALTY
 Every deal is the old choice in miniature — **Exit** (WALK), **Voice** (NEGOTIATE), **Loyalty** (TAKE). On your turn you take 2–3 actions (Study, Face a deal, Teach, gather at the Commons, Reach a Fallen friend, and in the endgame Trace the Underworld). You don't spend money — you spend **Time** (your actions) and **Trust**, and you earn **Clarity**. **Trust is the real currency:** every negotiation and every lesson costs one, it caps at 5, and the Commons is where you earn it back.
 
-## THE TWIST THAT MAKES IT *YOURS*: THE CORRUPTION PATH
+## THE TWIST THAT MAKES IT *YOURS*: THE SHADY PATH
 There's a tempting shortcut. You *can* get rich and powerful fast by using the machine's own tools — **Take** cards: leverage, pressure, squeezing people. They're marked. Play too many and your piece **flips into a Machine piece.** And if you "win" the board that way — surprise, you **lose.** You became the boss.
 
 > The rulebook's last line: *"How high did you climb before you turned into the thing you were fighting?"*
@@ -61,14 +61,14 @@ A board game you can win by selling out — where winning that way is secretly t
 ## THE FALLEN — the corruption path, fully playable (the most electric moment in the game)
 Flipping isn't a quiet exit anymore. When a player corrupts out, they **don't leave the table — they stay in the turn order and the Machine starts moving through them.** The Fallen gets real enemy actions:
 - **Extract** — feed the Machine, push a district's pressure toward capture.
-- **Obscure** — bury the second number again: pull Sight back out of a district the block woke up.
+- **Obscure** — bury the second number again: pull Read back out of a district the block woke up.
 - **Tempt** — whisper a sweeter deal to a teammate and drain their Trust.
 
 Now the betrayal is *live.* The person who was carrying the crew turns and starts tearing down the exact districts they helped wake. It's the table's biggest gut-punch — and it's genuinely fun to *be* the one who turned.
 
-**The counter-tension — redemption.** A Fallen player is never gone. The crew can spend 2 hard-won Trust and an action to **reach** them and pull them home (the rescuer earns +3 Legend — saving a soul is the most legendary thing you can do). But every turn spent reaching is a turn not spent defending the board. Save the district, or save your friend?
+**The counter-tension — redemption.** A Fallen player is never gone. The crew can spend 2 hard-won Trust and an action to **reach** them and pull them home (the rescuer earns +3 Props — saving a soul is the most legendary thing you can do). But every turn spent reaching is a turn not spent defending the board. Save the district, or save your friend?
 
-**The guardrail that protects the whole thesis:** the Fallen can **win the board** — if they drag the block down to two captured districts, the Machine wins the game. **But they can never win the Legend.** The scoreboard that actually crowns a winner only counts people lifted, districts woken, souls reached. When the Fallen "wins," the game says it plainly: *"You won the board as the Machine — and earned 0 Legend. The Owner just wore your face. You win nothing by becoming it."* The fall is thrilling, real, and playable — but it is still a fall. **You don't win by becoming the thing you fight.** That's the philosophy, enforced by the rules.
+**The guardrail that protects the whole thesis:** the Fallen can **win the board** — if they drag the block down to two captured districts, the Machine wins the game. **But they can never win the Props.** The scoreboard that actually crowns a winner only counts people lifted, districts woken, souls reached. When the Fallen "wins," the game says it plainly: *"You won the board as the Machine — and earned 0 Props. The Owner just wore your face. You win nothing by becoming it."* The fall is thrilling, real, and playable — but it is still a fall. **You don't win by becoming the thing you fight.** That's the philosophy, enforced by the rules.
 
 ## OPTIONAL: OVERLORD MODE — one player IS the Machine (1-vs-many)
 For groups who want the full competitive, head-to-head version, there's an optional way to play: **one player takes the Machine from the start, openly — The Overlord.** No hidden Owner, no slow corruption; it's the block versus a live human adversary. The Overlord takes Machine actions every round (extract, obscure, tempt), choosing targets with a mind instead of a deck. The block still wins by dragging the Underworld into the light; the Overlord wins by capturing two districts. It's a different, nastier game on the same board — and it's **optional, so it never limits the co-op experience either way.** Toggle it on when the table wants a villain with a face.
@@ -76,7 +76,7 @@ For groups who want the full competitive, head-to-head version, there's an optio
 *(Both are live in the prototype: the Fallen plays as the Machine on their turn with redemption as the counter-pull — `python3 second_number_play.py --auto` — and Overlord mode runs with `--overlord`. Overlord moves obey the same spread rule as the Machine — one move per district per round — so no one can snipe a district in a single round.)*
 
 ## HOW YOU WIN / LOSE
-- **Win (together):** wake districts until total Clarity cracks the Underworld open (9), then **trace 3 blue threads** (Sight 3 in a woken district) while the Owner fights in the open, and **expose** it.
+- **Win (together):** wake districts until total Clarity cracks the Underworld open (9), then **trace 3 blue threads** (Read 3 in a woken district) while the Owner fights in the open, and **expose** it.
 - **Lose:** the Machine captures **two** districts, **or** every player corrupts into a Machine, **or** round 12 ends — the amber clock is real.
 
 *(As built and balance-tested across 2–5 players with every West Dayton mechanic in play: co-op 54–68% block wins, Overlord 46–59%, zero first-round losses; careful play beats both "never take a shortcut" and "take every shortcut". See `balance_report.txt` and `RULES.md`.)*
@@ -90,13 +90,13 @@ Play the game → meet the second number → want the novel → find Civic Armor
 ---
 
 ## THE UNDERWORLD (the hidden layer — the wildcard that connects everything)
-Beneath the five visible districts is a **hidden under-board** — *The Underworld* — that cracks open once the block's total Clarity reaches 9, and can only be *exposed* by players who've reached the deepest level of Sight (blue). It's the secret engine of the whole machine, and it carries the game's biggest truth:
+Beneath the five visible districts is a **hidden under-board** — *The Underworld* — that cracks open once the block's total Clarity reaches 9, and can only be *exposed* by players who've reached the deepest level of Read (blue). It's the secret engine of the whole machine, and it carries the game's biggest truth:
 
 - **The districts look separate. The Underworld reveals they're one machine.** Down there, the same money, the same firms, the same hands own a piece of all five domains. (This is the "Knowledge Graph" from the philosophy — how institutions are secretly connected — made playable.)
 - It's ruled by **The Owner** — faceless (straight out of the novel) — the hand that moves between all domains and influences everything from below.
 - **Wildcard mechanic:** Underworld events ripple across **all five districts at once**, because down there they're connected. One move below hits the whole board above.
 - **Where the fallen go:** players who fully corrupt and flip to the Machine operate *from* the Underworld — that's where the Machine's real power sits.
-- **The true endgame:** you *think* you're fighting five separate problems. Then someone gets deep enough to open the Underworld, and the whole table sees it's **one thing.** Truly winning isn't just waking the five districts — it's dragging the Underworld into the light, exposing the connection. The master level of the Sight isn't seeing one trap. It's seeing that all the traps are the same trap.
+- **The true endgame:** you *think* you're fighting five separate problems. Then someone gets deep enough to open the Underworld, and the whole table sees it's **one thing.** Truly winning isn't just waking the five districts — it's dragging the Underworld into the light, exposing the connection. The master level of the Read isn't seeing one trap. It's seeing that all the traps are the same trap.
 
 That's the novel's climax and the philosophy's core, built as the hidden heart of the board.
 
@@ -127,23 +127,23 @@ The real world doesn't hurt you one domain at a time. It hurts you in **combinat
 ## REPLAYABILITY & DEPTH (what keeps it on the table for years)
 
 **Replayability — a different game every time:**
-- **The Variable Owner.** The Underworld hides a different boss each game. It acts from round 1, face-down, so the table can *deduce* it before it's revealed — *The Algorithm* (relentless: an extra strike every round), *The Lobbyist* (leans on your strongest work; re-captures a woken district on reveal), *The Debt Buyer* (every shortcut corrupts you harder, and collections drain the Trust of anyone carrying Corruption), *The Recruiter* (peels your people away — Sight loss each round). Same board, a new puzzle every time. It's the Owner from the novel, as a rotating cast.
+- **The Variable Owner.** The Underworld hides a different boss each game. It acts from round 1, face-down, so the table can *deduce* it before it's revealed — *The Algorithm* (relentless: an extra strike every round), *The Lobbyist* (leans on your strongest work; re-captures a woken district on reveal), *The Debt Buyer* (every shortcut corrupts you harder, and collections drain the Trust of anyone carrying Shady), *The Recruiter* (peels your people away — Read loss each round). Same board, a new puzzle every time. It's the Owner from the novel, as a rotating cast.
 - **The Scenario deck.** Each game opens from a setup card — *The Eviction Wave, Payday Season, The Closure, The Audit, A Quiet Year* — changing the starting map and the pressure.
 - **Expansion packs = the CAN domains.** Tenant Rights, Medical Debt, Immigration & Labor, Benefits. Each new pack is also a Civic Armor Network domain — **the game's content roadmap and the business's domain roadmap are the same roadmap.** The empire funds the game; the game markets the empire.
 - **Legacy Campaign mode.** ~10 linked games where the block permanently changes, roles and districts unlock, and you slowly uncover who the Owner really is — ending on the novel's reveal. Sold as a premium expansion.
 
 **Depth — what makes it art, not just clever:**
-- **Corruption as salvation.** Sometimes a district is one round from capture and the *only* way to save it in time is to take the shortcut — corrupt yourself to protect your people. The game forces the soul-vs-the-block choice over and over. ID8 as a gut-punch you feel every game.
+- **Shady as salvation.** Sometimes a district is one round from capture and the *only* way to save it in time is to take the shortcut — corrupt yourself to protect your people. The game forces the soul-vs-the-block choice over and over. ID8 as a gut-punch you feel every game.
 - **Reach the fallen (redemption).** A flipped player isn't gone. The others can spend hard-won Trust and an action to pull them back — but it leaves the board exposed. Save the district, or save your own?
-- **Layered lenses.** Red reveals the cost, amber the clock, blue the connection. A tech-tree of *seeing* — the deeper your Sight, the more layers of the machine you read at once.
+- **Layered lenses.** Red reveals the cost, amber the clock, blue the connection. A tech-tree of *seeing* — the deeper your Read, the more layers of the machine you read at once.
 - **The Machine adapts.** It contests your best work (it strikes the district closest to waking), Patterns tighten on their own, and once the Underworld opens the Owner fights in the open — an extra strike and a cover-up every round. Institutions adapting to exposure, straight from the Resilience File.
 
-**The layered lens:** Sight deepens in three stages — 🔴 **RED** reveals the *cost* (and tells you trap from honest), 🟠 **AMBER** the *clock* (the deadline, your rights window), 🔵 **BLUE** the *connection* (which Underworld thread the deal feeds). Each trap's lever key says which layer you need to beat it, and blue Sight is what lets you trace the Underworld and win.
+**The layered lens:** Read deepens in three stages — 🔴 **RED** reveals the *cost* (and tells you trap from honest), 🟠 **AMBER** the *clock* (the deadline, your rights window), 🔵 **BLUE** the *connection* (which Underworld thread the deal feeds). Each trap's lever key says which layer you need to beat it, and blue Read is what lets you trace the Underworld and win.
 
-*(The playable prototype `second_number_play.py` and the rules engine `sn_engine.py` implement all of it: the layered lens and levers, the five roles, the Scenario deck, the Variable Owner, corruption-as-salvation, redemption, the Underworld final act, and the Legend scoreboard. `RULES.md` is the table rulebook; `test_rules.py` pins each rule to the code.)*
+*(The playable prototype `second_number_play.py` and the rules engine `sn_engine.py` implement all of it: the layered lens and levers, the five roles, the Scenario deck, the Variable Owner, corruption-as-salvation, redemption, the Underworld final act, and the Props scoreboard. `RULES.md` is the table rulebook; `test_rules.py` pins each rule to the code.)*
 
 ## THE DECK (what's actually built)
-The base box is a **76-card deal deck — 12 real, documented traps and 3 honest deals per district, plus Gem City Market in Health** (Lending, Housing, Labor, Health, Education). Every trap carries the layered second number — 🔴 the real cost, 🟠 the clock, 🔵 the Underworld connection — plus a **lever key** (5 red, 4 amber, 3 blue per district). The honest deals (credit-union loan, free VITA tax prep, community land trust, union apprenticeship, state wage claim, charity care, marketplace subsidy, FAFSA, guaranteed-transfer community college…) mean blind suspicion has a cost. Every deal is a **three-way choice** — *Take it* (honest: real help; trap: fast relief now, Corruption on you), *Walk* (safe on a trap; costs Trust on honest help), or *Negotiate* (spend Trust; beats a trap only if your Sight reaches its lever). With 5 roles (printed as church hand fans), 12 Pattern cards, 4 Owner cards, 7 Scenario cards, 12 History cards and the Green Book, the base box is **117 cards and fans**, plus the Cookout plate and the Sou-Sou can. It grows as each CAN domain expansion adds its own traps and patterns.
+The base box is a **76-card deal deck — 12 real, documented traps and 3 honest deals per district, plus Gem City Market in Health** (Lending, Housing, Labor, Health, Education). Every trap carries the layered second number — 🔴 the real cost, 🟠 the clock, 🔵 the Underworld connection — plus a **lever key** (5 red, 4 amber, 3 blue per district). The honest deals (credit-union loan, free VITA tax prep, community land trust, union apprenticeship, state wage claim, charity care, marketplace subsidy, FAFSA, guaranteed-transfer community college…) mean blind suspicion has a cost. Every deal is a **three-way choice** — *Take it* (honest: real help; trap: fast relief now, Shady on you), *Walk* (safe on a trap; costs Trust on honest help), or *Negotiate* (spend Trust; beats a trap only if your Read reaches its lever). With 5 roles (printed as church hand fans), 12 Pattern cards, 4 Owner cards, 7 Scenario cards, 12 History cards and the Green Book, the base box is **117 cards and fans**, plus the Cookout plate and the Sou-Sou can. It grows as each CAN domain expansion adds its own traps and patterns.
 
 **The lens, physically:** the hidden second number is printed in cyan under a red camouflage hatch — a muddy blur to the naked eye. Hold up a **red lens** (red acetate, gel, even a red candy wrapper) and the red hatch washes out while the cyan darkens: the number appears. It's the real decoder-ink trick, and the **print-and-play kit is built so it works on a home inkjet tonight.** The deluxe/manufactured edition uses proper decoder registration — and a three-filter version (red / amber / blue) where each lens layer has its own physical reveal.
 

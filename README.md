@@ -30,10 +30,10 @@ To run the production build instead: `npm run build && npm start`.
    - **Overlord:** one player is the Machine, or the computer is.
    - **Campaign:** *The Long Ledger*, Chapter 3: *The Map*.
    - **Coach me as we play** is on by default; untick it to play without hints. The 🧑🏾‍🏫 Coach box in the game's header switches it on or off mid-game.
-3. **Plain names.** The website calls the stats **Read** (how well you read a district), **Shady** (what shortcuts leave on you; at 6 you Fall), **Squeeze** (the Machine's grip on a district; 3 captures it) and **Props** (respect for lifting people). The rulebook, print-and-play kit and rules engine still say Sight, Corruption, Pressure and Legend; the site translates the engine's text as it shows it (`src/game/words.ts`).
+3. **Plain names.** The stats are **Read** (how well you read a district), **Shady** (what shortcuts leave on you; at 6 you Fall), **Squeeze** (the Machine's grip on a district; 3 captures it) and **Props** (respect for lifting people), on the website, in the rulebook and in the print-and-play kit alike.
 4. **Read the board at a glance.** The **road to victory** across the top shows where the block is (wake the districts, open the Underworld, trace 3 threads, expose the Owner) and what loses the game. Every stat has an icon (👁 Read, ♥ Trust, a purple drop for Shady, ★ Props, a sunrise for Clarity, a red weight for Squeeze), and after each move the numbers it changed float up off the board.
 5. **Take turns on one device.** The action panel shows whose turn it is and what they can do. Pass the device on when your turn ends.
-6. **Read deals with the glasses.** When you face a deal, drag Grandma's red reading glasses over the card to read the layers your Sight has unlocked, or press **Put glasses on**. Layers you haven't unlocked stay locked. **What's on this card?** under any deal shows a labeled card: what each layer means and how to beat a trap.
+6. **Read deals with the glasses.** When you face a deal, drag Grandma's red reading glasses over the card to read the layers your Read has unlocked, or press **Put glasses on**. Layers you haven't unlocked stay locked. **What's on this card?** under any deal shows a labeled card: what each layer means and how to beat a trap.
 7. **Between turns** the game asks the table about the **Sou-Sou** and, at the start of a round, the **Cookout**, then shows what the Machine did.
 8. **Stop any time.** The game saves itself in this browser after every move. Close the tab, and **Continue your game** on the home page (or **Play now**) picks up exactly where you left off, deal card and all. One saved game per device; it clears when the game ends.
 9. **The Green Book** opens automatically when a strike would capture a district. Untick the box at the top if you'd rather save it.
@@ -63,6 +63,8 @@ The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of tr
 | `npm run golden` | Record 63 complete games from the Python engine (all modes, player counts, bot styles, scenarios and Owners) to `tests/golden.json`. |
 | `npm test` | Replay every golden game in TypeScript (each log line and the final state must match), 38 tests that drive the browser turn flow through whole games, and 5 Coach tests: it never changes the game or draws a card, never peeks at hidden layers, recommends only legal moves, and a table that follows it wins far more often than the default bot. |
 | `npm run lint` / `npm run typecheck` | ESLint and TypeScript. |
+
+**After any art change:** with the site running, `node scripts/render_art.mjs http://localhost:3000` captures the drawn art from the `/art` page into `game/print_kit/art/` (needs Playwright), then `python3 game/print_kit/build_print_and_play.py` rebuilds the PDF.
 
 **After any rules or card change:** edit the Python in `game/`, then run `npm run content`, `npm run golden` and `npm test`. If a test fails, mirror the change in `src/engine/engine.ts`.
 

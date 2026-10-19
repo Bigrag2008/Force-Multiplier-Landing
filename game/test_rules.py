@@ -24,7 +24,7 @@ def test_deck_shape():
 def test_seeing_is_not_beating():
     g,p=game(); p.sight["LENDING"]=1; p.trust=3; g.pressure["LENDING"]=2
     g.face(p,"LENDING","NEGOTIATE",card(lever=2))
-    assert g.pressure["LENDING"]==3 and p.trust==2          # got played: Sight 1 < amber lever
+    assert g.pressure["LENDING"]==3 and p.trust==2          # got played: Read 1 < amber lever
     p.sight["LENDING"]=2; g.face(p,"LENDING","NEGOTIATE",card(lever=2))
     assert g.pressure["LENDING"]==2 and g.clarity["LENDING"]==1 and p.trust==1
 
@@ -96,7 +96,7 @@ def test_awake_is_safe_until_the_underworld():
 def test_underworld_final_act():
     g,p=game(); g.uw_open=True
     for d in ("LENDING","HOUSING","LABOR"):
-        g.clarity[d]=E.WAKE; p.sight[d]=2; g.trace(p,d); assert d not in g.threads   # blue Sight required
+        g.clarity[d]=E.WAKE; p.sight[d]=2; g.trace(p,d); assert d not in g.threads   # blue Read required
         p.sight[d]=3; g.trace(p,d)
     assert g.can_expose(); g.expose_uw(p); assert g.result=="BLOCK_WIN"
 
@@ -160,7 +160,7 @@ def test_the_league_forms_and_lowers_the_levers():
     g.sign_league(a); assert len(g.league)==1 and a.trust==2               # one signature each; costs an action, not Trust
     g.sign_league(b); assert g.league_formed and g.pressure["HOUSING"]==0
     a.sight["LENDING"]=1; a.trust=2; g.pressure["LENDING"]=2
-    g.face(a,"LENDING","NEGOTIATE",card(lever=3)); assert g.pressure["LENDING"]==1   # blue lever beaten at Sight 1
+    g.face(a,"LENDING","NEGOTIATE",card(lever=3)); assert g.pressure["LENDING"]==1   # blue lever beaten at Read 1
 
 def test_league_pledges_fall_apart_if_not_same_round():
     g=E.new_game(seed=1, chapter="THE_MAP", roster=E.ROSTER[:3]); a,b,c=g.players

@@ -5,20 +5,20 @@ THE SECOND NUMBER — the full card content for the base box.
 
 Each deal card:
   front : the price/pitch you SEE with the naked eye
-  red   : 🔴 the real COST (Sight 1 reveals)
-  amber : 🟠 the CLOCK / deadline (Sight 2 reveals)
-  blue  : 🔵 the CONNECTION to the Underworld (Sight 3 reveals)
+  red   : 🔴 the real COST (Read 1 reveals)
+  amber : 🟠 the CLOCK / deadline (Read 2 reveals)
+  blue  : 🔵 the CONNECTION to the Underworld (Read 3 reveals)
 
   lever : which layer holds the leverage to beat it (1 red · 2 amber · 3 blue).
-          Printed inside the hidden red zone, so it takes Sight 1 to see it.
+          Printed inside the hidden red zone, so it takes Read 1 to see it.
 
-Seeing is not the same as beating it. Sight 1 (red) tells you a deal is a trap.
-To NEGOTIATE it down you need Sight up to the card's lever layer.
+Seeing is not the same as beating it. Read 1 (red) tells you a deal is a trap.
+To NEGOTIATE it down you need Read up to the card's lever layer.
 
 Every deal offers the same three choices (defined in the rules, not per card):
-  TAKE it      — honest deal: real help. Trap: fast relief now, Corruption on you.
+  TAKE it      — honest deal: real help. Trap: fast relief now, Shady on you.
   WALK         — always safe on a trap; walking away from honest help costs Trust.
-  NEGOTIATE    — spend 1 Trust; with Sight ≥ the lever you defuse the trap,
+  NEGOTIATE    — spend 1 Trust; with Read ≥ the lever you defuse the trap,
                  below it you get played.
 """
 
@@ -297,11 +297,11 @@ DECK = {
 }
 
 ROLES = {
- "Translator":"Teaches for free (no Trust cost). Still has to read a district to teach it. The bridge — spreads the Sight fastest.",
- "Student":"Gains DOUBLE Sight when taught. The hungry one.",
- "Elder":"Starts with Sight 1 everywhere; once per game, 'Teach the History' wakes a whole district instantly.",
+ "Translator":"Teaches for free (no Trust cost). Still has to read a district to teach it. The bridge — spreads the Read fastest.",
+ "Student":"Gains DOUBLE Read when taught. The hungry one.",
+ "Elder":"Starts with Read 1 everywhere; once per game, 'Teach the History' wakes a whole district instantly.",
  "Veteran":"Shields the block from two Machine hits per game. Came home to protect it.",
- "Organizer":"A successful NEGOTIATE drops Pressure by 2, not 1 (collective action). Rallies the block.",
+ "Organizer":"A successful NEGOTIATE drops Squeeze by 2, not 1 (collective action). Rallies the block.",
 }
 
 PATTERNS = [
@@ -333,9 +333,9 @@ PATTERNS = [
 
 OWNERS = {
  "The Algorithm":"Relentless. The Machine strikes one extra time every round.",
- "The Lobbyist":"Each round it leans on your strongest unfinished district (+1 Pressure). On reveal it knocks one woken district back to Clarity 1.",
- "The Debt Buyer":"Every TAKE on a trap costs +1 extra Corruption. Each round, collections calls: anyone carrying Corruption loses 1 Trust. The Fallen strike twice as hard.",
- "The Recruiter":"Each round it peels someone away: a random player loses 1 Sight in a district they can read.",
+ "The Lobbyist":"Each round it leans on your strongest unfinished district (+1 Squeeze). On reveal it knocks one woken district back to Clarity 1.",
+ "The Debt Buyer":"Every TAKE on a trap costs +1 extra Shady. Each round, collections calls: anyone carrying Shady loses 1 Trust. The Fallen strike twice as hard.",
+ "The Recruiter":"Each round it peels someone away: a random player loses 1 Read in a district they can read.",
 }
 
 # HISTORY — the Elder's deck. "Teach the History" wakes a district and draws a
@@ -407,16 +407,16 @@ HISTORY = {
 }
 
 # COMMONS PLACES — where the block gathers, on the West Side of Dayton.
-# Every Commons action gives +2 Trust and −1 Corruption, plus the place's bonus.
+# Every Commons action gives +2 Trust and −1 Shady, plus the place's bonus.
 PLACES = {
  "BARBERSHOP":dict(name="The Barbershop & Beauty Shop", where="West Third Street",
                    bonus="Your next Teach this turn is free.",
                    flavor="Where the news really travels. Somebody in the chair already read the fine print."),
  "CHURCH":    dict(name="The Church", where="on the corner, every Sunday",
-                   bonus="−2 Corruption instead of −1.",
+                   bonus="−2 Shady instead of −1.",
                    flavor="Come as you are. Leave a little lighter."),
  "ADVENTURE": dict(name="Adventure Central", where="Wesleyan MetroPark",
-                   bonus="Your next Study this turn gives +2 Sight.",
+                   bonus="Your next Study this turn gives +2 Read.",
                    flavor="The young people's learning center in the park. Practice makes sight."),
  "MARKET":    dict(name="Gem City Market", where="the co-op grocery on Salem Avenue",
                    bonus="Your next deal this turn: draw 2, face 1.",
@@ -427,13 +427,13 @@ PLACES = {
 }
 
 SCENARIOS = {
- "The Eviction Wave":"Housing starts under siege (2 pressure). Hold the line.",
+ "The Eviction Wave":"Housing starts under siege (Squeeze 2). Hold the line.",
  "Payday Season":"Every second round is payday: Lending takes an extra hit. The hardest rung.",
- "The Closure":"A school starts captured (3 Pressure). Reclaim it — fast.",
+ "The Closure":"A school starts captured (3 Squeeze). Reclaim it — fast.",
  "The Audit":"The Machine is distracted — the block gets a one-round head start.",
- "A Quiet Year":"No special pressure. Learn the ropes.",
- "The Plants Close":"Dayton, 2008: Labor starts at Pressure 2, and everyone starts with 1 Trust instead of 2.",
- "The Hospital Closes":"Dayton, 2018: Health starts at Pressure 2, and negotiating a Health deal costs 2 Trust.",
+ "A Quiet Year":"No extra Squeeze. Learn the ropes.",
+ "The Plants Close":"Dayton, 2008: Labor starts at Squeeze 2, and everyone starts with 1 Trust instead of 2.",
+ "The Hospital Closes":"Dayton, 2018: Health starts at Squeeze 2, and negotiating a Health deal costs 2 Trust.",
 }
 
 # ---------------------------------------------------------------------------
@@ -520,8 +520,8 @@ HONEST = {
 
 # LEVERS — which layer holds the leverage to beat each trap, in deck order.
 # 1 = red (the cost is the weak point), 2 = amber (the clock / your rights window),
-# 3 = blue (you have to name who's behind it). 5 / 4 / 3 per district, so Sight 2
-# and Sight 3 each unlock real plays.
+# 3 = blue (you have to name who's behind it). 5 / 4 / 3 per district, so Read 2
+# and Read 3 each unlock real plays.
 LEVERS = {
  "LENDING":  [1,2,2,2,1,3,1,3,1,3,2,1],
  "HOUSING":  [1,2,3,1,2,2,3,3,1,1,1,2],

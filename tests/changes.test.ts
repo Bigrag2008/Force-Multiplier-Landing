@@ -10,7 +10,7 @@ describe("Step changes", () => {
     expect(diff(snap(s.g), snap(s.g))).toBeNull();
   });
 
-  it("reports a Study as +1 Sight for that player in that district", () => {
+  it("reports a Study as +1 Read for that player in that district", () => {
     const s = new Session({ mode: "coop", roster: C.roster.slice(0, 3), seed: 3 });
     if (s.phase === "cookout") s.cookout(false);
     const p = s.player;
@@ -22,7 +22,7 @@ describe("Step changes", () => {
     expect(d.districts).toEqual({});
   });
 
-  it("reports the Machine's strikes as Pressure on the districts", () => {
+  it("reports the Machine's strikes as Squeeze on the districts", () => {
     const s = new Session({ mode: "coop", roster: C.roster.slice(0, 3), seed: 8 });
     // pass every turn and every question until the Machine has moved (the round-1 grace round excepted)
     const toMachine = () => {

@@ -21,7 +21,7 @@ THE SECOND NUMBER — balance report (v3)
 
 === DOES DEEPER SIGHT MATTER? (co-op, 4 players, human-like bot) ===
   successful NEGOTIATEs by lever:  red  79.3%  amber  20.2%  blue   0.5%
-  Underworld threads traced (needs Sight 3 / blue): 2.33 per game · every win needs 3
+  Underworld threads traced (needs Read 3 / blue): 2.33 per game · every win needs 3
 
 === OWNERS (co-op, 4 players, human-like bot) ===
   The Algorithm    46.9%
@@ -55,4 +55,4 @@ THE SECOND NUMBER — balance report (v3)
   OVERLORD 4p  healthy  (46% block wins)
   OVERLORD 5p  healthy  (55% block wins)
   Shortcut     tempting AND dangerous  (never 35% · careful 61% · greedy 23%)
-  Deep Sight   matters  (amber = 20.2% of defusals; blue/Sight 3 is required to trace every winning thread)
+  Deep Read   matters  (amber = 20.2% of defusals; blue/Read 3 is required to trace every winning thread)

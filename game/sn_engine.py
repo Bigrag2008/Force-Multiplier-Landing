@@ -2,16 +2,16 @@
 """
 THE SECOND NUMBER — rules engine (single source of truth).
 v3: makes reading the real skill, and the shortcut a real temptation.
-  • SEEING ≠ BEATING. Sight 1 (red) tells you a deal is a trap. To NEGOTIATE it
-    down you need Sight up to the card's lever layer (red / amber / blue), so
-    Sight 2 and Sight 3 finally matter.
+  • SEEING ≠ BEATING. Read 1 (red) tells you a deal is a trap. To NEGOTIATE it
+    down you need Read up to the card's lever layer (red / amber / blue), so
+    Read 2 and Read 3 finally matter.
   • NEGOTIATE costs 1 Trust and can fail; WALK is the safe exit; TAKE the honest
     deals. Reading the card decides which.
-  • TAKE is tempting again: on a trap it patches the district NOW (Pressure −2) or
-    rushes clarity (+2) — and puts Corruption on you. Corruption-as-salvation.
+  • TAKE is tempting again: on a trap it patches the district NOW (Squeeze −2) or
+    rushes clarity (+2) — and puts Shady on you. Shady-as-salvation.
   • The Machine scales with player count (2–5 all playable).
   • The Underworld is a final act: once it cracks open the Owner fights in the
-    open, and the block must TRACE the thread (Sight 3, blue) in woken districts
+    open, and the block must TRACE the thread (Read 3, blue) in woken districts
     before it can expose the Owner and win.
   • Owners all bite from round 1 (Debt Buyer bug fixed).
 
@@ -113,7 +113,7 @@ class Game:
         return self.uw_open and pl.sight[d]>=3 and self.clarity[d]>=WAKE and d not in self.threads
     def can_expose(self): return self.uw_open and len(self.threads)>=self.threads_needed()
     def lever(self, d, card):
-        """The League reads contracts together: Housing and Lending traps beatable at Sight 1."""
+        """The League reads contracts together: Housing and Lending traps beatable at Read 1."""
         if self.league_formed and d in ("HOUSING","LENDING") and card["trap"]: return min(card["lever"],1)
         return card["lever"]
 
@@ -127,7 +127,7 @@ class Game:
         if pl.name in self.league: self.emit(f"  {pl.name} has already signed."); return
         self.league.add(pl.name); pl.legend+=1
         self.emit(f"{pl.name} signs the League pledge: we withhold together. "
-                  f"Signatures {len(self.league)}/{self.league_needed()}. Legend +1.")
+                  f"Signatures {len(self.league)}/{self.league_needed()}. Props +1.")
         self.try_form_league()
 
     def try_form_league(self):
@@ -136,9 +136,9 @@ class Game:
         if True:
             self.league_formed=True; before=self.pressure["HOUSING"]
             self.pressure["HOUSING"]=max(0,before-2)
-            self.emit(f"✦ THE LEAGUE FORMS. Housing Pressure {before}→{self.pressure['HOUSING']}. "
+            self.emit(f"✦ THE LEAGUE FORMS. Housing Squeeze {before}→{self.pressure['HOUSING']}. "
                       f"The families read their contracts together: every Housing and Lending trap can now be "
-                      f"negotiated with Sight 1.")
+                      f"negotiated with Read 1.")
 
     def league_round(self):
         """Each Machine phase: a formed League pushes back; a forming one draws retaliation."""
@@ -147,7 +147,7 @@ class Game:
             d=max(LEAGUE_PUSH,key=lambda x:self.pressure[x])
             if self.pressure[d]>0:
                 self.pressure[d]-=1
-                self.emit(f"  ✦ The League withholds together: Pressure in {d} −1 ({self.pressure[d]}/{CAPTURE}).")
+                self.emit(f"  ✦ The League withholds together: Squeeze in {d} −1 ({self.pressure[d]}/{CAPTURE}).")
         elif self.league:
             self.emit(f"  ⚑ The sellers scare families off: the pledges fall apart ({len(self.league)}/"
                       f"{self.league_needed()} signed). Everyone has to sign in the same round.")
@@ -160,7 +160,7 @@ class Game:
 
     # ---- what a player can see on a card (front-ends render this) ----
     def visible(self, pl, d, card):
-        """[(layer_no, label, text_or_None)] — None means locked at this Sight."""
+        """[(layer_no, label, text_or_None)] — None means locked at this Read."""
         return [(n,lab,card[k] if pl.sight[d]>=n else None) for n,k,lab in LAYERS]
 
     # ================= BLOCK ACTIONS =================
@@ -170,7 +170,7 @@ class Game:
         g=2 if pl.practice else 1; pl.practice=False
         pl.sight[d]=min(3,pl.sight[d]+g); pl.legend+=1
         self.emit(f"{pl.name} studies {d}{' (practiced at Adventure Central)' if g==2 else ''}. "
-                  f"Sight now {pl.sight[d]}/3. Legend +1.")
+                  f"Read now {pl.sight[d]}/3. Props +1.")
 
     def draw(self, d): return random.choice(self.deck[d])
 
@@ -190,15 +190,15 @@ class Game:
         if choice=="TAKE":
             if not trap:
                 pl.trust+=2; self.clarity[d]=min(WAKE,self.clarity[d]+1); pl.legend+=1
-                self.emit(f"  It was an HONEST deal — real help. Trust +2, {d} clarity +1, Legend +1.")
+                self.emit(f"  It was an HONEST deal — real help. Trust +2, {d} clarity +1, Props +1.")
             else:
                 cost=self.take_cost(); pl.corruption+=cost
                 if self.pressure[d]>0:
                     self.pressure[d]=max(0,self.pressure[d]-2)
-                    self.emit(f"  TAKE the trap to patch {d} NOW: Pressure −2… Corruption +{cost} on you. (Legend +0)")
+                    self.emit(f"  TAKE the trap to patch {d} NOW: Squeeze −2… Shady +{cost} on you. (Props +0)")
                 else:
                     self.clarity[d]=min(WAKE,self.clarity[d]+2)
-                    self.emit(f"  TAKE the trap for fast power: {d} clarity +2… Corruption +{cost} on you. (Legend +0)")
+                    self.emit(f"  TAKE the trap for fast power: {d} clarity +2… Shady +{cost} on you. (Props +0)")
         elif choice=="WALK":
             if trap: self.emit(f"  WALK: you dodged a trap. Safe, nothing gained.")
             else:
@@ -213,12 +213,12 @@ class Game:
                 amt=2 if pl.role=="Organizer" else 1
                 self.pressure[d]=max(0,self.pressure[d]-amt); self.clarity[d]=min(WAKE,self.clarity[d]+1)
                 pl.legend+=2
-                self.emit(f"  NEGOTIATE on the {LEVER_NAME[lever]} lever (Sight {see}): defused. "
-                          f"Pressure −{amt}, {d} clarity +1, Legend +2.")
+                self.emit(f"  NEGOTIATE on the {LEVER_NAME[lever]} lever (Read {see}): defused. "
+                          f"Squeeze −{amt}, {d} clarity +1, Props +2.")
             elif trap:
                 self.pressure[d]=min(CAPTURE,self.pressure[d]+1)
-                self.emit(f"  NEGOTIATE without the {LEVER_NAME[lever]} layer (Sight {see}): you got played. "
-                          f"Pressure +1, Trust −{cost}.")
+                self.emit(f"  NEGOTIATE without the {LEVER_NAME[lever]} layer (Read {see}): you got played. "
+                          f"Squeeze +1, Trust −{cost}.")
                 if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
             else:
                 self.emit(f"  NEGOTIATE on an honest deal: you haggled away real help. Trust −{cost}.")
@@ -236,25 +236,25 @@ class Game:
         if not free: pl.trust-=1
         elif pl.role!="Translator": pl.free_teach=False
         pl.legend+=2
-        self.emit(f"{pl.name} teaches {t.name} to read {d}. Sight {old}→{t.sight[d]}{' (free)' if free else ''}. Legend +2.")
+        self.emit(f"{pl.name} teaches {t.name} to read {d}. Read {old}→{t.sight[d]}{' (free)' if free else ''}. Props +2.")
         if response:
             pl.legend+=1; t.legend+=1
-            self.emit(f"  Call and response: {t.name} says the second number back. Legend +1 each.")
+            self.emit(f"  Call and response: {t.name} says the second number back. Props +1 each.")
 
     def commons(self, pl, place="BARBERSHOP"):
-        """+2 Trust, −1 Corruption, plus the place's bonus."""
+        """+2 Trust, −1 Shady, plus the place's bonus."""
         if place=="KITCHEN" and self.kitchen_used: place="BARBERSHOP"
         pl.trust=min(MAX_TRUST,pl.trust+2)
         drop=2 if place=="CHURCH" else 1; had=pl.corruption; pl.corruption=max(0,pl.corruption-drop)
         P=PLACES[place]
         self.emit(f"{pl.name} gathers at {P['name']} ({P['where']}). Trust +2"
-                  + (f", Corruption −{had-pl.corruption}" if had else "") + ".")
+                  + (f", Shady −{had-pl.corruption}" if had else "") + ".")
         if place=="BARBERSHOP":
             pl.free_teach=True; self.emit("  Somebody in the chair can help: your next Teach this turn is free.")
         elif place=="MARKET":
             pl.shop_around=True; self.emit("  You shop around: your next deal this turn, draw 2 and face 1.")
         elif place=="ADVENTURE":
-            pl.practice=True; self.emit("  Practice in the park: your next Study this turn gives +2 Sight.")
+            pl.practice=True; self.emit("  Practice in the park: your next Study this turn gives +2 Read.")
         elif place=="KITCHEN":
             self.kitchen_used=True
             for p in self.active(): p.trust=min(MAX_TRUST,p.trust+2)
@@ -267,7 +267,7 @@ class Game:
 
     def throw_hand(self, pick=None):
         """Everyone who can puts 1 Trust in the pot. A full pot pays the next player's hand:
-        clear 2 Pressure from one district, no Corruption. pick(pl) -> district."""
+        clear 2 Squeeze from one district, no Shady. pick(pl) -> district."""
         payers=[p for p in self.active() if p.trust>=1]
         for p in payers: p.trust-=1
         self.pot+=len(payers)
@@ -277,7 +277,7 @@ class Game:
         d=(pick(pl) if pick else None) or max(DISTRICTS,key=lambda x:self.pressure[x])
         before=self.pressure[d]; self.pressure[d]=max(0,before-2); pl.legend+=1
         self.emit(f"  It's {pl.name}'s hand. The debt in {d} gets paid off clean: "
-                  f"Pressure {before}→{self.pressure[d]}, no Corruption. Legend +1.")
+                  f"Squeeze {before}→{self.pressure[d]}, no Shady. Props +1.")
 
     # ---- the Cookout: once per game, the whole round is spent together ----
     def cookout_gain(self, pl):
@@ -287,8 +287,8 @@ class Game:
         return d, best[d]-pl.sight[d]
 
     def cookout(self, picks=None):
-        """No block actions this round. Everyone +2 Trust, −1 Corruption, and raises their
-        Sight in one district to the table's best there. picks: {player name: district}."""
+        """No block actions this round. Everyone +2 Trust, −1 Shady, and raises their
+        Read in one district to the table's best there. picks: {player name: district}."""
         self.cookout_used=True
         self.emit("🍖 THE COOKOUT. Everybody's invited. Nobody works this round — the block eats, laughs, and compares paperwork.")
         best={d:max(p.sight[d] for p in self.active()) for d in DISTRICTS}
@@ -296,8 +296,8 @@ class Game:
             pl.trust=min(MAX_TRUST,pl.trust+2); pl.corruption=max(0,pl.corruption-1); pl.legend+=1
             d=(picks or {}).get(pl.name) or self.cookout_gain(pl)[0]
             old=pl.sight[d]; pl.sight[d]=max(old,best[d])
-            self.emit(f"  {pl.name}: Trust +2, Corruption −1, Legend +1"
-                      + (f", Sight in {d} {old}→{pl.sight[d]}." if pl.sight[d]>old else "."))
+            self.emit(f"  {pl.name}: Trust +2, Shady −1, Props +1"
+                      + (f", Read in {d} {old}→{pl.sight[d]}." if pl.sight[d]>old else "."))
 
     def cookout_ai(self):
         """Call it when the table's knowledge is lopsided enough to be worth a whole round."""
@@ -314,7 +314,7 @@ class Game:
     def reach(self, pl, t):
         if pl.trust<2: self.emit(f"  {pl.name} needs 2 Trust to reach someone."); return
         pl.trust-=2; t.flipped=False; t.corruption=FLIP-2; pl.legend+=3
-        self.emit(f"{pl.name} reaches {t.name} and pulls them home. Legend +3.")
+        self.emit(f"{pl.name} reaches {t.name} and pulls them home. Props +3.")
 
     def history(self, pl, d):
         if pl.role!="Elder" or pl.elder_used: self.emit("  No History to teach."); return
@@ -322,14 +322,14 @@ class Game:
         h=self.history_card=random.choice(HISTORY[d]+HISTORY["ANY"])
         self.emit(f"{pl.name} teaches the History of {d}: {h['title']} ({h['year']}, {h['place']}).")
         self.emit(f"  {h['story']}")
-        self.emit(f"  \"{h['lesson']}\"  {d} AWAKE. Legend +2.")
+        self.emit(f"  \"{h['lesson']}\"  {d} AWAKE. Props +2.")
 
     def trace(self, pl, d):
         if not self.can_trace(pl,d):
-            self.emit(f"  {pl.name} can't trace {d} (needs the Underworld open, Sight 3, and {d} awake)."); return
+            self.emit(f"  {pl.name} can't trace {d} (needs the Underworld open, Read 3, and {d} awake)."); return
         self.threads.add(d); pl.legend+=2
         self.emit(f"{pl.name} traces the blue thread under {d} down into the Underworld. "
-                  f"Threads {len(self.threads)}/{self.threads_needed()}. Legend +2.")
+                  f"Threads {len(self.threads)}/{self.threads_needed()}. Props +2.")
 
     def expose_uw(self, pl):
         if not self.can_expose():
@@ -352,7 +352,7 @@ class Game:
         self.struck.add(d)
         if self.safe_route(d): return
         if self.pressure[d]<CAPTURE:
-            self.pressure[d]+=1; self.emit(f"[{who}] feeds the Machine in {d}. Pressure {self.pressure[d]}/{CAPTURE}.")
+            self.pressure[d]+=1; self.emit(f"[{who}] feeds the Machine in {d}. Squeeze {self.pressure[d]}/{CAPTURE}.")
             if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
     def m_obscure(self, who, d):
         if d in self.struck:
@@ -392,13 +392,13 @@ class Game:
             best=[d for d in DISTRICTS if 0<self.clarity[d]<WAKE and self.pressure[d]<CAPTURE and d not in self.struck]
             if best:
                 d=max(best,key=lambda x:self.clarity[x]); self.struck.add(d); self.pressure[d]+=1
-                self.emit(f"  ⚑ (hidden hand) pressure creeps onto your strongest work in {d}. {self.pressure[d]}/{CAPTURE}.")
+                self.emit(f"  ⚑ (hidden hand) the squeeze creeps onto your strongest work in {d}. {self.pressure[d]}/{CAPTURE}.")
                 if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
         elif o=="The Recruiter":
             pool=[(p,d) for p in self.active() for d in DISTRICTS if p.sight[d]>0]
             if pool:
                 p,d=random.choice(pool); p.sight[d]-=1
-                self.emit(f"  ⚑ (hidden hand) a recruiter peels {p.name} away from {d}. Sight −1.")
+                self.emit(f"  ⚑ (hidden hand) a recruiter peels {p.name} away from {d}. Read −1.")
         elif o=="The Debt Buyer":
             owed=[p for p in self.active() if p.corruption>0 and p.trust>0]
             for p in owed: p.trust-=1
@@ -409,7 +409,7 @@ class Game:
         vet=next((p for p in self.active() if p.role=="Veteran" and p.shields>0),None)
         if vet: vet.shields-=1; self.emit(f"  ⛨ {vet.name} shields {d}. ({vet.shields} left)"); return
         if self.safe_route(d): return
-        self.pressure[d]+=1; self.emit(f"  ✖ The Machine extracts from {d}. Pressure {self.pressure[d]}/{CAPTURE}.")
+        self.pressure[d]+=1; self.emit(f"  ✖ The Machine extracts from {d}. Squeeze {self.pressure[d]}/{CAPTURE}.")
         if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
 
     def auto_machine_phase(self):
@@ -450,7 +450,7 @@ class Game:
         self.owner_shown=True
         text=self.chapter["face_text"] if self.chapter else f"{self.owner} — {OWNERS[self.owner]}"
         self.emit(f"⚑ THE UNDERWORLD CRACKS OPEN. The Owner is {text}")
-        self.emit(f"  Trace {self.threads_needed()} threads (Sight 3 in a woken district) and expose it before it buries you.")
+        self.emit(f"  Trace {self.threads_needed()} threads (Read 3 in a woken district) and expose it before it buries you.")
         if self.owner=="The Lobbyist":
             awake=[d for d in DISTRICTS if self.clarity[d]>=WAKE]
             if awake: d=random.choice(awake); self.clarity[d]=1; self.emit(f"  ✖ {self.owner_face} re-captures {d}.")
@@ -469,7 +469,7 @@ class Game:
         cand=[d for d in c if self.pressure[d]<CAPTURE]
         if cand:
             d=min(cand,key=lambda x:self.pressure[x]); self.pressure[d]+=1
-            self.emit(f"  ⚠ {n} tightens on {d}. Pressure {self.pressure[d]}/{CAPTURE}.")
+            self.emit(f"  ⚠ {n} tightens on {d}. Squeeze {self.pressure[d]}/{CAPTURE}.")
             if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
 
     def map_compounds(self):
@@ -479,7 +479,7 @@ class Game:
         d=min(("HOUSING","LENDING"),key=lambda x:self.pressure[x])
         if self.pressure[d]<CAPTURE:
             self.pressure[d]+=1
-            self.emit(f"  ⚠ The map compounds: REDLINING tightens again on {d}. Pressure {self.pressure[d]}/{CAPTURE}.")
+            self.emit(f"  ⚠ The map compounds: REDLINING tightens again on {d}. Squeeze {self.pressure[d]}/{CAPTURE}.")
             if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
 
     def check_patterns(self):
@@ -572,7 +572,7 @@ class Game:
         if (self.has_league() and not self.league_formed and pl.name not in self.league
                 and max(self.pressure["HOUSING"],self.pressure["LENDING"])>=1):
             return ("league",None,None)
-        # final act: get someone to Sight 3 in a woken, untraced district
+        # final act: get someone to Read 3 in a woken, untraced district
         if self.uw_open:
             open_d=[d for d in DISTRICTS if self.clarity[d]>=WAKE and d not in self.threads]
             if open_d:

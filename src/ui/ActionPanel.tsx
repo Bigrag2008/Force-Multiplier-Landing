@@ -5,7 +5,6 @@ import { maxBy, type Action, type Player } from "../engine/engine";
 import { adviseCookout, adviseDeal, adviseSousou, adviseTurn } from "../game/coach";
 import { toWire } from "../game/moves";
 import type { Session } from "../game/session";
-import { say } from "../game/words";
 import { CoachBadge, CoachBox, picked, safe, ShortcutBadge } from "./Coach";
 import { Icon, type IconName } from "./icons";
 import { DealCard } from "./DealCard";
@@ -210,7 +209,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
             return (
               <button key={key} className={`${ghost} text-left${picked(key === best && !used)}`} disabled={used} onClick={() => act({ k: "commons", place: key })}>
                 <span className="block">{P.name} <span className="text-xs font-normal text-program/70">· {P.where}</span></span>
-                <span className="block text-xs font-normal text-gold">{used ? "Grandma already fed the block this game." : say(P.bonus)}</span>
+                <span className="block text-xs font-normal text-gold">{used ? "Grandma already fed the block this game." : P.bonus}</span>
                 {key === best && !used && <CoachBadge />}
               </button>
             );
@@ -253,7 +252,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
       title={`${p.name}'s turn`}
       sub={
         <>
-          The {p.role}: {say(C.roles[p.role])} · <b>{s.actionsLeft}</b> action{s.actionsLeft === 1 ? "" : "s"} left
+          The {p.role}: {C.roles[p.role]} · <b>{s.actionsLeft}</b> action{s.actionsLeft === 1 ? "" : "s"} left
         </>
       }
     >
@@ -402,7 +401,7 @@ export function MachineReport({ s, play, local }: { s: Session; play: Play; loca
       <ul className="max-h-60 space-y-1 overflow-y-auto text-sm">
         {lines.map((l, i) => (
           <li key={i} className={l.startsWith("  ") ? "pl-3 text-program/90" : "font-semibold"}>
-            {say(l.trim())}
+            {l.trim()}
           </li>
         ))}
       </ul>

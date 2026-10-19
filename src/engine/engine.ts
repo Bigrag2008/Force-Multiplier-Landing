@@ -213,7 +213,7 @@ export class Game {
     pl.legend += 1;
     this.emit(
       `${pl.name} signs the League pledge: we withhold together. ` +
-        `Signatures ${this.league.size}/${this.leagueNeeded()}. Legend +1.`,
+        `Signatures ${this.league.size}/${this.leagueNeeded()}. Props +1.`,
     );
     this.tryFormLeague();
   }
@@ -223,9 +223,9 @@ export class Game {
     const before = this.pressure.HOUSING;
     this.pressure.HOUSING = Math.max(0, before - 2);
     this.emit(
-      `✦ THE LEAGUE FORMS. Housing Pressure ${before}→${this.pressure.HOUSING}. ` +
+      `✦ THE LEAGUE FORMS. Housing Squeeze ${before}→${this.pressure.HOUSING}. ` +
         `The families read their contracts together: every Housing and Lending trap can now be ` +
-        `negotiated with Sight 1.`,
+        `negotiated with Read 1.`,
     );
   }
   leagueRound() {
@@ -234,7 +234,7 @@ export class Game {
       const d = maxBy(K.LEAGUE_PUSH, (x) => this.pressure[x]);
       if (this.pressure[d] > 0) {
         this.pressure[d] -= 1;
-        this.emit(`  ✦ The League withholds together: Pressure in ${d} −1 (${this.pressure[d]}/${K.CAPTURE}).`);
+        this.emit(`  ✦ The League withholds together: Squeeze in ${d} −1 (${this.pressure[d]}/${K.CAPTURE}).`);
       }
     } else if (this.league.size) {
       this.emit(
@@ -266,7 +266,7 @@ export class Game {
     pl.legend += 1;
     this.emit(
       `${pl.name} studies ${d}${g === 2 ? " (practiced at Adventure Central)" : ""}. ` +
-        `Sight now ${pl.sight[d]}/3. Legend +1.`,
+        `Read now ${pl.sight[d]}/3. Props +1.`,
     );
   }
   draw(d: District) {
@@ -295,16 +295,16 @@ export class Game {
         pl.trust += 2;
         this.clarity[d] = Math.min(K.WAKE, this.clarity[d] + 1);
         pl.legend += 1;
-        this.emit(`  It was an HONEST deal — real help. Trust +2, ${d} clarity +1, Legend +1.`);
+        this.emit(`  It was an HONEST deal — real help. Trust +2, ${d} clarity +1, Props +1.`);
       } else {
         const cost = this.takeCost();
         pl.corruption += cost;
         if (this.pressure[d] > 0) {
           this.pressure[d] = Math.max(0, this.pressure[d] - 2);
-          this.emit(`  TAKE the trap to patch ${d} NOW: Pressure −2… Corruption +${cost} on you. (Legend +0)`);
+          this.emit(`  TAKE the trap to patch ${d} NOW: Squeeze −2… Shady +${cost} on you. (Props +0)`);
         } else {
           this.clarity[d] = Math.min(K.WAKE, this.clarity[d] + 2);
-          this.emit(`  TAKE the trap for fast power: ${d} clarity +2… Corruption +${cost} on you. (Legend +0)`);
+          this.emit(`  TAKE the trap for fast power: ${d} clarity +2… Shady +${cost} on you. (Props +0)`);
         }
       }
     } else if (choice === "WALK") {
@@ -326,14 +326,14 @@ export class Game {
         this.clarity[d] = Math.min(K.WAKE, this.clarity[d] + 1);
         pl.legend += 2;
         this.emit(
-          `  NEGOTIATE on the ${LEVER_NAME[lever]} lever (Sight ${see}): defused. ` +
-            `Pressure −${amt}, ${d} clarity +1, Legend +2.`,
+          `  NEGOTIATE on the ${LEVER_NAME[lever]} lever (Read ${see}): defused. ` +
+            `Squeeze −${amt}, ${d} clarity +1, Props +2.`,
         );
       } else if (trap) {
         this.pressure[d] = Math.min(K.CAPTURE, this.pressure[d] + 1);
         this.emit(
-          `  NEGOTIATE without the ${LEVER_NAME[lever]} layer (Sight ${see}): you got played. ` +
-            `Pressure +1, Trust −${cost}.`,
+          `  NEGOTIATE without the ${LEVER_NAME[lever]} layer (Read ${see}): you got played. ` +
+            `Squeeze +1, Trust −${cost}.`,
         );
         if (this.pressure[d] >= K.CAPTURE) this.emit(`  ✖ ${d} CAPTURED.`);
       } else {
@@ -362,11 +362,11 @@ export class Game {
     if (!free) pl.trust -= 1;
     else if (pl.role !== "Translator") pl.freeTeach = false;
     pl.legend += 2;
-    this.emit(`${pl.name} teaches ${t.name} to read ${d}. Sight ${old}→${t.sight[d]}${free ? " (free)" : ""}. Legend +2.`);
+    this.emit(`${pl.name} teaches ${t.name} to read ${d}. Read ${old}→${t.sight[d]}${free ? " (free)" : ""}. Props +2.`);
     if (response) {
       pl.legend += 1;
       t.legend += 1;
-      this.emit(`  Call and response: ${t.name} says the second number back. Legend +1 each.`);
+      this.emit(`  Call and response: ${t.name} says the second number back. Props +1 each.`);
     }
   }
   commons(pl: Player, place: PlaceKey = "BARBERSHOP") {
@@ -377,7 +377,7 @@ export class Game {
     pl.corruption = Math.max(0, pl.corruption - drop);
     const P = C.places[place];
     this.emit(
-      `${pl.name} gathers at ${P.name} (${P.where}). Trust +2` + (had ? `, Corruption −${had - pl.corruption}` : "") + ".",
+      `${pl.name} gathers at ${P.name} (${P.where}). Trust +2` + (had ? `, Shady −${had - pl.corruption}` : "") + ".",
     );
     if (place === "BARBERSHOP") {
       pl.freeTeach = true;
@@ -387,7 +387,7 @@ export class Game {
       this.emit("  You shop around: your next deal this turn, draw 2 and face 1.");
     } else if (place === "ADVENTURE") {
       pl.practice = true;
-      this.emit("  Practice in the park: your next Study this turn gives +2 Sight.");
+      this.emit("  Practice in the park: your next Study this turn gives +2 Read.");
     } else if (place === "KITCHEN") {
       this.kitchenUsed = true;
       for (const p of this.active()) p.trust = Math.min(K.MAX_TRUST, p.trust + 2);
@@ -415,7 +415,7 @@ export class Game {
     pl.legend += 1;
     this.emit(
       `  It's ${pl.name}'s hand. The debt in ${d} gets paid off clean: ` +
-        `Pressure ${before}→${this.pressure[d]}, no Corruption. Legend +1.`,
+        `Squeeze ${before}→${this.pressure[d]}, no Shady. Props +1.`,
     );
   }
 
@@ -439,7 +439,7 @@ export class Game {
       const d = (picks && picks[pl.name]) || this.cookoutGain(pl)[0];
       const old = pl.sight[d];
       pl.sight[d] = Math.max(old, best[d]);
-      this.emit(`  ${pl.name}: Trust +2, Corruption −1, Legend +1` + (pl.sight[d] > old ? `, Sight in ${d} ${old}→${pl.sight[d]}.` : "."));
+      this.emit(`  ${pl.name}: Trust +2, Shady −1, Props +1` + (pl.sight[d] > old ? `, Read in ${d} ${old}→${pl.sight[d]}.` : "."));
     }
   }
   cookoutAi() {
@@ -460,7 +460,7 @@ export class Game {
     t.flipped = false;
     t.corruption = K.FLIP - 2;
     pl.legend += 3;
-    this.emit(`${pl.name} reaches ${t.name} and pulls them home. Legend +3.`);
+    this.emit(`${pl.name} reaches ${t.name} and pulls them home. Props +3.`);
   }
   history(pl: Player, d: District) {
     if (pl.role !== "Elder" || pl.elderUsed) {
@@ -473,18 +473,18 @@ export class Game {
     const h = (this.historyCard = this.rng.choice([...C.history[d], ...C.history.ANY]));
     this.emit(`${pl.name} teaches the History of ${d}: ${h.title} (${h.year}, ${h.place}).`);
     this.emit(`  ${h.story}`);
-    this.emit(`  "${h.lesson}"  ${d} AWAKE. Legend +2.`);
+    this.emit(`  "${h.lesson}"  ${d} AWAKE. Props +2.`);
   }
   trace(pl: Player, d: District) {
     if (!this.canTrace(pl, d)) {
-      this.emit(`  ${pl.name} can't trace ${d} (needs the Underworld open, Sight 3, and ${d} awake).`);
+      this.emit(`  ${pl.name} can't trace ${d} (needs the Underworld open, Read 3, and ${d} awake).`);
       return;
     }
     this.threads.add(d);
     pl.legend += 2;
     this.emit(
       `${pl.name} traces the blue thread under ${d} down into the Underworld. ` +
-        `Threads ${this.threads.size}/${this.threadsNeeded()}. Legend +2.`,
+        `Threads ${this.threads.size}/${this.threadsNeeded()}. Props +2.`,
     );
   }
   exposeUw(pl: Player) {
@@ -515,7 +515,7 @@ export class Game {
     if (this.safeRoute(d)) return;
     if (this.pressure[d] < K.CAPTURE) {
       this.pressure[d] += 1;
-      this.emit(`[${who}] feeds the Machine in ${d}. Pressure ${this.pressure[d]}/${K.CAPTURE}.`);
+      this.emit(`[${who}] feeds the Machine in ${d}. Squeeze ${this.pressure[d]}/${K.CAPTURE}.`);
       if (this.pressure[d] >= K.CAPTURE) this.emit(`  ✖ ${d} CAPTURED.`);
     }
   }
@@ -573,7 +573,7 @@ export class Game {
         const d = maxBy(best, (x) => this.clarity[x]);
         this.struck.add(d);
         this.pressure[d] += 1;
-        this.emit(`  ⚑ (hidden hand) pressure creeps onto your strongest work in ${d}. ${this.pressure[d]}/${K.CAPTURE}.`);
+        this.emit(`  ⚑ (hidden hand) the squeeze creeps onto your strongest work in ${d}. ${this.pressure[d]}/${K.CAPTURE}.`);
         if (this.pressure[d] >= K.CAPTURE) this.emit(`  ✖ ${d} CAPTURED.`);
       }
     } else if (o === "The Recruiter") {
@@ -582,7 +582,7 @@ export class Game {
       if (pool.length) {
         const [p, d] = this.rng.choice(pool);
         p.sight[d] -= 1;
-        this.emit(`  ⚑ (hidden hand) a recruiter peels ${p.name} away from ${d}. Sight −1.`);
+        this.emit(`  ⚑ (hidden hand) a recruiter peels ${p.name} away from ${d}. Read −1.`);
       }
     } else if (o === "The Debt Buyer") {
       const owed = this.active().filter((p) => p.corruption > 0 && p.trust > 0);
@@ -599,7 +599,7 @@ export class Game {
     }
     if (this.safeRoute(d)) return;
     this.pressure[d] += 1;
-    this.emit(`  ✖ The Machine extracts from ${d}. Pressure ${this.pressure[d]}/${K.CAPTURE}.`);
+    this.emit(`  ✖ The Machine extracts from ${d}. Squeeze ${this.pressure[d]}/${K.CAPTURE}.`);
     if (this.pressure[d] >= K.CAPTURE) this.emit(`  ✖ ${d} CAPTURED.`);
   }
   autoMachinePhase() {
@@ -647,7 +647,7 @@ export class Game {
     this.ownerShown = true;
     const text = this.chapter ? this.chapter.face_text : `${this.owner} — ${C.owners[this.owner]}`;
     this.emit(`⚑ THE UNDERWORLD CRACKS OPEN. The Owner is ${text}`);
-    this.emit(`  Trace ${this.threadsNeeded()} threads (Sight 3 in a woken district) and expose it before it buries you.`);
+    this.emit(`  Trace ${this.threadsNeeded()} threads (Read 3 in a woken district) and expose it before it buries you.`);
     if (this.owner === "The Lobbyist") {
       const awake = DISTRICTS.filter((d) => this.clarity[d] >= K.WAKE);
       if (awake.length) {
@@ -671,7 +671,7 @@ export class Game {
     if (cand.length) {
       const d = minBy(cand, (x) => this.pressure[x]);
       this.pressure[d] += 1;
-      this.emit(`  ⚠ ${p.name} tightens on ${d}. Pressure ${this.pressure[d]}/${K.CAPTURE}.`);
+      this.emit(`  ⚠ ${p.name} tightens on ${d}. Squeeze ${this.pressure[d]}/${K.CAPTURE}.`);
       if (this.pressure[d] >= K.CAPTURE) this.emit(`  ✖ ${d} CAPTURED.`);
     }
   }
@@ -681,7 +681,7 @@ export class Game {
     const d = minBy<District>(["HOUSING", "LENDING"], (x) => this.pressure[x]);
     if (this.pressure[d] < K.CAPTURE) {
       this.pressure[d] += 1;
-      this.emit(`  ⚠ The map compounds: REDLINING tightens again on ${d}. Pressure ${this.pressure[d]}/${K.CAPTURE}.`);
+      this.emit(`  ⚠ The map compounds: REDLINING tightens again on ${d}. Squeeze ${this.pressure[d]}/${K.CAPTURE}.`);
       if (this.pressure[d] >= K.CAPTURE) this.emit(`  ✖ ${d} CAPTURED.`);
     }
   }
