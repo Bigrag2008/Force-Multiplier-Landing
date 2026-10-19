@@ -23,6 +23,8 @@ export interface Advice<P> {
   pick: P;
   title: string;
   why: string;
+  /** the tempting road not taken, shown beside the pick so the choice is real */
+  alt?: { pick: P; title: string; why: string; falls: boolean };
 }
 
 /** What the current player should do with their next action, and why. */
@@ -107,8 +109,34 @@ export function adviseTurn(g: Game, p: Player, actionsLeft: number): Advice<Turn
   return { pick: { k: "study", d: tgt }, title: `Study ${T(tgt)}`, why: `You can't read ${T(tgt)} yet (Sight 0). Sight 1 unlocks the red layer: the cost, and whether a deal is a trap at all.` };
 }
 
-/** What to do with a deal in front of you, using only the layers you can read. */
+/** The shortcut, spelled out: what TAKE buys on a trap right now, and what it costs you. */
+function shortcut(g: Game, p: Player, d: District, blind: boolean): NonNullable<Advice<Choice>["alt"]> {
+  const cost = g.takeCost();
+  const after = p.corruption + cost;
+  const falls = after >= K.FLIP;
+  const gain = g.pressure[d] > 0 ? `${T(d)}'s Pressure drops by 2 right now (negotiating only drops 1)` : `${T(d)} jumps +2 Clarity right now (defusing only gives +1)`;
+  const warning = falls
+    ? `That's ${K.FLIP}: you'd Fall, and the Machine would play through you.`
+    : after >= K.FLIP - 2
+      ? "One more shortcut after this and you Fall. That's how it starts."
+      : `Shortcuts add up: at ${K.FLIP} you Fall.`;
+  return {
+    pick: "TAKE",
+    falls,
+    title: falls ? "The shortcut would make you Fall" : "The shortcut: TAKE it",
+    why: `${blind ? "If it's a trap (most are), " : ""}TAKE costs no Trust, and ${gain}. The catch: +${cost} Corruption on you (${p.corruption} → ${after} of ${K.FLIP}). ${warning}`,
+  };
+}
+
+/** What to do with a deal in front of you, using only the layers you can read, with the shortcut beside it. */
 export function adviseDeal(g: Game, p: Player, d: District, card: Card): Advice<Choice> {
+  const advice = pickDeal(g, p, d, card);
+  const blind = p.sight[d] < 1;
+  if (advice.pick !== "TAKE" && (blind || card.trap)) advice.alt = shortcut(g, p, d, blind);
+  return advice;
+}
+
+function pickDeal(g: Game, p: Player, d: District, card: Card): Advice<Choice> {
   const see = p.sight[d];
   const urgent = g.pressure[d] >= K.CAPTURE - 1;
   const safe = p.corruption + g.takeCost() < K.FLIP;

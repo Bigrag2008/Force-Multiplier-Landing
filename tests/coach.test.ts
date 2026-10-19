@@ -101,6 +101,29 @@ describe("The Coach", () => {
     }
   });
 
+  it("lays the shortcut beside its pick on a trap, with the true cost", () => {
+    const s = new Session({ mode: "coop", roster: C.roster.slice(0, 3), seed: 4 });
+    const g = s.g;
+    const p = g.players[0];
+    const trap = C.deck.LENDING.find((c) => c.trap)!;
+    const honest = C.deck.LENDING.find((c) => !c.trap)!;
+    p.sight.LENDING = 3;
+    p.trust = 3;
+    p.corruption = 0;
+    g.pressure.LENDING = 1;
+    const a = adviseDeal(g, p, "LENDING", trap);
+    expect(a.pick).toBe("NEGOTIATE");
+    expect(a.alt?.pick).toBe("TAKE");
+    expect(a.alt?.falls).toBe(false);
+    expect(a.alt?.why).toContain("drops by 2");
+    g.pressure.LENDING = 0;
+    expect(adviseDeal(g, p, "LENDING", trap).alt?.why).toContain("+2 Clarity");
+    p.corruption = 5;
+    expect(adviseDeal(g, p, "LENDING", trap).alt?.falls).toBe(true);
+    // an honest deal you can read is just good help: no shortcut to offer
+    expect(adviseDeal(g, p, "LENDING", honest).alt).toBeUndefined();
+  });
+
   it("only recommends what the player can afford", () => {
     for (const seed of [1, 2, 3, 4, 5]) {
       const s = new Session({ mode: "coop", roster: C.roster.slice(0, 3), seed });

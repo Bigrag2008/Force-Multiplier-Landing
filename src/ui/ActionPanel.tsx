@@ -4,7 +4,7 @@ import { C, DISTRICTS, K, type Card, type Choice, type District, type PlaceKey }
 import { maxBy, type Action, type Player } from "../engine/engine";
 import { adviseCookout, adviseDeal, adviseSousou, adviseTurn } from "../game/coach";
 import type { Session } from "../game/session";
-import { CoachBadge, CoachBox, picked, safe } from "./Coach";
+import { CoachBadge, CoachBox, picked, safe, ShortcutBadge } from "./Coach";
 import { Icon, type IconName } from "./icons";
 import { DealCard } from "./DealCard";
 import { DISTRICT_COLOR, titleCase } from "./theme";
@@ -125,6 +125,7 @@ export function TurnPanel({ s, run, onHistory }: { s: Session; run: Run; onHisto
         <span>{c}</span>
         <span className="block text-[11px] font-normal">{label}</span>
         {deal?.pick === c && <CoachBadge />}
+        {deal?.alt?.pick === c && <ShortcutBadge falls={deal.alt.falls} />}
       </button>
     );
     return (
