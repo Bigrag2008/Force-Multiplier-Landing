@@ -14,7 +14,7 @@ What it checks, and what "healthy" means:
   • "careful" play (TAKE only to save a district) beats "never TAKE"  → the shortcut
     is genuinely tempting; and "greedy" play loses more and Falls  → it's dangerous
   • NEGOTIATE wins happen on amber levers, and every win traces blue threads
-    → Sight 2 and Sight 3 both matter
+    → Read 2 and Read 3 both matter
   • Owners and Scenarios spread the difficulty without any one being a lock
 """
 import sys, random, collections
@@ -108,10 +108,10 @@ if __name__=="__main__":
 
     st,rounds,owner,scen,role=run_batch(n*2,4,style="human")
     tot=st["neg_red"]+st["neg_amber"]+st["neg_blue"]
-    print("=== DOES DEEPER SIGHT MATTER? (co-op, 4 players, human-like bot) ===")
+    print("=== DOES DEEPER READ MATTER? (co-op, 4 players, human-like bot) ===")
     print(f"  successful NEGOTIATEs by lever:  red {pct(st['neg_red'],tot)}  amber {pct(st['neg_amber'],tot)}  "
           f"blue {pct(st['neg_blue'],tot)}")
-    print(f"  Underworld threads traced (needs Sight 3 / blue): {st['traces']/(n*2):.2f} per game · every win needs {E.THREADS_TO_WIN}")
+    print(f"  Underworld threads traced (needs Read 3 / blue): {st['traces']/(n*2):.2f} per game · every win needs {E.THREADS_TO_WIN}")
     print("\n=== OWNERS (co-op, 4 players, human-like bot) ===")
     for o,(c,w) in sorted(owner.items()): print(f"  {o:<16}{pct(w,c)}")
     print("\n=== SCENARIOS (co-op, 4 players, human-like bot) ===")
@@ -132,5 +132,5 @@ if __name__=="__main__":
         ok=0.40<=w<=0.70 and w>never and r1<0.02
         print(f"  Chapter 3 {k}p {'healthy' if ok else 'NEEDS TUNING'}  ({w*100:.0f}% wins; organizing worth {100*(w-never):+.0f} pts)")
     deep = tot and st['neg_amber']/tot>=0.15
-    print(f"  Deep Sight   {'matters' if deep else 'NEEDS TUNING'}  (amber = {pct(st['neg_amber'],tot).strip()} of defusals; "
-          f"blue/Sight 3 is required to trace every winning thread)")
+    print(f"  Deep Read   {'matters' if deep else 'NEEDS TUNING'}  (amber = {pct(st['neg_amber'],tot).strip()} of defusals; "
+          f"blue/Read 3 is required to trace every winning thread)")

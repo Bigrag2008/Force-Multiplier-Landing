@@ -657,11 +657,11 @@
   ]
  },
  "roles": {
-  "Translator": "Teaches for free (no Trust cost). Still has to read a district to teach it. The bridge — spreads the Sight fastest.",
-  "Student": "Gains DOUBLE Sight when taught. The hungry one.",
-  "Elder": "Starts with Sight 1 everywhere; once per game, 'Teach the History' wakes a whole district instantly.",
+  "Translator": "Teaches for free (no Trust cost). Still has to read a district to teach it. The bridge — spreads the Read fastest.",
+  "Student": "Gains DOUBLE Read when taught. The hungry one.",
+  "Elder": "Starts with Read 1 everywhere; once per game, 'Teach the History' wakes a whole district instantly.",
   "Veteran": "Shields the block from two Machine hits per game. Came home to protect it.",
-  "Organizer": "A successful NEGOTIATE drops Pressure by 2, not 1 (collective action). Rallies the block."
+  "Organizer": "A successful NEGOTIATE drops Squeeze by 2, not 1 (collective action). Rallies the block."
  },
  "patterns": [
   {
@@ -769,18 +769,18 @@
  ],
  "owners": {
   "The Algorithm": "Relentless. The Machine strikes one extra time every round.",
-  "The Lobbyist": "Each round it leans on your strongest unfinished district (+1 Pressure). On reveal it knocks one woken district back to Clarity 1.",
-  "The Debt Buyer": "Every TAKE on a trap costs +1 extra Corruption. Each round, collections calls: anyone carrying Corruption loses 1 Trust. The Fallen strike twice as hard.",
-  "The Recruiter": "Each round it peels someone away: a random player loses 1 Sight in a district they can read."
+  "The Lobbyist": "Each round it leans on your strongest unfinished district (+1 Squeeze). On reveal it knocks one woken district back to Clarity 1.",
+  "The Debt Buyer": "Every TAKE on a trap costs +1 extra Shady. Each round, collections calls: anyone carrying Shady loses 1 Trust. The Fallen strike twice as hard.",
+  "The Recruiter": "Each round it peels someone away: a random player loses 1 Read in a district they can read."
  },
  "scenarios": {
-  "The Eviction Wave": "Housing starts under siege (2 pressure). Hold the line.",
+  "The Eviction Wave": "Housing starts under siege (Squeeze 2). Hold the line.",
   "Payday Season": "Every second round is payday: Lending takes an extra hit. The hardest rung.",
-  "The Closure": "A school starts captured (3 Pressure). Reclaim it — fast.",
+  "The Closure": "A school starts captured (3 Squeeze). Reclaim it — fast.",
   "The Audit": "The Machine is distracted — the block gets a one-round head start.",
-  "A Quiet Year": "No special pressure. Learn the ropes.",
-  "The Plants Close": "Dayton, 2008: Labor starts at Pressure 2, and everyone starts with 1 Trust instead of 2.",
-  "The Hospital Closes": "Dayton, 2018: Health starts at Pressure 2, and negotiating a Health deal costs 2 Trust."
+  "A Quiet Year": "No extra Squeeze. Learn the ropes.",
+  "The Plants Close": "Dayton, 2008: Labor starts at Squeeze 2, and everyone starts with 1 Trust instead of 2.",
+  "The Hospital Closes": "Dayton, 2018: Health starts at Squeeze 2, and negotiating a Health deal costs 2 Trust."
  },
  "history": {
   "LENDING": [
@@ -890,13 +890,13 @@
   "CHURCH": {
    "name": "The Church",
    "where": "on the corner, every Sunday",
-   "bonus": "−2 Corruption instead of −1.",
+   "bonus": "−2 Shady instead of −1.",
    "flavor": "Come as you are. Leave a little lighter."
   },
   "ADVENTURE": {
    "name": "Adventure Central",
    "where": "Wesleyan MetroPark",
-   "bonus": "Your next Study this turn gives +2 Sight.",
+   "bonus": "Your next Study this turn gives +2 Read.",
    "flavor": "The young people's learning center in the park. Practice makes sight."
   },
   "MARKET": {
@@ -922,10 +922,10 @@
     "HOUSING": 2,
     "LENDING": 2
    },
-   "twist": "REDLINING is active from round 1, and from round 2, while it stays active, the map compounds: it tightens a second time every round (+1 Pressure on the weaker of Housing and Lending). Break it, or it breaks you.",
+   "twist": "REDLINING is active from round 1, and from round 2, while it stays active, the map compounds: it tightens a second time every round (+1 Squeeze on the weaker of Housing and Lending). Break it, or it breaks you.",
    "owner": "The Lobbyist",
    "face": "The Appraiser",
-   "face_text": "The Appraiser: leans on your strongest unfinished district every round (+1 Pressure); on reveal, knocks one woken district back to Clarity 1.",
+   "face_text": "The Appraiser: leans on your strongest unfinished district every round (+1 Squeeze); on reveal, knocks one woken district back to Clarity 1.",
    "decks": {
     "HOUSING": [
      {
@@ -1174,7 +1174,7 @@
    },
    "league": {
     "name": "The League",
-    "text": "Like the Contract Buyers League (Chicago, 1968): sign the pledge to withhold together (an action). Every family must sign in the same round, or the sellers scare them off and the pledges fall apart. Once it forms: Housing Pressure −2 at once, Housing −1 every second round after, and every Housing and Lending trap can be negotiated with Sight 1."
+    "text": "Like the Contract Buyers League (Chicago, 1968): sign the pledge to withhold together (an action). Every family must sign in the same round, or the sellers scare them off and the pledges fall apart. Once it forms: Housing Squeeze −2 at once, Housing −1 every second round after, and every Housing and Lending trap can be negotiated with Read 1."
    },
    "unlocks_always": [
     "The Redlining Maps"
@@ -1182,7 +1182,7 @@
    "unlocks_if_league_won": [
     "The Contract Buyers League"
    ],
-   "decision": "Stay and fight for the house, or move to where the map says you can? Stay: Housing keeps its sticker, and the Organizer gains +1 Legend per League signature in Chapter 4. Move: remove one Scar from Housing, but the Elder role skips a generation."
+   "decision": "Stay and fight for the house, or move to where the map says you can? Stay: Housing keeps its sticker, and the Organizer gains +1 Props per League signature in Chapter 4. Move: remove one Scar from Housing, but the Elder role skips a generation."
   }
  },
  "roster": [

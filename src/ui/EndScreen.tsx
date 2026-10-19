@@ -1,6 +1,5 @@
 "use client";
 import type { Session } from "../game/session";
-import { say } from "../game/words";
 
 export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
   const g = s.g;
@@ -15,7 +14,7 @@ export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
     <section className={`rounded-2xl border-2 p-6 ${won ? "border-gold bg-gold/10" : "border-[#E63946] bg-[#E63946]/10"}`}>
       <h2 className={`text-3xl font-black ${won ? "text-gold" : "text-[#ff8a8a]"}`}>{won ? "The block wins." : "The Machine holds the block."}</h2>
       <p className="mt-2">
-        {won ? `Owner exposed: ${g.ownerFace}. It was always one machine.` : (s.endMessage && say(s.endMessage)) ?? "The clock ran out. The Machine doesn't need to win — it only needs you to run out of time."}
+        {won ? `Owner exposed: ${g.ownerFace}. It was always one machine.` : s.endMessage ?? "The clock ran out. The Machine doesn't need to win — it only needs you to run out of time."}
       </p>
       {legend && (
         <p className="mt-3 text-gold">

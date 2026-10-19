@@ -86,7 +86,7 @@ describe("The Coach", () => {
     }
   });
 
-  it("at Sight 0 gives the same advice for a trap and an honest deal", () => {
+  it("at Read 0 gives the same advice for a trap and an honest deal", () => {
     const s = new Session({ mode: "coop", roster: C.roster.slice(0, 3), seed: 4 });
     const g = s.g;
     const p = g.players[0];

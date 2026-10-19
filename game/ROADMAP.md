@@ -9,26 +9,26 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 ## Part A: Mechanics from the culture
 
 - [x] **1. The Sou-Sou** (also called a susu, "the hand," or "the club")
-  A rotating savings circle. At the end of the block's turns the table may throw a hand: everyone who can puts in 1 Trust. When the pot reaches the hand size, the next player in the circle takes it and clears 2 Pressure from any district, with **no Corruption**. It's the honest version of the payday shortcut.
+  A rotating savings circle. At the end of the block's turns the table may throw a hand: everyone who can puts in 1 Trust. When the pot reaches the hand size, the next player in the circle takes it and clears 2 Squeeze from any district, with **no Shady**. It's the honest version of the payday shortcut.
 
 - [x] **2. Commons places, at West Dayton landmarks**
-  The Commons action now happens *somewhere*. Each place gives the base Commons effect (+2 Trust, −1 Corruption) plus its own bonus:
+  The Commons action now happens *somewhere*. Each place gives the base Commons effect (+2 Trust, −1 Shady) plus its own bonus:
   | Place | Bonus |
   |---|---|
   | Barbershop / beauty shop on West Third Street | Your next Teach this turn is free. |
-  | The church | −2 Corruption instead of −1. |
-  | Adventure Central at Wesleyan MetroPark | Your next Study this turn gives +2 Sight. |
+  | The church | −2 Shady instead of −1. |
+  | Adventure Central at Wesleyan MetroPark | Your next Study this turn gives +2 Read. |
   | Gem City Market (the co-op grocery on Salem Avenue) | Your next deal this turn: draw 2, face 1. |
   | Grandma's kitchen table | Once per game: every player gets +2 Trust. |
 
 - [x] **3. The Cookout**
-  Once per game, the table calls it at the start of a round. Nobody takes normal actions that round. Everyone gets +2 Trust, −1 Corruption and +1 Legend, and each player raises their Sight in one district to the best Sight anyone at the table has there. The Machine still moves.
+  Once per game, the table calls it at the start of a round. Nobody takes normal actions that round. Everyone gets +2 Trust, −1 Shady and +1 Props, and each player raises their Read in one district to the best Read anyone at the table has there. The Machine still moves.
 
 - [x] **4. The Green Book**
   The block holds one copy. Once per game, when a Machine strike would capture a district, open it: that strike takes a safe route and lands nowhere.
 
 - [x] **5. Call and response**
-  When you Teach, read the red layer aloud and your learner says the second number back. If they do, you both gain +1 Legend.
+  When you Teach, read the red layer aloud and your learner says the second number back. If they do, you both gain +1 Props.
 
 ## Part B: History and place
 
@@ -88,6 +88,7 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 - [x] **25a. From that playtest:** the shortcut made tempting (the Coach lays TAKE and its true cost beside its pick on every trap), plain names on the website (Read, Shady, Squeeze, Props), and drawn art: five district scenes and five role portraits as church fans, with [ART_BRIEF.md](ART_BRIEF.md) for commissioning the finished art (it drops in through `src/ui/art/manifest.ts`).
 - [x] **26. Online play:** the table device opens a room with a four-letter code; everyone joins from their phone and plays their own seat, with deal cards private to the reader. Phones connect directly (WebRTC via PeerJS, nothing to sign up for); the table device referees every move and every device replays the same moves. Dropped phones rejoin their seats, and a reloaded table reopens the same room.
 - [x] **27a. Save and continue:** every change is a move, a game is its seed plus its moves, and the browser keeps the game after every move.
+- [x] **27b. The paper version matches the website:** the plain names (Read, Shady, Squeeze, Props) in the engine, cards, rulebook, terminal edition and both PDFs; "Name the price" for the shortcut in the rulebook, quick reference and player boards; the drawn district scenes on the board, and the role portraits on the church fans and player boards (captured from the site's /art page by `scripts/render_art.mjs`).
 - [ ] **27. Finished illustrations** (see ART_BRIEF.md).
 
 ---

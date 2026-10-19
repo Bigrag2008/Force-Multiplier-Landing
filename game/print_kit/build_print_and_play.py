@@ -57,6 +57,12 @@ ZONEBG=(1.0,0.93,0.93)
 CARD_W, CARD_H = 2.5*inch, 3.5*inch
 PAGE_W, PAGE_H = letter
 
+# drawn art, captured from the site's /art page by scripts/render_art.mjs (commissioned art replaces it)
+ART=os.path.join(HERE,"art")
+def art(name):
+    p=os.path.join(ART,f"{name}.png")
+    return p if os.path.exists(p) else None
+
 def fill(c,rgb): c.setFillColorRGB(*rgb)
 def stroke(c,rgb): c.setStrokeColorRGB(*rgb)
 
@@ -176,7 +182,7 @@ def deal_card(c,x,y,d,i,card,era="",era_years=""):
         hy=top-(n-1)*(zone_h+gap)
         dot(c,ix+3,hy-2.5,2.6,LAYER_COL[n])
         fill(c,INK); c.setFont("DVB",5.8)
-        c.drawString(ix+9,hy-4.5,f"SIGHT {n} · THE {LAYER_NAME[n]}")
+        c.drawString(ix+9,hy-4.5,f"READ {n} · THE {LAYER_NAME[n]}")
         if n==1: fill(c,GREY); c.setFont("DV",4.6); c.drawRightString(x+CARD_W-10,hy-4.5,"(fine print — use your glasses)")
         txt=card[key]
         if n==1:
@@ -186,7 +192,7 @@ def deal_card(c,x,y,d,i,card,era="",era_years=""):
     stroke(c,INK); c.setLineWidth(0.5); c.line(ix+8,y+17,ix+70,y+17)
     fill(c,INK); c.setFont("DVB",7); c.drawString(ix,y+18,"X")
     fill(c,GREY); c.setFont("DV",5.2); c.drawRightString(x+CARD_W-10,y+18,"TAKE · WALK · NEGOTIATE")
-    c.setFont("DV",4.6); c.drawRightString(x+CARD_W-10,y+11,"Negotiate: 1 Trust, Sight ≥ lever")
+    c.setFont("DV",4.6); c.drawRightString(x+CARD_W-10,y+11,"Negotiate: 1 Trust, Read ≥ lever")
 
 def card_back(c,x,y,label="THE SECOND NUMBER",sub="read the machine"):
     stroke(c,INK); c.setLineWidth(0.6); fill(c,NAVY)
@@ -241,7 +247,7 @@ def build_other_cards(c):
     for combo,name,lesson in Dk.PATTERNS:
         cards.append((hx("8b1e1e"),"MACHINE PATTERN"," + ".join(DABBR[d] for d in combo),
                       name.title() if name.isupper() else name,lesson,
-                      "Forms when every district listed is at Pressure 2+. Tightens each round. Break it by pulling one district below 2."))
+                      "Forms when every district listed is at Squeeze 2+. Tightens each round. Break it by pulling one district below 2."))
     for d,hs in Dk.HISTORY.items():
         for h in hs:
             cards.append((hx("5a3d1e"),"HISTORY",("any district" if d=="ANY" else d.lower()),h["title"],
@@ -271,13 +277,22 @@ def hand_fan(c,cx,cy,role,gift):
     c.restoreState()
     stroke(c,GOLD); c.setLineWidth(1.4); c.circle(cx,cy,r-6,stroke=1,fill=0)
     fill(c,NAVY); c.circle(cx,cy+0.45*inch,0.5*inch,stroke=0,fill=1)                        # portrait
-    fill(c,GOLDL); c.setFont("DVI",5.5); c.drawCentredString(cx,cy+0.47*inch,"portrait —")
-    c.drawCentredString(cx,cy+0.38*inch,"commission")
+    img=art(f"role-{role.lower()}")
+    if img:
+        # the drawn portrait is itself a fan (viewBox -2..62 × -2..78, face r=24 at 30,30): crop to its face
+        u=0.5*inch/24
+        c.saveState(); p=c.beginPath(); p.circle(cx,cy+0.45*inch,0.5*inch); c.clipPath(p,stroke=0)
+        c.drawImage(img,cx-32*u,cy+0.45*inch+32*u-80*u,64*u,80*u,mask="auto")
+        c.restoreState()
+        stroke(c,GOLD); c.setLineWidth(1.2); c.circle(cx,cy+0.45*inch,0.5*inch,stroke=1,fill=0)
+    else:
+        fill(c,GOLDL); c.setFont("DVI",5.5); c.drawCentredString(cx,cy+0.47*inch,"portrait —")
+        c.drawCentredString(cx,cy+0.38*inch,"commission")
     fill(c,INK); c.setFont("DVB",13); c.drawCentredString(cx,cy-0.25*inch,f"The {role}")
     lines,size=fit_lines(gift,"DV",7.4,2*r-0.75*inch,5,6)
     c.setFont("DV",size); ty=cy-0.45*inch
     for ln in lines: c.drawCentredString(cx,ty,ln); ty-=size+2
-    start="Start: 2 Trust · Sight 1 everywhere" if role=="Elder" else "Start: 2 Trust · Sight 0"
+    start="Start: 2 Trust · Read 1 everywhere" if role=="Elder" else "Start: 2 Trust · Read 0"
     fill(c,GREY); c.setFont("DVI",6); c.drawCentredString(cx,cy-r+0.28*inch,start)
     fill(c,INK); c.setFont("DVB",6); c.drawCentredString(cx,cy-r-0.3*inch,"ROLE")
 
@@ -293,7 +308,7 @@ def paper_plate(c,cx,cy):
     fill(c,hx("E03C31")); c.setFont("DVB",15); c.drawCentredString(cx,cy+0.5*inch,"THE COOKOUT")
     fill(c,INK); c.setFont("DV",7)
     for k,ln in enumerate(["Once per game, at the start of a round.","No block actions this round.",
-                           "Everyone: +2 Trust, −1 Corruption, +1 Legend,","and Sight in one district up to",
+                           "Everyone: +2 Trust, −1 Shady, +1 Props,","and Read in one district up to",
                            "the best reader at the table.","Flip this plate over when it's been had."]):
         c.drawCentredString(cx,cy+0.22*inch-k*10,ln)
 
@@ -304,7 +319,7 @@ def sousou_label(c,x,y,w,h):
     c.setFont("DV",8)
     for k,ln in enumerate(["Tape this around a coffee can. At the end of the block's turns, the table may throw a hand:",
                            "everyone with Trust drops 1 in the can. At 4, the next player in the circle takes the hand",
-                           "and clears 2 Pressure from any district — paid off clean, no Corruption."]):
+                           "and clears 2 Squeeze from any district — paid off clean, no Shady."]):
         c.drawString(x+0.25*inch,y+h-0.68*inch-k*10.5,ln)
     fill(c,INK); c.setFont("DVI",7); c.drawRightString(x+w-0.2*inch,y+0.12*inch,"also called a susu, “the hand,” or “the club”")
 
@@ -375,9 +390,9 @@ def build_tokens(c):
     fill(c,INK); c.setFont("DVB",16); c.drawString(0.6*inch,PAGE_H-0.75*inch,"Tokens: bottle caps, chips and markers")
     fill(c,GREY); c.setFont("DV",8.5)
     c.drawString(0.6*inch,PAGE_H-0.98*inch,"Print on cardstock and punch or cut out. Real bottle caps, coins or beans work just as well.")
-    rows=[("TRUST — bottle caps",GOLD,"T",30),("CORRUPTION — the gold-chain chips",hx("b8860b"),"$",20),
-          ("SIGHT markers (player boards)",hx("5a5470"),"S",25),("CLARITY markers",hx("3FA34D"),"C",10),
-          ("PRESSURE markers",LAYER_COL[1],"P",10),("UNDERWORLD THREADS & round marker",LAYER_COL[3],"✦",5)]
+    rows=[("TRUST — bottle caps",GOLD,"T",30),("SHADY — the gold-chain chips",hx("b8860b"),"$",20),
+          ("READ markers (player boards)",hx("5a5470"),"S",25),("CLARITY markers",hx("3FA34D"),"C",10),
+          ("SQUEEZE markers",LAYER_COL[1],"P",10),("UNDERWORLD THREADS & round marker",LAYER_COL[3],"✦",5)]
     y=PAGE_H-1.35*inch
     for label,col,ch,n in rows:
         fill(c,INK); c.setFont("DVB",8.5); c.drawString(0.6*inch,y,label); y-=0.32*inch
@@ -438,7 +453,7 @@ def build_lens_page(c):
     y-=10
     tests=["IF YOU CAN READ THIS, YOUR LENS WORKS.",
            "THE SECOND NUMBER: 391% APR. THE FEE IS THE PRODUCT.",
-           "SIGHT 3 · THE CONNECTION — IT WAS ALWAYS ONE MACHINE."]
+           "READ 3 · THE CONNECTION — IT WAS ALWAYS ONE MACHINE."]
     for k,t in enumerate(tests):
         dot(c,inch+4,y-14,4,LAYER_COL[k+1])
         decoder_zone(c,inch+16,y-30,PAGE_W-2*inch-16,30,t,seed=900+k,size=12,lead=14,decoy=10)
@@ -446,10 +461,10 @@ def build_lens_page(c):
     y-=6
     fill(c,INK); c.setFont("DVB",11); c.drawString(inch,y,"The honor rule"); y-=14
     c.setFont("DV",9.5)
-    for ln in simpleSplit("Every deal card has three hidden zones: red (Sight 1), amber (Sight 2) and blue (Sight 3). "
-        "When you face a deal, hold the lens only over the zones your Sight in that district unlocks — no deeper. "
+    for ln in simpleSplit("Every deal card has three hidden zones: red (Read 1), amber (Read 2) and blue (Read 3). "
+        "When you face a deal, hold the lens only over the zones your Read in that district unlocks — no deeper. "
         "The table watches. The lever (or 'honest deal') is printed inside the red zone, so a blind player "
-        "(Sight 0) sees only the pitch.","DV",9.5,PAGE_W-2*inch): c.drawString(inch,y,ln); y-=12.5
+        "(Read 0) sees only the pitch.","DV",9.5,PAGE_W-2*inch): c.drawString(inch,y,ln); y-=12.5
     footer(c,"Lens & printer test"); c.showPage()
 
 # ================= board =================
@@ -467,7 +482,8 @@ def build_board(c):
         fill(c,GOLD if r<12 else LAYER_COL[1]); c.setFont("DVB",9); c.drawCentredString(bx+0.17*inch,H-0.5*inch,str(r))
     fill(c,CREAM); c.setFont("DV",6.5); c.drawRightString(W-0.5*inch,H-0.72*inch,"end of round 12 = the Machine wins")
     # districts as quilt blocks
-    colw=(W-inch)/5; top=H-0.9*inch; ch=3.2*inch
+    SCENE=0.62*inch      # the district's scene, under its header
+    colw=(W-inch)/5; top=H-0.9*inch; ch=3.2*inch+SCENE
     for k,d in enumerate(E.DISTRICTS):
         x=0.5*inch+k*colw; rgb=DCOL[d]
         fill(c,(1,1,1)); stroke(c,rgb); c.setLineWidth(2); c.roundRect(x+4,top-ch,colw-8,ch,8,stroke=1,fill=1)
@@ -476,6 +492,13 @@ def build_board(c):
         c.rect(x+4,top-0.5*inch,colw-8,0.2*inch,stroke=0,fill=1)
         fill(c,(1,1,1)); c.setFont("DVB",12); c.drawCentredString(x+colw/2,top-0.27*inch,d)
         c.setFont("DVI",6.6); c.drawCentredString(x+colw/2,top-0.42*inch,Dk.DAYTON[d]["sub"])
+        img=art(f"district-{d.lower()}")
+        if img:
+            c.saveState(); p=c.beginPath(); p.rect(x+4,top-0.5*inch-SCENE,colw-8,SCENE); c.clipPath(p,stroke=0)
+            iw=colw-8; ih=iw*7/20      # 20:7, centred in the strip
+            c.drawImage(img,x+4,top-0.5*inch-SCENE/2-ih/2,iw,ih,mask="auto")
+            c.restoreState()
+        body=top-SCENE
         def track(label,yy,col,last):
             fill(c,INK); c.setFont("DVB",7.5); c.drawString(x+14,yy+0.36*inch,label)
             for n in range(4):
@@ -484,18 +507,18 @@ def build_board(c):
                 c.rect(bx,yy,bw,0.3*inch,stroke=1,fill=1)
                 fill(c,col if n<3 else (1,1,1)); c.setFont("DVB",9); c.drawCentredString(bx+bw/2,yy+0.1*inch,str(n))
             fill(c,col); c.setFont("DVB",6.5); c.drawRightString(x+colw-14,yy+0.36*inch,last)
-        track("CLARITY",top-1.1*inch,rgb,"3 = AWAKE")
-        track("MACHINE",top-1.8*inch,LAYER_COL[1],"3 = CAPTURED")
-        fill(c,GREY); c.setFont("DV",6.3); c.drawString(x+14,top-1.95*inch,"2+ = gripped (counts for Patterns)")
+        track("CLARITY",body-1.1*inch,rgb,"3 = AWAKE")
+        track("SQUEEZE",body-1.8*inch,LAYER_COL[1],"3 = CAPTURED")
+        fill(c,GREY); c.setFont("DV",6.3); c.drawString(x+14,body-1.95*inch,"2+ = gripped (counts for Patterns)")
         stroke(c,rgb); c.setDash(3,3); c.setLineWidth(1)
-        c.roundRect(x+16,top-3.0*inch,0.85*inch,0.9*inch,5,stroke=1,fill=0); c.setDash()
-        fill(c,rgb); c.setFont("DVB",6.5); c.drawCentredString(x+16+0.425*inch,top-2.52*inch,"deal pile")
-        stroke(c,LAYER_COL[3]); c.setLineWidth(1.4); fill(c,(1,1,1)); c.circle(x+colw-0.55*inch,top-2.55*inch,0.24*inch,stroke=1,fill=1)
-        fill(c,LAYER_COL[3]); c.setFont("DVB",5); c.drawCentredString(x+colw-0.55*inch,top-2.57*inch,"THREAD")
-        fill(c,GREY); c.setFont("DV",5.5); c.drawCentredString(x+colw-0.55*inch,top-2.95*inch,"Sight 3 + awake")
+        c.roundRect(x+16,body-3.0*inch,0.85*inch,0.9*inch,5,stroke=1,fill=0); c.setDash()
+        fill(c,rgb); c.setFont("DVB",6.5); c.drawCentredString(x+16+0.425*inch,body-2.52*inch,"deal pile")
+        stroke(c,LAYER_COL[3]); c.setLineWidth(1.4); fill(c,(1,1,1)); c.circle(x+colw-0.55*inch,body-2.55*inch,0.24*inch,stroke=1,fill=1)
+        fill(c,LAYER_COL[3]); c.setFont("DVB",5); c.drawCentredString(x+colw-0.55*inch,body-2.57*inch,"THREAD")
+        fill(c,GREY); c.setFont("DV",5.5); c.drawCentredString(x+colw-0.55*inch,body-2.95*inch,"Read 3 + awake")
     # the Commons row: five West Side places
     cy=top-ch-0.12*inch; chh=1.05*inch; tw=(W-inch)/5
-    fill(c,NAVY); c.setFont("DVB",8); c.drawString(0.55*inch,cy-0.1*inch,"THE COMMONS — gather here: +2 Trust, −1 Corruption, plus the place's bonus")
+    fill(c,NAVY); c.setFont("DVB",8); c.drawString(0.55*inch,cy-0.1*inch,"THE COMMONS — gather here: +2 Trust, −1 Shady, plus the place's bonus")
     for k,(key,P) in enumerate(Dk.PLACES.items()):
         x=0.5*inch+k*tw; y=cy-chh-0.15*inch
         fill(c,CREAM); stroke(c,GOLD); c.setLineWidth(1.4); c.roundRect(x+4,y,tw-8,chh,8,stroke=1,fill=1)
@@ -551,12 +574,16 @@ def player_board(c,y0,role,gift):
             c.rect(bx,y,0.48*inch,0.34*inch,stroke=1,fill=1)
             fill(c,(1,1,1) if i==n else col); c.setFont("DVB",10); c.drawCentredString(bx+0.24*inch,y+0.11*inch,str(i))
         fill(c,col); c.setFont("DVB",7); c.drawString(x0+0.25*inch+(n+1)*0.55*inch,y+0.12*inch,last)
-    start="start 2" + (" · Elder starts Sight 1 everywhere" if role=="Elder" else "")
+    start="start 2" + (" · Elder starts Read 1 everywhere" if role=="Elder" else "")
     track("TRUST",y0+h-1.35*inch,5,GOLD,"max 5",f"{start} · spend on Negotiate, Teach, Reach")
-    track("CORRUPTION",y0+h-2.15*inch,6,LAYER_COL[1],"6 = YOU FALL","TAKE on a trap +2 · Commons −1")
+    track("SHADY",y0+h-2.15*inch,6,LAYER_COL[1],"6 = YOU FALL","TAKE on a trap +2 (name the price first) · Commons −1")
+    img=art(f"role-{role.lower()}")
+    if img:   # the role's church fan, beside the tracks
+        fh=1.55*inch; fw=fh*64/80
+        c.drawImage(img,x0+w-fw-0.35*inch,y0+h-0.65*inch-fh,fw,fh,mask="auto")
     # sight grid
     gx=x0+0.25*inch; gy=y0+0.45*inch
-    fill(c,INK); c.setFont("DVB",9); c.drawString(gx,gy+1.85*inch,"SIGHT")
+    fill(c,INK); c.setFont("DVB",9); c.drawString(gx,gy+1.85*inch,"READ")
     fill(c,GREY); c.setFont("DV",6.8); c.drawString(gx+0.6*inch,gy+1.85*inch,"read only the zones you've unlocked")
     for k,d in enumerate(E.DISTRICTS):
         yy=gy+(4-k)*0.34*inch
@@ -569,19 +596,19 @@ def player_board(c,y0,role,gift):
     # action summary
     ax=x0+3.35*inch; ay=y0+2.25*inch
     fill(c,INK); c.setFont("DVB",9); c.drawString(ax,ay,"ACTIONS"); ay-=13
-    acts=[("Study","+1 Sight in a district. +1 Legend."),
-          ("Face a deal","Read what your Sight allows → TAKE / WALK / NEGOTIATE."),
-          ("Teach","+1 Sight to a teammate where you read better. 1 Trust (Translator: free). +2 Legend. Call and response: +1 Legend each."),
-          ("Commons","Gather at a West Side place: +2 Trust, −1 Corruption, plus its bonus (see the board)."),
-          ("Reach","2 Trust: a Fallen friend comes home at Corruption 4. +3 Legend."),
-          ("Trace","Underworld open, Sight 3, district awake → place a thread. +2 Legend."),
+    acts=[("Study","+1 Read in a district. +1 Props."),
+          ("Face a deal","Read what your Read allows → TAKE / WALK / NEGOTIATE."),
+          ("Teach","+1 Read to a teammate where you read better. 1 Trust (Translator: free). +2 Props. Call and response: +1 Props each."),
+          ("Commons","Gather at a West Side place: +2 Trust, −1 Shady, plus its bonus (see the board)."),
+          ("Reach","2 Trust: a Fallen friend comes home at Shady 4. +3 Props."),
+          ("Trace","Underworld open, Read 3, district awake → place a thread. +2 Props."),
           ("Expose","3 threads traced → the block wins.")]
     for a,t in acts:
         fill(c,INK); c.setFont("DVB",7.4); c.drawString(ax,ay,a)
         c.setFont("DV",7.2)
         for ln in simpleSplit(t,"DV",7.2,w-3.35*inch-1.05*inch): c.drawString(ax+0.8*inch,ay,ln); ay-=9.2
         ay-=2
-    fill(c,GOLD); c.setFont("DVB",8); c.drawString(ax,y0+0.22*inch,"LEGEND:")
+    fill(c,GOLD); c.setFont("DVB",8); c.drawString(ax,y0+0.22*inch,"PROPS:")
     stroke(c,LGREY); c.line(ax+0.6*inch,y0+0.2*inch,x0+w-0.25*inch,y0+0.2*inch)
 
 def build_player_boards(c):
@@ -654,18 +681,19 @@ def rules_story():
 def reference_story():
     s=[PageBreak(),Paragraph("Quick reference — West Dayton Edition",ST["h1"])]
     rows=[["Your turn","Take your actions (2–3, see setup table): Study · Face a deal · Teach · Commons · Reach · Trace · Expose."],
-          ["Facing a deal","Draw from a district. Lens over the zones your Sight unlocks. Then TAKE / WALK / NEGOTIATE."],
-          ["Honest deal","TAKE: +2 Trust, +1 Clarity, +1 Legend. WALK: −1 Trust. NEGOTIATE: the Trust is wasted."],
-          ["Trap","TAKE: −2 Pressure now (or +2 Clarity if no Pressure), +2 Corruption. WALK: safe. NEGOTIATE (1 Trust): Sight ≥ lever → −1 Pressure (Organizer −2), +1 Clarity, +2 Legend; else +1 Pressure."],
-          ["Commons places","Barbershop (next Teach free) · Church (−2 Corruption) · Adventure Central (next Study +2) · Gem City Market (next deal: draw 2, face 1) · Grandma's table (once: all +2 Trust)."],
-          ["Teach","Call and response: read a red layer aloud; if your learner says the second number back, +1 Legend each."],
-          ["Start of a round","Once per game, call the Cookout instead of turns: everyone +2 Trust, −1 Corruption, +1 Legend, Sight in one district up to the table's best."],
-          ["After all turns","The Sou-Sou (optional): everyone with Trust puts 1 in the can; at 4 the next player's hand clears 2 Pressure, no Corruption. Then: total Clarity ≥ 9 → the Underworld cracks open."],
+          ["Facing a deal","Draw from a district. Lens over the zones your Read unlocks. Then TAKE / WALK / NEGOTIATE."],
+          ["Honest deal","TAKE: +2 Trust, +1 Clarity, +1 Props. WALK: −1 Trust. NEGOTIATE: the Trust is wasted."],
+          ["Trap","TAKE: −2 Squeeze now (or +2 Clarity if no Squeeze), +2 Shady. WALK: safe. NEGOTIATE (1 Trust): Read ≥ lever → −1 Squeeze (Organizer −2), +1 Clarity, +2 Props; else +1 Squeeze."],
+          ["The shortcut","Before you TAKE a trap, name the price out loud: what it buys (no Trust; −2 Squeeze now, or +2 Clarity) and what it costs you (+2 Shady, or more if the Owner is the Debt Buyer; at 6 you Fall). Then the table weighs in."],
+          ["Commons places","Barbershop (next Teach free) · Church (−2 Shady) · Adventure Central (next Study +2) · Gem City Market (next deal: draw 2, face 1) · Grandma's table (once: all +2 Trust)."],
+          ["Teach","Call and response: read a red layer aloud; if your learner says the second number back, +1 Props each."],
+          ["Start of a round","Once per game, call the Cookout instead of turns: everyone +2 Trust, −1 Shady, +1 Props, Read in one district up to the table's best."],
+          ["After all turns","The Sou-Sou (optional): everyone with Trust puts 1 in the can; at 4 the next player's hand clears 2 Squeeze, no Shady. Then: total Clarity ≥ 9 → the Underworld cracks open."],
           ["The Green Book","Once per game, a strike that would capture a district lands nowhere."],
           ["Machine phase","Strikes (setup table), each on a different unwoken district, closest to waking first. Muddy the strongest unwoken district (−1 Clarity). Scenario, Owner, Patterns."],
           ["Owner in the open","+1 strike; once per round −1 Clarity on a woken district without a thread."],
           ["Lose","2 districts captured · everyone Fallen · round 12 ends."],
-          ["Win","3 threads traced (Sight 3 in woken districts) → Expose."],
+          ["Win","3 threads traced (Read 3 in woken districts) → Expose."],
           ["Fallen","On your turn the Machine moves through you (Extract · Obscure · Tempt). Your crew can Reach you."]]
     data=[[Paragraph(f"<b>{a}</b>",ST["td"]),Paragraph(inline(b),ST["td"])] for a,b in rows]
     t=Table(data,colWidths=[1.3*inch,PAGE_W-1.5*inch-1.3*inch])

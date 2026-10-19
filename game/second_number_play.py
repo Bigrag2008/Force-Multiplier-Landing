@@ -80,8 +80,8 @@ class Table:
             sight=" ".join(f"{DCOL[d]}{d[:3]}{pl.sight[d]}{R}" for d in D)
             if pl.flipped: print(f"  {RED}{pl.name:<8} ✖ FALLEN{R}{DIM} — the Machine moves through them (reach them back){R}"); continue
             corr=bar(pl.corruption,FLIP,'▮',RED) if pl.corruption else DIM+"·"*FLIP+R
-            print(f"  {WHITE}{pl.name:<8}{R}{DIM}{pl.role:<11}{R}Trust {GOLDB}{pl.trust:<2}{R} Legend {GOLD}{pl.legend:<3}{R}"
-                  f"Corr[{corr}]  Sight {sight}")
+            print(f"  {WHITE}{pl.name:<8}{R}{DIM}{pl.role:<11}{R}Trust {GOLDB}{pl.trust:<2}{R} Props {GOLD}{pl.legend:<3}{R}"
+                  f"Corr[{corr}]  Read {sight}")
         for c,n,_ in g.active_patterns(): print(f"  {RED}{B}⚠ PATTERN{R} {RED}{n}{R} {DIM}[{' + '.join(c)}]{R}")
         if g.uw_open:
             print(f"  {GOLD}⚑ UNDERWORLD OPEN{R} — threads {CYAN}{len(g.threads)}/{g.threads_needed()}{R}"
@@ -90,7 +90,7 @@ class Table:
             print(f"  {DIM}Underworld cracks at total Clarity {E.UNDERWORLD_AT} (now {g.total_clarity()}).{R}")
         if g.has_league():
             print(f"  {GOLD}{B}THE LEAGUE{R} "
-                  + (f"{GREEN}formed — Housing −1 every 2nd round; Housing & Lending traps beatable at Sight 1{R}" if g.league_formed
+                  + (f"{GREEN}formed — Housing −1 every 2nd round; Housing & Lending traps beatable at Read 1{R}" if g.league_formed
                      else f"{DIM}{len(g.league)}/{g.league_needed()} signed this round — everyone must sign before the Machine moves{R}"))
         print(f"  {GOLD}Sou-Sou pot{R} {bar(g.pot,E.SOUSOU_HAND,'●',GOLD)}  {DIM}next hand: {g.next_hand().name if g.active() else '—'}{R}"
               f"   {GREEN if g.green_book else GREY}📗 Green Book {'ready' if g.green_book else 'used'}{R}"
@@ -111,15 +111,15 @@ class Table:
 
     # ---- a live deal ----
     def show_card(self, pl, d, card, label=None):
-        # the lever is printed inside the red zone, so it takes Sight 1 to see it
+        # the lever is printed inside the red zone, so it takes Read 1 to see it
         lev=("" if pl.sight[d]<1 else f"   {DIM}lever: {R}{LKEY[card['lever']]}" if card["lever"]
              else f"   {GREEN}honest deal — no lever{R}")
         print(f"\n  {DCOL[d]}{B}[{pl.name}] {label or 'faces a deal'} in {d}{R}{lev}")
         print(f"  {WHITE}{B}WHAT YOU SEE:{R} {WHITE}{card['front']}{R}")
         for n,label,text in self.g.visible(pl,d,card):
             if text: print(f"  {LCOL[n]}{label}:{R} {CREAM}{text}{R}")
-            else:    print(f"  {GREY}🔒 {label.split('—')[0].strip()} — need Sight {n} in {d}{R}")
-        print(f"  {DIM}TAKE = accept · WALK = refuse · NEGOTIATE = spend 1 Trust; beats a trap only with Sight ≥ its lever{R}")
+            else:    print(f"  {GREY}🔒 {label.split('—')[0].strip()} — need Read {n} in {d}{R}")
+        print(f"  {DIM}TAKE = accept · WALK = refuse · NEGOTIATE = spend 1 Trust; beats a trap only with Read ≥ its lever{R}")
 
     def human_face(self, pl, d):
         cards=self.g.deals_for(pl,d)
@@ -136,7 +136,7 @@ class Table:
     def block_menu(self, pl, left):
         g=self.g
         print(f"\n  {WHITE}{B}▶ {pl.name}{R} {DIM}({pl.role}) — {E.ROLES[pl.role]}{R}")
-        print(f"  {DIM}{left} action(s) left · Trust {pl.trust} · Corruption {pl.corruption}/{FLIP}{R}")
+        print(f"  {DIM}{left} action(s) left · Trust {pl.trust} · Shady {pl.corruption}/{FLIP}{R}")
         opts=[f"{GOLDB}1{R})Study", f"{GOLDB}2{R})Face a deal", f"{GOLDB}3{R})Teach", f"{GOLDB}4{R})Commons"]
         if any(p.flipped for p in g.blk()): opts.append(f"{GOLDB}5{R})Reach a Fallen")
         if pl.role=="Elder" and not pl.elder_used: opts.append(f"{GOLD}h{R})History")
@@ -154,7 +154,7 @@ class Table:
                 t=self.pick_player([p for p in g.active() if p is not pl],"teach who"); d=t and self.pick_district()
                 if not (t and d): return None
                 if pl.sight[d]<=t.sight[d]:
-                    print(f"  {GREY}You read {d} at Sight {pl.sight[d]}, {t.name} at {t.sight[d]}. "
+                    print(f"  {GREY}You read {d} at Read {pl.sight[d]}, {t.name} at {t.sight[d]}. "
                           f"You can only teach what you read better.{R}"); return None
                 card=g.draw(d)
                 print(f"\n  {GOLD}{B}CALL AND RESPONSE{R}  {DIM}{pl.name}, read this aloud to {t.name}:{R}")
@@ -178,7 +178,7 @@ class Table:
     def machine_menu(self, who):
         g=self.g
         print(f"\n  {RED}{B}▶ {who.name} — move the Machine{R}  {DIM}(one move per district per round){R}")
-        print(f"   {RED}1{R})Extract (+Pressure)   {RED}2{R})Obscure (−Clarity)   {RED}3{R})Tempt (−Trust)   {DIM}0)Pass{R}")
+        print(f"   {RED}1{R})Extract (+Squeeze)   {RED}2{R})Obscure (−Clarity)   {RED}3{R})Tempt (−Trust)   {DIM}0)Pass{R}")
         k=ask("   choose: ")
         if k=="1": d=self.pick_district(); return ("m_extract",None,d) if d else ("pass",None,None)
         if k=="2": d=self.pick_district(); return ("m_obscure",None,d) if d else ("pass",None,None)
@@ -194,7 +194,7 @@ class Table:
             return False
         self.board(f"{GOLD}— round {g.round} —{R}")
         if ask(f"\n  {GOLD}{B}Call the COOKOUT?{R} {DIM}(once per game: no actions this round; everyone +2 Trust, "
-               f"−1 Corruption, and Sight in one district up to the table's best){R} (y/{GOLDB}n{R}): ")!="y": return False
+               f"−1 Shady, and Read in one district up to the table's best){R} (y/{GOLDB}n{R}): ")!="y": return False
         picks={}
         for p in act:
             d,gain=g.cookout_gain(p)
@@ -214,7 +214,7 @@ class Table:
         print(f"\n  {GOLD}{B}THE SOU-SOU{R}  {DIM}pot {g.pot}/{E.SOUSOU_HAND} · next hand: {nxt.name}{R}")
         if ask(f"   Throw a hand? Everyone with Trust puts in 1. ({GOLDB}y{R}/n): ")!="y": return
         def pick(pl):
-            print(f"   {pl.name} takes the hand: clear 2 Pressure, no Corruption.")
+            print(f"   {pl.name} takes the hand: clear 2 Squeeze, no Shady.")
             return self.pick_district("pay off which district") or max(D,key=lambda x:g.pressure[x])
         g.throw_hand(pick)
 
@@ -261,13 +261,13 @@ class Table:
             w=[p for p in g.blk() if not p.flipped]
             if w:
                 m=max(w,key=lambda p:p.legend)
-                print(f"  {GOLDB}MOST LEGENDARY: {m.name} ({m.role}) — {m.legend} Legend, earned by lifting people.{R}")
+                print(f"  {GOLDB}MOST LEGENDARY: {m.name} ({m.role}) — {m.legend} Props, earned by lifting people.{R}")
             print(GOLD+"★"*72+R)
         else:
             print("\n"+RED+"✖"*72+R); print(f"  {RED}{B}{g.check_end() or 'The clock ran out. The Machine holds the block.'}{R}")
             fallen=[p for p in g.blk() if p.flipped]
             if fallen:
-                print(RED+wrap(f"{fallen[0].name} won the board as the Machine — and earned 0 Legend. "
+                print(RED+wrap(f"{fallen[0].name} won the board as the Machine — and earned 0 Props. "
                                "The Owner just wore their face. You win nothing by becoming it.")+R)
             print(RED+"✖"*72+R)
         if g.chapter: self.ledger()
@@ -301,7 +301,7 @@ def intro(g):
     else:
         print("  "+((RED+"OVERLORD MODE — one player IS the Machine."+R) if g.overlord
                     else f"{CREAM}Scenario: {B}{g.scenario}{R} — {E.SCENARIOS[g.scenario]}"))
-    print(f"  {DIM}Seeing isn't beating: Sight 1 shows a trap; beating it takes Sight up to its lever.{R}")
+    print(f"  {DIM}Seeing isn't beating: Read 1 shows a trap; beating it takes Read up to its lever.{R}")
     print(f"  {DIM}Wake districts → crack the Underworld at Clarity {E.UNDERWORLD_AT} → trace {g.threads_needed()} blue threads → expose the Owner.{R}")
     print(f"  {DIM}Lose if 2 districts are captured, everyone Falls, or round {E.MAX_ROUNDS} ends.{R}\n")
     pause("  (Enter to begin)")

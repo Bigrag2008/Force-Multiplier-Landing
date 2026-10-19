@@ -29,7 +29,7 @@ The **district colors** follow AfriCOBRA's Kool-Aid brights, each named for a fl
 |---|---|---|
 | Night base (backgrounds, the Machine) | After Hours | `#1B1530` |
 | Paper (cards, rulebook) | Church Program | `#F6EEDC` |
-| Accent, titles, Legend | Funk Gold | `#F2B632` |
+| Accent, titles, Props | Funk Gold | `#F2B632` |
 | Lending | Lime | `#3FA34D` |
 | Housing | Fruit Punch | `#E03C31` |
 | Labor | Blue Raspberry | `#1F7AE0` |
@@ -53,7 +53,7 @@ The **district colors** follow AfriCOBRA's Kool-Aid brights, each named for a fl
 | **Role cards** | **Church hand fans**, with a portrait on the front and a "sponsor" panel on the back | The back's ad space carries the role's gift. |
 | **Deal cards** | **Real paperwork:** leases, receipts, hospital bills, carbon-copy forms | Form numbers, a signature line ("X ________"); the second number really is in the fine print. |
 | **Trust tokens** | **Bottle caps** | The print kit has a cut-out sheet; the deluxe edition uses real caps. |
-| **Corruption tokens** | **Fake gold chains / casino chips** | Shiny on purpose. |
+| **Shady tokens** | **Fake gold chains / casino chips** | Shiny on purpose. |
 | **The Sou-Sou pot** | **A coffee can** | The hand goes around the table. |
 | **The Green Book** | **A small booklet card**, green cover | Honors *The Negro Motorist Green Book*. |
 | **The Cookout card** | **A paper plate** | Round card, foil-plate border. |

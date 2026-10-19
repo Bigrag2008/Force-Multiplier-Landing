@@ -51,7 +51,7 @@ def chapter_rules(c):
     y=para(c,x,y,CH3["intro"],"DVI",10.5,lead=14,col=K.GREY)-8
     secs=[
      ("Setup",f"Set up the base game as usual, with these changes. Swap the Housing and Lending deal decks for this envelope's "
-              f"era decks (the cards with “The Map” backs; print the backs on the reverse so era deals never mix into the base deck). Start Housing and Lending at Pressure 2: REDLINING is active "
+              f"era decks (the cards with “The Map” backs; print the backs on the reverse so era deals never mix into the base deck). Start Housing and Lending at Squeeze 2: REDLINING is active "
               f"from round 1. Slide the Appraiser face-down under the board as the Owner (skip the Owner shuffle). "
               f"Ignore the scenario deck. If the last chapter was lost, the community rallies: everyone starts with +1 Trust "
               f"and one free Commons action."),
@@ -147,7 +147,7 @@ def stickers(c):
     fill(c,K.GREY); c.setFont("DV",8.5)
     c.drawString(0.75*inch,PAGE_H-1.08*inch,"Print on sticker paper (or paper + tape). Awake at a chapter's end: heal a Scar, else add Rebuilt. Captured: add Scarred. Max 2 per district.")
     y=PAGE_H-1.6*inch
-    for label,col,sub,n in (("REBUILT",hx("3FA34D"),"starts at Clarity 1",20),("SCARRED",K.LAYER_COL[1],"starts at Pressure 1",20)):
+    for label,col,sub,n in (("REBUILT",hx("3FA34D"),"starts at Clarity 1",20),("SCARRED",K.LAYER_COL[1],"starts at Squeeze 1",20)):
         fill(c,K.INK); c.setFont("DVB",10); c.drawString(0.75*inch,y,f"{label} — {sub}"); y-=0.55*inch
         for k in range(n):
             cx=0.75*inch+0.42*inch+(k%10)*0.72*inch; cy=y-(k//10)*0.8*inch

@@ -8,7 +8,6 @@
 import { C, DISTRICTS, K, type Card, type Choice, type District, type PlaceKey } from "../engine/content";
 import { maxBy, minBy, type Game, type Player } from "../engine/engine";
 import type { Session } from "./session";
-import { say } from "./words";
 
 /**
  * What a shortcut costs, as far as the table can know. A hidden Owner can make it cost more
@@ -38,7 +37,7 @@ export interface Advice<P> {
 /** What the current player should do with their next action, and why. */
 export function adviseTurn(g: Game, p: Player, actionsLeft: number): Advice<TurnPick> {
   const act = g.active();
-  const placeWhy = (place: PlaceKey) => `${C.places[place].name}: ${say(C.places[place].bonus)}`;
+  const placeWhy = (place: PlaceKey) => `${C.places[place].name}: ${C.places[place].bonus}`;
   const commons = (place: PlaceKey, why: string): Advice<TurnPick> => ({
     pick: { k: "commons", place },
     title: `Gather at ${C.places[place].name}`,

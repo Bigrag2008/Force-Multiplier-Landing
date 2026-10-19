@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { C } from "../engine/content";
 import type { Mode, SessionConfig } from "../game/session";
-import { say } from "../game/words";
 import { RolePortrait } from "./art/RolePortrait";
 
 const ROLES = Object.keys(C.roles);
@@ -92,7 +91,7 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
               <option key={s} value={s} className="text-ink">{s}</option>
             ))}
           </select>
-          <p className="text-xs text-program/70">{scenario !== "random" ? say(C.scenarios[scenario]) : "A random scenario."} Start with The Audit or A Quiet Year.</p>
+          <p className="text-xs text-program/70">{scenario !== "random" ? C.scenarios[scenario] : "A random scenario."} Start with The Audit or A Quiet Year.</p>
         </div>
       )}
       {mode === "overlord" && (

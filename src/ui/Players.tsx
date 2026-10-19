@@ -1,7 +1,6 @@
 "use client";
 import { C, DISTRICTS, K } from "../engine/content";
 import type { Session } from "../game/session";
-import { say } from "../game/words";
 import { RolePortrait } from "./art/RolePortrait";
 import { Float, type Changes } from "./Board";
 import { Icon, Pips } from "./icons";
@@ -38,7 +37,7 @@ export function Players({ s, changes = null }: { s: Session; changes?: Changes }
                 </span>
               )}
             </div>
-            <div className="mt-1 text-[11px] text-program/70">{say(C.roles[p.role])}</div>
+            <div className="mt-1 text-[11px] text-program/70">{C.roles[p.role]}</div>
             <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
               <span className="inline-flex items-center gap-1" title="Trust: pays for negotiating and teaching">
                 <Icon name="trust" size={13} /> Trust <Pips value={p.trust} max={K.MAX_TRUST} color="#ff7a90" />

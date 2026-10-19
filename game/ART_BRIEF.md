@@ -4,7 +4,7 @@
 
 **The game:** a cooperative board game, played on a website and on paper, set on the West Side of Dayton, Ohio. Neighbors learn to read the hidden cost in predatory deals (payday loans, rent-to-own, "free" first months), teach each other, and expose the one Machine behind them. It should look like the block on its best day: proud, loud, funny, stylish, and nobody's fool.
 
-**What's there now:** flat vector placeholders drawn in code (the five district scenes, five role portraits and the four-panel story). They show the composition and palette; your art replaces them. Play the site to see them in place: choose **Learn to play**.
+**What's there now:** flat vector placeholders drawn in code (the five district scenes, five role portraits and the four-panel story). They show the composition and palette; your art replaces them. See them all at full size on the site's **/art** page, and in place by choosing **Learn to play**.
 
 ---
 
