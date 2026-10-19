@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { C } from "../engine/content";
 import type { Mode, SessionConfig } from "../game/session";
+import { say } from "../game/words";
+import { RolePortrait } from "./art/RolePortrait";
 
 const ROLES = Object.keys(C.roles);
 const DEFAULT_NAMES = C.roster.map((r) => r.name);
@@ -63,7 +65,8 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig) => void }) {
       <fieldset className="space-y-2">
         <legend className="font-bold">The crew</legend>
         {Array.from({ length: count }, (_, i) => (
-          <div key={i} className="grid grid-cols-2 gap-2">
+          <div key={i} className="grid grid-cols-[auto_1fr_1fr] items-center gap-2">
+            <RolePortrait role={roles[i]} size={34} />
             <input aria-label={`Player ${i + 1} name`} className={field} value={names[i]} onChange={(e) => setNames(names.map((n, j) => (j === i ? e.target.value : n)))} />
             <select aria-label={`Player ${i + 1} role`} className={field} value={roles[i]} onChange={(e) => setRoles(roles.map((r, j) => (j === i ? e.target.value : r)))}>
               {ROLES.map((r) => (
@@ -84,7 +87,7 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig) => void }) {
               <option key={s} value={s} className="text-ink">{s}</option>
             ))}
           </select>
-          <p className="text-xs text-program/70">{scenario !== "random" ? C.scenarios[scenario] : "A random scenario."} Start with The Audit or A Quiet Year.</p>
+          <p className="text-xs text-program/70">{scenario !== "random" ? say(C.scenarios[scenario]) : "A random scenario."} Start with The Audit or A Quiet Year.</p>
         </div>
       )}
       {mode === "overlord" && (

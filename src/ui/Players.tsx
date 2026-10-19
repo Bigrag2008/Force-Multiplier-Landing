@@ -1,6 +1,8 @@
 "use client";
 import { C, DISTRICTS, K } from "../engine/content";
 import type { Session } from "../game/session";
+import { say } from "../game/words";
+import { RolePortrait } from "./art/RolePortrait";
 import { Float, type Changes } from "./Board";
 import { Icon, Pips } from "./icons";
 import { DISTRICT_COLOR } from "./theme";
@@ -21,33 +23,36 @@ export function Players({ s, changes = null }: { s: Session; changes?: Changes }
         const ch = changes?.delta.players[p.name];
         return (
           <div key={p.name} className={`relative rounded-xl border p-3 ${current ? "border-gold bg-gold/10" : "border-white/15 bg-white/5"}`}>
-            <div className="flex items-baseline justify-between">
-              <div>
-                <span className="font-black">{p.name}</span> <span className="text-xs text-program/70">the {p.role}</span>
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <RolePortrait role={p.role} size={40} title={`${p.name}, the ${p.role}`} />
+                <div>
+                  <span className="font-black">{p.name}</span> <span className="text-xs text-program/70">the {p.role}</span>
+                </div>
               </div>
               {p.flipped ? (
                 <span className="text-xs font-black text-[#ff8a8a]">FALLEN</span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-xs text-gold" title="Legend: earned by lifting people">
+                <span className="inline-flex items-center gap-1 text-xs text-gold" title="Props: earned by lifting people">
                   <Icon name="legend" size={13} /> {p.legend}
                 </span>
               )}
             </div>
-            <div className="mt-1 text-[11px] text-program/70">{C.roles[p.role]}</div>
+            <div className="mt-1 text-[11px] text-program/70">{say(C.roles[p.role])}</div>
             <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
               <span className="inline-flex items-center gap-1" title="Trust: pays for negotiating and teaching">
                 <Icon name="trust" size={13} /> Trust <Pips value={p.trust} max={K.MAX_TRUST} color="#ff7a90" />
               </span>
-              <span className="inline-flex items-center gap-1" title={`Corruption: at ${K.FLIP} you Fall`}>
-                <Icon name="corruption" size={13} /> Corruption <Pips value={p.corruption} max={K.FLIP} color="#b07cff" danger={K.FLIP} />
+              <span className="inline-flex items-center gap-1" title={`Shady: at ${K.FLIP} you Fall`}>
+                <Icon name="corruption" size={13} /> Shady <Pips value={p.corruption} max={K.FLIP} color="#b07cff" danger={K.FLIP} />
               </span>
               {p.role === "Veteran" && <span>Shields {p.shields}</span>}
               {p.role === "Elder" && <span>History {p.elderUsed ? "told" : "ready"}</span>}
             </div>
-            <div className="mt-2 flex items-center gap-1" aria-label="Sight by district">
-              <Icon name="sight" size={14} title="Sight: how well you read each district" />
+            <div className="mt-2 flex items-center gap-1" aria-label="Read by district">
+              <Icon name="sight" size={14} title="Read: how well you read each district" />
               {DISTRICTS.map((d) => (
-                <div key={d} title={`${d}: Sight ${p.sight[d]}`} className="relative flex-1 rounded px-1 py-0.5 text-center text-[10px] font-bold text-white" style={{ background: DISTRICT_COLOR[d], opacity: p.sight[d] ? 1 : 0.35 }}>
+                <div key={d} title={`${d}: Read ${p.sight[d]}`} className="relative flex-1 rounded px-1 py-0.5 text-center text-[10px] font-bold text-white" style={{ background: DISTRICT_COLOR[d], opacity: p.sight[d] ? 1 : 0.35 }}>
                   {d.slice(0, 3)} {p.sight[d]}
                   {ch?.sight?.[d] ? <Float key={changes!.id} id={changes!.id} n={ch.sight[d]!} icon="sight" className="absolute -top-4 left-1/2 -translate-x-1/2" /> : null}
                 </div>

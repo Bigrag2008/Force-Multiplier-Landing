@@ -2,6 +2,7 @@
 import { useCallback, useState } from "react";
 import { C, K } from "../engine/content";
 import type { SessionConfig } from "../game/session";
+import { say } from "../game/words";
 import { CookoutPanel, MachinePanel, MachineReport, SousouPanel, TurnPanel } from "./ActionPanel";
 import { Board } from "./Board";
 import { EndScreen } from "./EndScreen";
@@ -69,9 +70,9 @@ export function GameScreen({ config, onQuit, story = "first-time" }: { config: S
 
       {intro && g.round === 1 && s.phase !== "over" && (
         <aside className="rounded-xl border border-gold/40 bg-black/25 p-3 text-sm">
-          <b className="text-gold">The Long Ledger · Chapter {intro.number}: {intro.title} ({intro.era}).</b> {intro.intro}
-          <p className="mt-1"><b>The twist:</b> {intro.twist}</p>
-          {intro.league && <p className="mt-1"><b>{intro.league.name}:</b> {intro.league.text}</p>}
+          <b className="text-gold">The Long Ledger · Chapter {intro.number}: {intro.title} ({intro.era}).</b> {say(intro.intro)}
+          <p className="mt-1"><b>The twist:</b> {say(intro.twist)}</p>
+          {intro.league && <p className="mt-1"><b>{intro.league.name}:</b> {say(intro.league.text)}</p>}
         </aside>
       )}
 
