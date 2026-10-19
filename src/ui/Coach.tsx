@@ -1,6 +1,7 @@
 "use client";
 import { lessonsDue } from "../game/coach";
 import type { Session } from "../game/session";
+import { DealAnatomy, StatKey } from "./DealAnatomy";
 
 type Run = (fn: (s: Session) => void) => void;
 
@@ -33,6 +34,8 @@ export function CoachBox({ s, run, view = "board", sight = 0, advice }: { s: Ses
           <p className="text-[11px] font-black uppercase tracking-widest text-[#7CFFB2]">Coach · new rule</p>
           <p className="font-black">{lesson.title}</p>
           <p className="mt-1 text-program/90">{lesson.body}</p>
+          {lesson.id === "turn" && <StatKey />}
+          {(lesson.id === "glasses" || lesson.id === "blind") && <DealAnatomy />}
           <button className="mt-2 rounded-md bg-[#7CFFB2] px-3 py-1 text-xs font-black text-night" onClick={() => run((x) => x.seenLessons.add(lesson.id))}>
             Got it
           </button>

@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import { C, type Card, type District } from "../engine/content";
+import { DealAnatomy } from "./DealAnatomy";
 import { DISTRICT_COLOR, LAYER_COLOR, LAYER_LABEL, LEVER_WORD, titleCase } from "./theme";
 
 const LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$%";
@@ -52,6 +53,7 @@ export interface DealCardProps {
 export function DealCard({ card, district, sight, effectiveLever, formId }: DealCardProps) {
   const [lensY, setLensY] = useState(110);
   const [glassesOn, setGlassesOn] = useState(false);
+  const [explain, setExplain] = useState(false);
   const area = useRef<HTMLDivElement>(null);
   const drag = useRef<number | null>(null);
   const color = DISTRICT_COLOR[district];
@@ -149,6 +151,10 @@ export function DealCard({ card, district, sight, effectiveLever, formId }: Deal
       ) : (
         <p className="mt-2 text-xs text-program/80">Sight 0 in {titleCase(district)}: you can only see the pitch. Most deals are traps.</p>
       )}
+      <button className="mt-1 text-xs font-semibold text-[#7CFFB2] underline" aria-expanded={explain} onClick={() => setExplain((v) => !v)}>
+        {explain ? "Hide the card guide" : "What's on this card?"}
+      </button>
+      {explain && <DealAnatomy />}
     </div>
   );
 }

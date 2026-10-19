@@ -10,7 +10,7 @@ import { Players } from "./Players";
 import { useSession } from "./useSession";
 
 export function GameScreen({ config, onQuit }: { config: SessionConfig; onQuit: () => void }) {
-  const { session: s, run, version } = useSession(config);
+  const { session: s, run, version, changes } = useSession(config);
   const [showHistory, setShowHistory] = useState(false);
   const g = s.g;
   const panelKey = `${s.phase}-${s.seat}-${g.round}-${s.actionsLeft}-${s.movesLeft}`;
@@ -53,8 +53,8 @@ export function GameScreen({ config, onQuit }: { config: SessionConfig; onQuit: 
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_420px]">
         <div className="space-y-4">
-          <Board s={s} />
-          <Players s={s} />
+          <Board s={s} changes={changes} />
+          <Players s={s} changes={changes} />
         </div>
         {/* on phones the actions come first; on wide screens they sit beside the board */}
         <div className="order-first space-y-4 lg:order-none">
