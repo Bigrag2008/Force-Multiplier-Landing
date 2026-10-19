@@ -35,7 +35,8 @@ To run the production build instead: `npm run build && npm start`.
 5. **Take turns on one device.** The action panel shows whose turn it is and what they can do. Pass the device on when your turn ends.
 6. **Read deals with the glasses.** When you face a deal, drag Grandma's red reading glasses over the card to read the layers your Sight has unlocked, or press **Put glasses on**. Layers you haven't unlocked stay locked. **What's on this card?** under any deal shows a labeled card: what each layer means and how to beat a trap.
 7. **Between turns** the game asks the table about the **Sou-Sou** and, at the start of a round, the **Cookout**, then shows what the Machine did.
-8. **The Green Book** opens automatically when a strike would capture a district. Untick the box at the top if you'd rather save it.
+8. **Stop any time.** The game saves itself in this browser after every move. Close the tab, and **Continue your game** on the home page (or **Play now**) picks up exactly where you left off, deal card and all. One saved game per device; it clears when the game ends.
+9. **The Green Book** opens automatically when a strike would capture a district. Untick the box at the top if you'd rather save it.
 
 **How to play** on the home page has the short rules; [`game/RULES.md`](game/RULES.md) has the full rulebook. Prefer paper? Print [`game/The_Second_Number_PRINT_AND_PLAY.pdf`](game/The_Second_Number_PRINT_AND_PLAY.pdf).
 
@@ -63,6 +64,7 @@ The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of tr
 | `app/` | Website pages: home, `/play`, `/learn` (the guided game; `?seed=` replays one), `/how-to-play`. |
 | `src/engine/` | The rules engine (TypeScript port), its content types and the shared RNG. |
 | `src/game/session.ts` | The round-by-round flow: who acts next, and what the table is asked. |
+| `src/game/moves.ts`, `save.ts` | Every change to a game as a move; a game is its seed plus its moves, which is what a save holds. |
 | `src/game/coach.ts` | The Coach: the recommended move with its reason, and the lessons, all read-only. |
 | `src/ui/` | The board, players, deal card and lens, action panels, the Coach box, the story comic, end screen. |
 | `src/ui/art/` | The drawn district scenes and role portraits, and `manifest.ts`, where commissioned art drops in (brief: [`game/ART_BRIEF.md`](game/ART_BRIEF.md)). |

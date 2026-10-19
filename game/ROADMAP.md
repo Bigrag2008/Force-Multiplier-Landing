@@ -87,7 +87,8 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 - [x] **25b. The story in four panels** before round 1: the block, the deals (the glasses find the real fee), the Machine (one hidden Owner behind the gears), your mission. Drawn inline in the West Dayton palette; replay it from **Story**.
 - [x] **25a. From that playtest:** the shortcut made tempting (the Coach lays TAKE and its true cost beside its pick on every trap), plain names on the website (Read, Shady, Squeeze, Props), and drawn art: five district scenes and five role portraits as church fans, with [ART_BRIEF.md](ART_BRIEF.md) for commissioning the finished art (it drops in through `src/ui/art/manifest.ts`).
 - [ ] **26. Online multiplayer:** rooms, each player on their own phone (needs a realtime service).
-- [ ] **27. Save and resume, illustrations.**
+- [x] **27a. Save and continue:** every change is a move, a game is its seed plus its moves, and the browser keeps the game after every move.
+- [ ] **27. Finished illustrations** (see ART_BRIEF.md).
 
 ---
 
