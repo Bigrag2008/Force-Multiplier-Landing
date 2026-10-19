@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { C } from "@/engine/content";
+import { ContinueLink } from "@/ui/ContinueCard";
 
 export default function Home() {
   const colors = Object.values(C.districtColors);
@@ -19,6 +20,7 @@ export default function Home() {
         light. Set on the West Side of Dayton, Ohio.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
+        <ContinueLink />
         <Link href="/play" className="rounded-xl bg-gold px-6 py-3 text-lg font-black text-night hover:brightness-110">
           Play now
         </Link>

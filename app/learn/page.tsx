@@ -17,5 +17,5 @@ export default function LearnPage() {
     setConfig({ ...LEARN, seed }); // eslint-disable-line react-hooks/set-state-in-effect
   }, []);
   if (!config) return <p className="p-8 text-center text-program/70">Setting the table…</p>;
-  return <GameScreen config={config} story="always" onQuit={() => router.push("/play")} />;
+  return <GameScreen start={{ config }} story="always" onQuit={() => router.push("/play")} />;
 }

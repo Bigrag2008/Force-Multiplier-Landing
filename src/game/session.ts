@@ -3,8 +3,9 @@
  * passed around the table). It mirrors second_number_play.py's Table class, but as a
  * state machine the UI can step through, waiting for a person at every decision.
  */
-import { K, type District } from "../engine/content";
+import { K, type Card, type District } from "../engine/content";
 import { newGame, type Action, type Game, type Player } from "../engine/engine";
+import { fromWire, type Move } from "./moves";
 
 export type Mode = "coop" | "overlord" | "chapter";
 export type Phase =
@@ -26,8 +27,14 @@ export interface SessionConfig {
   coach?: boolean;
 }
 
+/** a card drawn and waiting on the current player: kept in the session, so a reload can't redraw it */
+export type Pending = { k: "deal"; d: District; cards: Card[] } | { k: "teach"; to: string; d: District; card: Card } | null;
+
 export class Session {
   g: Game;
+  /** every move so far: with the config, the whole game (see moves.ts) */
+  moves: Move[] = [];
+  pending: Pending = null;
   phase: Phase = "turn";
   /** index into g.players of whose turn it is */
   seat = 0;
@@ -44,6 +51,8 @@ export class Session {
   seenLessons = new Set<string>();
 
   constructor(public config: SessionConfig) {
+    // fix the seed now, so a save or another phone can rebuild this exact game
+    if (config.seed === undefined) this.config = config = { ...config, seed: Math.floor(Math.random() * 2 ** 31) };
     this.g = newGame({
       overlord: config.mode === "overlord",
       chapter: config.mode === "chapter" ? "THE_MAP" : undefined,
@@ -55,6 +64,56 @@ export class Session {
     this.coach = !!config.coach;
     this.g.useGreenBook = () => this.autoGreenBook;
     this.startRound();
+  }
+
+  /** rebuild a game from its config and moves */
+  static replay(config: SessionConfig, moves: Move[]) {
+    const s = new Session(config);
+    for (const m of moves) if (!s.apply(m)) throw new Error(`Move ${s.moves.length + 1} doesn't fit this game: ${JSON.stringify(m)}`);
+    return s;
+  }
+
+  /** Is this move allowed right now? (online, every phone's move is checked by the host) */
+  allowed(m: Move): boolean {
+    switch (m.t) {
+      case "cookout": return this.phase === "cookout";
+      case "end": return this.phase === "turn";
+      case "act": {
+        if (this.phase !== "turn") return false;
+        const pd = this.pending;
+        if (!pd) return true;
+        // with a card drawn, the only move is the one that card is for
+        if (pd.k === "deal") return m.a.k === "face" && m.a.d === pd.d && !!m.a.card && pd.cards.includes(this.g.deck[m.a.card.d][m.a.card.i]);
+        return m.a.k === "teach" && m.a.t === pd.to && m.a.d === pd.d;
+      }
+      case "deal": return this.phase === "turn" && this.pending === null;
+      case "teachCard": return this.phase === "turn" && this.pending === null && this.g.players.some((p) => p.name === m.to);
+      case "fallen": return this.phase === "fallen";
+      case "sousou": return this.phase === "sousou";
+      case "overlord": return this.phase === "overlord";
+      case "next": return this.phase === "machine";
+      case "greenbook": return this.phase !== "over";
+    }
+  }
+
+  /** make a move and record it; false (and nothing changes) if it isn't allowed now */
+  apply(m: Move): boolean {
+    if (!this.allowed(m)) return false;
+    const g = this.g;
+    switch (m.t) {
+      case "cookout": this.cookout(m.call, m.picks); break;
+      case "act": this.pending = null; this.act(fromWire(g, m.a)); break;
+      case "end": this.pending = null; this.endTurn(); break;
+      case "deal": this.pending = { k: "deal", d: m.d, cards: g.dealsFor(this.player, m.d) }; break;
+      case "teachCard": this.pending = { k: "teach", to: m.to, d: m.d, card: g.draw(m.d) }; break;
+      case "fallen": this.fallenAct(fromWire(g, m.a)); break;
+      case "sousou": this.sousou(m.hand, m.d); break;
+      case "overlord": this.overlordAct(fromWire(g, m.a)); break;
+      case "next": this.nextRound(); break;
+      case "greenbook": this.autoGreenBook = m.on; break;
+    }
+    this.moves.push(m);
+    return true;
   }
 
   get player(): Player {
