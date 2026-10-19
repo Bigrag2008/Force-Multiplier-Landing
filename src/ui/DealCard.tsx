@@ -46,7 +46,7 @@ export interface DealCardProps {
 }
 
 /**
- * A deal as paperwork. Layers the player's Sight unlocks are printed in decoder ink;
+ * A deal as paperwork. Layers the player's Read unlocks are printed in decoder ink;
  * locked layers carry no text at all. Drag Grandma's reading glasses over the card
  * (or put them on with the button) to read the second number.
  */
@@ -102,7 +102,7 @@ export function DealCard({ card, district, sight, effectiveLever, formId }: Deal
             <section key={n}>
               <h4 className="mb-0.5 flex items-center gap-1.5 text-[10px] font-black uppercase">
                 <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: LAYER_COLOR[n] }} />
-                Sight {n} · {LAYER_LABEL[n]}
+                Read {n} · {LAYER_LABEL[n]}
               </h4>
               {sight >= n ? (
                 <>
@@ -111,7 +111,7 @@ export function DealCard({ card, district, sight, effectiveLever, formId }: Deal
                 </>
               ) : (
                 <div className="flex min-h-[64px] items-center justify-center rounded-sm border border-dashed border-black/25 text-[12px] text-black/55">
-                  🔒 Locked: needs Sight {n} in {titleCase(district)}
+                  🔒 Locked: needs Read {n} in {titleCase(district)}
                 </div>
               )}
             </section>
@@ -149,7 +149,7 @@ export function DealCard({ card, district, sight, effectiveLever, formId }: Deal
           </button>
         </div>
       ) : (
-        <p className="mt-2 text-xs text-program/80">Sight 0 in {titleCase(district)}: you can only see the pitch. Most deals are traps.</p>
+        <p className="mt-2 text-xs text-program/80">Read 0 in {titleCase(district)}: you can only see the pitch. Most deals are traps.</p>
       )}
       <button className="mt-1 text-xs font-semibold text-[#7CFFB2] underline" aria-expanded={explain} onClick={() => setExplain((v) => !v)}>
         {explain ? "Hide the card guide" : "What's on this card?"}

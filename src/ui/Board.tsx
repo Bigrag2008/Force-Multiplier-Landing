@@ -2,6 +2,7 @@
 import type { ReactNode } from "react";
 import { C, DISTRICTS, K, type District } from "../engine/content";
 import type { Session } from "../game/session";
+import { say } from "../game/words";
 import { signed, type Delta } from "./changes";
 import { Icon, Pips, type IconName } from "./icons";
 import { DISTRICT_COLOR, titleCase } from "./theme";
@@ -73,7 +74,7 @@ function DistrictBlock({ s, d, highlight, changes }: { s: Session; d: District; 
       </div>
       <div className="space-y-2 p-2">
         <Track value={c} max={K.WAKE} color={DISTRICT_COLOR[d]} name="Clarity" label={<><Icon name="clarity" size={12} color={DISTRICT_COLOR[d]} /> Clarity</>} end="3 = awake" />
-        <Track value={p} max={K.CAPTURE} color="#E63946" name="Pressure" label={<><Icon name="pressure" size={12} /> Pressure</>} end="3 = captured" />
+        <Track value={p} max={K.CAPTURE} color="#E63946" name="Squeeze" label={<><Icon name="pressure" size={12} /> Squeeze</>} end="3 = captured" />
         <div className="flex items-center justify-between text-[11px]">
           <span className="font-black" style={{ color: status?.c }}>{status?.t ?? " "}</span>
           {g.threads.has(d) ? <span className="font-bold text-[#2F8FD8]">🔵 thread</span> : null}
@@ -98,7 +99,7 @@ export function Board({ s, highlight, changes = null }: { s: Session; highlight?
       {patterns.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {patterns.map((p) => (
-            <span key={p.name} title={p.lesson} className="rounded-full bg-[#8b1e1e] px-3 py-1 text-xs font-bold text-white">
+            <span key={p.name} title={say(p.lesson)} className="rounded-full bg-[#8b1e1e] px-3 py-1 text-xs font-bold text-white">
               ⚠ {p.name} · {p.combo.map(titleCase).join(" + ")}
             </span>
           ))}
@@ -119,7 +120,7 @@ export function Board({ s, highlight, changes = null }: { s: Session; highlight?
           {g.hasLeague() && (
             <div>
               <span className="font-bold text-gold">The League:</span>{" "}
-              {g.leagueFormed ? "formed: Housing −1 every 2nd round; Housing & Lending traps beatable at Sight 1" : `${g.league.size}/${g.leagueNeeded()} signed this round`}
+              {g.leagueFormed ? "formed: Housing −1 every 2nd round; Housing & Lending traps beatable at Read 1" : `${g.league.size}/${g.leagueNeeded()} signed this round`}
             </div>
           )}
         </div>
@@ -165,7 +166,7 @@ function GoalTrack({ s, changes }: { s: Session; changes: Changes }) {
       state: won || (g.uwOpen && threads >= need) ? "done" : g.uwOpen ? "now" : "next",
       body: (
         <>
-          <Pips value={threads} max={need} color="#2F8FD8" /> <span className="ml-1">Sight 3 in an awake district</span>
+          <Pips value={threads} max={need} color="#2F8FD8" /> <span className="ml-1">Read 3 in an awake district</span>
         </>
       ),
     },

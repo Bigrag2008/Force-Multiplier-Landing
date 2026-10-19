@@ -9,9 +9,9 @@ const Num = ({ n }: { n: number }) => (
 
 const PARTS: { n: number; title: string; body: string; color?: string }[] = [
   { n: 1, title: "The pitch", body: "What they tell you. Everyone can read it, and it always sounds good." },
-  { n: 2, title: "Red · the cost (Sight 1)", body: "The real price, and the verdict: TRAP or HONEST. A trap also names its lever: red, amber or blue.", color: LAYER_COLOR[1] },
-  { n: 3, title: "Amber · the clock (Sight 2)", body: "When it comes due, and how it grows.", color: LAYER_COLOR[2] },
-  { n: 4, title: "Blue · the connection (Sight 3)", body: "Who's really behind it. Reading blue lets you trace a thread once the Underworld opens.", color: LAYER_COLOR[3] },
+  { n: 2, title: "Red · the cost (Read 1)", body: "The real price, and the verdict: TRAP or HONEST. A trap also names its lever: red, amber or blue.", color: LAYER_COLOR[1] },
+  { n: 3, title: "Amber · the clock (Read 2)", body: "When it comes due, and how it grows.", color: LAYER_COLOR[2] },
+  { n: 4, title: "Blue · the connection (Read 3)", body: "Who's really behind it. Reading blue lets you trace a thread once the Underworld opens.", color: LAYER_COLOR[3] },
   { n: 5, title: "The red glasses", body: "Layers you can read are printed in hidden ink. Drag the glasses over them, or press Put glasses on." },
 ];
 
@@ -50,10 +50,10 @@ export function DealAnatomy() {
         </ol>
       </div>
       <figcaption className="mt-2 rounded-md border border-gold/40 bg-night/60 p-2 text-[12px] leading-snug">
-        <b className="text-gold">Beating a trap:</b> NEGOTIATE works when your <Icon name="sight" size={12} /> Sight reaches the trap&apos;s lever:{" "}
+        <b className="text-gold">Beating a trap:</b> NEGOTIATE works when your <Icon name="sight" size={12} /> Read reaches the trap&apos;s lever:{" "}
         {[1, 2, 3].map((n) => (
           <span key={n} className="mx-0.5 inline-flex items-center gap-0.5 whitespace-nowrap rounded px-1 font-bold text-white" style={{ background: LAYER_COLOR[n] }}>
-            {["red", "amber", "blue"][n - 1]} = Sight {n}
+            {["red", "amber", "blue"][n - 1]} = Read {n}
           </span>
         ))}
         . It costs {K.NEG_COST} <Icon name="trust" size={12} /> Trust. Below the lever you get played, so WALK instead.
@@ -65,12 +65,12 @@ export function DealAnatomy() {
 /** What each icon means, for the first turn. */
 export function StatKey() {
   const rows: [Parameters<typeof Icon>[0]["name"], string, string][] = [
-    ["sight", "Sight", "how well you read a district (0–3)"],
+    ["sight", "Read", "how well you read a district (0–3)"],
     ["trust", "Trust", "spend it to negotiate and teach"],
-    ["corruption", "Corruption", `shortcuts add it; at ${K.FLIP} you Fall`],
-    ["legend", "Legend", "earned by lifting people up"],
+    ["corruption", "Shady", `shortcuts add it; at ${K.FLIP} you Fall`],
+    ["legend", "Props", "earned by lifting people up"],
     ["clarity", "Clarity", `a district wakes at ${K.WAKE}`],
-    ["pressure", "Pressure", `the Machine's grip; ${K.CAPTURE} = captured`],
+    ["pressure", "Squeeze", `the Machine's grip; ${K.CAPTURE} = captured`],
   ];
   return (
     <ul className="mt-2 grid gap-1 rounded-lg bg-black/20 p-2 text-[12px] sm:grid-cols-2">

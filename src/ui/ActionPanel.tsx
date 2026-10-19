@@ -4,6 +4,7 @@ import { C, DISTRICTS, K, type Card, type Choice, type District, type PlaceKey }
 import { maxBy, type Action, type Player } from "../engine/engine";
 import { adviseCookout, adviseDeal, adviseSousou, adviseTurn } from "../game/coach";
 import type { Session } from "../game/session";
+import { say } from "../game/words";
 import { CoachBadge, CoachBox, picked, safe, ShortcutBadge } from "./Coach";
 import { Icon, type IconName } from "./icons";
 import { DealCard } from "./DealCard";
@@ -76,7 +77,7 @@ export function TurnPanel({ s, run, onHistory }: { s: Session; run: Run; onHisto
         <DistrictButtons
           best={pick?.k === f ? pick.d : undefined}
           disabled={(d) => (f === "study" ? p.sight[d] >= 3 : f === "trace" ? !g.canTrace(p, d) : false)}
-          note={(d) => (f === "history" ? `wakes ${titleCase(d)}` : `your Sight ${p.sight[d]}`)}
+          note={(d) => (f === "history" ? `wakes ${titleCase(d)}` : `your Read ${p.sight[d]}`)}
           onPick={(d) => {
             if (f === "study") act({ k: "study", d });
             else if (f === "trace") act({ k: "trace", d });
@@ -129,13 +130,13 @@ export function TurnPanel({ s, run, onHistory }: { s: Session; run: Run; onHisto
       </button>
     );
     return (
-      <Panel key={pending.k} title={`${p.name} faces a deal in ${titleCase(d)}`} sub="Read what your Sight allows, then decide.">
+      <Panel key={pending.k} title={`${p.name} faces a deal in ${titleCase(d)}`} sub="Read what you can, then decide.">
         <CoachBox s={s} run={run} view="deal" sight={p.sight[d]} advice={deal} />
         <DealCard card={card} district={d} sight={p.sight[d]} effectiveLever={g.lever(d, card)} formId={formId(s, d, card)} />
         <div className="grid gap-2 sm:grid-cols-3">
           {choice("TAKE", "accept it")}
           {choice("WALK", "refuse it")}
-          {choice("NEGOTIATE", `${cost} Trust · beats a trap if Sight ≥ lever`)}
+          {choice("NEGOTIATE", `${cost} Trust · beats a trap if Read ≥ lever`)}
         </div>
       </Panel>
     );
@@ -185,7 +186,7 @@ export function TurnPanel({ s, run, onHistory }: { s: Session; run: Run; onHisto
         </blockquote>
         <div className="grid gap-2 sm:grid-cols-2">
           <button className={primary + picked(s.coach)} onClick={() => act({ k: "teach", t, d, response: true })}>
-            <span>{t.name} said it back (+1 Legend each)</span>
+            <span>{t.name} said it back (+1 Props each)</span>
             {s.coach && <CoachBadge />}
           </button>
           <button className={ghost} onClick={() => act({ k: "teach", t, d, response: false })}>
@@ -199,7 +200,7 @@ export function TurnPanel({ s, run, onHistory }: { s: Session; run: Run; onHisto
   if (pending.k === "commons") {
     const best = pick?.k === "commons" ? pick.place : s.coach ? g.botPlace(p) : null;
     return (
-      <Panel key={pending.k} title="Gather where?" sub="Every place: +2 Trust, −1 Corruption, plus its bonus.">
+      <Panel key={pending.k} title="Gather where?" sub="Every place: +2 Trust, −1 Shady, plus its bonus.">
         <CoachBox s={s} run={run} advice={pick?.k === "commons" ? tip : null} />
         <div className="grid gap-2">
           {(Object.keys(C.places) as PlaceKey[]).map((key) => {
@@ -208,7 +209,7 @@ export function TurnPanel({ s, run, onHistory }: { s: Session; run: Run; onHisto
             return (
               <button key={key} className={`${ghost} text-left${picked(key === best && !used)}`} disabled={used} onClick={() => act({ k: "commons", place: key })}>
                 <span className="block">{P.name} <span className="text-xs font-normal text-program/70">· {P.where}</span></span>
-                <span className="block text-xs font-normal text-gold">{used ? "Grandma already fed the block this game." : P.bonus}</span>
+                <span className="block text-xs font-normal text-gold">{used ? "Grandma already fed the block this game." : say(P.bonus)}</span>
                 {key === best && !used && <CoachBadge />}
               </button>
             );
@@ -221,7 +222,7 @@ export function TurnPanel({ s, run, onHistory }: { s: Session; run: Run; onHisto
 
   if (pending.k === "reach")
     return (
-      <Panel key={pending.k} title="Reach a Fallen friend" sub="Costs 2 Trust. They come home at Corruption 4.">
+      <Panel key={pending.k} title="Reach a Fallen friend" sub="Costs 2 Trust. They come home at Shady 4.">
         {g.blk().filter((x) => x.flipped).map((t) => (
           <button key={t.name} className={primary + picked(pick?.k === "reach" && pick.t === t.name)} onClick={() => act({ k: "reach", t })}>
             <span>Reach {t.name}</span>
@@ -235,13 +236,13 @@ export function TurnPanel({ s, run, onHistory }: { s: Session; run: Run; onHisto
   // ---- the menu ----
   const fallen = g.blk().filter((x) => x.flipped);
   const options: { kind: string; icon: IconName; label: string; hint: string; on: () => void; show?: boolean; disabled?: boolean; gold?: boolean }[] = [
-    { kind: "study", icon: "sight", label: "Study", hint: "+1 Sight in a district" + (p.practice ? " (+2 now)" : ""), on: () => setPending({ k: "pick", for: "study" }) },
+    { kind: "study", icon: "sight", label: "Study", hint: "+1 Read in a district" + (p.practice ? " (+2 now)" : ""), on: () => setPending({ k: "pick", for: "study" }) },
     { kind: "face", icon: "deal", label: "Face a deal", hint: p.shopAround ? "draw 2, face 1" : "read it, then TAKE / WALK / NEGOTIATE", on: () => setPending({ k: "pick", for: "face" }) },
     { kind: "teach", icon: "teach", label: "Teach", hint: p.role === "Translator" || p.freeTeach ? "free" : "1 Trust", on: () => setPending({ k: "teachWho" }), disabled: !others.length },
     { kind: "commons", icon: "commons", label: "Commons", hint: "gather on the West Side", on: () => setPending({ k: "commons" }) },
     { kind: "reach", icon: "reach", label: "Reach", hint: "2 Trust: bring a Fallen friend home", on: () => setPending({ k: "reach" }), show: fallen.length > 0, disabled: p.trust < 2 },
     { kind: "history", icon: "history", label: "Teach the History", hint: "Elder, once: wake a district", on: () => setPending({ k: "pick", for: "history" }), show: p.role === "Elder" && !p.elderUsed },
-    { kind: "trace", icon: "clue", label: "Trace a thread", hint: "Sight 3 in an awake district", on: () => setPending({ k: "pick", for: "trace" }), show: g.uwOpen, disabled: !DISTRICTS.some((d) => g.canTrace(p, d)) },
+    { kind: "trace", icon: "clue", label: "Trace a thread", hint: "Read 3 in an awake district", on: () => setPending({ k: "pick", for: "trace" }), show: g.uwOpen, disabled: !DISTRICTS.some((d) => g.canTrace(p, d)) },
     { kind: "league", icon: "league", label: "Sign the League pledge", hint: `${g.league.size}/${g.leagueNeeded()} this round`, on: () => act({ k: "league" }), show: g.hasLeague() && !g.leagueFormed && !g.league.has(p.name) },
     { kind: "expose_uw", icon: "expose", label: "EXPOSE THE UNDERWORLD", hint: "you win", on: () => act({ k: "expose_uw" }), show: g.canExpose(), gold: true },
   ];
@@ -251,7 +252,7 @@ export function TurnPanel({ s, run, onHistory }: { s: Session; run: Run; onHisto
       title={`${p.name}'s turn`}
       sub={
         <>
-          The {p.role}: {C.roles[p.role]} · <b>{s.actionsLeft}</b> action{s.actionsLeft === 1 ? "" : "s"} left
+          The {p.role}: {say(C.roles[p.role])} · <b>{s.actionsLeft}</b> action{s.actionsLeft === 1 ? "" : "s"} left
         </>
       }
     >
@@ -291,7 +292,7 @@ export function MachinePanel({ s, run, who }: { s: Session; run: Run; who: "fall
       {who === "fallen" && <CoachBox s={s} run={run} />}
       {mode === null && (
         <div key="menu" className="grid gap-2 sm:grid-cols-2">
-          <button className={ghost} onClick={() => setMode("m_extract")}>Extract <span className="block text-xs font-normal">+1 Pressure</span></button>
+          <button className={ghost} onClick={() => setMode("m_extract")}>Extract <span className="block text-xs font-normal">+1 Squeeze</span></button>
           <button className={ghost} onClick={() => setMode("m_obscure")}>Obscure <span className="block text-xs font-normal">−1 Clarity</span></button>
           <button className={ghost} onClick={() => setMode("m_tempt")}>Tempt <span className="block text-xs font-normal">−1 Trust</span></button>
           <button className={ghost} onClick={() => go(g.machineAiMove(g.struck))}>Let the Machine choose</button>
@@ -323,7 +324,7 @@ export function CookoutPanel({ s, run }: { s: Session; run: Run }) {
   const [picks, setPicks] = useState<Record<string, District>>(() => Object.fromEntries(g.active().map((p) => [p.name, g.cookoutGain(p)[0]])));
   const tip = s.coach ? safe(() => adviseCookout(g)) : null;
   return (
-    <Panel title={`Round ${g.round}: call the Cookout?`} sub="Once per game. Nobody takes actions this round. Everyone gets +2 Trust, −1 Corruption, +1 Legend, and catches up to the best reader at the table in one district. The Machine still moves.">
+    <Panel title={`Round ${g.round}: call the Cookout?`} sub="Once per game. Nobody takes actions this round. Everyone gets +2 Trust, −1 Shady, +1 Props, and catches up to the best reader at the table in one district. The Machine still moves.">
       <CoachBox s={s} run={run} advice={tip} />
       <div className="space-y-2">
         {g.active().map((p) => (
@@ -360,7 +361,7 @@ export function SousouPanel({ s, run }: { s: Session; run: Run }) {
   const [d, setD] = useState<District>(() => DISTRICTS.reduce((a, x) => (g.pressure[x] > g.pressure[a] ? x : a), DISTRICTS[0]));
   const tip = s.coach ? safe(() => adviseSousou(s)) : null;
   return (
-    <Panel title="The Sou-Sou" sub={`Everyone with Trust puts 1 in the can (${payers} would). At ${K.SOUSOU_HAND}, the next player's hand clears 2 Pressure: no Corruption.`}>
+    <Panel title="The Sou-Sou" sub={`Everyone with Trust puts 1 in the can (${payers} would). At ${K.SOUSOU_HAND}, the next player's hand clears 2 Squeeze: no Shady.`}>
       <CoachBox s={s} run={run} advice={tip} />
       <p className="text-sm">
         Pot {g.pot}/{K.SOUSOU_HAND} · next hand: <b>{g.nextHand()?.name}</b>
@@ -372,7 +373,7 @@ export function SousouPanel({ s, run }: { s: Session; run: Run }) {
           <select className="rounded bg-white/10 px-2 py-1" value={d} onChange={(e) => setD(e.target.value as District)}>
             {DISTRICTS.map((x) => (
               <option key={x} value={x} className="text-ink">
-                {titleCase(x)} (Pressure {g.pressure[x]})
+                {titleCase(x)} (Squeeze {g.pressure[x]})
               </option>
             ))}
           </select>
@@ -400,7 +401,7 @@ export function MachineReport({ s, run }: { s: Session; run: Run }) {
       <ul className="max-h-60 space-y-1 overflow-y-auto text-sm">
         {lines.map((l, i) => (
           <li key={i} className={l.startsWith("  ") ? "pl-3 text-program/90" : "font-semibold"}>
-            {l.trim()}
+            {say(l.trim())}
           </li>
         ))}
       </ul>

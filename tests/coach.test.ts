@@ -120,6 +120,13 @@ describe("The Coach", () => {
     expect(adviseDeal(g, p, "LENDING", trap).alt?.why).toContain("+2 Clarity");
     p.corruption = 5;
     expect(adviseDeal(g, p, "LENDING", trap).alt?.falls).toBe(true);
+    // a hidden Owner's surcharge is not the Coach's to reveal
+    p.corruption = 0;
+    g.owner = "The Debt Buyer";
+    g.ownerShown = false;
+    expect(adviseDeal(g, p, "LENDING", trap).alt?.why).toContain("+2 or more Shady");
+    g.ownerShown = true;
+    expect(adviseDeal(g, p, "LENDING", trap).alt?.why).toContain("+3 Shady");
     // an honest deal you can read is just good help: no shortcut to offer
     expect(adviseDeal(g, p, "LENDING", honest).alt).toBeUndefined();
   });

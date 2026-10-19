@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import type { Session } from "../game/session";
+import { say } from "../game/words";
 
 function tone(line: string) {
   if (/✖|⚠|got played|FALLEN|clock ran out|buries|feeds|whispers|peels|collections|creeps|covers|scare/.test(line)) return "text-[#ff9b9b]";
@@ -22,7 +23,7 @@ export function EventFeed({ s, version }: { s: Session; version: number }) {
       {lines.length === 0 && <p className="text-program/60">The story of the game appears here.</p>}
       {lines.map((l, i) => (
         <p key={offset + i} className={`${tone(l)} ${offset + i >= s.stepStart ? "" : "opacity-70"} ${l.startsWith("  ") ? "pl-4" : ""}`}>
-          {l.trim()}
+          {say(l.trim())}
         </p>
       ))}
       <div ref={end} />

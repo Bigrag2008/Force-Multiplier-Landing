@@ -1,5 +1,6 @@
 "use client";
 import type { Session } from "../game/session";
+import { say } from "../game/words";
 
 export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
   const g = s.g;
@@ -14,15 +15,15 @@ export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
     <section className={`rounded-2xl border-2 p-6 ${won ? "border-gold bg-gold/10" : "border-[#E63946] bg-[#E63946]/10"}`}>
       <h2 className={`text-3xl font-black ${won ? "text-gold" : "text-[#ff8a8a]"}`}>{won ? "The block wins." : "The Machine holds the block."}</h2>
       <p className="mt-2">
-        {won ? `Owner exposed: ${g.ownerFace}. It was always one machine.` : s.endMessage ?? "The clock ran out. The Machine doesn't need to win — it only needs you to run out of time."}
+        {won ? `Owner exposed: ${g.ownerFace}. It was always one machine.` : (s.endMessage && say(s.endMessage)) ?? "The clock ran out. The Machine doesn't need to win — it only needs you to run out of time."}
       </p>
       {legend && (
         <p className="mt-3 text-gold">
-          Most Legendary: <b>{legend.name}</b> ({legend.role}) with {legend.legend} Legend, earned by lifting people.
+          Most Legendary: <b>{legend.name}</b> ({legend.role}) with {legend.legend} Props, earned by lifting people.
         </p>
       )}
       {!won && fallen.length > 0 && (
-        <p className="mt-3 text-[#ff9b9b]">{fallen[0].name} won the board as the Machine, and earned 0 Legend. You win nothing by becoming it.</p>
+        <p className="mt-3 text-[#ff9b9b]">{fallen[0].name} won the board as the Machine, and earned 0 Props. You win nothing by becoming it.</p>
       )}
       {ch && r && (
         <div className="mt-5 rounded-xl border border-gold/40 bg-black/25 p-4">
