@@ -1,17 +1,38 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { C, K } from "../engine/content";
 import type { SessionConfig } from "../game/session";
 import { CookoutPanel, MachinePanel, MachineReport, SousouPanel, TurnPanel } from "./ActionPanel";
 import { Board } from "./Board";
 import { EndScreen } from "./EndScreen";
 import { EventFeed } from "./EventFeed";
+import { IntroComic } from "./IntroComic";
 import { Players } from "./Players";
 import { useSession } from "./useSession";
 
-export function GameScreen({ config, onQuit }: { config: SessionConfig; onQuit: () => void }) {
+const INTRO_SEEN = "sn-intro-seen";
+/** has this device already seen the story? (storage can be unavailable: then show it) */
+function introSeen() {
+  try {
+    return window.localStorage.getItem(INTRO_SEEN) === "1";
+  } catch {
+    return false;
+  }
+}
+
+/** `story`: "always" for the guided game; "first-time" shows the intro comic once per device */
+export function GameScreen({ config, onQuit, story = "first-time" }: { config: SessionConfig; onQuit: () => void; story?: "always" | "first-time" }) {
   const { session: s, run, version, changes } = useSession(config);
   const [showHistory, setShowHistory] = useState(false);
+  const [showIntro, setShowIntro] = useState(() => story === "always" || !introSeen());
+  const closeIntro = useCallback(() => {
+    setShowIntro(false);
+    try {
+      window.localStorage.setItem(INTRO_SEEN, "1");
+    } catch {
+      // private mode: the story just shows again next time
+    }
+  }, []);
   const g = s.g;
   const panelKey = `${s.phase}-${s.seat}-${g.round}-${s.actionsLeft}-${s.movesLeft}`;
   const intro = g.chapter ?? null;
@@ -34,6 +55,9 @@ export function GameScreen({ config, onQuit }: { config: SessionConfig; onQuit: 
             <input type="checkbox" checked={s.autoGreenBook} onChange={(e) => run((x) => (x.autoGreenBook = e.target.checked))} />
             📗 Open the Green Book when a capture is coming
           </label>
+          <button className="rounded-md border border-white/25 px-2 py-1 hover:bg-white/10" onClick={() => setShowIntro(true)}>
+            Story
+          </button>
           <a href="/how-to-play" target="_blank" className="rounded-md border border-white/25 px-2 py-1 hover:bg-white/10">
             Rules
           </a>
@@ -70,6 +94,8 @@ export function GameScreen({ config, onQuit }: { config: SessionConfig; onQuit: 
           <EventFeed s={s} version={version} />
         </div>
       </div>
+
+      {showIntro && <IntroComic onDone={closeIntro} />}
 
       {showHistory && g.historyCard && (
         <div role="dialog" aria-modal="true" aria-labelledby="history-title" className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setShowHistory(false)}>

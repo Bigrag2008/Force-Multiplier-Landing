@@ -22,7 +22,7 @@ npm run dev        # then open http://localhost:3000
 To run the production build instead: `npm run build && npm start`.
 
 ## How to play
-**First time?** Choose **Learn to play** on the home page. It starts a guided three-player game with the Coach: on every decision, the Coach glows on the move it would make and says why, and each rule is explained the first time it comes up. You can always choose your own move.
+**First time?** Choose **Learn to play** on the home page. A four-panel comic tells the story in about 30 seconds (the block, the deals, the Machine, your mission); it opens before every guided game, the first time you play on a device, and any time from **Story** in the game's header. It starts a guided three-player game with the Coach: on every decision, the Coach glows on the move it would make and says why, and each rule is explained the first time it comes up. You can always choose your own move.
 
 1. Open the site and choose **Play now**.
 2. **Set the table:** choose a mode, then the number of players (2–5), each player's name and role, and (in co-op) a scenario. Start with *The Audit* or *A Quiet Year*.
