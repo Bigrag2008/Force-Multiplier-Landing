@@ -86,7 +86,7 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 - [x] **25. Graphics that teach:** the road-to-victory tracker (and what loses the game) across the top of the board, one icon per stat used everywhere, numbers that float off whatever a move changed, and a labeled deal card in the first-deal lesson and under every deal. From the first family playtest: the deals were fun, the start was confusing.
 - [x] **25b. The story in four panels** before round 1: the block, the deals (the glasses find the real fee), the Machine (one hidden Owner behind the gears), your mission. Drawn inline in the West Dayton palette; replay it from **Story**.
 - [x] **25a. From that playtest:** the shortcut made tempting (the Coach lays TAKE and its true cost beside its pick on every trap), plain names on the website (Read, Shady, Squeeze, Props), and drawn art: five district scenes and five role portraits as church fans, with [ART_BRIEF.md](ART_BRIEF.md) for commissioning the finished art (it drops in through `src/ui/art/manifest.ts`).
-- [ ] **26. Online multiplayer:** rooms, each player on their own phone (needs a realtime service).
+- [x] **26. Online play:** the table device opens a room with a four-letter code; everyone joins from their phone and plays their own seat, with deal cards private to the reader. Phones connect directly (WebRTC via PeerJS, nothing to sign up for); the table device referees every move and every device replays the same moves. Dropped phones rejoin their seats, and a reloaded table reopens the same room.
 - [x] **27a. Save and continue:** every change is a move, a game is its seed plus its moves, and the browser keeps the game after every move.
 - [ ] **27. Finished illustrations** (see ART_BRIEF.md).
 

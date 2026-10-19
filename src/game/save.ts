@@ -15,8 +15,10 @@ export interface SaveFile {
   coach: boolean;
   seenLessons: string[];
   savedAt: number;
+  /** online: the room code, so continuing reopens the same room */
+  room?: string;
   /** for the "continue" card: who's playing and where they are */
-  label: { mode: string; names: string[]; round: number };
+  label: { mode: string; names: string[]; round: number; online?: boolean };
 }
 
 export function saveGame(s: Session) {
@@ -28,11 +30,13 @@ export function saveGame(s: Session) {
       moves: s.moves,
       coach: s.coach,
       seenLessons: [...s.seenLessons],
+      ...(s.room ? { room: s.room } : {}),
       savedAt: Date.now(),
       label: {
         mode: s.g.overlord ? "Overlord" : s.g.chapter ? `Campaign: Chapter ${s.g.chapter.number}` : s.g.scenario,
         names: s.g.players.filter((p) => p.role !== "Overlord").map((p) => p.name),
         round: s.g.round,
+        ...(s.room ? { online: true } : {}),
       },
     };
     window.localStorage.setItem(KEY, JSON.stringify(file));

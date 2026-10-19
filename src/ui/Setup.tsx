@@ -8,7 +8,7 @@ import { RolePortrait } from "./art/RolePortrait";
 const ROLES = Object.keys(C.roles);
 const DEFAULT_NAMES = C.roster.map((r) => r.name);
 
-export function Setup({ onStart }: { onStart: (c: SessionConfig) => void }) {
+export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean) => void }) {
   const [mode, setMode] = useState<Mode>("coop");
   const [count, setCount] = useState(4);
   const [names, setNames] = useState<string[]>(DEFAULT_NAMES);
@@ -16,22 +16,26 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig) => void }) {
   const [scenario, setScenario] = useState("A Quiet Year");
   const [overlordHuman, setOverlordHuman] = useState(false);
   const [coach, setCoach] = useState(true);
+  const [online, setOnline] = useState(false);
   const field = "rounded-lg border border-white/20 bg-white/10 px-3 py-2";
   const dupRoles = new Set(roles.slice(0, count)).size < count;
+  const finalNames = names.slice(0, count).map((n, i) => n.trim() || DEFAULT_NAMES[i]);
+  // seats are known by name (online, a phone claims a name), and "The Owner" is the Overlord's
+  const dupNames = new Set(finalNames.map((n) => n.toLowerCase())).size < count || finalNames.some((n) => n.toLowerCase() === "the owner");
 
   return (
     <form
       className="mx-auto max-w-2xl space-y-6 rounded-2xl border border-gold/40 bg-black/25 p-6"
       onSubmit={(e) => {
         e.preventDefault();
-        if (dupRoles) return;
+        if (dupRoles || dupNames) return;
         onStart({
           mode,
           roster: Array.from({ length: count }, (_, i) => ({ name: names[i].trim() || DEFAULT_NAMES[i], role: roles[i] })),
           scenario: mode === "coop" ? (scenario === "random" ? undefined : scenario) : undefined,
           overlordHuman: mode === "overlord" && overlordHuman,
           coach,
-        });
+        }, online);
       }}
     >
       <fieldset>
@@ -76,6 +80,7 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig) => void }) {
           </div>
         ))}
         {dupRoles && <p className="text-sm text-[#ff9b9b]">Each player needs a different role.</p>}
+        {dupNames && <p className="text-sm text-[#ff9b9b]">Each player needs a different name (and &ldquo;The Owner&rdquo; is taken).</p>}
       </fieldset>
 
       {mode === "coop" && (
@@ -105,10 +110,20 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig) => void }) {
         </span>
       </label>
 
-      <button type="submit" disabled={dupRoles} className="w-full rounded-xl bg-gold px-4 py-3 text-lg font-black text-night disabled:opacity-50">
+      <label className="flex items-start gap-2">
+        <input type="checkbox" className="mt-1" checked={online} onChange={(e) => setOnline(e.target.checked)} />
+        <span>
+          <b>📱 Play on everyone&apos;s phones</b>
+          <span className="block text-xs text-program/70">
+            This device becomes the table and opens a room with a code. Everyone joins from their phone (Join a game on the home page) and plays their own seat; deal cards stay private on the reader&apos;s phone. Any seat nobody takes is played here.
+          </span>
+        </span>
+      </label>
+
+      <button type="submit" disabled={dupRoles || dupNames} className="w-full rounded-xl bg-gold px-4 py-3 text-lg font-black text-night disabled:opacity-50">
         Start the game
       </button>
-      <p className="text-center text-xs text-program/60">One device, passed around the table. Everyone can see the board.</p>
+      <p className="text-center text-xs text-program/60">{online ? "This device is the table; phones join with the room code." : "One device, passed around the table. Everyone can see the board."}</p>
     </form>
   );
 }

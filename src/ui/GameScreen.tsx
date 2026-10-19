@@ -1,7 +1,10 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { C, K } from "../engine/content";
+import type { Move } from "../game/moves";
+import type { Session } from "../game/session";
 import { say } from "../game/words";
+import { waitingOn } from "../net/protocol";
 import { CookoutPanel, MachinePanel, MachineReport, SousouPanel, TurnPanel } from "./ActionPanel";
 import { Board } from "./Board";
 import { EndScreen } from "./EndScreen";
@@ -20,12 +23,33 @@ function introSeen() {
   }
 }
 
+/** Online play, from this device's side (see src/net/protocol.ts). */
+export interface Net {
+  /** the seats this device plays ("all" on a device passed around the table) */
+  mine: ReadonlySet<string> | "all";
+  /** a phone: send moves to the host instead of making them */
+  send?: (m: Move) => void;
+  /** the host: pass each move on to the phones */
+  onApplied?: (m: Move) => void;
+  /** hands the session and `apply` to whoever runs the connection */
+  onReady?: (s: Session, apply: (m: Move) => boolean) => void;
+  /** a phone keeps no save: the game lives on the host */
+  autosave?: boolean;
+  /** the room's code and who's at the table, shown above the board */
+  room?: ReactNode;
+}
+
 /**
  * A game on this device: a new one or a saved one (`start`).
  * `story`: "always" for the guided game; "first-time" shows the intro comic once per device.
  */
-export function GameScreen({ start, onQuit, story = "first-time" }: { start: GameStart; onQuit: () => void; story?: "always" | "first-time" }) {
-  const { session: s, play, local, version, changes } = useSession(start);
+export function GameScreen({ start, onQuit, story = "first-time", net }: { start: GameStart; onQuit: () => void; story?: "always" | "first-time"; net?: Net }) {
+  const { session: s, play, local, apply, version, changes } = useSession(start, { send: net?.send, onApplied: net?.onApplied, autosave: net?.autosave });
+  const onReady = net?.onReady;
+  useEffect(() => onReady?.(s, apply), [onReady, s, apply]);
+  const mine = net?.mine ?? "all";
+  const waiting = waitingOn(s);
+  const myMove = waiting === null || mine === "all" || mine.has(waiting);
   // a History card shows when it's told; one already told before a reload stays put away
   const [historyRead, setHistoryRead] = useState(() => s.g.historyCard);
   const [showIntro, setShowIntro] = useState(() => "config" in start && (story === "always" || !introSeen()));
@@ -88,10 +112,12 @@ export function GameScreen({ start, onQuit, story = "first-time" }: { start: Gam
         </div>
         {/* on phones the actions come first; on wide screens they sit beside the board */}
         <div className="order-first space-y-4 lg:order-none">
+          {net?.room}
           <div key={panelKey}>
-            {s.phase === "turn" && <TurnPanel s={s} play={play} local={local} />}
-            {s.phase === "fallen" && <MachinePanel s={s} play={play} local={local} who="fallen" />}
-            {s.phase === "overlord" && <MachinePanel s={s} play={play} local={local} who="overlord" />}
+            {!myMove && <WaitingPanel s={s} who={waiting!} />}
+            {myMove && s.phase === "turn" && <TurnPanel s={s} play={play} local={local} />}
+            {myMove && s.phase === "fallen" && <MachinePanel s={s} play={play} local={local} who="fallen" />}
+            {myMove && s.phase === "overlord" && <MachinePanel s={s} play={play} local={local} who="overlord" />}
             {s.phase === "cookout" && <CookoutPanel s={s} play={play} local={local} />}
             {s.phase === "sousou" && <SousouPanel s={s} play={play} local={local} />}
             {s.phase === "machine" && <MachineReport s={s} play={play} local={local} />}
@@ -118,5 +144,28 @@ export function GameScreen({ start, onQuit, story = "first-time" }: { start: Gam
         </div>
       )}
     </div>
+  );
+}
+
+/** someone else's turn, on their own phone */
+function WaitingPanel({ s, who }: { s: Session; who: string }) {
+  const pd = s.pending;
+  const doing =
+    s.phase === "fallen"
+      ? "The Machine is moving through them."
+      : s.phase === "overlord"
+        ? "The Overlord is choosing where to strike."
+        : pd?.k === "deal"
+          ? `Reading a deal in ${pd.d.charAt(0) + pd.d.slice(1).toLowerCase()}…`
+          : pd?.k === "teach"
+            ? `Teaching ${pd.to}: listen for the second number.`
+            : `${s.actionsLeft} action${s.actionsLeft === 1 ? "" : "s"} left.`;
+  return (
+    <section className="rounded-xl border border-white/20 bg-night/80 p-4" aria-live="polite">
+      <p className="text-xs font-black uppercase tracking-widest text-program/60">Waiting on</p>
+      <h2 className="text-lg font-black text-gold">{who}</h2>
+      <p className="mt-1 text-sm text-program/85">{doing}</p>
+      <p className="mt-2 text-xs text-program/60">It&apos;s their move, on their phone. The board updates as they play.</p>
+    </section>
   );
 }
