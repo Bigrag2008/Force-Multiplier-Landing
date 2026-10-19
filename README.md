@@ -40,6 +40,14 @@ To run the production build instead: `npm run build && npm start`.
 
 **How to play** on the home page has the short rules; [`game/RULES.md`](game/RULES.md) has the full rulebook. Prefer paper? Print [`game/The_Second_Number_PRINT_AND_PLAY.pdf`](game/The_Second_Number_PRINT_AND_PLAY.pdf).
 
+## Play on everyone's phones
+1. On the device that will be the table (a laptop or TV is best), choose **Play now**, set up the game and tick **📱 Play on everyone's phones**. A room opens with a four-letter code.
+2. Everyone else opens the site on their phone, taps **📱 Join a game**, enters the code (or opens the join link the host shares) and picks their seat.
+3. Each person plays their own seat on their own phone. Deal cards show only on the phone of the person reading them; the table shows "Reading a deal…". Seats nobody takes are played on the table device, and anyone can answer the table's questions (the Cookout, the Sou-Sou, Start round).
+4. Dropped connections recover: a phone that closes or sleeps frees its seat within seconds and can rejoin; if the table device reloads, **Continue your game** reopens the same room and the phones reconnect to their seats on their own.
+
+**How it connects:** phones talk directly to the table device (WebRTC, through [PeerJS](https://peerjs.com)). PeerJS's free public server only introduces them, so there's nothing to sign up for or run. The table device is the referee: phones send moves, it checks each one and passes it on, and every device replays the same moves (`src/net/`). Most home and phone networks connect fine; a few strict networks (some workplaces and schools) block direct connections, and then playing on one device still works. To use your own PeerJS server, add `?peer=host:port` to the page address.
+
 ## Put it online (Vercel, free tier)
 1. At [vercel.com/new](https://vercel.com/new), import this repo. Vercel detects Next.js; leave the settings as they are.
 2. Deploy. Every push to `main` updates the live link, and each pull request gets its own preview link.
@@ -61,9 +69,10 @@ The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of tr
 ## Layout
 | Path | What |
 |---|---|
-| `app/` | Website pages: home, `/play`, `/learn` (the guided game; `?seed=` replays one), `/how-to-play`. |
+| `app/` | Website pages: home, `/play`, `/learn` (the guided game; `?seed=` replays one), `/join` (a phone joining a room), `/how-to-play`. |
 | `src/engine/` | The rules engine (TypeScript port), its content types and the shared RNG. |
 | `src/game/session.ts` | The round-by-round flow: who acts next, and what the table is asked. |
+| `src/net/` | Online play: the room's rules (who may make which move) and the PeerJS connection. |
 | `src/game/moves.ts`, `save.ts` | Every change to a game as a move; a game is its seed plus its moves, which is what a save holds. |
 | `src/game/coach.ts` | The Coach: the recommended move with its reason, and the lessons, all read-only. |
 | `src/ui/` | The board, players, deal card and lens, action panels, the Coach box, the story comic, end screen. |
@@ -73,7 +82,6 @@ The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of tr
 | `game/` | The game itself (see above). |
 
 ## Next steps
-- **Online multiplayer:** each player joins a room from their own phone. This needs a small realtime service (for example PartyKit, Supabase Realtime, or a Node server on Fly.io); the engine and turn flow already run anywhere JavaScript does.
-- Save and resume a game in progress; sound and the art direction's illustrations.
+- Sound, and the commissioned illustrations (see `game/ART_BRIEF.md`).
 
 Part of the Individual Democracy / Civic Armor universe.

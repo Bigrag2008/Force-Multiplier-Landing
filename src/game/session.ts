@@ -49,6 +49,8 @@ export class Session {
   coach: boolean;
   /** the Coach's lessons this table has already read */
   seenLessons = new Set<string>();
+  /** online: the room this game is hosted in (kept in the save, so a continued game reopens it) */
+  room?: string;
 
   constructor(public config: SessionConfig) {
     // fix the seed now, so a save or another phone can rebuild this exact game
