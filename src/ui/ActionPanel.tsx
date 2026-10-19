@@ -5,6 +5,7 @@ import { maxBy, type Action, type Player } from "../engine/engine";
 import { adviseCookout, adviseDeal, adviseSousou, adviseTurn } from "../game/coach";
 import type { Session } from "../game/session";
 import { CoachBadge, CoachBox, picked, safe } from "./Coach";
+import { Icon, type IconName } from "./icons";
 import { DealCard } from "./DealCard";
 import { DISTRICT_COLOR, titleCase } from "./theme";
 
@@ -232,16 +233,16 @@ export function TurnPanel({ s, run, onHistory }: { s: Session; run: Run; onHisto
 
   // ---- the menu ----
   const fallen = g.blk().filter((x) => x.flipped);
-  const options: { kind: string; label: string; hint: string; on: () => void; show?: boolean; disabled?: boolean; gold?: boolean }[] = [
-    { kind: "study", label: "Study", hint: "+1 Sight in a district" + (p.practice ? " (+2 now)" : ""), on: () => setPending({ k: "pick", for: "study" }) },
-    { kind: "face", label: "Face a deal", hint: p.shopAround ? "draw 2, face 1" : "read it, then TAKE / WALK / NEGOTIATE", on: () => setPending({ k: "pick", for: "face" }) },
-    { kind: "teach", label: "Teach", hint: p.role === "Translator" || p.freeTeach ? "free" : "1 Trust", on: () => setPending({ k: "teachWho" }), disabled: !others.length },
-    { kind: "commons", label: "Commons", hint: "gather on the West Side", on: () => setPending({ k: "commons" }) },
-    { kind: "reach", label: "Reach", hint: "2 Trust: bring a Fallen friend home", on: () => setPending({ k: "reach" }), show: fallen.length > 0, disabled: p.trust < 2 },
-    { kind: "history", label: "Teach the History", hint: "Elder, once: wake a district", on: () => setPending({ k: "pick", for: "history" }), show: p.role === "Elder" && !p.elderUsed },
-    { kind: "trace", label: "Trace a thread", hint: "Sight 3 in an awake district", on: () => setPending({ k: "pick", for: "trace" }), show: g.uwOpen, disabled: !DISTRICTS.some((d) => g.canTrace(p, d)) },
-    { kind: "league", label: "Sign the League pledge", hint: `${g.league.size}/${g.leagueNeeded()} this round`, on: () => act({ k: "league" }), show: g.hasLeague() && !g.leagueFormed && !g.league.has(p.name) },
-    { kind: "expose_uw", label: "EXPOSE THE UNDERWORLD", hint: "you win", on: () => act({ k: "expose_uw" }), show: g.canExpose(), gold: true },
+  const options: { kind: string; icon: IconName; label: string; hint: string; on: () => void; show?: boolean; disabled?: boolean; gold?: boolean }[] = [
+    { kind: "study", icon: "sight", label: "Study", hint: "+1 Sight in a district" + (p.practice ? " (+2 now)" : ""), on: () => setPending({ k: "pick", for: "study" }) },
+    { kind: "face", icon: "deal", label: "Face a deal", hint: p.shopAround ? "draw 2, face 1" : "read it, then TAKE / WALK / NEGOTIATE", on: () => setPending({ k: "pick", for: "face" }) },
+    { kind: "teach", icon: "teach", label: "Teach", hint: p.role === "Translator" || p.freeTeach ? "free" : "1 Trust", on: () => setPending({ k: "teachWho" }), disabled: !others.length },
+    { kind: "commons", icon: "commons", label: "Commons", hint: "gather on the West Side", on: () => setPending({ k: "commons" }) },
+    { kind: "reach", icon: "reach", label: "Reach", hint: "2 Trust: bring a Fallen friend home", on: () => setPending({ k: "reach" }), show: fallen.length > 0, disabled: p.trust < 2 },
+    { kind: "history", icon: "history", label: "Teach the History", hint: "Elder, once: wake a district", on: () => setPending({ k: "pick", for: "history" }), show: p.role === "Elder" && !p.elderUsed },
+    { kind: "trace", icon: "clue", label: "Trace a thread", hint: "Sight 3 in an awake district", on: () => setPending({ k: "pick", for: "trace" }), show: g.uwOpen, disabled: !DISTRICTS.some((d) => g.canTrace(p, d)) },
+    { kind: "league", icon: "league", label: "Sign the League pledge", hint: `${g.league.size}/${g.leagueNeeded()} this round`, on: () => act({ k: "league" }), show: g.hasLeague() && !g.leagueFormed && !g.league.has(p.name) },
+    { kind: "expose_uw", icon: "expose", label: "EXPOSE THE UNDERWORLD", hint: "you win", on: () => act({ k: "expose_uw" }), show: g.canExpose(), gold: true },
   ];
   return (
     <Panel
@@ -259,7 +260,10 @@ export function TurnPanel({ s, run, onHistory }: { s: Session; run: Run; onHisto
           .filter((o) => o.show !== false)
           .map((o) => (
             <button key={o.label} className={(o.gold ? primary : `${ghost} text-left`) + picked(pick?.k === o.kind)} disabled={o.disabled} onClick={o.on}>
-              <span className="block">{o.label}</span>
+              <span className="flex items-center gap-1.5">
+                <Icon name={o.icon} size={16} color={o.gold ? "#1B1530" : "#F2B632"} />
+                {o.label}
+              </span>
               <span className="block text-xs font-normal text-program/70">{o.hint}</span>
               {pick?.k === o.kind && <CoachBadge />}
             </button>

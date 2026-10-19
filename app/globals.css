@@ -32,3 +32,22 @@ body {
   background: var(--after-hours);
   color: var(--program);
 }
+
+/* what a move changed: numbers float up off the board, and the spot glows */
+@keyframes float-up {
+  0% { opacity: 0; transform: translateY(6px) scale(0.9); }
+  12% { opacity: 1; transform: translateY(0) scale(1.08); }
+  70% { opacity: 1; transform: translateY(-10px) scale(1); }
+  100% { opacity: 0; transform: translateY(-18px); }
+}
+@keyframes glow-out {
+  0% { box-shadow: 0 0 0 0 var(--glow, #F2B632); }
+  30% { box-shadow: 0 0 0 5px var(--glow, #F2B632); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.float-up { animation: float-up 2.6s ease-out forwards; }
+.glow-out { animation: glow-out 1.8s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .float-up { animation: none; opacity: 1; }
+  .glow-out { animation: none; }
+}

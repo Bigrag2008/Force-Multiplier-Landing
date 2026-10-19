@@ -83,8 +83,10 @@ Every rules change also updates `RULES.md`, `test_rules.py` and the playable gam
 - [x] **22. The turn flow** for one device passed around the table.
 - [x] **23. The playable site:** board, lens, every decision, all three modes, phone layout; tested in a real browser.
 - [x] **24. The Coach, a guided first game:** the game recommends each move and says why, glows on the button it would press, and teaches each rule the first time it comes up. Deal advice uses only the layers the player can read. A table that follows it wins about 94% of *The Audit* games, against 69% for the default bot. **Learn to play** on the home page starts one.
-- [ ] **25. Online multiplayer:** rooms, each player on their own phone (needs a realtime service).
-- [ ] **26. Save and resume, illustrations.**
+- [x] **25. Graphics that teach:** the road-to-victory tracker (and what loses the game) across the top of the board, one icon per stat used everywhere, numbers that float off whatever a move changed, and a labeled deal card in the first-deal lesson and under every deal. From the first family playtest: the deals were fun, the start was confusing.
+- [ ] **25a. Next from that playtest:** make the shortcut tempting (the Coach should offer TAKE as a real choice, not only in emergencies), simpler names, finished art.
+- [ ] **26. Online multiplayer:** rooms, each player on their own phone (needs a realtime service).
+- [ ] **27. Save and resume, illustrations.**
 
 ---
 
