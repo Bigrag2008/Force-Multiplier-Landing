@@ -169,6 +169,8 @@ function pickDeal(g: Game, p: Player, d: District, card: Card): Advice<Choice> {
     return urgent && safe
       ? { pick: "TAKE", title: "TAKE it (the shortcut)", why: `You could beat it, but negotiating costs ${cost} Trust and you have ${p.trust}. ${shortcut}` }
       : { pick: "WALK", title: "WALK away", why: `You could beat it, but negotiating costs ${cost} Trust and you have ${p.trust}. Walk, then rebuild Trust at the Commons.` };
+  if (g.partial && see === lever - 1 && p.trust >= cost && (urgent || !safe))
+    return { pick: "NEGOTIATE", title: "NEGOTIATE: a close read", why: `It's a trap with a ${LEVER[lever]} lever, one layer past your Read ${see}. With Close reads on, NEGOTIATE rolls a die: 5 or 6 talks them down (Squeeze −1), anything else and you get played (Squeeze +1). One chance in three, and no Shady.` };
   if (urgent && safe)
     return { pick: "TAKE", title: "TAKE it (the shortcut)", why: `It's a trap with a ${LEVER[lever]} lever; your Read ${see} can't reach it. ${shortcut}` };
   return { pick: "WALK", title: "WALK away", why: `It's a trap and its lever is ${LEVER[lever]}: you need Read ${lever} to beat it and you have ${see}. Negotiating now gets you played. Walk; Study ${T(d)} to reach the lever.` };
@@ -230,6 +232,12 @@ export function lessonsDue(s: Session, view: "board" | "deal" = "board", sight =
   const rushed = s.pending?.k === "deal" && s.pending.cards.some((c) => c.rush) && s.config.clocks !== false;
   if (view === "deal" && rushed)
     out.push(L("rush", "Sign now?", "This deal pushes a deadline: a clock counts down while you decide. Real scams do this so you sign before you can read. The deadline is fake: let it run out and the offer is still there. Read 2 in a district (amber, the clock) shows you that from the start."));
+  if (view === "deal" && g.render && s.player && s.player.face > 0)
+    out.push(L("render", "Render?", "In the novel, the Sight asks Marcus one word before it reads someone he loves: Render? Here, a teammate who reads a district better can read a deal for you. It costs your one Face token (the Cookout gives it back), so save it for the deal that matters."));
+  if (view === "deal" && g.partial)
+    out.push(L("close", "Close reads", "One layer short of a trap's lever, NEGOTIATE becomes a roll: 5 or 6 on a die talks them down (Squeeze −1); anything else and you get played. Worth it when a district is about to fall and you'd rather not take the shortcut."));
+  if (g.carry && g.round <= 1)
+    out.push(L("remember", "Your block remembers", "This block has played before. Districts it woke last time start stronger (Clarity +1); districts it lost carry a scar (Squeeze +1); after a loss, everyone gets +1 Trust. Wake them again to keep them strong."));
   if (view === "deal" && g.finePrint) out.push(L("fineprint", "The fine-print die", "Each trap's lever is rolled when it's drawn: 1–3 red, 4–5 amber, 6 blue. You can't memorize the deck. Read deep enough to reach whatever the die says."));
   if (view === "deal" && g.endless) out.push(L("endless", "Endless deals", "These deals are rolled fresh from templates, so the numbers change every time. Work out the second number: the math is on the red layer."));
   if (g.overlord && g.log.some((l) => l.includes("slips a counterfeit")))

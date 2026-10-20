@@ -60,6 +60,12 @@ def load_edition(path):
     for d,cards in (ED.get("history") or {}).items():
         mine=[{k:c.get(k,"") for k in ("title","year","place","story","lesson")} for c in cards or []]
         if mine: Dk.HISTORY[d]=mine if ED.get("historyMode")=="replace" else Dk.HISTORY[d]+mine
+    for d,deals in (ED.get("deals") or {}).items():         # local deals join the deck (cards, answer key, count)
+        for x in deals or []:
+            trap=bool(x.get("trap",True))
+            Dk.DECK[d].append(dict(front=x["front"],red=x["red"],amber=x["amber"],blue=x["blue"],trap=trap,
+                                   lever=min(3,max(1,int(x.get("lever") or 1))) if trap else 0,
+                                   dollars=int(x.get("dollars") or 0),basis=x.get("basis",""),local=True))
     slug=re.sub(r"[^a-z0-9]+","_",EDITION.lower()).strip("_")
     OUT=os.path.join(ROOT,f"The_Second_Number_{slug}_PRINT_AND_PLAY.pdf")
 LAYER_COL={1:hx("e63946"),2:hx("e0a526"),3:hx("2f8fd8")}
@@ -881,6 +887,10 @@ def edition_story():
     if hist:
         s+=[Paragraph("Local history, and where it was checked",ST["h2"])]
         s+=md_table(["| District | Story | Source |"]+[f"| {'Any' if d=='ANY' else d.title()} | {c.get('title','')} ({c.get('year','')}) | {c.get('source','')} |" for d,c in hist])
+    local=[(d,x) for d,deals in (ED.get("deals") or {}).items() for x in deals or []]
+    if local:
+        s+=[Paragraph("Local deals, and where they come from",ST["h2"])]
+        s+=md_table(["| District | The deal | Source |"]+[f"| {d.title()} | {x['front']} | {x.get('source','')} |" for d,x in local])
     if ED.get("resources"):
         s+=[Paragraph(f"Real help in {CITY}",ST["h2"])]
         s+=md_table(["| Name | What it helps with | Where |"]+[f"| {r['name']} | {r['what']} | {r.get('where','')} |" for r in ED["resources"]])

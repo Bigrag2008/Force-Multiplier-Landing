@@ -7,7 +7,7 @@
  */
 import { C, DISTRICTS, K, type Card, type Chapter, type Choice, type District, type HistoryCard, type PlaceKey } from "./content";
 import { makeDeal } from "./dealgen";
-import { historyOf, placesOf, WEST_DAYTON, type Edition } from "./edition";
+import { historyOf, localCards, placesOf, WEST_DAYTON, type Edition } from "./edition";
 import { Rng } from "./rng";
 
 export const LAYERS: [number, "red" | "amber" | "blue", string][] = [
@@ -20,7 +20,7 @@ export type Style = "careful" | "never" | "greedy" | "human";
 
 export type Action =
   | { k: "study"; d: District }
-  | { k: "face"; d: District; choice: Choice; card?: Card }
+  | { k: "face"; d: District; choice: Choice; card?: Card; by?: Player | null }
   | { k: "teach"; t: Player; d: District; response?: boolean }
   | { k: "commons"; place: PlaceKey }
   | { k: "reach"; t: Player }
@@ -72,6 +72,8 @@ export class Player {
   bare = new Set<District>();
   /** Block Party: sits out their next turn */
   benched = false;
+  /** "Render?": Face tokens (set by newGame when the rule is on) */
+  face = 0;
   constructor(public name: string, public role: string) {
     this.sight = perDistrict(() => (role === "Elder" ? 1 : 0));
     this.shields = role === "Veteran" ? 2 : 0;
@@ -94,13 +96,27 @@ export interface GameOptions {
   endless?: boolean;
   /** a Your City edition: the places and History cards where this game happens (default: West Dayton) */
   edition?: Edition;
+  /** Close reads: one layer short of the lever, NEGOTIATE rolls for it */
+  partial?: boolean;
+  /** "Render?": a teammate who reads better can read a deal for you, once per Face token */
+  render?: boolean;
+  /** a block that remembers: last game's woken districts and scars (see remember()) */
+  carry?: Carry | null;
+}
+
+/** what a block remembers between games */
+export interface Carry {
+  clarity?: Partial<Record<District, number>>;
+  pressure?: Partial<Record<District, number>>;
+  /** after a loss, the community rallies: everyone +1 Trust */
+  rally?: boolean;
 }
 
 /** one deal decision, and its real money */
 export interface Signed {
   who: string;
   d: District;
-  out: "help" | "taken" | "dodged" | "refused" | "defused" | "played" | "wasted" | "conned";
+  out: "help" | "taken" | "dodged" | "refused" | "defused" | "played" | "wasted" | "conned" | "partial";
   front: string;
   dollars: number;
   basis: string;
@@ -176,6 +192,9 @@ export class Game {
   maxRounds: number;
   /** every card drawn, in order (endless and fine-print cards aren't in the deck) */
   dealt: Card[] = [];
+  partial: boolean;
+  render: boolean;
+  carry: Carry | null;
   /** where this game happens: its districts' names, its gathering places, its History deck */
   ed: Edition;
   places: typeof C.places;
@@ -193,6 +212,9 @@ export class Game {
     this.finePrint = !!o.finePrint;
     this.terrell = !!o.terrell;
     this.endless = !!o.endless;
+    this.partial = !!o.partial;
+    this.render = !!o.render;
+    this.carry = o.carry ?? null;
     this.ed = o.edition ?? WEST_DAYTON;
     this.places = placesOf(this.ed);
     this.historyDeck = historyOf(this.ed);
@@ -203,7 +225,10 @@ export class Game {
     this.ownerShown = this.overlord;
     const ch = this.chapter;
     this.scenario = this.party ? "Block Party" : ch ? `Chapter ${ch.number}: ${ch.title}` : o.scenario || this.rng.choice(Object.keys(C.scenarios));
-    this.deck = Object.fromEntries(DISTRICTS.map((d) => [d, (ch && ch.decks[d]) || C.deck[d]])) as Record<District, Card[]>;
+    // a Your City edition's local deals join the base deck (not Chapter 3's era decks)
+    this.deck = Object.fromEntries(
+      DISTRICTS.map((d) => [d, (ch && ch.decks[d]) || (localCards(this.ed, d).length ? [...C.deck[d], ...localCards(this.ed, d)] : C.deck[d])]),
+    ) as Record<District, Card[]>;
     if (ch) for (const [d, p] of Object.entries(ch.pressure)) this.pressure[d as District] = p as number;
     const start: Record<string, Partial<Record<District, number>>> = {
       "The Eviction Wave": { HOUSING: 2 },
@@ -216,6 +241,30 @@ export class Game {
     this.owner = this.overlord ? "The Overlord" : this.party ? "No Owner" : ch ? ch.owner : o.owner || this.rng.choice(Object.keys(C.owners));
     if (this.party) this.greenBook = false;
     this.ownerFace = ch && !this.overlord ? ch.face : this.owner;
+    this.remember();
+  }
+
+  /**
+   * A block that remembers: districts woken last game start a step ahead (Clarity +1), captured ones carry
+   * a scar (Squeeze +1). The full co-op game only.
+   */
+  remember() {
+    const c = this.carry;
+    if (!c || this.overlord || this.chapter || this.party) return;
+    for (const [d, n] of Object.entries(c.clarity ?? {}) as [District, number][])
+      if (this.ds.includes(d) && n > 0) this.clarity[d] = Math.min(K.WAKE - 1, this.clarity[d] + n);
+    for (const [d, n] of Object.entries(c.pressure ?? {}) as [District, number][])
+      if (this.ds.includes(d) && n > 0) this.pressure[d] = Math.min(K.CAPTURE - 1, this.pressure[d] + n);
+    const strong = this.ds.filter((d) => c.clarity?.[d]);
+    const scars = this.ds.filter((d) => c.pressure?.[d]);
+    if (strong.length || scars.length || c.rally) {
+      const parts = [
+        ...(strong.length ? [`${strong.join(", ")} start${strong.length === 1 ? "s" : ""} stronger (Clarity +1)`] : []),
+        ...(scars.length ? [`${scars.join(", ")} carr${scars.length === 1 ? "ies" : "y"} a scar (Squeeze +1)`] : []),
+        ...(c.rally ? ["after last game, the community rallies (everyone +1 Trust)"] : []),
+      ];
+      this.emit(`🏘 The block remembers: ${parts.join("; ")}.`);
+    }
   }
 
   // ---- helpers ----
@@ -354,9 +403,13 @@ export class Game {
     }
     return this.dress(this.endless ? makeDeal(d, this.rng) : this.rng.choice(this.deck[d]));
   }
-  /** The deal as this player can read it: below Read 3, a counterfeit looks like honest help. */
-  looks(pl: Player, d: District, card: Card): Card {
-    return card.counterfeit && pl.sight[d] < 3 ? { ...card, trap: false, lever: 0 } : card;
+  /** The deal as this player can read it (or a teammate rendering it for them: see): below Read 3, a counterfeit looks like honest help. */
+  looks(pl: Player, d: District, card: Card, see?: number): Card {
+    return card.counterfeit && (see ?? pl.sight[d]) < 3 ? { ...card, trap: false, lever: 0 } : card;
+  }
+  /** "Render?": a teammate who reads this district better reads the deal for you, once per Face token. */
+  canRender(pl: Player, by: Player | null | undefined, d: District): by is Player {
+    return this.render && !!by && by !== pl && pl.face > 0 && !by.flipped && by.role !== "Overlord" && by.sight[d] > pl.sight[d];
   }
   /** the fine-print die: roll which layer holds a trap's lever, so the deck can't be learned by heart */
   dress(card: Card) {
@@ -380,12 +433,17 @@ export class Game {
     }
     return [this.draw(d)];
   }
-  face(pl: Player, d: District, choice: Choice, card?: Card) {
+  face(pl: Player, d: District, choice: Choice, card?: Card, by?: Player | null) {
     card = card || this.draw(d);
     const trap = card.trap;
     const lever = this.lever(d, card);
-    const see = pl.sight[d];
+    let see = pl.sight[d];
     this.emit(`${pl.name} faces a deal in ${d}: "${card.front}"  → ${choice}`);
+    if (this.canRender(pl, by, d)) {
+      pl.face -= 1;
+      see = by.sight[d];
+      this.emit(`  Render? ${pl.name} lets ${by.name} read it for them (Read ${see}). Face left: ${pl.face}.`);
+    }
     if (card.die !== undefined) this.emit(`  (The fine print: rolled ${card.die}, so the lever sits in ${LEVER_NAME[card.lever]}.)`);
     const bare = this.terrell && trap && pl.bare.has(d) && choice !== "WALK";
     let out: Signed["out"] | null = null;
@@ -433,6 +491,7 @@ export class Game {
         return;
       }
       pl.trust -= cost;
+      let roll = 0;
       if (trap && see >= lever) {
         const amt = pl.role === "Organizer" ? 2 : 1;
         out = "defused";
@@ -447,7 +506,14 @@ export class Game {
           pl.legend += 1;
           this.emit(`  You exposed a COUNTERFEIT: it only looked like honest help. Props +1.`);
         }
+      } else if (trap && this.partial && see === lever - 1 && (roll = Math.floor(this.rng.random() * 6) + 1) >= K.CLOSE_READ) {
+        // a close read: one layer short, and you talked them down
+        out = "partial";
+        this.pressure[d] = Math.max(0, this.pressure[d] - 1);
+        pl.legend += 1;
+        this.emit(`  NEGOTIATE one layer short of the ${LEVER_NAME[lever]} lever (Read ${see}): rolled ${roll}, you talked them down. Squeeze −1, Props +1.`);
       } else if (trap) {
+        if (this.partial && see === lever - 1) this.emit(`  A close read (Read ${see}, the lever's ${LEVER_NAME[lever]}): rolled ${roll}, not enough.`);
         out = "played";
         this.pressure[d] = Math.min(K.CAPTURE, this.pressure[d] + 1);
         this.emit(
@@ -590,6 +656,7 @@ export class Game {
       pl.trust = Math.min(K.MAX_TRUST, pl.trust + 2);
       pl.corruption = Math.max(0, pl.corruption - 1);
       pl.legend += 1;
+      if (this.render) pl.face = K.FACE_TOKENS;
       const d = (picks && picks[pl.name]) || this.cookoutGain(pl)[0];
       const old = pl.sight[d];
       pl.sight[d] = Math.max(old, best[d]);
@@ -922,7 +989,7 @@ export class Game {
   do(pl: Player, a: Action) {
     switch (a.k) {
       case "study": this.study(pl, a.d); break;
-      case "face": this.face(pl, a.d, a.choice, a.card); break;
+      case "face": this.face(pl, a.d, a.choice, a.card, a.by); break;
       case "teach": this.teach(pl, a.t, a.d, a.response ?? true); break;
       case "commons": this.commons(pl, a.place || "BARBERSHOP"); break;
       case "reach": this.reach(pl, a.t); break;
@@ -948,9 +1015,9 @@ export class Game {
   }
 
   // ================= BLOCK AI =================
-  botChoice(pl: Player, d: District, card: Card, style: Style = "careful"): Choice {
-    card = this.looks(pl, d, card);
-    const see = pl.sight[d];
+  botChoice(pl: Player, d: District, card: Card, style: Style = "careful", seeAs?: number): Choice {
+    const see = seeAs ?? pl.sight[d];
+    card = this.looks(pl, d, card, see);
     const safe = pl.corruption + this.takeCost() < K.FLIP;
     const urgent = this.pressure[d] >= K.CAPTURE - 1;
     if (see >= 1) {
@@ -959,6 +1026,7 @@ export class Game {
       if (see >= card.lever && pl.trust >= this.negCost(d)) return "NEGOTIATE";
       if (style === "greedy" && pl.corruption + this.takeCost() < K.FLIP + 2) return "TAKE";
       if (style === "careful" && urgent && safe) return "TAKE";
+      if (this.partial && urgent && see === card.lever - 1 && pl.trust >= this.negCost(d) && style !== "greedy") return "NEGOTIATE"; // try a close read
       return "WALK";
     }
     if (style === "greedy" || (style === "careful" && urgent && safe)) return "TAKE";
@@ -967,7 +1035,15 @@ export class Game {
   botFace(pl: Player, d: District, style: Style): Action {
     const score = (c: Card) => ((c = this.looks(pl, d, c)), pl.sight[d] < 1 ? 0 : !c.trap ? 2 : pl.sight[d] >= c.lever ? 3 : 0);
     const card = maxBy(this.dealsFor(pl, d), score);
-    return { k: "face", d, choice: this.botChoice(pl, d, card, style), card };
+    const by = this.botRenderer(pl, d);
+    return { k: "face", d, choice: this.botChoice(pl, d, card, style, by ? by.sight[d] : undefined), card, by };
+  }
+  /** who a bot asks to read a deal for it: the best reader, when it can't read the district or it's urgent */
+  botRenderer(pl: Player, d: District): Player | null {
+    if (!this.render || pl.face < 1) return null;
+    const others = this.active().filter((p) => p !== pl);
+    const best = others.length ? maxBy(others, (p) => p.sight[d]) : null;
+    return best && this.canRender(pl, best, d) && (pl.sight[d] === 0 || this.pressure[d] >= K.CAPTURE - 1) ? best : null;
   }
   botPlace(pl: Player): PlaceKey {
     const act = this.active();
@@ -1103,7 +1179,7 @@ export class Game {
     const most = Object.entries(played).length ? maxBy(Object.entries(played), (kv) => kv[1]) : null;
     return {
       taken: tot("taken"), played: tot("played") + conned, refused: tot("refused") + tot("wasted"),
-      dodged: tot("dodged"), defused: tot("defused"), help: tot("help"),
+      dodged: tot("dodged"), defused: tot("defused") + tot("partial"), help: tot("help"),
       shortcuts: taken.length, worst: taken.length ? maxBy(taken, (x) => x.dollars) : null,
       playedMost: most ? { who: most[0], times: most[1] } : null,
     };
@@ -1138,6 +1214,8 @@ export function newGame(o: NewGameOptions = {}) {
   const g = new Game(o);
   g.players = (o.roster || C.roster).map((r) => new Player(r.name, r.role));
   if (g.scenario === "The Plants Close") for (const p of g.players) p.trust = 1;
+  for (const p of g.players) p.face = g.render ? K.FACE_TOKENS : 0;
+  if (g.carry?.rally && !g.overlord && !g.chapter && !g.party) for (const p of g.players) p.trust = Math.min(K.MAX_TRUST, p.trust + 1);
   if (o.overlord) g.players.push(new Player("The Owner", "Overlord"));
   return g;
 }

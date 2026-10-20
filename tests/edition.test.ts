@@ -62,4 +62,21 @@ describe("Your City editions", () => {
     expect(r.g.log).toEqual(s.g.log);
     expect(r.g.ed.name).toBe("East Side Test Edition");
   });
+
+  it("local deals join the deck, need a source, and count real money", () => {
+    const ed = eastSide();
+    ed.deals = { LENDING: [{ front: "Testville Quick Loan", red: "the fee doubles", amber: "due in 14 days", blue: "a partner bank", trap: true, lever: 2, dollars: 180, basis: "two rollovers", source: "Test State Code 1234.5" }] };
+    expect(checkEdition(ed)).toEqual([]);
+    const g = newGame({ seed: 4, scenario: "A Quiet Year", roster: C.roster.slice(0, 2), edition: ed });
+    expect(g.deck.LENDING.length).toBe(C.deck.LENDING.length + 1);
+    const local = g.deck.LENDING.at(-1)!;
+    expect(local).toMatchObject({ front: "Testville Quick Loan", trap: true, lever: 2, dollars: 180, local: true });
+    const p = g.players[0];
+    g.face(p, "LENDING", "TAKE", local);
+    expect(g.money().taken).toBe(180);
+    ed.deals.LENDING![0].source = "";
+    expect(checkEdition(ed).some((x) => x.includes("source"))).toBe(true);
+    expect(newGame({ seed: 4, roster: C.roster.slice(0, 2) }).deck.LENDING).toBe(C.deck.LENDING); // West Dayton: the base deck
+  });
 });
+

@@ -1,5 +1,7 @@
 "use client";
 import type { Session } from "../game/session";
+import { useEffect, useState } from "react";
+import { describeCarry, rememberGame, type BlockMemory } from "../game/block";
 import { MoneyCount } from "./MoneyCount";
 import { ResultCode } from "./ResultCode";
 
@@ -23,6 +25,7 @@ export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
           Most Props: <b>{legend.name}</b> ({legend.role}) with {legend.legend} Props, earned by lifting people.
         </p>
       )}
+      <BlockMemoryNote s={s} />
       <MoneyCount s={s} />
       {g.ed.resources.length > 0 && (
         <div className="mt-5 rounded-xl border border-[#7CFFB2]/40 bg-[#7CFFB2]/10 p-4">
@@ -60,5 +63,20 @@ export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
         Play again
       </button>
     </section>
+  );
+}
+
+/** A block that remembers: keep this game, once, and say what the next one starts with. */
+function BlockMemoryNote({ s }: { s: Session }) {
+  const [memory, setMemory] = useState<BlockMemory | null>(null);
+  useEffect(() => {
+    if (!s.config.remember) return;
+    setMemory(rememberGame(s.g.ed.id, `${s.config.seed}-${s.moves.length}`, s.g)); // eslint-disable-line react-hooks/set-state-in-effect
+  }, [s]);
+  if (!memory) return null;
+  return (
+    <p className="mt-4 rounded-lg border border-gold/40 bg-gold/10 p-3 text-sm">
+      🏘 <b>Your block remembers.</b> {memory.games} game{memory.games === 1 ? "" : "s"} together ({memory.wins} won). Next game: {describeCarry(memory.carry)}.
+    </p>
   );
 }

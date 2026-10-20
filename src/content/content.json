@@ -1509,7 +1509,9 @@
    "6": 3
   },
   "COUNTERFEIT_HAND": 3,
-  "CON_TRUST": 1
+  "CON_TRUST": 1,
+  "CLOSE_READ": 5,
+  "FACE_TOKENS": 1
  },
  "dealTemplates": {
   "LENDING": [

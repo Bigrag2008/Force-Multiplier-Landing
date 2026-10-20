@@ -14,6 +14,7 @@ The game and the novel *The Second Number* (Book One) are built to the same rule
 | Read is per district | Dre reads one district: the corner. Outside it he can't read clear. |
 | Teach, and call and response | The Chain: Marcus teaches one person, who teaches the next. |
 | **The Terrell rule** (house rule) | Terrell saw the trap, confronted it with no one covering him, and paid for it. |
+| ***Render?*** (house rule, Face tokens) | The Sight's one-word offer before it reads someone. Marcus learns to refuse it for the people he loves; at the table, letting a teammate read for you costs your Face. |
 | The Commons covering a learner | Civic Armor: "Seeing ain't enough. You gotta cover people while they see." |
 | Shady, and the Fall | The crown and the desk: every shortcut that looks like a blessing. |
 | Expose; no single leader to arrest | The Empty Throne: no card table to shut down, no neck to fit a cuff or a crown to. |

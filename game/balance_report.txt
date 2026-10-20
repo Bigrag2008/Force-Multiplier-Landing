@@ -29,6 +29,8 @@ THE SECOND NUMBER — balance report (v4)
   Terrell rule win  55.6%  rounds  9.9 (wins avg 10.5)  r1-loss   0.0%  clock-outs  11.6%  UW opened  99.4%  Fall-games  17.0%  reaches/game 0.17
   endless deals win  58.8%  rounds  8.8 (wins avg  9.7)  r1-loss   0.0%  clock-outs   3.2%  UW opened  99.2%  Fall-games  25.6%  reaches/game 0.26
   all three  win  60.0%  rounds  9.9 (wins avg 10.4)  r1-loss   0.0%  clock-outs  11.0%  UW opened  99.4%  Fall-games  11.0%  reaches/game 0.11
+  close reads win  50.6%  rounds  8.7 (wins avg  9.9)  r1-loss   0.0%  clock-outs   3.8%  UW opened  98.8%  Fall-games  22.6%  reaches/game 0.22
+  Render?    win  53.6%  rounds  8.6 (wins avg  9.7)  r1-loss   0.0%  clock-outs   2.4%  UW opened  99.2%  Fall-games  17.2%  reaches/game 0.16
 
 === IS THE SHORTCUT TEMPTING? (co-op, 4 players) ===
   never      win  37.2%  rounds  8.3 (wins avg 10.1)  r1-loss   0.0%  clock-outs   1.0%  UW opened  95.2%  Fall-games   0.0%  reaches/game 0.00  TAKEs/game 0.0
@@ -78,6 +80,8 @@ THE SECOND NUMBER — balance report (v4)
   House rules: Terrell rule     healthy  (56% block wins)
   House rules: endless deals    healthy  (59% block wins)
   House rules: all three        healthy  (60% block wins)
+  House rules: close reads      healthy  (51% block wins)
+  House rules: Render?          healthy  (54% block wins)
   CO-OP 2p     healthy  (53% block wins)
   CO-OP 3p     healthy  (66% block wins)
   CO-OP 4p     healthy  (61% block wins)

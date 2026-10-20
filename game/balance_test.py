@@ -113,7 +113,8 @@ if __name__=="__main__":
     base,_r,*_=run_batch(n,4,style="human")
     house=[]
     for name,rules in (("none",{}),("fine-print dice",dict(fine_print=True)),("Terrell rule",dict(terrell=True)),
-                       ("endless deals",dict(endless=True)),("all three",dict(fine_print=True,terrell=True,endless=True))):
+                       ("endless deals",dict(endless=True)),("all three",dict(fine_print=True,terrell=True,endless=True)),
+                       ("close reads",dict(partial=True)),("Render?",dict(render=True))):
         st,rounds,*_=run_batch(n,4,style="human",**rules) if rules else (base,_r)
         house.append((name,wr(st,n)))
         print(line(name,n,st,rounds))

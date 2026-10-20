@@ -68,6 +68,8 @@ BP_ACTIONS      = {1:3, 2:2, 3:2, 4:2, 5:2}
 BP_HITS         = {1:1, 2:0.75, 3:1.75, 4:3, 5:4}   # strikes per round, carrying the remainder (repeats allowed)
 COUNTERFEIT_HAND = 3   # Overlord mode: counterfeit deals per game, at most one a round; each is one of its moves
 CON_TRUST       = 1    # Trust lost when you're conned by one
+CLOSE_READ      = 5    # Close reads: one layer short of the lever, NEGOTIATE succeeds on this roll or higher (d6)
+FACE_TOKENS     = 1    # "Render?": times each player can be read by a teammate; the Cookout gives it back
 # ---- the fine-print die: which layer holds a trap's lever, rolled on every draw ----
 FINE_PRINT_DIE  = {1:1, 2:1, 3:1, 4:2, 5:2, 6:3}   # 1–3 red · 4–5 amber · 6 blue
 
@@ -80,14 +82,17 @@ class Player:
         self.shields = 2 if role=="Veteran" else 0; self.elder_used = False
         self.free_teach = False; self.shop_around = False; self.practice = False   # Commons set-ups, this turn only
         self.bare = set()        # the Terrell rule: districts this player was taught without cover
+        self.face = 0            # "Render?": Face tokens (set by new_game when the rule is on)
         self.benched = False     # Block Party: sits out their next turn
 
 class Game:
     def __init__(self, overlord=False, scenario=None, owner=None, verbose=False, seed=None, chapter=None,
-                 party=False, fine_print=False, terrell=False, endless=False):
+                 party=False, fine_print=False, terrell=False, endless=False, partial=False, render=False, carry=None):
         if seed is not None: random.seed(seed)
         self.party=party and not overlord and not chapter          # Block Party: the intro game
         self.fine_print=fine_print; self.terrell=terrell; self.endless=endless
+        self.partial=partial; self.render=render                   # house rules: Close reads, "Render?"
+        self.carry=carry                                            # a block that remembers (see remember())
         self.ds=list(BP_DISTRICTS) if self.party else list(DISTRICTS)
         self.max_rounds=BP_ROUNDS if self.party else MAX_ROUNDS
         self.dealt=[]                                               # every card drawn, in order
@@ -119,11 +124,29 @@ class Game:
                     "The Plants Close":{"LABOR":2},"The Hospital Closes":{"HEALTH":2}}.get(self.scenario,{}).items():
             self.pressure[d]=p
         self.grace = 1 if self.scenario=="The Audit" else 0
+        self.remember()
         self.owner = ("The Overlord" if overlord else "No Owner" if self.party else
                       ch["owner"] if ch else owner or random.choice(list(OWNERS)))
         if self.party: self.green_book=False
         self.owner_face = ch["face"] if ch and not overlord else self.owner          # the Owner's era face
         self.players=[]
+
+    def remember(self):
+        """A block that remembers: districts woken last game start a step ahead (Clarity +1), captured ones
+        carry a scar (Squeeze +1). carry = {"clarity": {d: n}, "pressure": {d: n}, "rally": bool}."""
+        if not self.carry or self.overlord or self.chapter or self.party: return   # the full co-op game only
+        for d,n in (self.carry.get("clarity") or {}).items():
+            if d in self.ds and n>0: self.clarity[d]=min(WAKE-1,self.clarity[d]+n)
+        for d,n in (self.carry.get("pressure") or {}).items():
+            if d in self.ds and n>0: self.pressure[d]=min(CAPTURE-1,self.pressure[d]+n)
+        strong=[d for d in self.ds if (self.carry.get("clarity") or {}).get(d)]
+        scars=[d for d in self.ds if (self.carry.get("pressure") or {}).get(d)]
+        if strong or scars or self.carry.get("rally"):
+            self.emit("🏘 The block remembers: "
+                      + "; ".join(([f"{', '.join(strong)} start{'s' if len(strong)==1 else ''} stronger (Clarity +1)"] if strong else [])
+                                  + ([f"{', '.join(scars)} carr{'ies' if len(scars)==1 else 'y'} a scar (Squeeze +1)"] if scars else [])
+                                  + (["after last game, the community rallies (everyone +1 Trust)"] if self.carry.get("rally") else []))
+                      + ".")
 
     # ---- helpers ----
     def emit(self,s):
@@ -213,9 +236,11 @@ class Game:
         card=G.make_deal(d,random) if self.endless else random.choice(self.deck[d])
         return self.dress(card)
 
-    def looks(self, pl, d, card):
-        """The deal as this player can read it: below Read 3, a counterfeit looks like honest help."""
-        return dict(card, trap=False, lever=0) if card.get("counterfeit") and pl.sight[d]<3 else card
+    def looks(self, pl, d, card, see=None):
+        """The deal as this player can read it (or a teammate rendering it for them: see): below Read 3,
+        a counterfeit looks like honest help."""
+        see=pl.sight[d] if see is None else see
+        return dict(card, trap=False, lever=0) if card.get("counterfeit") and see<3 else card
 
     def dress(self, card):
         """The fine-print die: roll which layer holds a trap's lever, so the deck can't be learned by heart."""
@@ -235,10 +260,18 @@ class Game:
             return [self.dress(c) for c in random.sample(self.deck[d],2)]
         return [self.draw(d)]
 
-    def face(self, pl, d, choice, card=None):
-        """Face a live deal. choice in TAKE/WALK/NEGOTIATE."""
+    def can_render(self, pl, by, d):
+        """"Render?": a teammate who reads this district better reads the deal for you, once per Face token."""
+        return (self.render and by is not None and by is not pl and pl.face>0 and not by.flipped
+                and by.role!="Overlord" and by.sight[d]>pl.sight[d])
+
+    def face(self, pl, d, choice, card=None, by=None):
+        """Face a live deal. choice in TAKE/WALK/NEGOTIATE. by: the teammate rendering it for you ("Render?")."""
         card=card or self.draw(d); trap=card["trap"]; lever=self.lever(d,card); see=pl.sight[d]
         self.emit(f"{pl.name} faces a deal in {d}: \"{card['front']}\"  → {choice}")
+        if self.can_render(pl,by,d):
+            pl.face-=1; see=by.sight[d]
+            self.emit(f"  Render? {pl.name} lets {by.name} read it for them (Read {see}). Face left: {pl.face}.")
         out=None                                   # what happened, for the money count (money())
         if "die" in card: self.emit(f"  (The fine print: rolled {card['die']}, so the lever sits in {LEVER_NAME[card['lever']]}.)")
         bare=self.terrell and trap and d in pl.bare and choice!="WALK"
@@ -283,7 +316,13 @@ class Game:
                           f"Squeeze −{amt}, {d} clarity +1, Props +2.")
                 if fake:
                     pl.legend+=1; self.emit(f"  You exposed a COUNTERFEIT: it only looked like honest help. Props +1.")
+            elif trap and self.partial and see==lever-1 and (roll:=int(random.random()*6)+1)>=CLOSE_READ:
+                out="partial"; self.pressure[d]=max(0,self.pressure[d]-1); pl.legend+=1   # a close read
+                self.emit(f"  NEGOTIATE one layer short of the {LEVER_NAME[lever]} lever (Read {see}): rolled {roll}, "
+                          f"you talked them down. Squeeze −1, Props +1.")
             elif trap:
+                if self.partial and see==lever-1:
+                    self.emit(f"  A close read (Read {see}, the lever's {LEVER_NAME[lever]}): rolled {roll}, not enough.")
                 out="played"; self.pressure[d]=min(CAPTURE,self.pressure[d]+1)
                 self.emit(f"  NEGOTIATE without the {LEVER_NAME[lever]} layer (Read {see}): you got played. "
                           f"Squeeze +1, Trust −{cost}.")
@@ -389,6 +428,7 @@ class Game:
         best={d:max(p.sight[d] for p in self.active()) for d in self.ds}
         for pl in self.active():
             pl.trust=min(MAX_TRUST,pl.trust+2); pl.corruption=max(0,pl.corruption-1); pl.legend+=1
+            if self.render: pl.face=FACE_TOKENS
             d=(picks or {}).get(pl.name) or self.cookout_gain(pl)[0]
             old=pl.sight[d]; pl.sight[d]=max(old,best[d])
             self.emit(f"  {pl.name}: Trust +2, Shady −1, Props +1"
@@ -635,7 +675,7 @@ class Game:
     def do(self, pl, a):
         k=a[0]
         if   k=="study":    self.study(pl,a[1])
-        elif k=="face":     self.face(pl,a[1],a[2],a[3] if len(a)>3 else None)
+        elif k=="face":     self.face(pl,a[1],a[2],a[3] if len(a)>3 else None,a[4] if len(a)>4 else None)
         elif k=="teach":    self.teach(pl,a[1],a[2],a[3] if len(a)>3 else True)
         elif k=="commons":  self.commons(pl, a[1] if len(a)>1 and a[1] else "BARBERSHOP")
         elif k=="reach":    self.reach(pl,a[1])
@@ -660,10 +700,11 @@ class Game:
     # style: "careful" (TAKE only to save a district, never past the edge),
     #        "never"   (refuses every shortcut), "greedy" (takes fast power freely),
     #        "human"   (careful, but gives in to temptation about one move in five).
-    def bot_choice(self, pl, d, card, style="careful"):
-        """Decide TAKE/WALK/NEGOTIATE using only what this player can see."""
-        card=self.looks(pl,d,card)
-        see=pl.sight[d]; safe=pl.corruption+self.take_cost()<FLIP
+    def bot_choice(self, pl, d, card, style="careful", see=None):
+        """Decide TAKE/WALK/NEGOTIATE using only what this player can see (or a renderer sees for them)."""
+        see=pl.sight[d] if see is None else see
+        card=self.looks(pl,d,card,see)
+        safe=pl.corruption+self.take_cost()<FLIP
         urgent=self.pressure[d]>=CAPTURE-1
         if see>=1:                                   # red layer: you can tell trap from honest
             if not card["trap"]: return "TAKE"
@@ -671,6 +712,8 @@ class Game:
             if see>=card["lever"] and pl.trust>=self.neg_cost(d): return "NEGOTIATE"
             if style=="greedy" and pl.corruption+self.take_cost()<FLIP+2: return "TAKE"
             if style=="careful" and urgent and safe: return "TAKE"
+            if (self.partial and urgent and see==card["lever"]-1 and pl.trust>=self.neg_cost(d)
+                    and style!="greedy"): return "NEGOTIATE"                     # try a close read
             return "WALK"
         # blind: the front is all you have
         if style=="greedy" or (style=="careful" and urgent and safe): return "TAKE"
@@ -683,7 +726,15 @@ class Game:
             if not c["trap"]: return 2
             return 3 if pl.sight[d]>=c["lever"] else 0
         card=max(self.deals_for(pl,d),key=score)
-        return ("face",d,self.bot_choice(pl,d,card,style),card)
+        by=self.bot_renderer(pl,d)
+        return ("face",d,self.bot_choice(pl,d,card,style,by.sight[d] if by else None),card,by)
+
+    def bot_renderer(self, pl, d):
+        """Who a bot asks to read a deal for it: the best reader, when it can't read the district or it's urgent."""
+        if not self.render or pl.face<1: return None
+        best=max((p for p in self.active() if p is not pl), key=lambda p:p.sight[d], default=None)
+        if best and self.can_render(pl,best,d) and (pl.sight[d]==0 or self.pressure[d]>=CAPTURE-1): return best
+        return None
 
     def bot_place(self, pl):
         """Where the bot gathers. Barbershop, park and market set up your next action."""
@@ -798,7 +849,7 @@ class Game:
             if x["out"] in ("played","conned"): played[x["who"]]=played.get(x["who"],0)+1
         most=max(played.items(),key=lambda kv:kv[1]) if played else None
         return dict(taken=tot("taken"), played=tot("played")+conned, refused=tot("refused")+tot("wasted"),
-                    dodged=tot("dodged"), defused=tot("defused"), help=tot("help"),
+                    dodged=tot("dodged"), defused=tot("defused")+tot("partial"), help=tot("help"),
                     shortcuts=len(taken), worst=worst, playedMost=dict(who=most[0],times=most[1]) if most else None)
 
     def chapter_result(self):
@@ -825,10 +876,13 @@ class Game:
 ROSTER=[("Marcus","Translator"),("Nia","Student"),("Simone","Elder"),("Zay","Veteran"),("Dre","Organizer")]
 
 def new_game(overlord=False, scenario=None, owner=None, verbose=False, seed=None, roster=None, chapter=None, **rules):
-    """rules: party, fine_print, terrell, endless (see Game)."""
+    """rules: party, fine_print, terrell, endless, partial, render, carry (see Game)."""
     g=Game(overlord=overlord, scenario=scenario, owner=owner, verbose=verbose, seed=seed, chapter=chapter, **rules)
     g.players=[Player(n,r) for n,r in (roster or ROSTER)]
     if g.scenario=="The Plants Close":
         for p in g.players: p.trust=1
+    for p in g.players: p.face=FACE_TOKENS if g.render else 0
+    if g.carry and g.carry.get("rally") and not g.overlord and not g.chapter and not g.party:
+        for p in g.players: p.trust=min(MAX_TRUST,p.trust+1)
     if overlord: g.players.append(Player("The Owner","Overlord"))
     return g

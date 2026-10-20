@@ -275,6 +275,39 @@ def test_counterfeits():
     assert g.money()["played"]>0
     g.forged=False; g.forgeries=0; g.m_counterfeit(ov.name,"LABOR"); assert not g.counterfeits   # hand empty
 
+def test_close_reads():
+    import random
+    hits=played=0
+    for seed in range(40):
+        g=E.new_game(seed=seed, scenario="A Quiet Year", roster=E.ROSTER[:2], partial=True); p=g.players[0]
+        p.sight["LABOR"]=1; p.trust=3; g.pressure["LABOR"]=2
+        g.face(p,"LABOR","NEGOTIATE",card(True,2))           # one layer short of an amber lever: a roll
+        if g.pressure["LABOR"]==1: hits+=1; assert "talked them down" in g.log[-1]
+        else: played+=1; assert g.pressure["LABOR"]==3
+    assert hits and played                                     # both happen
+    g=E.new_game(seed=1, scenario="A Quiet Year", roster=E.ROSTER[:2], partial=True); p=g.players[0]
+    p.sight["LABOR"]=1; p.trust=3; g.pressure["LABOR"]=1
+    g.face(p,"LABOR","NEGOTIATE",card(True,3)); assert g.pressure["LABOR"]==2   # two layers short: no roll
+
+def test_render():
+    g=E.new_game(seed=1, scenario="A Quiet Year", roster=E.ROSTER[:3], render=True); a,b=g.players[0],g.players[1]
+    assert a.face==E.FACE_TOKENS
+    b.sight["HOUSING"]=2; a.trust=3; g.pressure["HOUSING"]=2
+    g.face(a,"HOUSING","NEGOTIATE",card(True,2),b)          # b reads it for a: Read 2 beats the amber lever
+    assert g.pressure["HOUSING"]==1 and a.face==0 and any("Render?" in l for l in g.log)
+    g.face(a,"HOUSING","NEGOTIATE",card(True,2),b)          # no Face left: a reads it alone, and gets played
+    assert g.pressure["HOUSING"]==2
+    g.cookout(); assert a.face==E.FACE_TOKENS                 # the Cookout gives Face back
+    off=E.new_game(seed=1, scenario="A Quiet Year", roster=E.ROSTER[:2]); assert off.players[0].face==0
+
+def test_block_remembers():
+    c={"clarity":{"HOUSING":1},"pressure":{"LABOR":1},"rally":True}
+    g=E.new_game(seed=1, scenario="A Quiet Year", roster=E.ROSTER[:2], carry=c)
+    assert g.clarity["HOUSING"]==1 and g.pressure["LABOR"]==1 and all(p.trust==E.START_TRUST+1 for p in g.players)
+    assert "remembers" in g.log[0]
+    p=E.new_game(seed=1, roster=[("A","Neighbor"),("B","Neighbor")], party=True, carry=c)
+    assert p.clarity["HOUSING"]==0 and p.players[0].trust==E.START_TRUST     # Block Party starts fresh
+
 if __name__=="__main__":
     tests=[(n,f) for n,f in sorted(globals().items()) if n.startswith("test_")]
     for n,f in tests: f(); print(f"  ✓ {n[5:].replace('_',' ')}")

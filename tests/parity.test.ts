@@ -4,12 +4,12 @@
  */
 import { describe, expect, it } from "vitest";
 import golden from "./golden.json";
-import { newGame, type Game, type Style } from "../src/engine/engine";
+import { newGame, type Carry, type Game, type Style } from "../src/engine/engine";
 
 interface GoldenGame {
   config: {
     mode: string; players: number; style: Style; seed: number; roster: string[][]; scenario?: string; owner?: string;
-    rules?: { party?: boolean; finePrint?: boolean; terrell?: boolean; endless?: boolean };
+    rules?: { party?: boolean; finePrint?: boolean; terrell?: boolean; endless?: boolean; partial?: boolean; render?: boolean; carry?: Carry };
   };
   final: Record<string, unknown>;
   log: string[];
@@ -24,7 +24,7 @@ function snapshot(g: Game) {
     leagueFormed: g.leagueFormed, money: g.money(),
     players: g.players.map((p) => ({
       name: p.name, role: p.role, trust: p.trust, corruption: p.corruption, legend: p.legend,
-      flipped: p.flipped, shields: p.shields, sight: p.sight, bare: [...p.bare].sort(), benched: p.benched,
+      flipped: p.flipped, shields: p.shields, sight: p.sight, bare: [...p.bare].sort(), benched: p.benched, face: p.face,
     })),
   };
 }

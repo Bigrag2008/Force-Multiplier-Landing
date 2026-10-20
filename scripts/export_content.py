@@ -16,7 +16,7 @@ import deck_cards as D, chapters as CH, sn_engine as E, deal_gen as G
 CONST_NAMES=["WAKE","CAPTURE","FLIP","GRIP","LOSE_CAPTURED","UNDERWORLD_AT","THREADS_TO_WIN","TAKE_CORRUPT",
              "NEG_COST","START_TRUST","MAX_TRUST","MAX_ROUNDS","SOUSOU_HAND","LEAGUE_PUSH",
              "ACTIONS","MACHINE_HITS","OVERLORD_MOVES","BP_DISTRICTS","BP_ROUNDS","BP_WAKE_TO_WIN","BP_TAKE",
-             "BP_SIT_OUT","BP_ACTIONS","BP_HITS","FINE_PRINT_DIE","COUNTERFEIT_HAND","CON_TRUST"]
+             "BP_SIT_OUT","BP_ACTIONS","BP_HITS","FINE_PRINT_DIE","COUNTERFEIT_HAND","CON_TRUST","CLOSE_READ","FACE_TOKENS"]
 
 def jsonable(v):
     if isinstance(v,dict): return {str(k):jsonable(x) for k,x in v.items()}

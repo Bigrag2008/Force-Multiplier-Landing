@@ -90,6 +90,33 @@ describe("Session flow", () => {
     expect(Session.replay(config, s.moves).clock).toEqual(s.clock);
   });
 
+  it("Render? travels as a move: a teammate reads the deal, the Face is spent, and it replays", () => {
+    const config: SessionConfig = { mode: "coop", roster: C.roster.slice(0, 3), scenario: "A Quiet Year", seed: 21, render: true };
+    const s = new Session(config);
+    if (s.phase === "cookout") s.apply({ t: "cookout", call: false });
+    const reader = s.g.players.find((x) => x !== s.player)!;
+    reader.sight.HEALTH = 3; // set before any move, the same on replay below
+    s.apply({ t: "deal", d: "HEALTH" });
+    const card = s.pending!.k === "deal" ? s.pending!.cards[0] : undefined;
+    expect(s.apply({ t: "act", a: toWire(s.g, { k: "face", d: "HEALTH", choice: "WALK", card, by: reader }) })).toBe(true);
+    expect(s.g.log.some((l) => l.includes(`lets ${reader.name} read it`))).toBe(true);
+    expect(s.g.players[0].face).toBe(0);
+    const r = new Session(config);
+    r.g.players.find((x) => x.name === reader.name)!.sight.HEALTH = 3;
+    for (const m of s.moves) r.apply(m);
+    expect(r.g.log).toEqual(s.g.log);
+  });
+
+  it("a remembering block starts where the last game left it", () => {
+    const s = new Session({ mode: "coop", roster: C.roster.slice(0, 2), scenario: "A Quiet Year", seed: 22, remember: true, carry: { clarity: { HOUSING: 1 }, pressure: { LABOR: 1 }, rally: true } });
+    expect(s.g.clarity.HOUSING).toBe(1);
+    expect(s.g.pressure.LABOR).toBe(1);
+    expect(s.g.players.every((p) => p.trust === 3)).toBe(true); // the rally
+    expect(s.g.log[0]).toContain("The block remembers");
+    const party = new Session({ mode: "party", roster: C.roster.slice(0, 2).map((r) => ({ ...r, role: "Neighbor" })), seed: 22, carry: { clarity: { HOUSING: 1 } } });
+    expect(party.g.clarity.HOUSING).toBe(0); // Block Party always starts fresh
+  });
+
   it("asks before the Cookout and lets the table decline", () => {
     const s = new Session({ mode: "coop", roster: C.roster.slice(0, 3), scenario: "A Quiet Year", seed: 5 });
     expect(s.phase).toBe("cookout");

@@ -22,7 +22,7 @@ export function cardFromWire(g: Game, w: WireCard): Card {
 
 export type WireAction =
   | { k: "study" | "history" | "trace"; d: District }
-  | { k: "face"; d: District; choice: Choice; card?: WireCard; clock?: ClockTag }
+  | { k: "face"; d: District; choice: Choice; card?: WireCard; clock?: ClockTag; by?: string }
   | { k: "teach"; t: string; d: District; response?: boolean }
   | { k: "commons"; place: PlaceKey }
   | { k: "reach"; t: string }
@@ -48,7 +48,7 @@ export type Move =
 export function toWire(g: Game, a: Action): WireAction {
   switch (a.k) {
     case "face":
-      return { k: "face", d: a.d, choice: a.choice, ...(a.card ? { card: cardToWire(g, a.d, a.card) } : {}) };
+      return { k: "face", d: a.d, choice: a.choice, ...(a.card ? { card: cardToWire(g, a.d, a.card) } : {}), ...(a.by ? { by: a.by.name } : {}) };
     case "teach":
       return { k: "teach", t: a.t.name, d: a.d, ...(a.response === undefined ? {} : { response: a.response }) };
     case "reach":
@@ -68,7 +68,7 @@ export function fromWire(g: Game, w: WireAction): Action {
   };
   switch (w.k) {
     case "face":
-      return { k: "face", d: w.d, choice: w.choice, card: w.card ? cardFromWire(g, w.card) : undefined };
+      return { k: "face", d: w.d, choice: w.choice, card: w.card ? cardFromWire(g, w.card) : undefined, by: w.by ? who(w.by) : undefined };
     case "teach":
       return { k: "teach", t: who(w.t), d: w.d, response: w.response };
     case "reach":

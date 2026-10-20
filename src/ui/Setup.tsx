@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { C } from "../engine/content";
 import { checkEdition, LAST_EDITION, loadEditions, WEST_DAYTON, type Edition } from "../engine/edition";
+import { describeCarry, forgetBlock, loadBlock, type BlockMemory } from "../game/block";
 import type { Mode, SessionConfig } from "../game/session";
 import { RolePortrait } from "./art/RolePortrait";
 
@@ -17,7 +18,8 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
   const [overlordHuman, setOverlordHuman] = useState(false);
   const [coach, setCoach] = useState(true);
   const [online, setOnline] = useState(false);
-  const [rules, setRules] = useState({ finePrint: false, terrell: false, endless: false, math: false, clocks: true });
+  const [rules, setRules] = useState({ finePrint: false, terrell: false, endless: false, math: false, clocks: true, partial: false, render: false });
+  const [remember, setRemember] = useState(true);
   const party = mode === "party";
   // Your City editions saved on this device (only ones ready to play); ?edition=<id> picks one
   const [editions, setEditions] = useState<Edition[]>([]);
@@ -34,6 +36,9 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
     if (pick && ready.some((e) => e.id === pick)) setEditionId(pick);
   }, []);
   const edition = editions.find((e) => e.id === editionId);
+  // a block that remembers (full co-op): what this edition's block carries into the next game
+  const [memory, setMemory] = useState<BlockMemory | null>(null);
+  useEffect(() => setMemory(loadBlock(editionId)), [editionId]); // eslint-disable-line react-hooks/set-state-in-effect
   const rule = (k: keyof typeof rules) => (e: { target: { checked: boolean } }) => setRules({ ...rules, [k]: e.target.checked });
   const field = "rounded-lg border border-white/20 bg-white/10 px-3 py-2";
   const dupRoles = !party && new Set(roles.slice(0, count)).size < count;
@@ -58,7 +63,10 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
           endless: rules.endless,
           math: rules.endless && rules.math,
           clocks: rules.clocks,
+          partial: rules.partial,
+          render: rules.render,
           ...(edition ? { edition } : {}),
+          ...(mode === "coop" && remember ? { remember: true, ...(memory ? { carry: memory.carry } : {}) } : {}),
         }, online);
         try {
           window.localStorage.setItem(LAST_EDITION, editionId);
@@ -138,6 +146,26 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
           <p className="text-xs text-program/70">{scenario !== "random" ? C.scenarios[scenario] : "A random scenario."} Start with The Audit or A Quiet Year.</p>
         </div>
       )}
+      {mode === "coop" && (
+        <div className="rounded-xl border border-white/15 p-3">
+          <label className="flex items-start gap-2">
+            <input type="checkbox" className="mt-1" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
+            <span>
+              <b>🏘 Our block remembers</b>
+              <span className="block text-xs text-program/70">
+                {memory
+                  ? `${memory.games} game${memory.games === 1 ? "" : "s"} so far (${memory.wins} won). This game: ${describeCarry(memory.carry)}.`
+                  : "Play on as the same block: districts you wake start the next game stronger, and captured ones carry a scar."}
+              </span>
+            </span>
+          </label>
+          {memory && (
+            <button type="button" className="ml-6 mt-1 text-xs text-program/60 underline" onClick={() => { if (window.confirm("Start a new block? This one's memory is forgotten.")) { forgetBlock(editionId); setMemory(null); } }}>
+              Start a new block
+            </button>
+          )}
+        </div>
+      )}
       {mode === "overlord" && (
         <label className="flex items-center gap-2">
           <input type="checkbox" checked={overlordHuman} onChange={(e) => setOverlordHuman(e.target.checked)} />
@@ -152,6 +180,14 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
             <label className="flex items-start gap-2">
               <input type="checkbox" className="mt-1" checked={rules.finePrint} onChange={rule("finePrint")} />
               <span><b>🎲 Fine-print dice</b><span className="block text-xs text-program/70">Each trap&apos;s lever is rolled when it&apos;s drawn (1–3 red, 4–5 amber, 6 blue), so nobody can learn the deck by heart.</span></span>
+            </label>
+            <label className="flex items-start gap-2">
+              <input type="checkbox" className="mt-1" checked={rules.partial} onChange={rule("partial")} />
+              <span><b>🎲 Close reads</b><span className="block text-xs text-program/70">One layer short of a trap&apos;s lever, NEGOTIATE rolls a die: 5–6 talks them down (Squeeze −1); anything else, you get played.</span></span>
+            </label>
+            <label className="flex items-start gap-2">
+              <input type="checkbox" className="mt-1" checked={rules.render} onChange={rule("render")} />
+              <span><b><i>Render?</i></b><span className="block text-xs text-program/70">Each player has one Face token. Facing a deal, you can let a teammate who reads that district better read it for you; it costs your Face. The Cookout gives it back. From the novel: the Sight&apos;s offer Marcus learns to refuse.</span></span>
             </label>
             <label className="flex items-start gap-2">
               <input type="checkbox" className="mt-1" checked={rules.terrell} onChange={rule("terrell")} />

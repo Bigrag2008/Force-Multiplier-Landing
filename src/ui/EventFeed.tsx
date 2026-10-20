@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import type { Session } from "../game/session";
 
 function tone(line: string) {
-  if (/✖|⚠|got played|FALLEN|clock ran out|strikes|muddies|tempts|backfires|sits|COUNTERFEIT: it only|counterfeit into|buries|feeds|whispers|peels|collections|creeps|covers|scare/.test(line)) return "text-[#ff9b9b]";
+  if (/✖|⚠|got played|FALLEN|clock ran out|strikes|muddies|tempts|backfires|sits|COUNTERFEIT: it only|counterfeit into|not enough|buries|feeds|whispers|peels|collections|creeps|covers|scare/.test(line)) return "text-[#ff9b9b]";
   if (/⚑|UNDERWORLD|COOKOUT/.test(line)) return "text-gold";
   if (/✦|defused|HONEST|pulls them home|⛨|traces|AWAKE|Green Book|paid off|Call and response|LEAGUE FORMS/.test(line)) return "text-[#8be0b5]";
   return "text-program/90";

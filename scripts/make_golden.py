@@ -26,7 +26,7 @@ def snapshot(g):
                 leagueFormed=g.league_formed, money=g.money(),
                 players=[dict(name=p.name, role=p.role, trust=p.trust, corruption=p.corruption, legend=p.legend,
                               flipped=p.flipped, shields=p.shields, sight=p.sight,
-                              bare=sorted(p.bare), benched=p.benched) for p in g.players])
+                              bare=sorted(p.bare), benched=p.benched, face=p.face) for p in g.players])
 
 configs=[]
 for k in (2,3,4,5):
@@ -43,17 +43,22 @@ for ow in E.OWNERS:                         # every Owner at least once
     configs.append(dict(mode="coop", players=3, style="careful", seed=77, rot=1, owner=ow, scenario="A Quiet Year"))
 
 # Block Party, and the house rules (fine-print dice, the Terrell rule, endless deals), alone and together
-PY={"party":"party","finePrint":"fine_print","terrell":"terrell","endless":"endless"}
+PY={"party":"party","finePrint":"fine_print","terrell":"terrell","endless":"endless","partial":"partial","render":"render","carry":"carry"}
 for k in (2,3,4,5):
     for seed in (1,2,3):
         configs.append(dict(mode="coop", players=k, style=("careful","human","greedy")[seed-1], seed=seed*31+k, rot=seed,
                             rules=dict(party=True)))
 for i,rules in enumerate(({"finePrint":True},{"terrell":True},{"endless":True},
-                          {"finePrint":True,"terrell":True,"endless":True},{"party":True,"endless":True,"finePrint":True})):
+                          {"finePrint":True,"terrell":True,"endless":True},{"party":True,"endless":True,"finePrint":True},
+                          {"partial":True},{"render":True},{"partial":True,"render":True,"finePrint":True},
+                          {"carry":{"clarity":{"HOUSING":1,"LABOR":1},"pressure":{"LENDING":1},"rally":True}})):
     for k in (2,4,5):
         for style in ("careful","human"):
             configs.append(dict(mode="coop", players=k, style=style, seed=500+i*10+k, rot=i, rules=rules))
 
+for k in (2,3,4,5):                         # close reads, by a table that never takes the shortcut
+    for seed in (1,2):
+        configs.append(dict(mode="coop", players=k, style="never", seed=700+seed*10+k, rot=seed, rules={"partial":True}))
 games=[]
 for cfg in configs:
     g=E.new_game(overlord=cfg["mode"]=="overlord", seed=cfg["seed"], roster=[tuple(x) for x in roster(cfg["players"],cfg["rot"])],

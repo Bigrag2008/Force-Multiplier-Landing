@@ -28,6 +28,8 @@ export interface Card {
   rush?: boolean;
   /** Overlord mode: a fake honest deal; only Read 3 sees it (deck_cards.COUNTERFEITS) */
   counterfeit?: boolean;
+  /** a Your City edition's own deal */
+  local?: boolean;
 }
 /** a deal with blanks (game/deal_gen.py): rolled into a fresh Card for endless deals */
 export interface DealTemplate {
@@ -108,6 +110,8 @@ interface Constants {
   FINE_PRINT_DIE: Record<string, number>;
   COUNTERFEIT_HAND: number;
   CON_TRUST: number;
+  CLOSE_READ: number;
+  FACE_TOKENS: number;
 }
 interface Content {
   edition: string;

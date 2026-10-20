@@ -5,7 +5,7 @@
  */
 import { K, type Card, type District } from "../engine/content";
 import type { Edition } from "../engine/edition";
-import { newGame, type Action, type Game, type Player } from "../engine/engine";
+import { newGame, type Action, type Carry, type Game, type Player } from "../engine/engine";
 import { cardFromWire, fromWire, type Move, type WireAction } from "./moves";
 
 export type Mode = "coop" | "overlord" | "chapter" | "party";
@@ -36,6 +36,12 @@ export interface SessionConfig {
   clocks?: boolean;
   /** a Your City edition (the whole edition travels with the game, so saves and phones get it too) */
   edition?: Edition;
+  /** house rules: Close reads, "Render?" */
+  partial?: boolean;
+  render?: boolean;
+  /** a block that remembers: keep this game for the next one, and what this one starts with (full co-op only) */
+  remember?: boolean;
+  carry?: Carry;
 }
 
 /** a card drawn and waiting on the current player: kept in the session, so a reload can't redraw it */
@@ -79,6 +85,9 @@ export class Session {
       terrell: !!config.terrell,
       endless: !!config.endless,
       edition: config.edition,
+      partial: !!config.partial,
+      render: !!config.render,
+      carry: config.mode === "coop" ? config.carry : undefined,
     });
     this.overlordHuman = !!config.overlordHuman;
     this.coach = !!config.coach;

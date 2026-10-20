@@ -267,6 +267,13 @@ Turn any of these on. Each is in the website's setup, and in `sn_engine.py` as a
 
 **The math variant.** With endless deals, at Read 1 you work out the second number yourself before you look under the red glasses ("$20 a week × 78 weeks = ?"). Good for classrooms: it's the School Edition's default.
 
+**Close reads.** When your Read is exactly one layer short of a trap's lever (Read 1 against amber, Read 2 against blue), NEGOTIATE becomes a roll: **5 or 6** on a d6 talks them down (Squeeze −1, Props +1); anything else and you get played as usual. Two layers short, no roll. (About +0–3 points.)
+
+***Render?*** Each player has **1 Face token**. When you face a deal, a teammate who reads that district better may read it for you: their Read decides what you see and whether you can beat it. It costs your Face token. The Cookout gives everyone's Face back. The name is the novel's: before the Sight reads someone, it asks one word, *Render?*, and Marcus learns when to say no. (About +2 points.)
+
+## A block that remembers (the website)
+Play on as the same block. After each full co-op game, your block keeps what happened, one block per Your City edition: districts you **woke** start the next game a step ahead (**Clarity +1**), districts that were **captured** carry a **scar** (**Squeeze +1**), and after a **loss** the community rallies (everyone **+1 Trust**). Wake a scarred district to heal it. Tested over runs of 8 games: no losing spiral (2 players win 43% after a loss and 42% after a win; 4 players 50% and 55%). Block Party always starts fresh. At the table: write the woken and captured districts on the back of the rulebook and set them up next time.
+
 ## Campaign: *The Long Ledger* (prototype)
 The base game is also the first chapter you can play of a six-chapter Legacy campaign following one West Dayton family (see `CAMPAIGN.md`). **Chapter 3, *The Map* (1930s–1960s), is built and playable now**, with its own printed envelope:
 - **Setup:** swap in the era Housing and Lending decks; start both at Squeeze 2 (REDLINING is active); the Owner is *The Appraiser*.

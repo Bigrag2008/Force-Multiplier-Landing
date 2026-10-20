@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { C, DISTRICTS, type District, type PlaceKey } from "@/engine/content";
 import {
   blankEdition, checkEdition, encodeEdition, loadEditions, PLACE_KEYS, readEdition, saveEditions, WEST_DAYTON,
-  type Edition, type EditionHistory, type Resource,
+  type Edition, type EditionHistory, type LocalDeal, type Resource,
 } from "@/engine/edition";
 import { DISTRICT_COLOR, titleCase } from "@/ui/theme";
 
@@ -18,6 +18,15 @@ const WHAT: Record<District, string> = {
 };
 const field = "w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2";
 const blankHistory = (): EditionHistory => ({ title: "", year: "", place: "", story: "", lesson: "", source: "" });
+const blankDeal = (): LocalDeal => ({ front: "", red: "", amber: "", blue: "", trap: true, lever: 1, dollars: 0, basis: "", source: "" });
+/** where to look for a local deal, district by district */
+const DEAL_IDEAS: Record<District, string> = {
+  LENDING: "your state's rules for payday and title loans, a local rent-to-own store's contract, a check casher's posted fees",
+  HOUSING: "your city's rental rules (deposits, notice, inspections), a local lease's fee addendum, a land-contract sale on the county record",
+  LABOR: "your state's minimum wage or wage-theft law, a local staffing agency's terms",
+  HEALTH: "your local hospital's charity-care policy, a medical-credit card offered at a local clinic",
+  EDUCATION: "a local for-profit school's published costs, your state's grant program and its deadline",
+};
 
 /**
  * Your City editions: make the game about your own side of town. Same rules, same deals; your
@@ -192,6 +201,53 @@ function Editor({ ed, setEd, onSave, onClose }: { ed: Edition; setEd: (e: Editio
             })}
           </div>
         ))}
+      </Section>
+
+      <Section title="Local deals" sub="Deals from your own city or state, shuffled in with the base deck. Each one needs a source: the law, ordinance, policy or public record it comes from. Write the fine print the way it really reads.">
+        {DISTRICTS.map((d) => {
+          const deals = ed.deals?.[d] ?? [];
+          const setDeals = (next: LocalDeal[]) => set({ deals: { ...(ed.deals ?? {}), [d]: next } });
+          return (
+            <div key={d} className="rounded-xl border-l-4 bg-white/5 p-3" style={{ borderColor: DISTRICT_COLOR[d] }}>
+              <div className="flex items-center justify-between gap-2">
+                <p className="font-black" style={{ color: DISTRICT_COLOR[d] }}>{titleCase(d)} <span className="text-xs font-normal text-program/60">({deals.length})</span></p>
+                <button className="rounded-lg border border-white/25 px-2 py-1 text-xs" onClick={() => setDeals([...deals, blankDeal()])}>+ Add a deal</button>
+              </div>
+              <p className="text-xs text-program/60">Ideas: {DEAL_IDEAS[d]}.</p>
+              {deals.map((x, i) => {
+                const up = <K extends keyof LocalDeal>(k: K, v: LocalDeal[K]) => setDeals(deals.map((y, j) => (j === i ? { ...y, [k]: v } : y)));
+                return (
+                  <div key={i} className="mt-2 grid gap-2 rounded-lg border border-white/10 p-2 sm:grid-cols-2">
+                    <div className="sm:col-span-2"><Field label="What it says (the pitch everyone sees)"><input className={field} value={x.front} onChange={(e) => up("front", e.target.value)} /></Field></div>
+                    <Field label="🔴 The cost (Read 1)"><textarea className={`${field} h-16`} value={x.red} onChange={(e) => up("red", e.target.value)} /></Field>
+                    <Field label="🟠 The clock (Read 2)"><textarea className={`${field} h-16`} value={x.amber} onChange={(e) => up("amber", e.target.value)} /></Field>
+                    <Field label="🔵 The connection (Read 3)"><textarea className={`${field} h-16`} value={x.blue} onChange={(e) => up("blue", e.target.value)} /></Field>
+                    <div className="space-y-2">
+                      <label className="flex items-center gap-2 text-sm">
+                        <input type="checkbox" checked={!x.trap} onChange={(e) => up("trap", !e.target.checked)} /> It&apos;s an honest deal (real help)
+                      </label>
+                      {x.trap && (
+                        <Field label="Which layer beats it">
+                          <select className={field} value={x.lever} onChange={(e) => up("lever", Number(e.target.value))}>
+                            <option value={1} className="text-ink">Red: the cost is the weak point</option>
+                            <option value={2} className="text-ink">Amber: the deadline or your rights window</option>
+                            <option value={3} className="text-ink">Blue: name who&apos;s behind it</option>
+                          </select>
+                        </Field>
+                      )}
+                    </div>
+                    <Field label="Real money ($)" hint={x.trap ? "what signing it typically costs one household" : "what the real help is worth"}>
+                      <input className={field} inputMode="numeric" value={x.dollars || ""} onChange={(e) => up("dollars", Number(e.target.value.replace(/[^0-9]/g, "")) || 0)} />
+                    </Field>
+                    <Field label="Why that much" hint="one line, like the answer key's"><input className={field} value={x.basis} onChange={(e) => up("basis", e.target.value)} /></Field>
+                    <div className="sm:col-span-2"><Field label="Source" hint="the law or ordinance by name and number, the policy, or the public record"><input className={field} value={x.source} onChange={(e) => up("source", e.target.value)} /></Field></div>
+                    <button className="text-left text-xs text-program/60 underline sm:col-span-2" onClick={() => setDeals(deals.filter((_, j) => j !== i))}>Remove this deal</button>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
       </Section>
 
       <Section title="Real help near you" sub="Shown at the end of every game in this edition, and on Read your own deal. Only list places you've confirmed are open and do what you say.">

@@ -4,11 +4,29 @@
  * the true local history the Elder tells, and where to get real help. West Dayton is the reference
  * edition, built from the content export. game/YOUR_CITY.md is the guide to making one.
  */
-import { C, DISTRICTS, type District, type HistoryCard, type PlaceKey } from "./content";
+import { C, DISTRICTS, type Card, type District, type HistoryCard, type PlaceKey } from "./content";
 
 export interface EditionHistory extends HistoryCard {
   /** where the edition's makers checked the story (a book, an archive, a museum, an elder by name) */
   source?: string;
+}
+/** a deal from your own city or state: a local law, a local landlord's lease, a local lender's terms */
+export interface LocalDeal {
+  front: string;
+  /** the cost (Read 1) */
+  red: string;
+  /** the clock (Read 2) */
+  amber: string;
+  /** the connection (Read 3) */
+  blue: string;
+  trap: boolean;
+  /** which layer beats it: 1 red, 2 amber, 3 blue (traps only) */
+  lever: number;
+  /** the real money, for the end-of-game count */
+  dollars: number;
+  basis: string;
+  /** the law, ordinance or public record it comes from */
+  source: string;
 }
 export interface Resource {
   name: string;
@@ -36,6 +54,17 @@ export interface Edition {
   historyMode: "add" | "replace";
   /** real help near you, shown at the end of every game and on Read your own deal */
   resources: Resource[];
+  /** deals from your city or state, shuffled in with the base deck (not in endless deals or Chapter 3) */
+  deals?: Partial<Record<District, LocalDeal[]>>;
+}
+
+/** an edition's local deals as playable cards */
+export function localCards(ed: Edition, d: District): Card[] {
+  return (ed.deals?.[d] ?? []).map((x) => ({
+    front: x.front, red: x.red, amber: x.amber, blue: x.blue,
+    trap: x.trap, lever: x.trap ? Math.min(3, Math.max(1, x.lever || 1)) : 0,
+    dollars: Math.max(0, Math.round(x.dollars || 0)), basis: x.basis, local: true,
+  }));
 }
 
 export const PLACE_KEYS = Object.keys(C.places) as PlaceKey[];
@@ -98,6 +127,16 @@ export function checkEdition(ed: Edition): string[] {
       need(h.lesson, `${label}: lesson`, LIMITS.long);
       if (!h.source?.trim()) out.push(`${label}: say where you checked it (source). History cards have to be true.`);
     }
+  for (const [d, deals] of Object.entries(ed.deals ?? {}))
+    for (const [i, x] of (deals ?? []).entries()) {
+      const label = `Local deal ${d} #${i + 1}`;
+      need(x.front, `${label}: what it says`, 120);
+      need(x.red, `${label}: the cost (red)`, 200);
+      need(x.amber, `${label}: the clock (amber)`, 200);
+      need(x.blue, `${label}: the connection (blue)`, 200);
+      if (!x.source?.trim()) out.push(`${label}: name the law, ordinance or record it comes from (source).`);
+      if (x.trap && ![1, 2, 3].includes(x.lever)) out.push(`${label}: pick which layer beats it (red, amber or blue).`);
+    }
   for (const [i, r] of ed.resources.entries()) {
     need(r.name, `Resource #${i + 1}: name`);
     need(r.what, `Resource #${i + 1}: what it helps with`);
@@ -117,6 +156,7 @@ export function blankEdition(): Edition {
     credits: "",
     districts: Object.fromEntries(DISTRICTS.map((d) => [d, { sub: "", flavor: "" }])) as Edition["districts"],
     places: Object.fromEntries(PLACE_KEYS.map((k) => [k, { name: "", where: "", flavor: "" }])) as Edition["places"],
+    deals: {},
   };
 }
 
@@ -150,6 +190,7 @@ export function readEdition(text: string): Edition | null {
       history: ed.history ?? {},
       historyMode: ed.historyMode === "replace" ? "replace" : "add",
       resources: Array.isArray(ed.resources) ? ed.resources : [],
+      deals: ed.deals && typeof ed.deals === "object" ? ed.deals : {},
     };
   } catch {
     return null;

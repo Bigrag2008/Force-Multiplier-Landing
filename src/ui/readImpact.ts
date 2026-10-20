@@ -11,7 +11,7 @@ export type Tone = "good" | "bad" | "shady" | "calm" | "gold" | "dark";
 
 /** the verdict on a decision the player just made */
 export interface Verdict {
-  kind: "defused" | "played" | "honest" | "shortcut" | "walked" | "refused" | "wasted" | "backfire" | "conned" | "exposed";
+  kind: "defused" | "played" | "honest" | "shortcut" | "walked" | "refused" | "wasted" | "backfire" | "conned" | "exposed" | "close";
   title: string;
   sub: string;
   tone: Tone;
@@ -48,6 +48,8 @@ export function readImpact(g: Game, lines: string[], delta: Delta): Impact {
     // ---- the decision ----
     if ((m = l.match(/NEGOTIATE on the (\w+) lever \(Read (\d)\): defused\. Squeeze −(\d)/)))
       verdict({ kind: "defused", title: "DEFUSED", sub: `You read the ${m[1]} lever. Squeeze −${m[3]}, Clarity +1.`, tone: "good" });
+    else if ((m = l.match(/NEGOTIATE one layer short of the (\w+) lever \(Read (\d)\): rolled (\d)/)))
+      verdict({ kind: "close", title: "TALKED THEM DOWN", sub: `One layer short of the ${m[1]} lever, and you rolled ${m[3]}. Squeeze −1.`, tone: "good" });
     else if ((m = l.match(/NEGOTIATE without the (\w+) layer \(Read (\d)\): you got played/))) {
       verdict({ kind: "played", title: "YOU GOT PLAYED", sub: `The lever was ${m[1]}, and your Read was ${m[2]}. Squeeze +1.`, tone: "bad" });
       out.shake = true;

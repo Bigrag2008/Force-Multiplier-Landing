@@ -271,37 +271,68 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
   );
 }
 
-/** Facing one deal: read it, then TAKE / WALK / NEGOTIATE. A "sign now" deal counts down while you decide. */
+/**
+ * Facing one deal: read it, then TAKE / WALK / NEGOTIATE. A "sign now" deal counts down while you decide.
+ * With "Render?" on, a teammate who reads the district better can read it for you, once per Face token.
+ */
 function FaceDeal({ s, play, run, d, card, deal }: { s: Session; play: Play; run: Local; d: District; card: Card; deal: ReturnType<typeof adviseDeal> | null }) {
   const g = s.g;
   const p = s.player;
   const cost = g.negCost(d);
-  const [clock, left] = useSignNow(!!card.rush, p.sight[d], s.config.clocks !== false);
+  const [byName, setBy] = useState<string | null>(null);
+  const by = byName ? g.players.find((x) => x.name === byName) ?? null : null;
+  const offers = g.render && p.face > 0 ? g.active().filter((x) => g.canRender(p, x, d)) : [];
+  // what this decision is made with: your own Read, or the teammate's who reads it for you
+  const see = by ? by.sight[d] : p.sight[d];
+  const shown = g.looks(p, d, card, see);
+  const advice = by && s.coach ? safe(() => adviseDeal(g, { ...p, sight: { ...p.sight, [d]: see } } as Player, d, shown)) : deal;
+  const [clock, left] = useSignNow(!!card.rush, see, s.config.clocks !== false);
+  const close = g.partial && shown.trap && see === shown.lever - 1;
   const decide = (c: Choice) => {
     const tag = clockTag(clock);
-    play({ t: "act", a: { ...toWire(g, { k: "face", d, choice: c, card }), ...(tag ? { clock: tag } : {}) } as WireAction });
+    play({ t: "act", a: { ...toWire(g, { k: "face", d, choice: c, card, by }), ...(tag ? { clock: tag } : {}) } as WireAction });
   };
   const choice = (c: Choice, label: string) => (
     <button
-      className={primary + picked(deal?.pick === c) + (c === "TAKE" && clock === "running" ? " urge ring-2 ring-[#E63946]" : "")}
+      className={primary + picked(advice?.pick === c) + (c === "TAKE" && clock === "running" ? " urge ring-2 ring-[#E63946]" : "")}
       disabled={c === "NEGOTIATE" && p.trust < cost}
       onClick={() => decide(c)}
     >
       <span>{c === "TAKE" && clock === "running" ? "SIGN NOW" : c}</span>
       <span className="block text-[11px] font-normal">{label}</span>
-      {deal?.pick === c && <CoachBadge />}
-      {deal?.alt?.pick === c && <ShortcutBadge falls={deal.alt.falls} />}
+      {advice?.pick === c && <CoachBadge />}
+      {advice?.alt?.pick === c && <ShortcutBadge falls={advice.alt.falls} />}
     </button>
   );
   return (
     <Panel key="face" title={`${p.name} faces a deal in ${titleCase(d)}`} sub="Read what you can, then decide.">
-      <CoachBox s={s} run={run} view="deal" sight={p.sight[d]} advice={deal} />
+      <CoachBox s={s} run={run} view="deal" sight={see} advice={advice} />
+      {offers.length > 0 && !by && (
+        <div className="rounded-lg border border-[#c9a2ff]/50 bg-[#7b3fd1]/15 p-3 text-sm">
+          <p className="font-serif text-lg italic text-[#e3d2ff]">Render?</p>
+          <p className="text-program/85">
+            A teammate who reads {titleCase(d)} better can read this one for you. It costs your Face ({p.face} left); the Cookout gives it back. Or read it yourself.
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {offers.map((x) => (
+              <button key={x.name} className="rounded-lg border border-[#c9a2ff]/60 px-3 py-1.5 font-bold text-[#e3d2ff]" onClick={() => setBy(x.name)}>
+                Let {x.name} read it (Read {x.sight[d]})
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      {by && (
+        <p className="rounded-lg bg-[#7b3fd1]/15 px-3 py-2 text-sm text-[#e3d2ff]">
+          {by.name} is reading it for you, with Read {see}. <button className="ml-2 text-xs underline" onClick={() => setBy(null)}>Read it myself</button>
+        </p>
+      )}
       <SignNowClock state={clock} left={left} />
-      <DealCard card={g.looks(p, d, card)} district={d} sub={g.ed.districts[d].sub} sight={p.sight[d]} effectiveLever={g.lever(d, g.looks(p, d, card))} formId={formId(s, d, card)} math={s.config.math} />
+      <DealCard key={see} card={shown} district={d} sub={g.ed.districts[d].sub} sight={see} effectiveLever={g.lever(d, shown)} formId={formId(s, d, card)} math={s.config.math} />
       <div className="grid gap-2 sm:grid-cols-3">
         {choice("TAKE", "accept it")}
         {choice("WALK", "refuse it")}
-        {choice("NEGOTIATE", `${cost} Trust · beats a trap if Read ≥ lever`)}
+        {choice("NEGOTIATE", close ? `${cost} Trust · a close read: 5–6 on a die beats it` : `${cost} Trust · beats a trap if Read ≥ lever`)}
       </div>
     </Panel>
   );

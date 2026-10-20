@@ -113,4 +113,23 @@ describe("reading the impact of a move", () => {
     const exposed = step(g, () => g.face(p, "HEALTH", "NEGOTIATE", { ...C.counterfeits.HEALTH }));
     expect(exposed.verdict?.kind).toBe("exposed");
   });
+
+  it("a close read that lands gets its own stamp", () => {
+    // try seeds until the die comes up 5 or 6 for a Read-1 negotiation on an amber lever
+    for (let seed = 1; seed < 60; seed++) {
+      const g = newGame({ seed, scenario: "A Quiet Year", roster: C.roster.slice(0, 2), partial: true });
+      const p = g.players[0];
+      p.sight.LABOR = 1;
+      p.trust = 3;
+      g.pressure.LABOR = 2;
+      const i = step(g, () => g.face(p, "LABOR", "NEGOTIATE", card(true, 2)));
+      if (g.pressure.LABOR === 1) {
+        expect(i.verdict?.kind).toBe("close");
+        return;
+      }
+      expect(i.verdict?.kind).toBe("played");
+    }
+    throw new Error("no close read landed in 60 seeds");
+  });
 });
+
