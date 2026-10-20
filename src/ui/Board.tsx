@@ -2,6 +2,7 @@
 import type { ReactNode } from "react";
 import { K, type District } from "../engine/content";
 import type { Session } from "../game/session";
+import { t, tDistrict, useLang } from "../i18n";
 import { DistrictArt } from "./art/DistrictArt";
 import { signed, type Delta } from "./changes";
 import { Icon, Pips, type IconName } from "./icons";
@@ -32,7 +33,7 @@ function Track({ value, max, color, ink, label, name, end }: { value: number; ma
         <span className="inline-flex items-center gap-1">{label}</span>
         <span className="text-[9px]" style={{ color: ink }}>{end}</span>
       </div>
-      <div className="mt-0.5 grid grid-cols-4 gap-1" role="img" aria-label={`${name} ${value} of ${max}`}>
+      <div className="mt-0.5 grid grid-cols-4 gap-1" role="img" aria-label={t("{name} {value} of {max}", { name, value, max })}>
         {Array.from({ length: max + 1 }, (_, i) => {
           const on = i <= value && value > 0 && i > 0;
           return (
@@ -47,6 +48,7 @@ function Track({ value, max, color, ink, label, name, end }: { value: number; ma
 }
 
 function DistrictBlock({ s, d, highlight, changes, impact }: { s: Session; d: District; highlight?: boolean; changes: Changes; impact: Impact | null }) {
+  useLang();
   const g = s.g;
   const c = g.clarity[d];
   const p = g.pressure[d];
@@ -65,7 +67,7 @@ function DistrictBlock({ s, d, highlight, changes, impact }: { s: Session; d: Di
   return (
     <div
       role="group"
-      aria-label={`${titleCase(d)}, ${g.ed.districts[d].sub}: Clarity ${c} of ${K.WAKE}, Squeeze ${p} of ${K.CAPTURE}${status ? `, ${status.t.toLowerCase()}` : ""}${g.threads.has(d) ? ", thread traced" : ""}`}
+      aria-label={`${t("{d}, {sub}: Clarity {c} of {wake}, Squeeze {p} of {cap}", { d: titleCase(d), sub: t(g.ed.districts[d].sub), c, wake: K.WAKE, p, cap: K.CAPTURE })}${status ? `, ${t(status.t).toLowerCase()}` : ""}${g.threads.has(d) ? t(", thread traced") : ""}`}
       key={motion && motion !== "lights-on" ? `${d}-${changes?.id}` : d}
       className={`relative rounded-xl border-2 bg-white text-ink shadow ${highlight ? "ring-4 ring-gold" : ""} ${motion}`}
       style={{ borderColor: DISTRICT_COLOR[d], ["--delay" as string]: delay }}
@@ -77,7 +79,7 @@ function DistrictBlock({ s, d, highlight, changes, impact }: { s: Session; d: Di
             className={`rounded-md border-4 border-[#E63946] bg-white/90 px-3 py-1 text-xl font-black tracking-widest text-[#c1121f] ${justCaptured ? "slam" : ""}`}
             style={{ transform: "rotate(-12deg)", ["--delay" as string]: `${t0 + Math.max(0, hitAt) * STRIKE_GAP + 0.3}s` }}
           >
-            CAPTURED
+            {t("CAPTURED")}
           </span>
         </div>
       )}
@@ -90,19 +92,19 @@ function DistrictBlock({ s, d, highlight, changes, impact }: { s: Session; d: Di
         </div>
       )}
       <div className="rounded-t-lg px-2 py-1.5 text-center" style={{ background: DISTRICT_SURFACE[d].bg, color: DISTRICT_SURFACE[d].fg }}>
-        <div className="text-sm font-black tracking-wide"><span aria-hidden>{DISTRICT_MARK[d]} </span>{d}</div>
-        <div className="text-[10px] italic">{g.ed.districts[d].sub}</div>
+        <div className="text-sm font-black tracking-wide"><span aria-hidden>{DISTRICT_MARK[d]} </span>{tDistrict(d)}</div>
+        <div className="text-[10px] italic">{t(g.ed.districts[d].sub)}</div>
       </div>
-      <div className="h-12 overflow-hidden border-b-2" style={{ borderColor: DISTRICT_COLOR[d] }} title={g.ed.districts[d].flavor}>
+      <div className="h-12 overflow-hidden border-b-2" style={{ borderColor: DISTRICT_COLOR[d] }} title={t(g.ed.districts[d].flavor)}>
         <DistrictArt d={d} src={g.ed.art?.districts[d]} />
       </div>
       <div className="space-y-2 p-2">
-        <Track value={c} max={K.WAKE} color={DISTRICT_COLOR[d]} ink={DISTRICT_TEXT[d]} name="Clarity" label={<><Icon name="clarity" size={12} color={DISTRICT_COLOR[d]} /> Clarity</>} end="3 = awake" />
-        <Track value={p} max={K.CAPTURE} color="#E63946" ink={SQUEEZE_TEXT} name="Squeeze" label={<><Icon name="pressure" size={12} /> Squeeze</>} end="3 = captured" />
+        <Track value={c} max={K.WAKE} color={DISTRICT_COLOR[d]} ink={DISTRICT_TEXT[d]} name={t("Clarity")} label={<><Icon name="clarity" size={12} color={DISTRICT_COLOR[d]} /> {t("Clarity")}</>} end={t("3 = awake")} />
+        <Track value={p} max={K.CAPTURE} color="#E63946" ink={SQUEEZE_TEXT} name={t("Squeeze")} label={<><Icon name="pressure" size={12} /> {t("Squeeze")}</>} end={t("3 = captured")} />
         <div className="flex items-center justify-between text-[11px]">
-          <span className="font-black" style={{ color: status ? (status.t === "AWAKE" ? "#8a5a00" : SQUEEZE_TEXT) : undefined }}>{status?.t ?? " "}</span>
-          {g.threads.has(d) ? <span className="font-bold text-[#2F8FD8]">🔵 thread</span> : null}
-          {g.struck.has(d) && s.phase !== "machine" ? <span className="text-black/40">struck</span> : null}
+          <span className="font-black" style={{ color: status ? (status.t === "AWAKE" ? "#8a5a00" : SQUEEZE_TEXT) : undefined }}>{status ? t(status.t) : " "}</span>
+          {g.threads.has(d) ? <span className="font-bold text-[#2F8FD8]">🔵 {t("thread")}</span> : null}
+          {g.struck.has(d) && s.phase !== "machine" ? <span className="text-black/40">{t("struck")}</span> : null}
         </div>
       </div>
     </div>
@@ -110,10 +112,11 @@ function DistrictBlock({ s, d, highlight, changes, impact }: { s: Session; d: Di
 }
 
 export function Board({ s, highlight, changes = null, impact = null }: { s: Session; highlight?: District | null; changes?: Changes; impact?: Impact | null }) {
+  useLang();
   const g = s.g;
   const patterns = g.activePatterns();
   return (
-    <section aria-label={`The ${g.ed.name} board`} className="space-y-3">
+    <section aria-label={t("The {edition} board", { edition: t(g.ed.name) })} className="space-y-3">
       <GoalTrack s={s} changes={changes} />
       {/* the ending: every porch light on, or the lights go out across the block */}
       <div
@@ -127,40 +130,40 @@ export function Board({ s, highlight, changes = null, impact = null }: { s: Sess
       {patterns.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {patterns.map((p) => (
-            <span key={p.name} title={p.lesson} className="rounded-full bg-[#8b1e1e] px-3 py-1 text-xs font-bold text-white">
-              ⚠ {p.name} · {p.combo.map(titleCase).join(" + ")}
+            <span key={p.name} title={t(p.lesson)} className="rounded-full bg-[#8b1e1e] px-3 py-1 text-xs font-bold text-white">
+              ⚠ {t(p.name)} · {p.combo.map(titleCase).join(" + ")}
             </span>
           ))}
         </div>
       )}
       {!g.party && <div className="grid gap-2 rounded-xl border border-gold/40 bg-black/25 p-3 text-sm sm:grid-cols-2">
         <div>
-          <div className="font-black text-gold">The Owner</div>
+          <div className="font-black text-gold">{t("The Owner")}</div>
           <p className="text-program/80">
-            {g.ownerShown ? <b className="text-gold">{g.ownerFace}</b> : <span>hidden. Watch the board and deduce it.</span>}
+            {g.ownerShown ? <b className="text-gold">{t(g.ownerFace)}</b> : <span>{t("hidden. Watch the board and deduce it.")}</span>}
           </p>
         </div>
         <div className="space-y-1">
           <div>
-            <span className="font-bold text-gold">Sou-Sou pot</span> {g.pot}/{K.SOUSOU_HAND} · next hand: {g.nextHand()?.name ?? "—"}
+            <span className="font-bold text-gold">{t("Sou-Sou pot")}</span> {g.pot}/{K.SOUSOU_HAND} · {t("next hand:")} {g.nextHand() ? t(g.nextHand()!.name) : "—"}
           </div>
-          <div>📗 Green Book: {g.greenBook ? "ready" : "used"} · 🍖 Cookout: {g.cookoutUsed ? "had" : "ready"}</div>
+          <div>📗 {t("Green Book:")} {g.greenBook ? t("ready") : t("used")} · 🍖 {t("Cookout:")} {g.cookoutUsed ? t("had") : t("ready")}</div>
           {g.hasLeague() && (
             <div>
-              <span className="font-bold text-gold">The League:</span>{" "}
-              {g.leagueFormed ? "formed: Housing −1 every 2nd round; Housing & Lending traps beatable at Read 1" : `${g.league.size}/${g.leagueNeeded()} signed this round`}
+              <span className="font-bold text-gold">{t("The League:")}</span>{" "}
+              {g.leagueFormed ? t("formed: Housing −1 every 2nd round; Housing & Lending traps beatable at Read 1") : t("{n}/{need} signed this round", { n: g.league.size, need: g.leagueNeeded() })}
             </div>
           )}
           {Object.keys(g.late).length > 0 && (
             <div>
-              <span className="font-bold text-gold">Not settled yet:</span>{" "}
-              {Object.entries(g.late).map(([d, r]) => `${titleCase(d)} opens in round ${r}`).join(" · ")}
+              <span className="font-bold text-gold">{t("Not settled yet:")}</span>{" "}
+              {Object.entries(g.late).map(([d, r]) => t("{d} opens in round {r}", { d: titleCase(d), r })).join(" · ")}
             </div>
           )}
-          {g.chapter?.march && <div>✊🏾 The March: {g.marched ? "marched" : "ready (any player, an action)"}</div>}
-          {g.chapter?.desk && <div>🪑 The Desk: {g.desk ? `${g.desk} sits there` : g.deskLeft ? `${g.deskLeft} quit it` : g.deskOffered ? "empty" : "offered in round 2"}</div>}
-          {g.chapter?.crown && <div>👑 The Crown: {g.crowned ? `${g.crowned} wears it` : g.crownOffered ? "refused" : "not offered yet"}</div>}
-          {g.defend.length > 0 && <div>🛡 Defending what you built: the Machine strikes {g.defend.map(titleCase).join(" and ")} first</div>}
+          {g.chapter?.march && <div>✊🏾 {t("The March:")} {g.marched ? t("marched") : t("ready (any player, an action)")}</div>}
+          {g.chapter?.desk && <div>🪑 {t("The Desk:")} {g.desk ? t("{name} sits there", { name: g.desk }) : g.deskLeft ? t("{name} quit it", { name: g.deskLeft }) : g.deskOffered ? t("empty") : t("offered in round 2")}</div>}
+          {g.chapter?.crown && <div>👑 {t("The Crown:")} {g.crowned ? t("{name} wears it", { name: g.crowned }) : g.crownOffered ? t("refused") : t("not offered yet")}</div>}
+          {g.defend.length > 0 && <div>🛡 {t("Defending what you built: the Machine strikes {ds} first", { ds: g.defend.map(titleCase).join(t(" and ")) })}</div>}
         </div>
       </div>}
     </section>
@@ -171,6 +174,7 @@ type Stop = { icon: IconName; title: string; body: ReactNode; state: "done" | "n
 
 /** The road to victory, always on screen: where the block is, what's next, and what loses the game. */
 function GoalTrack({ s, changes }: { s: Session; changes: Changes }) {
+  useLang();
   const g = s.g;
   const total = g.totalClarity();
   const threads = g.threads.size;
@@ -179,19 +183,19 @@ function GoalTrack({ s, changes }: { s: Session; changes: Changes }) {
   const stops: Stop[] = g.party ? [
     {
       icon: "clarity",
-      title: `Wake ${K.BP_WAKE_TO_WIN} of ${g.ds.length}`,
+      title: t("Wake {n} of {total}", { n: K.BP_WAKE_TO_WIN, total: g.ds.length }),
       state: won ? "done" : "now",
       body: (
         <>
-          <Pips value={g.awake()} max={K.BP_WAKE_TO_WIN} color="#F2B632" /> <span className="ml-1">Clarity 3 wakes a district, and you win on the spot</span>
+          <Pips value={g.awake()} max={K.BP_WAKE_TO_WIN} color="#F2B632" /> <span className="ml-1">{t("Clarity 3 wakes a district, and you win on the spot")}</span>
         </>
       ),
     },
-    { icon: "pressure", title: "This round", state: "now", body: <>The Machine strikes <b>{g.strikes()}</b> time{g.strikes() === 1 ? "" : "s"}: +1 Squeeze and −1 Clarity on the district closest to waking</> },
+    { icon: "pressure", title: t("This round"), state: "now", body: <>{g.strikes() === 1 ? t("The Machine strikes once: +1 Squeeze and −1 Clarity on the district closest to waking") : t("The Machine strikes {n} times: +1 Squeeze and −1 Clarity on the district closest to waking", { n: g.strikes() })}</> },
   ] : [
     {
       icon: "clarity",
-      title: "Wake the block",
+      title: t("Wake the block"),
       state: g.uwOpen ? "done" : "now",
       body: (
         <>
@@ -199,38 +203,38 @@ function GoalTrack({ s, changes }: { s: Session; changes: Changes }) {
             <span className="block h-full rounded-full bg-gold transition-all duration-700" style={{ width: `${Math.min(100, (total / K.UNDERWORLD_AT) * 100)}%` }} />
           </span>
           <span className="mt-0.5 block">
-            Clarity <b>{Math.min(total, K.UNDERWORLD_AT)}</b>/{K.UNDERWORLD_AT} · {g.awake()} awake
+            {t("Clarity")} <b>{Math.min(total, K.UNDERWORLD_AT)}</b>/{K.UNDERWORLD_AT} · {t("{n} awake", { n: g.awake() })}
           </span>
         </>
       ),
     },
     {
       icon: "door",
-      title: "Underworld opens",
+      title: t("Underworld opens"),
       state: g.uwOpen ? "done" : "next",
-      body: g.uwOpen ? <>The Owner is out: <b>{g.ownerFace}</b></> : <>at Clarity {K.UNDERWORLD_AT}</>,
+      body: g.uwOpen ? <>{t("The Owner is out:")} <b>{t(g.ownerFace)}</b></> : <>{t("at Clarity {n}", { n: K.UNDERWORLD_AT })}</>,
     },
     {
       icon: "clue",
-      title: `Trace ${need} threads`,
+      title: t("Trace {n} threads", { n: need }),
       state: won || (g.uwOpen && threads >= need) ? "done" : g.uwOpen ? "now" : "next",
       body: (
         <>
-          <Pips value={threads} max={need} color="#2F8FD8" /> <span className="ml-1">Read 3 in an awake district</span>
+          <Pips value={threads} max={need} color="#2F8FD8" /> <span className="ml-1">{t("Read 3 in an awake district")}</span>
         </>
       ),
     },
-    { icon: "expose", title: "Expose the Owner", state: won ? "done" : g.canExpose() ? "now" : "next", body: g.canExpose() ? <b>Do it now: you win!</b> : <>you win</> },
+    { icon: "expose", title: t("Expose the Owner"), state: won ? "done" : g.canExpose() ? "now" : "next", body: g.canExpose() ? <b>{t("Do it now: you win!")}</b> : <>{t("you win")}</> },
   ];
   const captured = g.captured();
   const fallen = g.blk().filter((p) => p.flipped).length;
   const roundsLeft = g.maxRounds - g.round;
   return (
-    <div className="rounded-xl border border-gold/40 bg-black/25 p-2.5" aria-label="The road to victory">
+    <div className="rounded-xl border border-gold/40 bg-black/25 p-2.5" aria-label={t("The road to victory")}>
       <ol className={`grid grid-cols-2 gap-2 ${g.party ? "" : "sm:grid-cols-4"}`}>
         {stops.map((st, i) => (
           <li
-            key={st.title}
+            key={i}
             className={`relative rounded-lg border p-2 text-[11px] leading-snug transition ${
               st.state === "done" ? "border-gold/60 bg-gold/15" : st.state === "now" ? "border-gold bg-gold/10 shadow-[0_0_14px_rgba(242,182,50,0.35)]" : "border-dashed border-white/25"
             }`}
@@ -246,21 +250,21 @@ function GoalTrack({ s, changes }: { s: Session; changes: Changes }) {
         ))}
       </ol>
       <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-program/75">
-        <span className="font-black uppercase tracking-wider text-[#ff8a8a]">You lose if</span>
+        <span className="font-black uppercase tracking-wider text-[#ff8a8a]">{t("You lose if")}</span>
         <span className="inline-flex items-center gap-1">
-          <Icon name="pressure" size={12} /> {K.LOSE_CAPTURED} districts captured <Pips value={captured} max={K.LOSE_CAPTURED} color="#E63946" />
+          <Icon name="pressure" size={12} /> {t("{n} districts captured", { n: K.LOSE_CAPTURED })} <Pips value={captured} max={K.LOSE_CAPTURED} color="#E63946" />
         </span>
         <span className="inline-flex items-center gap-1">
-          <Icon name="clock" size={12} color="#ff8a8a" /> round {g.maxRounds} ends ({roundsLeft} left)
+          <Icon name="clock" size={12} color="#ff8a8a" /> {t("round {n} ends ({left} left)", { n: g.maxRounds, left: roundsLeft })}
         </span>
         {!g.party && g.round > 0 && (
           <span className="inline-flex items-center gap-1 text-program/75">
-            <Icon name="pressure" size={12} /> the Machine strikes {g.strikes()} this round{g.owner === "The Algorithm" && g.ownerShown ? ", +1 for the Algorithm" : ""}{g.ownerShown ? ", +1 in the open" : ""}
+            <Icon name="pressure" size={12} /> {t("the Machine strikes {n} this round", { n: g.strikes() })}{g.owner === "The Algorithm" && g.ownerShown ? t(", +1 for the Algorithm") : ""}{g.ownerShown ? t(", +1 in the open") : ""}
           </span>
         )}
         {!g.party && (
           <span className="inline-flex items-center gap-1">
-            <Icon name="corruption" size={12} /> everyone Falls ({fallen}/{g.blk().length})
+            <Icon name="corruption" size={12} /> {t("everyone Falls ({n}/{total})", { n: fallen, total: g.blk().length })}
           </span>
         )}
       </p>
