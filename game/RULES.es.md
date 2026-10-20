@@ -57,7 +57,7 @@ Cada regla, carta, tablero y pantalla usa estas palabras y ninguna otra.
 ## Preparación
 1. Elige un **Escenario** (empieza con *La Auditoría* o *Un Año Tranquilo*) y aplícalo.
 2. Baraja las cartas de **Dueño** y mete una boca abajo debajo del tablero. No la mires.
-3. Cada jugador toma un **Rol**, 2 de Confianza, 0 de Turbio y Lectura 0 en todos lados (el Anciano empieza con Lectura 1 en todos lados).
+3. Cada jugador toma un **Rol**, 2 de Confianza, 0 de Turbio y Lectura 0 en todos lados (la Anciana empieza con Lectura 1 en todos lados).
 4. Busca tu número de jugadores en la tabla de abajo:
 
 | Jugadores | Acciones por turno | Golpes de la Máquina por ronda | Movidas del Amo por ronda |
@@ -109,7 +109,7 @@ La Máquina, el Amo y los Caídos juntos pueden actuar sobre **cada distrito com
 |---|---|---|
 | **ACEPTAR** | Ayuda de verdad: +2 de Confianza, +1 de Claridad, +1 de Respeto | **El atajo.** Si el distrito tiene Presión, −2 de Presión *ya*; si no, +2 de Claridad *ya*. De cualquier forma te llevas +2 de Turbio y 0 de Respeto. |
 | **IRTE** | Rechazaste ayuda de verdad por miedo: −1 de Confianza | A salvo. No ganas nada. |
-| **NEGOCIAR** (cuesta 1 de Confianza) | Regateaste hasta perder la ayuda de verdad. La Confianza se fue. | **Lectura ≥ palanca:** desactivada. −1 de Presión (−2 para el Organizador), +1 de Claridad, +2 de Respeto. **Lectura < palanca:** te jugaron. +1 de Presión. |
+| **NEGOCIAR** (cuesta 1 de Confianza) | Regateaste hasta perder la ayuda de verdad. La Confianza se fue. | **Lectura ≥ palanca:** desactivada. −1 de Presión (−2 para la Organizadora), +1 de Claridad, +2 de Respeto. **Lectura < palanca:** te jugaron. +1 de Presión. |
 
 A ciegas (Lectura 0), solo ves el frente. La mayoría de los tratos son trampas, pero irte de la ayuda honesta cuesta Confianza. Aprender a leer es como dejas de adivinar.
 
@@ -169,7 +169,7 @@ Para ganar, rastreen **3 hilos azules**. Cada uno necesita **Lectura 3 (azul)** 
 ---
 
 ## El mazo de Historia
-Cuando el Anciano enseña la Historia de un distrito, barajen las cartas de Historia de ese distrito con las dos cartas de "cualquier distrito" y roben una. Lean la historia y su lección en voz alta. Son historias reales, y la mayoría cuenta cómo la comunidad se defendió: la Contract Buyers League, el banco de Maggie L. Walker, la huelga de sanidad de Memphis, las clínicas gratuitas del Black Panther Party, Wilberforce University, Paul Laurence Dunbar y la imprenta de los hermanos Wright, el alcalde James H. McGee, y más.
+Cuando la Anciana enseña la Historia de un distrito, barajen las cartas de Historia de ese distrito con las dos cartas de "cualquier distrito" y roben una. Lean la historia y su lección en voz alta. Son historias reales, y la mayoría cuenta cómo la comunidad se defendió: la Contract Buyers League, el banco de Maggie L. Walker, la huelga de sanidad de Memphis, las clínicas gratuitas del Black Panther Party, Wilberforce University, Paul Laurence Dunbar y la imprenta de los hermanos Wright, el alcalde James H. McGee, y más.
 
 ## Dueños (ocultos desde la ronda 1, así que hay que deducirlos)
 - **El Algoritmo:** implacable. +1 golpe de la Máquina cada ronda.
@@ -206,9 +206,9 @@ Cuando todos los distritos de una combinación están en Presión 2 o más, volt
 |---|---|
 | **Traductor** | Enseña gratis (igual necesita leer el distrito mejor que el alumno). |
 | **Estudiante** | Gana el doble de Lectura cuando le enseñan. |
-| **Anciano** | Empieza con Lectura 1 en todos lados. Una vez por partida, *Enseñar la Historia*: un distrito despierta al instante. Roba una carta de Historia de ese distrito y léela en voz alta. |
+| **Anciana** | Empieza con Lectura 1 en todos lados. Una vez por partida, *Enseñar la Historia*: un distrito despierta al instante. Roba una carta de Historia de ese distrito y léela en voz alta. |
 | **Veterano** | Bloquea dos golpes de la Máquina por partida. |
-| **Organizador** | Un NEGOCIAR exitoso baja la Presión 2. |
+| **Organizadora** | Un NEGOCIAR exitoso baja la Presión 2. |
 
 ## Modo Amo (opcional, 1 contra muchos)
 Un jugador *es* la Máquina. No hay Dueño oculto ni fase automática de la Máquina. Cada ronda el Amo hace las movidas de la tabla de preparación (golpear +1 de Presión, enturbiar −1 de Claridad, tentar −1 de Confianza), respetando la regla de reparto. Cuando se abre el Inframundo, el Amo puede enturbiar un distrito despierto y sin rastrear por ronda.

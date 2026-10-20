@@ -241,7 +241,7 @@ export const pages: Record<string, string> = {
   // ── teacher's guide (two printed pages: keep it tight)
   "Print the guide": "Imprimir la guía",
   "← Teacher's view": "← Vista del maestro",
-  "Download the PDF": "Descargar el PDF (en inglés)",
+  "Download the PDF": "Descargar el PDF",
   "Teacher's guide · one class period": "Guía del maestro · una clase",
   "A cooperative game about the hidden cost in every deal: the payday loan, the rent-to-own couch, the “free” first month. Students work as one block against the Machine, read the fine print together, and learn to spot the second number before they sign.":
     "Un juego cooperativo sobre el costo escondido en cada trato: el préstamo de día de pago, el sofá en renta con opción a compra, el primer mes “gratis”. Los estudiantes juegan como una cuadra contra la Máquina, leen juntos la letra chica y aprenden a ver el segundo número antes de firmar.",
@@ -250,38 +250,38 @@ export const pages: Record<string, string> = {
   "Learning goals": "Metas de aprendizaje",
   "By the end of the period, students can:": "Al final de la clase, los estudiantes pueden:",
   "<b>Find the total cost</b> of an offer from its fee and its term, and turn a flat fee into a yearly rate (APR).":
-    "<b>Sacar el costo total</b> de una oferta con su cargo y su plazo, y convertir un cargo fijo en una tasa anual (APR).",
+    "<b>Sacar el costo total</b> de una oferta con su cargo y su plazo, y convertir un cargo fijo en tasa anual (APR).",
   "<b>Name the three places a trap hides:</b> the cost (red), the terms and the clock (amber), and who profits behind it (blue).":
-    "<b>Nombrar los tres lugares donde se esconde una trampa:</b> el costo (rojo), los términos y el reloj (ámbar), y quién gana detrás (azul).",
+    "<b>Nombrar dónde se esconde una trampa:</b> el costo (rojo), los términos y el reloj (ámbar), y quién gana detrás (azul).",
   "<b>Spot pressure:</b> a deadline that is fake (“Approved!”, “Move in today”) is part of the sale, not a reason to sign.":
-    "<b>Detectar la presión:</b> una fecha límite falsa (“¡Aprobado!”, “Múdate hoy”) es parte de la venta, no una razón para firmar.",
+    "<b>Ver la presión:</b> una fecha límite falsa (“¡Aprobado!”, “Múdate hoy”) es parte de la venta, no razón para firmar.",
   "<b>Tell a trap from real help,</b> and name the honest options: a credit-union loan, free tax prep (VITA), federal student aid, a community college with guaranteed transfer.":
-    "<b>Distinguir una trampa de la ayuda de verdad,</b> y nombrar opciones honestas: préstamo de cooperativa de crédito, impuestos gratis (VITA), ayuda federal estudiantil, colegio comunitario con transferencia garantizada.",
+    "<b>Distinguir trampa de ayuda de verdad,</b> y nombrar opciones honestas: préstamo de cooperativa de crédito, impuestos gratis (VITA), becas federales, colegio comunitario con transferencia garantizada.",
   "<b>Explain why it takes a community:</b> the block only wins when everyone can read, not one strong reader.":
-    "<b>Explicar por qué hace falta una comunidad:</b> la cuadra solo gana cuando todos saben leer, no con un solo buen lector.",
+    "<b>Explicar por qué hace falta una comunidad:</b> la cuadra solo gana cuando todos leen, no con un solo lector.",
   "Fits the <i>Managing Credit</i> and <i>Spending</i> areas of the National Standards for Personal Financial Education, and works in math (rates, percents, totals), economics, and civics.":
     "Cubre <i>Managing Credit</i> y <i>Spending</i> de los National Standards for Personal Financial Education; sirve en matemáticas (tasas, porcentajes, totales), economía y civismo.",
   "Before class (10 minutes, once)": "Antes de la clase (10 minutos, una vez)",
   "Open the site on a school device and play a few turns of <b>Learn to play</b>. It runs in the browser; nothing to install.":
-    "Abre el sitio en un dispositivo de la escuela y juega unos turnos de <b>Aprende a jugar</b>. Funciona en el navegador; no hay nada que instalar.",
+    "Abre el sitio en la escuela y juega unos turnos de <b>Aprende a jugar</b>; corre en el navegador, sin instalar nada.",
   "Groups of 3 are best (2–5 work). One device per group, passed around the table. <i>Play on everyone's phones</i> is optional; some school networks block it, and one device always works.":
     "Lo mejor: grupos de 3 (de 2 a 5 funciona). Un dispositivo por grupo, de mano en mano. <i>Jugar en los teléfonos de todos</i> es opcional; algunas redes escolares lo bloquean, y un dispositivo siempre funciona.",
-  "No devices? Print the <a>print-and-play kit</a> (the cards, board and rules on paper).": "¿Sin dispositivos? Imprime el <a>kit para imprimir y jugar</a> (las cartas, el tablero y las reglas en papel).",
+  "No devices? Print the <a>print-and-play kit</a> (the cards, board and rules on paper).": "¿Sin dispositivos? Imprime el <a>kit para imprimir y jugar</a> (cartas, tablero y reglas en papel).",
   "Built for every student: keyboard-only play, screen-reader support, <b>Plain cards</b> for anyone the red lens doesn't work for, color-blind-safe districts, and 🔊 to mute.":
     "Para todos: se juega solo con teclado o con lector de pantalla, <b>Cartas simples</b> para quien no pueda usar el lente rojo, distritos seguros para daltónicos y 🔊 para silenciar.",
   "The 50-minute plan": "El plan de 50 minutos",
   "<b>Warm-up: one deal.</b> Open <b>Endless deals</b> on the projector and read one offer aloud. Ask: <i>“What does this really cost?”</i> Take three guesses, then reveal the second number.":
     "<b>Calentamiento: un trato.</b> Abre <b>Tratos sin fin</b> en el proyector y lee una oferta en voz alta. Pregunta: <i>“¿Cuánto cuesta esto de verdad?”</i> Oye tres respuestas y revela el segundo número.",
   "<b>Set the tables.</b> Each group chooses <b>Learn to play</b>: a 30-second comic, then the Coach explains each rule as it comes up. Groups that aren't three choose <b>Play now → Block Party</b> with <b>Coach me as we play</b> on.":
-    "<b>Pongan las mesas.</b> Cada grupo elige <b>Aprende a jugar</b>: un cómic de 30 segundos y luego el Coach explica cada regla cuando aparece. Los grupos que no son de tres eligen <b>Jugar ya → Block Party</b> con <b>Que el Coach me guíe mientras jugamos</b>.",
+    "<b>Pongan las mesas.</b> Cada grupo elige <b>Aprende a jugar</b>: un cómic de 30 segundos y luego el Coach explica cada regla cuando aparece. Los grupos de 2, 4 o 5 eligen <b>Jugar ya → Block Party</b> con <b>Que el Coach me guíe mientras jugamos</b>.",
   "<b>Play the Block Party</b> (3 districts: Lending, Housing, Education; {rounds} rounds; about 25 minutes). The block wins by waking {wake} districts before the Machine captures 2. Walk the room. Listen for students reading the cost aloud to each other: that is the lesson working.":
-    "<b>Jueguen el Block Party</b> (3 distritos: Préstamos, Vivienda, Educación; {rounds} rondas; unos 25 minutos). La cuadra gana si despierta {wake} distritos antes de que la Máquina capture 2. Recorre el salón. Si los oyes leerse el costo en voz alta, la lección está funcionando.",
+    "<b>Jueguen el Block Party</b> (3 distritos: Préstamos, Vivienda, Educación; {rounds} rondas; unos 25 minutos). La cuadra gana si despierta {wake} distritos antes de que la Máquina capture 2. Recorre el salón. Si los oyes leerse el costo en voz alta, la lección funciona.",
   "<b>The dollar count.</b> Win or lose, the end screen turns the game into real money: what the table signed, what it walked away from, what it stayed out of. Each table opens <b>Send this game to your teacher</b> and copies its result code to you (a chat, a form, or the board).":
     "<b>La cuenta en dólares.</b> Ganen o pierdan, la pantalla final convierte el juego en dinero real: lo que la mesa firmó, de lo que se fue, de lo que se libró. Cada mesa abre <b>Envíale este juego a tu maestro</b> y te copia su código de resultado (chat, formulario o pizarrón).",
   "<b>Debrief.</b> Paste the codes into the <b>Teacher's view</b> on your device. It adds up the class, shows the deals that fooled the most tables, and opens a <i>Talk it through</i> for the top one. Use the questions on the next page.":
     "<b>Repaso.</b> Pega los códigos en la <b>Vista del maestro</b>. Suma a la clase, muestra los tratos que engañaron a más mesas y abre un <i>Platíquenlo</i> para el primero. Usa las preguntas de la página 2.",
   "<b>Exit ticket / homework:</b> bring one real offer from home (a phone plan, a store card, a rent-to-own receipt) and work out its second number on the <b>Read your own deal</b> page. Nothing typed there leaves the device.":
-    "<b>Boleto de salida / tarea:</b> trae una oferta real de casa (plan de teléfono, tarjeta de tienda, recibo de renta con opción a compra) y saca su segundo número en <b>Lee tu propio trato</b>. Nada de lo que se escribe ahí sale del dispositivo.",
+    "<b>Boleto de salida / tarea:</b> trae una oferta real de casa (plan de teléfono, tarjeta de tienda, recibo de renta con opción a compra) y saca su segundo número en <b>Lee tu propio trato</b>. Lo que se escribe ahí no sale del dispositivo.",
   "How the game teaches it": "Cómo lo enseña el juego",
   "Every deal has a front,": "Cada trato tiene un frente,",
   "the pitch everyone sees, and three hidden layers. Students unlock them by building <b>Read</b>, and drag Grandma's red reading glasses over the card to see them.":
@@ -400,7 +400,7 @@ export const pages: Record<string, string> = {
   "Why people go": "Por qué va la gente",
   "Local history": "Historia local",
   "True stories of how your community fought back. The Elder tells them in play. Every card needs a source: a book, an archive, a museum, or an elder by name.":
-    "Historias verdaderas de cómo tu comunidad se defendió. El Anciano las cuenta en el juego. Cada carta necesita una fuente: un libro, un archivo, un museo o un mayor con nombre.",
+    "Historias verdaderas de cómo tu comunidad se defendió. La Anciana las cuenta en el juego. Cada carta necesita una fuente: un libro, un archivo, un museo o un mayor con nombre.",
   "Use only our cards in districts where we wrote some (otherwise yours join the base game's)": "Usar solo nuestras cartas en los distritos donde escribimos algunas (si no, las tuyas se suman a las del juego base)",
   "Any district": "Cualquier distrito",
   "+ Add a story": "+ Agregar una historia",

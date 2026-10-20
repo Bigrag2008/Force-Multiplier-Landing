@@ -1,9 +1,12 @@
 "use client";
+/** the layer colors, lightened to read as small text on the dark panel (4.5:1) */
+const READABLE: Record<string, string> = { [LAYER_COLOR[1]]: "#ff8a8a", [LAYER_COLOR[2]]: "#ffd27a", [LAYER_COLOR[3]]: "#8cc6ff" };
+
 /** A labeled sample deal card: what each part of a real card means, and how to beat a trap. */
 import { K } from "../engine/content";
 import { t, tDistrict, useLang } from "../i18n";
 import { Icon } from "./icons";
-import { LAYER_COLOR } from "./theme";
+import { DISTRICT_SURFACE, LAYER_COLOR } from "./theme";
 
 const Num = ({ n }: { n: number }) => (
   <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full bg-night text-[9px] font-black text-gold ring-1 ring-gold">{n}</span>
@@ -24,7 +27,7 @@ export function DealAnatomy() {
       <div className="grid gap-3 sm:grid-cols-[150px_1fr]">
         {/* the sample card */}
         <div className="relative mx-auto w-[150px] overflow-hidden rounded-lg border border-black/40 bg-program text-ink shadow" aria-hidden>
-          <div className="bg-lending px-2 py-0.5 text-[9px] font-black text-white">{tDistrict("LENDING")}</div>
+          <div className="px-2 py-0.5 text-[9px] font-black" style={{ background: DISTRICT_SURFACE.LENDING.bg, color: DISTRICT_SURFACE.LENDING.fg }}>{tDistrict("LENDING")}</div>
           <div className="flex items-start gap-1 border-b border-dashed border-black/20 px-1.5 py-1">
             <Num n={1} />
             <p className="text-[9px] font-extrabold leading-tight">&ldquo;{t("Quick Cash: $375 today!")}&rdquo;</p>
@@ -46,7 +49,7 @@ export function DealAnatomy() {
             <li key={p.n} className="flex gap-1.5">
               <Num n={p.n} />
               <span>
-                <b style={{ color: p.color }}>{t(p.title)}:</b> {t(p.body)}
+                <b style={{ color: p.color ? (READABLE[p.color] ?? p.color) : undefined }}>{t(p.title)}:</b> {t(p.body)}
               </span>
             </li>
           ))}
@@ -55,7 +58,7 @@ export function DealAnatomy() {
       <figcaption className="mt-2 rounded-md border border-gold/40 bg-night/60 p-2 text-[12px] leading-snug">
         <b className="text-gold">{t("Beating a trap:")}</b> {t("NEGOTIATE works when your")} <Icon name="sight" size={12} /> {t("Read reaches the trap's lever:")}{" "}
         {[1, 2, 3].map((n) => (
-          <span key={n} className="mx-0.5 inline-flex items-center gap-0.5 whitespace-nowrap rounded px-1 font-bold text-white" style={{ background: LAYER_COLOR[n] }}>
+          <span key={n} className="mx-0.5 inline-flex items-center gap-0.5 whitespace-nowrap rounded px-1 font-bold text-night" style={{ background: READABLE[LAYER_COLOR[n]] }}>
             {t(["red", "amber", "blue"][n - 1])} = {t("Read {n}", { n })}
           </span>
         ))}

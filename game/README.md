@@ -14,6 +14,8 @@ A cooperative board game about reading the hidden cost in every deal, and teachi
 | `CAMPAIGN.md` | The Legacy campaign, *The Long Ledger*: six chapters, all built. |
 | `chapters.py` | Every campaign chapter (The Long Ledger and Book One): setup, twist, Owner face, unlocks, Family Decision. |
 | `eras/` | The era decks for Chapters 1, 2, 4 and 5, and [`FACT_CHECK.md`](eras/FACT_CHECK.md), what the historian checks before print. |
+| `RULES.es.md` | The rulebook in Spanish. |
+| `i18n/` | The Spanish edition's card text (`es_*.json`) and the glossary every translation follows (`GLOSSARY.md`). |
 | `campaign.py` | What a family carries between chapters: the Ledger, stickers, decisions, flags. |
 | `The_Long_Ledger_Chapter3_The_Map.pdf` | The printable Chapter 3 envelope: rules, 30 era deals, chapter cards, lineage sheet, stickers. |
 | `print_kit/build_chapter_pack.py` | Rebuilds the Chapter 3 envelope. |
@@ -26,7 +28,7 @@ A cooperative board game about reading the hidden cost in every deal, and teachi
 | `test_rules.py` | One check per rule, pinning `RULES.md` to the code. |
 | `balance_report.txt` | The latest balance run (500 games per row), with Block Party and the house rules. |
 | `The_Second_Number_PRINT_AND_PLAY.pdf` | The 36-page West Dayton print-and-play kit. |
-| `print_kit/build_print_and_play.py` | Rebuilds the kit from `deck_cards.py` and `RULES.md`. Re-run after any card or rule change. |
+| `print_kit/build_print_and_play.py` | Rebuilds the kit from `deck_cards.py` and `RULES.md` (`--lang es`: the Spanish kit, from `RULES.es.md` and `i18n/es_*.json`). Re-run after any card or rule change. |
 
 ```bash
 python3 second_number_play.py              # play

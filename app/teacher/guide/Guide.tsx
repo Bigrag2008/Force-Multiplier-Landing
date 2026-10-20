@@ -10,16 +10,18 @@ const r = (en: string, vars?: Record<string, string | number>) => rich(t(en, var
 
 /**
  * The teacher's guide: the two pages a school asks for before it says yes. It prints on two Letter or
- * A4 sheets (globals.css, the .sheet print rules), in either language; the PDF in game/ is printed from this page in English.
+ * A4 sheets (globals.css, the .sheet print rules), in either language; the PDFs in game/ are printed from this page, one per language.
  */
 export function Guide() {
-  useLang();
+  const lang = useLang();
+  // each language prints its own PDFs (the build copies game/*.pdf into the site)
+  const es = lang === "es" ? "_ES" : "";
   return (
     <main className="px-4 py-8 print:p-0">
       <nav className="no-print mx-auto mb-4 flex max-w-[52rem] flex-wrap items-center justify-between gap-3 text-sm">
         <Link href="/teacher" className="text-gold underline">{t("← Teacher's view")}</Link>
         <span className="flex flex-wrap items-center gap-3">
-          <a href="/The_Second_Number_TEACHER_GUIDE.pdf" className="text-gold underline">{t("Download the PDF")}</a>
+          <a href={`/The_Second_Number_TEACHER_GUIDE${es}.pdf`} className="text-gold underline">{t("Download the PDF")}</a>
           <PrintButton />
         </span>
       </nav>
@@ -58,7 +60,7 @@ export function Guide() {
             <li>{r("Groups of 3 are best (2–5 work). One device per group, passed around the table. <i>Play on everyone's phones</i> is optional; some school networks block it, and one device always works.")}</li>
             <li>
               {rich(t("No devices? Print the <a>print-and-play kit</a> (the cards, board and rules on paper)."), {
-                a: (c) => <a href="/The_Second_Number_PRINT_AND_PLAY.pdf" className="font-bold underline">{c}</a>,
+                a: (c) => <a href={`/The_Second_Number_PRINT_AND_PLAY${es}.pdf`} className="font-bold underline">{c}</a>,
               })}
             </li>
             <li>{r("Built for every student: keyboard-only play, screen-reader support, <b>Plain cards</b> for anyone the red lens doesn't work for, color-blind-safe districts, and 🔊 to mute.")}</li>

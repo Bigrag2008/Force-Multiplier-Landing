@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { Session } from "../game/session";
 import { sounds } from "./sound";
 import { t, useLang } from "../i18n";
+import { tFront } from "../i18n/log";
 
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
 
@@ -62,7 +63,7 @@ export function MoneyCount({ s }: { s: Session }) {
       </dl>
       {m.worst && (
         <p className="mt-3 rounded-lg border border-[#ff8a8a]/40 bg-[#ff8a8a]/10 p-2 text-sm">
-          <b>{t("The most expensive shortcut:")}</b> {t("{name} signed", { name: m.worst.who })} <i>&ldquo;{t(m.worst.front)}&rdquo;</i>: <b className="text-[#ff8a8a]">{usd(m.worst.dollars)}</b>
+          <b>{t("The most expensive shortcut:")}</b> {t("{name} signed", { name: m.worst.who })} <i>&ldquo;{tFront(m.worst.front)}&rdquo;</i>: <b className="text-[#ff8a8a]">{usd(m.worst.dollars)}</b>
           {m.worst.basis && <span className="text-program/75">, {t(m.worst.basis)}</span>}.
         </p>
       )}

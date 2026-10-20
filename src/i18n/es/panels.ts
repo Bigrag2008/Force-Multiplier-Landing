@@ -53,7 +53,7 @@ export const panels: Record<string, string> = {
   "+2 Trust, −1 Shady": "+2 Confianza, −1 Turbio",
   "gather on {area}": "reúnete en {area}",
   "2 Trust: bring a Fallen friend home": "2 de Confianza: trae a casa a un amigo caído",
-  "Elder, once: wake a district": "Anciano, una vez: despierta un distrito",
+  "Elder, once: wake a district": "Anciana, una vez: despierta un distrito",
   "{a}/{b} this round": "{a}/{b} esta ronda",
   "once a game: everyone +2 Trust, −1 Shady, covered": "una vez por juego: todos +2 Confianza, −1 Turbio, cubiertos",
   "for good: face deals and teach again": "para siempre: vuelve a enfrentar tratos y enseñar",
@@ -350,4 +350,8 @@ export const panels: Record<string, string> = {
   "Every porch light on.": "Todas las luces del porche prendidas.",
   "The Machine holds the block": "La Máquina se queda con la cuadra",
   "The lights go out, one by one.": "Las luces se apagan, una por una.",
+  // why a game ended (the session and the engine say it in English)
+  "The clock ran out. The Machine holds the block.": "Se acabó el tiempo. La Máquina se queda con la cuadra.",
+  "Two districts fell. The Machine holds the block.": "Cayeron dos distritos. La Máquina se queda con la cuadra.",
+  "The whole block fell. The Machine won wearing your faces.": "Cayó toda la cuadra. La Máquina ganó con sus caras.",
 };

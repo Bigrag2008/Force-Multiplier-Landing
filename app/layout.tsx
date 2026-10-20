@@ -28,7 +28,7 @@ var ins=Node.prototype.insertBefore;Node.prototype.insertBefore=function(n,r){if
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" translate="no">
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen pb-14 antialiased">
         <Script id="tolerate-rewritten-text" strategy="beforeInteractive">
           {TOLERATE_REWRITTEN_TEXT}
         </Script>

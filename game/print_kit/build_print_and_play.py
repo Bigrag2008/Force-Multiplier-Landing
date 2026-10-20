@@ -191,7 +191,7 @@ ES_UI={
    "Los espacios se llenan de adelante hacia atrás, tal como están escritos: en la oferta, un espacio es el primer número que tiras para él, y es el mismo número cada vez que ese espacio vuelve a salir. La clave de respuestas del sitio web (y deal_gen.py) muestra cada línea ya llenada.",
  # player boards
  "THE {r}":"{r}", "TRUST":"CONFIANZA", "SHADY":"TURBIO", "READ":"LECTURA", "max 5":"máx. 5", "6 = YOU FALL":"6 = CAES",
- "start 2":"empiezas con 2", " · Elder starts Read 1 everywhere":" · el Anciano empieza con Lectura 1 en todo",
+ "start 2":"empiezas con 2", " · Elder starts Read 1 everywhere":" · la Anciana empieza con Lectura 1 en todo",
  "{s} · spend on Negotiate, Teach, Reach":"{s} · gástala en Negociar, Enseñar, Alcanzar",
  "TAKE on a trap +2 (name the price first) · Commons −1":"ACEPTAR una trampa +2 (di el precio primero) · Comunes −1",
  "read only the zones you've unlocked":"lee solo las zonas que desbloqueaste", "ACTIONS":"ACCIONES", "PROPS:":"RESPETO:",
@@ -225,7 +225,7 @@ ES_UI={
  "Second Number · {s} · {l}":"Segundo Número · {s} · {l}",
 }
 ES_DISTRICT={"LENDING":"PRÉSTAMOS","HOUSING":"VIVIENDA","LABOR":"TRABAJO","HEALTH":"SALUD","EDUCATION":"EDUCACIÓN"}
-ES_ROLE={"Translator":"el Traductor","Student":"el Estudiante","Elder":"el Anciano","Veteran":"el Veterano","Organizer":"el Organizador"}
+ES_ROLE={"Translator":"el Traductor","Student":"la Estudiante","Elder":"la Anciana","Veteran":"el Veterano","Organizer":"la Organizadora"}
 def T(_s,**kw):
     """The builder's own words: unchanged in English, from ES_UI under --lang es."""
     s=ES_UI.get(_s,_s) if LANG=="es" else _s
@@ -1079,7 +1079,7 @@ def reference_story():
         rows=[["Tu turno","Haz tus acciones (2–3, ver la tabla de preparación): Estudiar · Enfrentar un trato · Enseñar · Comunes · Alcanzar · Rastrear · Exponer."],
           ["Enfrentar un trato","Roba de un distrito. Lente sobre las zonas que tu Lectura desbloquea. Luego ACEPTAR / IRTE / NEGOCIAR."],
           ["Trato honesto","ACEPTAR: +2 Confianza, +1 Claridad, +1 Respeto. IRTE: −1 Confianza. NEGOCIAR: la Confianza se desperdicia."],
-          ["Trampa","ACEPTAR: −2 Presión ya (o +2 Claridad si no hay Presión), +2 Turbio. IRTE: a salvo. NEGOCIAR (1 Confianza): Lectura ≥ palanca → −1 Presión (Organizador −2), +1 Claridad, +2 Respeto; si no, +1 Presión."],
+          ["Trampa","ACEPTAR: −2 Presión ya (o +2 Claridad si no hay Presión), +2 Turbio. IRTE: a salvo. NEGOCIAR (1 Confianza): Lectura ≥ palanca → −1 Presión (Organizadora −2), +1 Claridad, +2 Respeto; si no, +1 Presión."],
           ["El atajo","Antes de ACEPTAR una trampa, di el precio en voz alta: lo que compra (nada de Confianza; −2 Presión ya, o +2 Claridad) y lo que te cuesta (+2 Turbio, o más si el Dueño es el Comprador de Deudas; con 6 Caes). Luego la mesa opina."],
           ["Lugares de reunión","Barbería (próximo Enseñar gratis) · Iglesia (−2 Turbio) · Adventure Central (próximo Estudiar +2) · Gem City Market (próximo trato: roba 2, enfrenta 1) · Mesa de la abuela (una vez: todos +2 Confianza)."],
           ["Enseñar","Llamada y respuesta: lee una capa roja en voz alta; si tu alumno te repite el segundo número, +1 Respeto cada uno."],

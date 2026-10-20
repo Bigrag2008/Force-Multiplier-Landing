@@ -67,7 +67,8 @@ const DEAL_TEMPLATES: { re: RegExp; slots: string[]; front: string }[] = Object.
 export function dealTemplateFor(front: string): number {
   return DEAL_TEMPLATES.findIndex((tp) => tp.re.test(front));
 }
-function tFront(front: string): string {
+/** a deal's front in the current language, printed card or filled endless-deal template */
+export function tFront(front: string): string {
   if (t(front) !== front) return t(front);
   for (const tp of DEAL_TEMPLATES) {
     const m = tp.re.exec(front);

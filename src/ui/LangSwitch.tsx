@@ -7,7 +7,7 @@ export function LangSwitch() {
   const lang = useLang();
   useEffect(() => initLang(), []);
   return (
-    <div className="no-print fixed bottom-3 left-3 z-40 flex overflow-hidden rounded-full border border-white/25 bg-night/90 text-xs shadow-lg" role="group" aria-label="Language / Idioma">
+    <nav className="no-print fixed bottom-3 left-3 z-40 flex overflow-hidden rounded-full border border-white/25 bg-night/90 text-xs shadow-lg" aria-label="Language / Idioma">
       {LANGS.map((l) => (
         <button
           key={l.id}
@@ -19,6 +19,6 @@ export function LangSwitch() {
           {l.name}
         </button>
       ))}
-    </div>
+    </nav>
   );
 }
