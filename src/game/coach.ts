@@ -232,6 +232,8 @@ export function lessonsDue(s: Session, view: "board" | "deal" = "board", sight =
     out.push(L("rush", "Sign now?", "This deal pushes a deadline: a clock counts down while you decide. Real scams do this so you sign before you can read. The deadline is fake: let it run out and the offer is still there. Read 2 in a district (amber, the clock) shows you that from the start."));
   if (view === "deal" && g.finePrint) out.push(L("fineprint", "The fine-print die", "Each trap's lever is rolled when it's drawn: 1–3 red, 4–5 amber, 6 blue. You can't memorize the deck. Read deep enough to reach whatever the die says."));
   if (view === "deal" && g.endless) out.push(L("endless", "Endless deals", "These deals are rolled fresh from templates, so the numbers change every time. Work out the second number: the math is on the red layer."));
+  if (g.overlord && g.log.some((l) => l.includes("slips a counterfeit")))
+    out.push(L("counterfeit", "Counterfeits", `The Overlord has ${K.COUNTERFEIT_HAND} counterfeit deals: fake honest help, slipped on top of a pile. Below Read 3 a counterfeit reads exactly like the real thing, and taking it gets you conned (+1 Squeeze). Walking is safe; negotiating with Read 3 exposes it for an extra Prop. When one is out there, the safest reader for an "honest" deal is the one with Read 3.`));
   if (g.hasLeague()) out.push(L("league", "The League", "Chapter 3: Housing and Lending start gripped, so REDLINING is active from round 1, and the map compounds it every round. Organize: every family signs the League pledge in the same round, and the League pushes back from then on."));
   return out;
 }

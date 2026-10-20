@@ -62,10 +62,10 @@ Every rule, card, board and screen uses these words and no others.
 
 | Players | Actions per turn | Machine strikes per round | Overlord moves per round |
 |---|---|---|---|
-| 2 | 3 | 1, or 2 on even rounds | 2 |
-| 3 | 3 | 3 | 4 |
-| 4 | 2 | 1, or 2 on even rounds | 2, or 3 on even rounds |
-| 5 | 2 | 2, or 3 on even rounds | 3, or 4 on even rounds |
+| 2 | 3 | 1, or 2 on even rounds | 1 in round 1, then 2 |
+| 3 | 3 | 3 | 3, then 4, 4, 4 (repeat) |
+| 4 | 2 | 1, or 2 on even rounds | 2, 2, 2, then 3 (repeat) |
+| 5 | 2 | 2, or 3 on even rounds | 3, 3, 3, then 4 (repeat) |
 
 You don't need to remember it: the strikes for each player count are printed on the **round track**, under every round. (We tested replacing the table with one rule, "one strike for every 4 actions the block takes." It fits 2 and 5 players, but 3 players won about 73% of games under it and 4 players dropped to about 45%, so the table stays and the board carries it. 2 players went from 1 strike to 1½, because their games ran long and soft.)
 
@@ -213,7 +213,16 @@ When every district in a combination is at Squeeze 2 or more, flip that Pattern 
 ## Overlord mode (optional, 1 vs. many)
 One player *is* the Machine. There is no hidden Owner and no automatic Machine phase. Each round the Overlord takes the moves on the setup table (strike +1 Squeeze, muddy −1 Clarity, tempt −1 Trust), obeying the spread rule. After the Underworld opens, the Overlord may muddy one woken, untraced district per round.
 
-**The stranger's handwriting.** A Reader can tell when another Reader is close: their writing shows up on the paperwork, slanted and pressed too hard. Once per game, any block player may ask the Overlord *"Is that your handwriting?"* about the last deal faced. The Overlord must answer truthfully whether they struck, muddied or tempted in that deal's district this round. It costs the asker 1 Trust. (A table rule for a person playing the Overlord; the engine has no hidden information to ask about.) Everything else is the same.
+**The stranger's handwriting.** A Reader can tell when another Reader is close: their writing shows up on the paperwork, slanted and pressed too hard. Once per game, any block player may ask the Overlord *"Is that your handwriting?"* about the last deal faced. The Overlord must answer truthfully whether they struck, muddied, tempted or slipped a counterfeit in that deal's district this round. It costs the asker 1 Trust. (A table rule for a person playing the Overlord.)
+
+**Counterfeits.** The Overlord holds **3 counterfeit deals**, fake honest help. Once per round, as one of its moves, it may slip one face-down on top of a district's deal pile without saying which (it doesn't use up that district's move under the spread rule). The next deal drawn there is the counterfeit. Its front, red and amber read like real help; only **Read 3** (blue) shows the word COUNTERFEIT.
+- **TAKE** it and you're **conned**: Squeeze +1 there and Trust −1. No Shady: you didn't know you were cutting a corner.
+- **WALK** is safe.
+- **NEGOTIATE** with Read 3 **exposes** it: defused like any trap, plus 1 Props. Below Read 3 you get played.
+
+When the Overlord has slipped one in, the safest reader for an "honest" deal is the one with Read 3. The Overlord's moves were retuned with counterfeits in hand (the setup table); the computer Overlord plays at 54–64% block wins.
+
+Everything else is the same.
 
 ## Block Party: the 25-minute intro
 Learn the game in one sitting. Everything not listed here is left in the box.

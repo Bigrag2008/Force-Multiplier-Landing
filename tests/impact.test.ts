@@ -94,4 +94,23 @@ describe("reading the impact of a move", () => {
     const w = step(g, () => g.do(p, { k: "face", d: "HOUSING", choice: "TAKE", card: card(false, 0) }));
     expect(w.moments.map((m) => m.kind)).toEqual(expect.arrayContaining(["awake", "won"]));
   });
+
+  it("counterfeits: conned, exposed, and the banner when one is slipped in", () => {
+    const g = newGame({ seed: 1, overlord: true, roster: C.roster.slice(0, 3) });
+    const ov = g.ov()!;
+    const p = g.players[0];
+    g.round = 2;
+    const slip = step(g, () => g.mCounterfeit(ov.name, "HEALTH"));
+    expect(slip.moments.map((m) => m.kind)).toContain("forged");
+    p.sight.HEALTH = 1;
+    const fake = g.draw("HEALTH");
+    expect(g.looks(p, "HEALTH", fake).trap).toBe(false);
+    const conned = step(g, () => g.face(p, "HEALTH", "TAKE", fake));
+    expect(conned.verdict?.kind).toBe("conned");
+    expect(conned.shake).toBe(true);
+    p.sight.HEALTH = 3;
+    p.trust = 3;
+    const exposed = step(g, () => g.face(p, "HEALTH", "NEGOTIATE", { ...C.counterfeits.HEALTH }));
+    expect(exposed.verdict?.kind).toBe("exposed");
+  });
 });

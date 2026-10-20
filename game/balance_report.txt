@@ -8,10 +8,10 @@ THE SECOND NUMBER — balance report (v4)
   5 players  win  53.4%  rounds  7.7 (wins avg  8.8)  r1-loss   0.0%  clock-outs   0.0%  UW opened  98.6%  Fall-games   0.0%  reaches/game 0.00
 
 === OVERLORD — by player count (careful bot) ===
-  2 players  win  59.8%  rounds 10.4 (wins avg 11.0)  r1-loss   0.0%  clock-outs  29.4%  UW opened  90.6%  Fall-games   0.0%  reaches/game 0.00
-  3 players  win  56.2%  rounds  8.8 (wins avg 10.5)  r1-loss   0.0%  clock-outs  18.0%  UW opened  85.0%  Fall-games   0.0%  reaches/game 0.00
-  4 players  win  46.4%  rounds 10.2 (wins avg 11.3)  r1-loss   0.0%  clock-outs  36.8%  UW opened  86.8%  Fall-games   0.0%  reaches/game 0.00
-  5 players  win  55.6%  rounds  9.6 (wins avg 11.0)  r1-loss   0.0%  clock-outs  22.0%  UW opened  88.0%  Fall-games   0.0%  reaches/game 0.00
+  2 players  win  63.2%  rounds 10.8 (wins avg 10.8)  r1-loss   0.0%  clock-outs  32.0%  UW opened  95.6%  Fall-games   0.0%  reaches/game 0.00
+  3 players  win  55.0%  rounds  8.3 (wins avg 10.3)  r1-loss   0.0%  clock-outs  12.8%  UW opened  80.2%  Fall-games   0.0%  reaches/game 0.00
+  4 players  win  63.8%  rounds 10.5 (wins avg 11.2)  r1-loss   0.0%  clock-outs  23.4%  UW opened  89.8%  Fall-games   0.0%  reaches/game 0.00
+  5 players  win  53.8%  rounds  8.9 (wins avg 11.0)  r1-loss   0.0%  clock-outs  14.6%  UW opened  82.2%  Fall-games   0.0%  reaches/game 0.00
 
 === BLOCK PARTY: the 25-minute intro (3 districts, 8 rounds) ===
   2p careful win  69.2%  rounds  7.5 (wins avg  7.2)  r1-loss   0.0%  clock-outs  30.8%  UW opened   0.0%  Fall-games   0.0%  reaches/game 0.00
@@ -82,10 +82,10 @@ THE SECOND NUMBER — balance report (v4)
   CO-OP 3p     healthy  (66% block wins)
   CO-OP 4p     healthy  (61% block wins)
   CO-OP 5p     healthy  (53% block wins)
-  OVERLORD 2p  healthy  (60% block wins)
-  OVERLORD 3p  healthy  (56% block wins)
-  OVERLORD 4p  healthy  (46% block wins)
-  OVERLORD 5p  healthy  (56% block wins)
+  OVERLORD 2p  healthy  (63% block wins)
+  OVERLORD 3p  healthy  (55% block wins)
+  OVERLORD 4p  healthy  (64% block wins)
+  OVERLORD 5p  healthy  (54% block wins)
   Shortcut     tempting AND dangerous  (never 37% · careful 61% · greedy 24%)
   Chapter 3 2p healthy  (47% wins; organizing worth +10 pts)
   Chapter 3 3p healthy  (48% wins; organizing worth +29 pts)

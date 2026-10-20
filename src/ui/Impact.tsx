@@ -69,7 +69,7 @@ export function ImpactLayer({ impact, id }: { impact: Impact | null; id: number 
 
 const lighten = (t: Tone) => ({ good: "#7CFFB2", bad: "#ff8a8a", shady: "#c9a2ff", calm: "#fff", gold: "#F2B632", dark: "#F2B632" })[t];
 const icon = (k: string) =>
-  ({ fallen: "⚠", reached: "🤝🏾", captured: "✖", awake: "💡", underworld: "⚑", pattern: "⚠", broken: "✦", greenbook: "📗", league: "✦", sitout: "⏸", won: "✦", lost: "⏳" })[k] ?? "";
+  ({ fallen: "⚠", reached: "🤝🏾", captured: "✖", awake: "💡", underworld: "⚑", pattern: "⚠", broken: "✦", greenbook: "📗", league: "✦", sitout: "⏸", won: "✦", lost: "⏳", forged: "🃏" })[k] ?? "";
 
 /** The screen jolts for the worst moments, and a phone buzzes. Never remounts the board. */
 export function useJolt(ref: RefObject<HTMLElement | null>, impact: Impact | null, id: number) {

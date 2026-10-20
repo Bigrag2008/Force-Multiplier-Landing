@@ -55,7 +55,9 @@ ACTIONS         = {1:4, 2:3, 3:3, 4:2, 5:2}
 # "One strike per 4 actions" was tested (balance_test.py): it fits 2 and 5 players, but 3 players
 # win ~73% under it and 4 players drop to ~45%, so the table stays a table.
 MACHINE_HITS    = {1:1, 2:1.5, 3:3, 4:1.5, 5:2.5}
-OVERLORD_MOVES  = {1:1.5, 2:2, 3:4, 4:2.5, 5:3.5}   # x.5 = one extra move on even rounds
+# Overlord moves per round, carrying the remainder like the strikes: 2 players 1 then 2, 2, 2…;
+# 3 players 3, 4, 4, 4; 4 players 2, 2, 2, 3; 5 players 3, 3, 3, 4. Set with its counterfeits in hand.
+OVERLORD_MOVES  = {1:1.5, 2:1.875, 3:3.75, 4:2.25, 5:3.25}
 # ---- Block Party: the 25-minute intro (RULES.md) ----
 BP_DISTRICTS    = ("LENDING","HOUSING","EDUCATION")
 BP_ROUNDS       = 8
@@ -64,6 +66,8 @@ BP_TAKE         = 2    # Shady chips for taking a trap
 BP_SIT_OUT      = 3    # Shady chips that sit you out a turn (no Fall in Block Party)
 BP_ACTIONS      = {1:3, 2:2, 3:2, 4:2, 5:2}
 BP_HITS         = {1:1, 2:0.75, 3:1.75, 4:3, 5:4}   # strikes per round, carrying the remainder (repeats allowed)
+COUNTERFEIT_HAND = 3   # Overlord mode: counterfeit deals per game, at most one a round; each is one of its moves
+CON_TRUST       = 1    # Trust lost when you're conned by one
 # ---- the fine-print die: which layer holds a trap's lever, rolled on every draw ----
 FINE_PRINT_DIE  = {1:1, 2:1, 3:1, 4:2, 5:2, 6:3}   # 1–3 red · 4–5 amber · 6 blue
 
@@ -88,6 +92,8 @@ class Game:
         self.max_rounds=BP_ROUNDS if self.party else MAX_ROUNDS
         self.dealt=[]                                               # every card drawn, in order
         self.signed=[]                                              # every deal decision, with its real money
+        self.counterfeits=set(); self.forged=False                  # Overlord: fake honest deals waiting in piles
+        self.forgeries=COUNTERFEIT_HAND                             # counterfeit cards left in the Overlord's hand
         self.chapter=CH.CHAPTERS[chapter] if chapter else None
         self.overlord = overlord; self.verbose = verbose
         self.clarity  = {d:0 for d in DISTRICTS}
@@ -201,8 +207,15 @@ class Game:
                   f"Read now {pl.sight[d]}/3. Props +1.")
 
     def draw(self, d):
+        if d in self.counterfeits:                 # the Overlord's counterfeit is on top of the pile
+            self.counterfeits.discard(d); card=dict(D.COUNTERFEITS[d])
+            self.dealt.append(card); return card
         card=G.make_deal(d,random) if self.endless else random.choice(self.deck[d])
         return self.dress(card)
+
+    def looks(self, pl, d, card):
+        """The deal as this player can read it: below Read 3, a counterfeit looks like honest help."""
+        return dict(card, trap=False, lever=0) if card.get("counterfeit") and pl.sight[d]<3 else card
 
     def dress(self, card):
         """The fine-print die: roll which layer holds a trap's lever, so the deck can't be learned by heart."""
@@ -218,7 +231,7 @@ class Game:
         """The deal(s) a player looks at: two if they shopped at Gem City Market this turn."""
         if pl.shop_around:
             pl.shop_around=False
-            if self.endless: return [self.draw(d), self.draw(d)]
+            if self.endless or d in self.counterfeits: return [self.draw(d), self.draw(d)]
             return [self.dress(c) for c in random.sample(self.deck[d],2)]
         return [self.draw(d)]
 
@@ -229,7 +242,14 @@ class Game:
         out=None                                   # what happened, for the money count (money())
         if "die" in card: self.emit(f"  (The fine print: rolled {card['die']}, so the lever sits in {LEVER_NAME[card['lever']]}.)")
         bare=self.terrell and trap and d in pl.bare and choice!="WALK"
-        if choice=="TAKE":
+        fake=card.get("counterfeit",False)
+        if choice=="TAKE" and fake:                # conned: you took it for honest help
+            out="conned"; lost=min(pl.trust,CON_TRUST); pl.trust-=lost
+            if self.pressure[d]<CAPTURE: self.pressure[d]+=1
+            self.emit(f"  It was a COUNTERFEIT: it only looked honest. Squeeze +1 in {d} ({self.pressure[d]}/{CAPTURE})"
+                      + (f", Trust −{lost}." if lost else "."))
+            if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
+        elif choice=="TAKE":
             if not trap:
                 pl.trust+=2; self.clarity[d]=min(WAKE,self.clarity[d]+1); pl.legend+=1; out="help"
                 self.emit(f"  It was an HONEST deal — real help. Trust +2, {d} clarity +1, Props +1.")
@@ -244,7 +264,8 @@ class Game:
                     self.emit(f"  TAKE the trap for fast power: {d} clarity +{rush}… Shady +{cost} on you. (Props +0)")
         elif choice=="WALK":
             out="dodged" if trap else "refused"
-            if trap: self.emit(f"  WALK: you dodged a trap. Safe, nothing gained.")
+            if fake: self.emit(f"  WALK: it was a COUNTERFEIT, and you walked. Safe.")
+            elif trap: self.emit(f"  WALK: you dodged a trap. Safe, nothing gained.")
             else:
                 pl.trust=max(0,pl.trust-1)
                 self.emit(f"  WALK: it was honest help you refused out of fear. Trust −1.")
@@ -260,6 +281,8 @@ class Game:
                 pl.legend+=2
                 self.emit(f"  NEGOTIATE on the {LEVER_NAME[lever]} lever (Read {see}): defused. "
                           f"Squeeze −{amt}, {d} clarity +1, Props +2.")
+                if fake:
+                    pl.legend+=1; self.emit(f"  You exposed a COUNTERFEIT: it only looked like honest help. Props +1.")
             elif trap:
                 out="played"; self.pressure[d]=min(CAPTURE,self.pressure[d]+1)
                 self.emit(f"  NEGOTIATE without the {LEVER_NAME[lever]} layer (Read {see}): you got played. "
@@ -436,6 +459,15 @@ class Game:
             self.covered=True
         if self.clarity[d]>0:
             self.struck.add(d); self.clarity[d]-=1; self.emit(f"[{who}] muddies {d}: the second number gets buried. Clarity −1.")
+    def m_counterfeit(self, who, d):
+        """Overlord: slip a fake honest deal onto a district's pile. One of the Overlord's moves, at most one a
+        round, from a hand of COUNTERFEIT_HAND. It doesn't use the district's move. The block isn't told where."""
+        if self.forged: self.emit(f"[{who}] has already slipped a counterfeit in this round."); return
+        if self.forgeries<1: self.emit(f"[{who}] has no counterfeits left."); return
+        if d in self.counterfeits: self.emit(f"[{who}] already has a counterfeit waiting there."); return
+        self.counterfeits.add(d); self.forged=True; self.forgeries-=1
+        self.emit(f"[{who}] slips a counterfeit into a deal pile somewhere on the block.")
+
     def m_tempt(self, who, t):
         if t and t.trust>0: t.trust-=1; self.emit(f"[{who}] tempts {t.name} with a sweeter deal. Trust −1.")
 
@@ -456,6 +488,20 @@ class Game:
         if t and t.trust>0: return ("m_tempt",t,None)
         free=[d for d in free if self.pressure[d]<CAPTURE]
         return ("m_extract",None,min(free,key=lambda x:self.pressure[x])) if free else ("pass",None,None)
+
+    def overlord_ai_move(self, struck=()):
+        """The computer Overlord: the Machine's move, or a counterfeit when no capture is on the line."""
+        a=self.machine_ai_move(struck)
+        if a[0]=="m_extract" and self.pressure[a[2]]==CAPTURE-1: return a       # a capture comes first
+        return self.overlord_counterfeit() or a
+
+    def overlord_counterfeit(self):
+        """The computer Overlord's counterfeit (from round 2): where the block reads well enough to trust
+        a deal and not well enough to see through it. None if there's nowhere worth it."""
+        if self.forged or self.forgeries<1 or self.round<2: return None
+        fooled=lambda x: sum(1<=p.sight[x]<3 for p in self.active())
+        cand=[d for d in self.ds if d not in self.counterfeits and self.clarity[d]<WAKE and fooled(d)]
+        return ("m_counterfeit",None,max(cand,key=fooled)) if cand else None
 
     def owner_passive(self):
         """Owner acts from round 1 (hidden). Skipped in Overlord mode."""
@@ -600,6 +646,7 @@ class Game:
         elif k=="m_extract":self.m_extract(pl.name,a[2])
         elif k=="m_obscure":self.m_obscure(pl.name,a[2])
         elif k=="m_tempt":  self.m_tempt(pl.name,a[1])
+        elif k=="m_counterfeit": self.m_counterfeit(pl.name,a[2])
         # "pass" -> nothing
         self.check_party_win()
 
@@ -615,6 +662,7 @@ class Game:
     #        "human"   (careful, but gives in to temptation about one move in five).
     def bot_choice(self, pl, d, card, style="careful"):
         """Decide TAKE/WALK/NEGOTIATE using only what this player can see."""
+        card=self.looks(pl,d,card)
         see=pl.sight[d]; safe=pl.corruption+self.take_cost()<FLIP
         urgent=self.pressure[d]>=CAPTURE-1
         if see>=1:                                   # red layer: you can tell trap from honest
@@ -630,6 +678,7 @@ class Game:
 
     def bot_face(self, pl, d, style):
         def score(c):
+            c=self.looks(pl,d,c)
             if pl.sight[d]<1: return 0
             if not c["trap"]: return 2
             return 3 if pl.sight[d]>=c["lever"] else 0
@@ -701,9 +750,9 @@ class Game:
     def machine_phase(self, overlord_move=None):
         self.league_round()
         if self.overlord and self.ov():
-            m=OVERLORD_MOVES[self.n()]; moves=int(m)+(1 if m%1 and self.round%2==0 else 0)
+            m=OVERLORD_MOVES[self.n()]; moves=int(m*self.round)-int(m*(self.round-1))   # carry the remainder
             for _ in range(moves):
-                self.do(self.ov(), overlord_move() if overlord_move else self.machine_ai_move(self.struck))
+                self.do(self.ov(), overlord_move() if overlord_move else self.overlord_ai_move(self.struck))
             self.tighten()
         elif self.grace>0:
             self.grace-=1; self.emit("  (The Machine is distracted — grace round.)")
@@ -716,7 +765,7 @@ class Game:
     def run_auto(self, max_rounds=None, style="careful"):
         max_rounds=max_rounds or (BP_ROUNDS if self.party else MAX_ROUNDS)   # read at call time so tuning works
         while self.round<max_rounds and not self.won:
-            self.round+=1; self.struck=set(); self.covered=False
+            self.round+=1; self.struck=set(); self.covered=False; self.forged=False
             feast=self.cookout_ai()
             if feast: self.cookout()
             for pl in self.players:
@@ -741,13 +790,14 @@ class Game:
         """The real money behind the game's decisions, for the end screen: what the block signed,
         what it read its way out of, and what it walked away from."""
         tot=lambda o: sum(x["dollars"] for x in self.signed if x["out"]==o)
+        conned=tot("conned")
         taken=[x for x in self.signed if x["out"]=="taken"]
         worst=max(taken,key=lambda x:x["dollars"]) if taken else None    # the first, on a tie
         played={}
         for x in self.signed:
-            if x["out"]=="played": played[x["who"]]=played.get(x["who"],0)+1
+            if x["out"] in ("played","conned"): played[x["who"]]=played.get(x["who"],0)+1
         most=max(played.items(),key=lambda kv:kv[1]) if played else None
-        return dict(taken=tot("taken"), played=tot("played"), refused=tot("refused")+tot("wasted"),
+        return dict(taken=tot("taken"), played=tot("played")+conned, refused=tot("refused")+tot("wasted"),
                     dodged=tot("dodged"), defused=tot("defused"), help=tot("help"),
                     shortcuts=len(taken), worst=worst, playedMost=dict(who=most[0],times=most[1]) if most else None)
 

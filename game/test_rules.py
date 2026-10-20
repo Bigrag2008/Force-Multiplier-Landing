@@ -258,6 +258,23 @@ def test_money_counts_every_decision():
     assert m["worst"]["dollars"]==900 and m["shortcuts"]==2 and m["playedMost"]=={"who":p.name,"times":1}
     assert all(c["dollars"]>=0 and c["basis"] for v in Dk.DECK.values() for c in v)
 
+def test_counterfeits():
+    g=E.new_game(seed=1, overlord=True, roster=E.ROSTER[:3]); ov=g.ov(); p=g.players[0]
+    g.round=2; g.m_counterfeit(ov.name,"HOUSING")
+    assert "HOUSING" in g.counterfeits and g.forgeries==E.COUNTERFEIT_HAND-1 and "HOUSING" not in g.struck
+    assert not any("HOUSING" in l for l in g.log[-1:])                     # the block isn't told where
+    g.m_counterfeit(ov.name,"LABOR"); assert "LABOR" not in g.counterfeits  # one a round
+    c=g.draw("HOUSING"); assert c["counterfeit"] and not g.counterfeits
+    p.sight["HOUSING"]=2; assert g.looks(p,"HOUSING",c)["trap"] is False   # below Read 3 it looks honest
+    assert g.bot_choice(p,"HOUSING",c)=="TAKE"                              # and the bots fall for it
+    t=p.trust; g.face(p,"HOUSING","TAKE",c)
+    assert g.pressure["HOUSING"]==1 and p.trust==t-E.CON_TRUST and p.corruption==0   # conned: no Shady
+    p.sight["HOUSING"]=3; p.trust=3; g.pressure["HOUSING"]=2; legend=p.legend
+    g.face(p,"HOUSING","NEGOTIATE",dict(E.D.COUNTERFEITS["HOUSING"]))
+    assert g.pressure["HOUSING"]==1 and p.legend==legend+3                  # exposed: defused, +1 Props
+    assert g.money()["played"]>0
+    g.forged=False; g.forgeries=0; g.m_counterfeit(ov.name,"LABOR"); assert not g.counterfeits   # hand empty
+
 if __name__=="__main__":
     tests=[(n,f) for n,f in sorted(globals().items()) if n.startswith("test_")]
     for n,f in tests: f(); print(f"  ✓ {n[5:].replace('_',' ')}")

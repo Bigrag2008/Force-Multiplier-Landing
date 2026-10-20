@@ -55,7 +55,7 @@ class Table:
     # ---- output ----
     def flush(self):
         for s in self.g.log[self.seen:]:
-            col = (RED if any(k in s for k in ("✖","⚠","played","FALLEN","clock ran out","buries","feeds","whispers","strikes","muddies","tempts","backfires","peels","collections","creeps","covers"))
+            col = (RED if any(k in s for k in ("✖","⚠","played","FALLEN","clock ran out","buries","feeds","whispers","strikes","muddies","tempts","backfires","COUNTERFEIT: it only","counterfeit into","peels","collections","creeps","covers"))
                    else GOLD if "⚑" in s or "UNDERWORLD" in s
                    else GREEN if any(k in s for k in ("✦","defused","HONEST","pulls them home","⛨","traces","AWAKE"))
                    else CREAM)
@@ -178,11 +178,15 @@ class Table:
     def machine_menu(self, who):
         g=self.g
         print(f"\n  {RED}{B}▶ {who.name} — move the Machine{R}  {DIM}(one move per district per round){R}")
-        print(f"   {RED}1{R})Strike (+Squeeze)   {RED}2{R})Muddy (−Clarity)   {RED}3{R})Tempt (−Trust)   {DIM}0)Pass{R}")
+        cf=who.role=="Overlord" and not g.forged and g.forgeries>0
+        print(f"   {RED}1{R})Strike (+Squeeze)   {RED}2{R})Muddy (−Clarity)   {RED}3{R})Tempt (−Trust)"
+              + (f"   {RED}4{R})Counterfeit ({g.forgeries} left)" if cf else "") + f"   {DIM}0)Pass{R}")
+        if who.role=="Overlord" and g.counterfeits: print(f"   {DIM}(your counterfeits wait in: {', '.join(sorted(g.counterfeits))}){R}")
         k=ask("   choose: ")
         if k=="1": d=self.pick_district(); return ("m_extract",None,d) if d else ("pass",None,None)
         if k=="2": d=self.pick_district(); return ("m_obscure",None,d) if d else ("pass",None,None)
         if k=="3": t=self.pick_player(g.active(),"tempt who"); return ("m_tempt",t,None) if t else ("pass",None,None)
+        if k=="4" and cf: d=self.pick_district("slip it where"); return ("m_counterfeit",None,d) if d else ("pass",None,None)
         return ("pass",None,None)
 
     # ---- the Cookout ----

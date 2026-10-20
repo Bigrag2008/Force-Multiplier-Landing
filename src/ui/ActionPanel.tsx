@@ -50,7 +50,11 @@ function DistrictButtons({ ds, onPick, disabled, note, best }: { ds: District[];
 }
 
 const formId = (s: Session, d: District, card: Card) =>
-  s.g.deck[d].includes(card) ? `${d.slice(0, 3)}-${String(s.g.deck[d].indexOf(card) + 1).padStart(2, "0")}` : `${d.slice(0, 3)}-NEW`;
+  s.g.deck[d].includes(card)
+    ? `${d.slice(0, 3)}-${String(s.g.deck[d].indexOf(card) + 1).padStart(2, "0")}`
+    : card.counterfeit // a counterfeit carries a real-looking form number: "NEW" would give it away
+      ? `${d.slice(0, 3)}-${String(s.g.deck[d].length + 1).padStart(2, "0")}`
+      : `${d.slice(0, 3)}-NEW`;
 
 /** The current player's turn. Keyed by the parent per action, so its local state resets. */
 export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: Local }) {
@@ -71,7 +75,8 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
   const pick = tip?.pick;
   const dealTip = (d: District, card: Card) => {
     if (!s.coach) return null;
-    const tip = safe(() => adviseDeal(g, p, d, card));
+    // the Coach only knows what this player can read: below Read 3, a counterfeit looks honest to it too
+    const tip = safe(() => adviseDeal(g, p, d, g.looks(p, d, card)));
     // the math variant: don't give away the second number before the table has worked it out
     if (tip && s.config.math && card.answer !== undefined && p.sight[d] >= 1)
       return { ...tip, title: "Work it out first", why: "Work out the second number on the card and check it. Then read the red layer: it tells you whether this is a trap. My pick is lit up if you want it." };
@@ -90,7 +95,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
         <div className="grid gap-4 md:grid-cols-2">
           {pd.cards.map((card, i) => (
             <div key={i} className="space-y-2">
-              <DealCard card={card} district={pd.d} sight={p.sight[pd.d]} effectiveLever={g.lever(pd.d, card)} formId={formId(s, pd.d, card)} math={s.config.math} />
+              <DealCard card={g.looks(p, pd.d, card)} district={pd.d} sight={p.sight[pd.d]} effectiveLever={g.lever(pd.d, g.looks(p, pd.d, card))} formId={formId(s, pd.d, card)} math={s.config.math} />
               <button className={primary + picked(card === best)} onClick={() => setChosen(card)}>
                 <span>Face this deal</span>
                 {card === best && <CoachBadge />}
@@ -292,7 +297,7 @@ function FaceDeal({ s, play, run, d, card, deal }: { s: Session; play: Play; run
     <Panel key="face" title={`${p.name} faces a deal in ${titleCase(d)}`} sub="Read what you can, then decide.">
       <CoachBox s={s} run={run} view="deal" sight={p.sight[d]} advice={deal} />
       <SignNowClock state={clock} left={left} />
-      <DealCard card={card} district={d} sight={p.sight[d]} effectiveLever={g.lever(d, card)} formId={formId(s, d, card)} math={s.config.math} />
+      <DealCard card={g.looks(p, d, card)} district={d} sight={p.sight[d]} effectiveLever={g.lever(d, g.looks(p, d, card))} formId={formId(s, d, card)} math={s.config.math} />
       <div className="grid gap-2 sm:grid-cols-3">
         {choice("TAKE", "accept it")}
         {choice("WALK", "refuse it")}
@@ -304,7 +309,7 @@ function FaceDeal({ s, play, run, d, card, deal }: { s: Session; play: Play; run
 
 /** The Machine moving through a Fallen player, or a person playing the Overlord. */
 export function MachinePanel({ s, play, local, who }: { s: Session; play: Play; local: Local; who: "fallen" | "overlord" }) {
-  const [mode, setMode] = useState<null | "m_extract" | "m_obscure" | "m_tempt">(null);
+  const [mode, setMode] = useState<null | "m_extract" | "m_obscure" | "m_tempt" | "m_counterfeit">(null);
   const g = s.g;
   const name = who === "fallen" ? s.player.name : g.ov()?.name ?? "The Owner";
   const go = (a: Action) => play({ t: who, a: toWire(g, a) });
@@ -319,8 +324,27 @@ export function MachinePanel({ s, play, local, who }: { s: Session; play: Play; 
           <button className={ghost} onClick={() => setMode("m_extract")}>Strike <span className="block text-xs font-normal">+1 Squeeze</span></button>
           <button className={ghost} onClick={() => setMode("m_obscure")}>Muddy <span className="block text-xs font-normal">−1 Clarity</span></button>
           <button className={ghost} onClick={() => setMode("m_tempt")}>Tempt <span className="block text-xs font-normal">−1 Trust</span></button>
-          <button className={ghost} onClick={() => go(g.machineAiMove(g.struck))}>Let the Machine choose</button>
+          {who === "overlord" && (
+            <button className={ghost} disabled={!g.canCounterfeit()} onClick={() => setMode("m_counterfeit")}>
+              Counterfeit{" "}
+              <span className="block text-xs font-normal">
+                {g.forged ? "one a round: done" : `a fake honest deal in a pile · ${g.forgeries} left`}
+              </span>
+            </button>
+          )}
+          <button className={ghost} onClick={() => go(who === "overlord" ? g.overlordAiMove(g.struck) : g.machineAiMove(g.struck))}>Let the Machine choose</button>
         </div>
+      )}
+      {who === "overlord" && g.counterfeits.size > 0 && (
+        <p className="text-xs text-[#c9a2ff]">Your counterfeits wait in: {[...g.counterfeits].map(titleCase).join(", ")}. Only Read 3 sees them. Keep it off the table&apos;s screens.</p>
+      )}
+      {mode === "m_counterfeit" && (
+        <DistrictButtons
+          ds={g.ds}
+          disabled={(d) => g.counterfeits.has(d)}
+          note={(d) => (g.counterfeits.has(d) ? "one waiting here" : `${g.active().filter((x) => x.sight[d] >= 3).length} can read blue here`)}
+          onPick={(d) => (setMode(null), go({ k: "m_counterfeit", d }))}
+        />
       )}
       {(mode === "m_extract" || mode === "m_obscure") && (
         <DistrictButtons ds={g.ds} disabled={(d) => g.struck.has(d)} note={(d) => (g.struck.has(d) ? "already moved here" : `Squeeze ${g.pressure[d]} · Clarity ${g.clarity[d]}`)} onPick={(d) => (setMode(null), go({ k: mode, d }))} />

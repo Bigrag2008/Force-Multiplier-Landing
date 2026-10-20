@@ -224,6 +224,11 @@ def build_deal_pages(c):
     crop_marks(c)
     for x,y in card_slots(): card_back(c,x,y)
     sheet_label(c,"Card backs (optional)"); c.showPage()
+    # Overlord mode: the counterfeits, printed exactly like honest deals (only the blue zone gives them away)
+    crop_marks(c)
+    for (x,y),(d,card) in zip(card_slots(),Dk.COUNTERFEITS.items()):
+        deal_card(c,x,y,d,len(Dk.DECK[d]),dict(card,trap=False,lever=0) | {"blue":card["blue"]})
+    sheet_label(c,"Overlord mode: counterfeit deals (keep these with the Overlord, face-down)"); c.showPage()
 
 # ================= role / owner / scenario / pattern cards =================
 def text_card(c,x,y,rgb,top,right,title,body,extra=None,body_size=8):
@@ -784,7 +789,10 @@ def reference_story():
     t.setStyle(TableStyle([("GRID",(0,0),(-1,-1),0.4,colors.Color(*LGREY)),("VALIGN",(0,0),(-1,-1),"TOP"),
         ("ROWBACKGROUNDS",(0,0),(-1,-1),[colors.white,colors.Color(0.97,0.96,0.93)])]))
     s+=[t,Spacer(1,10),Paragraph("Setup by player count",ST["h2"])]
-    def mv(m): return str(int(m)) if m==int(m) else f"{int(m)}, or {int(m)+1} on even rounds"
+    def mv(m):
+        if m==int(m): return str(int(m))
+        seq=[int(m*r)-int(m*(r-1)) for r in range(1,5)]
+        return f"{int(m)}, or {int(m)+1} on even rounds" if seq==[int(m),int(m)+1]*2 else ", ".join(map(str,seq))+"…"
     s+=md_table(["| Players | Actions per turn | Machine strikes | Overlord moves |"]+
                 [f"| {k} | {E.ACTIONS[k]} | {mv(E.MACHINE_HITS[k])} | {mv(E.OVERLORD_MOVES[k])} |" for k in (2,3,4,5)])
     return s

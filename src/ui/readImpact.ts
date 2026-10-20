@@ -11,14 +11,14 @@ export type Tone = "good" | "bad" | "shady" | "calm" | "gold" | "dark";
 
 /** the verdict on a decision the player just made */
 export interface Verdict {
-  kind: "defused" | "played" | "honest" | "shortcut" | "walked" | "refused" | "wasted" | "backfire";
+  kind: "defused" | "played" | "honest" | "shortcut" | "walked" | "refused" | "wasted" | "backfire" | "conned" | "exposed";
   title: string;
   sub: string;
   tone: Tone;
 }
 /** a moment big enough for a banner */
 export interface Moment {
-  kind: "fallen" | "reached" | "captured" | "awake" | "underworld" | "pattern" | "broken" | "greenbook" | "league" | "sitout" | "won" | "lost";
+  kind: "fallen" | "reached" | "captured" | "awake" | "underworld" | "pattern" | "broken" | "greenbook" | "league" | "sitout" | "won" | "lost" | "forged";
   title: string;
   sub: string;
   tone: Tone;
@@ -61,6 +61,17 @@ export function readImpact(g: Game, lines: string[], delta: Delta): Impact {
       verdict({ kind: "refused", title: "THAT WAS REAL HELP", sub: "You walked away from an honest deal. Trust −1.", tone: "bad" });
     else if (l.includes("NEGOTIATE on an honest deal"))
       verdict({ kind: "wasted", title: "HAGGLED IT AWAY", sub: "It was honest. The Trust is gone.", tone: "bad" });
+    // ---- counterfeits (Overlord mode): these overrule the plain verdicts above ----
+    if ((m = l.match(new RegExp(`It was a COUNTERFEIT: it only looked honest\\. Squeeze \\+1 in ${D}`)))) {
+      out.verdict = { kind: "conned", title: "CONNED", sub: `It only looked like honest help. Squeeze +1 in ${T(m[1])}. Only Read 3 sees a counterfeit.`, tone: "bad" };
+      out.shake = true;
+    }
+    if (l.includes("You exposed a COUNTERFEIT"))
+      out.verdict = { kind: "exposed", title: "COUNTERFEIT EXPOSED", sub: "You read the blue layer: it only looked honest. Defused, and Props +1.", tone: "good" };
+    if (l.includes("it was a COUNTERFEIT, and you walked"))
+      out.verdict = { kind: "walked", title: "WALKED AWAY", sub: "It was a counterfeit. Safe.", tone: "calm" };
+    if (l.includes("slips a counterfeit into a deal pile"))
+      out.moments.push({ kind: "forged", title: "A counterfeit is out there", sub: "The Overlord slipped a fake honest deal into a pile somewhere. Only Read 3 can see it.", tone: "shady" });
     if ((m = l.match(new RegExp(`It backfires: (.+?) read it but nobody had their back\\. Squeeze \\+1 in ${D}`)))) {
       out.verdict = { kind: "backfire", title: "IT BACKFIRES", sub: `${m[1]} saw it, but nobody had their back. Squeeze +1 in ${T(m[2])}.`, tone: "bad" };
       out.shake = true;

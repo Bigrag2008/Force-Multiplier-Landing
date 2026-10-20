@@ -16,7 +16,7 @@ import deck_cards as D, chapters as CH, sn_engine as E, deal_gen as G
 CONST_NAMES=["WAKE","CAPTURE","FLIP","GRIP","LOSE_CAPTURED","UNDERWORLD_AT","THREADS_TO_WIN","TAKE_CORRUPT",
              "NEG_COST","START_TRUST","MAX_TRUST","MAX_ROUNDS","SOUSOU_HAND","LEAGUE_PUSH",
              "ACTIONS","MACHINE_HITS","OVERLORD_MOVES","BP_DISTRICTS","BP_ROUNDS","BP_WAKE_TO_WIN","BP_TAKE",
-             "BP_SIT_OUT","BP_ACTIONS","BP_HITS","FINE_PRINT_DIE"]
+             "BP_SIT_OUT","BP_ACTIONS","BP_HITS","FINE_PRINT_DIE","COUNTERFEIT_HAND","CON_TRUST"]
 
 def jsonable(v):
     if isinstance(v,dict): return {str(k):jsonable(x) for k,x in v.items()}
@@ -30,7 +30,7 @@ content=dict(
     owners=D.OWNERS, scenarios=D.SCENARIOS, history=D.HISTORY, places=D.PLACES,
     chapters=CH.CHAPTERS, roster=[dict(name=n,role=r) for n,r in E.ROSTER],
     constants={k:getattr(E,k) for k in CONST_NAMES},
-    dealTemplates=G.TEMPLATES, slotOrder=list(G.SLOT_ORDER),
+    dealTemplates=G.TEMPLATES, slotOrder=list(G.SLOT_ORDER), counterfeits=D.COUNTERFEITS,
 )
 out=os.path.join(os.path.dirname(HERE),"src","content","content.json")
 with open(out,"w",encoding="utf-8") as f: json.dump(jsonable(content),f,ensure_ascii=False,indent=1)

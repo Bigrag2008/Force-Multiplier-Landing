@@ -1,6 +1,7 @@
 "use client";
 import type { Session } from "../game/session";
 import { MoneyCount } from "./MoneyCount";
+import { ResultCode } from "./ResultCode";
 
 export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
   const g = s.g;
@@ -23,6 +24,7 @@ export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
         </p>
       )}
       <MoneyCount s={s} />
+      <ResultCode s={s} />
       {!won && fallen.length > 0 && (
         <p className="mt-3 text-[#ff9b9b]">{fallen[0].name} won the board as the Machine, and earned 0 Props. You win nothing by becoming it.</p>
       )}

@@ -646,3 +646,36 @@ for _d in DECK:
     for _c in DECK[_d]:
         if _c["trap"] and _c["front"].startswith(RUSH): _c["rush"]=True
 assert sum(c.get("rush",False) for v in DECK.values() for c in v)==len(RUSH)
+
+# COUNTERFEITS — Overlord mode: the Machine slips a fake "honest" deal into a district's pile.
+# The front, the red layer and the amber layer all read like real help; only Read 3 (blue, the
+# connection) shows it's a counterfeit. One per district. (RULES.md: Overlord mode, Counterfeits)
+COUNTERFEITS = {
+ "LENDING": dict(front="Neighborhood credit union loan: fixed low rate, no fees.",
+                 red="A fair, fixed rate, and no fees to sign.",
+                 amber="No deadline: take your time and read it at home.",
+                 blue="COUNTERFEIT. A storefront lender using a look-alike name; the real rate is in a second agreement.",
+                 dollars=1500, basis="a high-cost loan dressed as a credit union"),
+ "HOUSING": dict(front="A fair lease: normal deposit, clear terms.",
+                 red="Rent is the rent; the deposit is refundable.",
+                 amber="Standard 30-day notice on both sides.",
+                 blue="COUNTERFEIT. The landlord is a shell company with dozens of eviction filings; a fee addendum is stapled behind page 4.",
+                 dollars=2500, basis="a fee addendum and a deposit that never comes back"),
+ "LABOR": dict(front="Union-scale job: overtime and benefits from day one.",
+               red="Overtime, benefits, and the employer pays its share of taxes.",
+               amber="Your first check comes in two weeks.",
+               blue="COUNTERFEIT. A staffing agency borrowed the union's name; page 6 makes you a contractor with no overtime.",
+               dollars=3500, basis="overtime and benefits that were never in the contract"),
+ "HEALTH": dict(front="The hospital's financial-help program: apply right here.",
+                red="Your bill could drop to a fraction, or to nothing.",
+                amber="Apply within 240 days of your first bill.",
+                blue="COUNTERFEIT. A medical-credit company dressed as the hospital's charity program; deferred interest applies.",
+                dollars=2000, basis="deferred interest where charity care should have been"),
+ "EDUCATION": dict(front="Free help with your federal student loans.",
+                   red="Federal repayment and forgiveness programs, filed for you.",
+                   amber="Sign up before the program deadline.",
+                   blue="COUNTERFEIT. A 'document prep' company charging for free federal forms, and keeping your login.",
+                   dollars=1000, basis="fees for free federal forms, and your account login"),
+}
+for _c in COUNTERFEITS.values():
+    _c.update(trap=True, lever=3, counterfeit=True)

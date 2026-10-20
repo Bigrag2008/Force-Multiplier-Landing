@@ -30,6 +30,7 @@ export type Action =
   | { k: "m_extract"; d: District }
   | { k: "m_obscure"; d: District }
   | { k: "m_tempt"; t: Player | null }
+  | { k: "m_counterfeit"; d: District }
   | { k: "pass" };
 
 type Key = number | number[];
@@ -96,7 +97,7 @@ export interface GameOptions {
 export interface Signed {
   who: string;
   d: District;
-  out: "help" | "taken" | "dodged" | "refused" | "defused" | "played" | "wasted";
+  out: "help" | "taken" | "dodged" | "refused" | "defused" | "played" | "wasted" | "conned";
   front: string;
   dollars: number;
   basis: string;
@@ -174,6 +175,10 @@ export class Game {
   dealt: Card[] = [];
   /** every deal decision, with its real money (see money()) */
   signed: Signed[] = [];
+  /** Overlord mode: counterfeit deals waiting on top of piles, one slipped this round, and how many are left */
+  counterfeits = new Set<District>();
+  forged = false;
+  forgeries = K.COUNTERFEIT_HAND;
 
   constructor(o: GameOptions = {}) {
     this.rng = new Rng(o.seed ?? Math.floor(Math.random() * 2 ** 31));
@@ -330,7 +335,18 @@ export class Game {
     );
   }
   draw(d: District) {
+    if (this.counterfeits.has(d)) {
+      // the Overlord's counterfeit is on top of the pile
+      this.counterfeits.delete(d);
+      const card = { ...C.counterfeits[d] };
+      this.dealt.push(card);
+      return card;
+    }
     return this.dress(this.endless ? makeDeal(d, this.rng) : this.rng.choice(this.deck[d]));
+  }
+  /** The deal as this player can read it: below Read 3, a counterfeit looks like honest help. */
+  looks(pl: Player, d: District, card: Card): Card {
+    return card.counterfeit && pl.sight[d] < 3 ? { ...card, trap: false, lever: 0 } : card;
   }
   /** the fine-print die: roll which layer holds a trap's lever, so the deck can't be learned by heart */
   dress(card: Card) {
@@ -349,7 +365,7 @@ export class Game {
   dealsFor(pl: Player, d: District) {
     if (pl.shopAround) {
       pl.shopAround = false;
-      if (this.endless) return [this.draw(d), this.draw(d)];
+      if (this.endless || this.counterfeits.has(d)) return [this.draw(d), this.draw(d)];
       return this.rng.sample(this.deck[d], 2).map((c) => this.dress(c));
     }
     return [this.draw(d)];
@@ -363,7 +379,16 @@ export class Game {
     if (card.die !== undefined) this.emit(`  (The fine print: rolled ${card.die}, so the lever sits in ${LEVER_NAME[card.lever]}.)`);
     const bare = this.terrell && trap && pl.bare.has(d) && choice !== "WALK";
     let out: Signed["out"] | null = null;
-    if (choice === "TAKE") {
+    const fake = !!card.counterfeit;
+    if (choice === "TAKE" && fake) {
+      // conned: you took it for honest help
+      out = "conned";
+      const lost = Math.min(pl.trust, K.CON_TRUST);
+      pl.trust -= lost;
+      if (this.pressure[d] < K.CAPTURE) this.pressure[d] += 1;
+      this.emit(`  It was a COUNTERFEIT: it only looked honest. Squeeze +1 in ${d} (${this.pressure[d]}/${K.CAPTURE})` + (lost ? `, Trust −${lost}.` : "."));
+      if (this.pressure[d] >= K.CAPTURE) this.emit(`  ✖ ${d} CAPTURED.`);
+    } else if (choice === "TAKE") {
       if (!trap) {
         pl.trust += 2;
         this.clarity[d] = Math.min(K.WAKE, this.clarity[d] + 1);
@@ -385,7 +410,8 @@ export class Game {
       }
     } else if (choice === "WALK") {
       out = trap ? "dodged" : "refused";
-      if (trap) this.emit(`  WALK: you dodged a trap. Safe, nothing gained.`);
+      if (fake) this.emit(`  WALK: it was a COUNTERFEIT, and you walked. Safe.`);
+      else if (trap) this.emit(`  WALK: you dodged a trap. Safe, nothing gained.`);
       else {
         pl.trust = Math.max(0, pl.trust - 1);
         this.emit(`  WALK: it was honest help you refused out of fear. Trust −1.`);
@@ -407,6 +433,10 @@ export class Game {
           `  NEGOTIATE on the ${LEVER_NAME[lever]} lever (Read ${see}): defused. ` +
             `Squeeze −${amt}, ${d} clarity +1, Props +2.`,
         );
+        if (fake) {
+          pl.legend += 1;
+          this.emit(`  You exposed a COUNTERFEIT: it only looked like honest help. Props +1.`);
+        }
       } else if (trap) {
         out = "played";
         this.pressure[d] = Math.min(K.CAPTURE, this.pressure[d] + 1);
@@ -652,6 +682,35 @@ export class Game {
       this.emit(`[${who}] muddies ${d}: the second number gets buried. Clarity −1.`);
     }
   }
+  /**
+   * Overlord: slip a fake honest deal onto a district's pile. One of the Overlord's moves, at most one a
+   * round, from a hand of K.COUNTERFEIT_HAND. It doesn't use the district's move. The block isn't told where.
+   */
+  mCounterfeit(who: string, d: District) {
+    if (this.forged) return this.emit(`[${who}] has already slipped a counterfeit in this round.`);
+    if (this.forgeries < 1) return this.emit(`[${who}] has no counterfeits left.`);
+    if (this.counterfeits.has(d)) return this.emit(`[${who}] already has a counterfeit waiting there.`);
+    this.counterfeits.add(d);
+    this.forged = true;
+    this.forgeries -= 1;
+    this.emit(`[${who}] slips a counterfeit into a deal pile somewhere on the block.`);
+  }
+  canCounterfeit(d?: District) {
+    return this.overlord && !this.forged && this.forgeries > 0 && (d === undefined || !this.counterfeits.has(d));
+  }
+  /** The computer Overlord: the Machine's move, or a counterfeit when no capture is on the line. */
+  overlordAiMove(struck: Set<District> = new Set()): Action {
+    const a = this.machineAiMove(struck);
+    if (a.k === "m_extract" && this.pressure[a.d] === K.CAPTURE - 1) return a; // a capture comes first
+    return this.overlordCounterfeit() ?? a;
+  }
+  /** where the block reads well enough to trust a deal and not well enough to see through it (from round 2) */
+  overlordCounterfeit(): Action | null {
+    if (this.forged || this.forgeries < 1 || this.round < 2) return null;
+    const fooled = (x: District) => this.active().filter((p) => 1 <= p.sight[x] && p.sight[x] < 3).length;
+    const cand = this.ds.filter((d) => !this.counterfeits.has(d) && this.clarity[d] < K.WAKE && fooled(d));
+    return cand.length ? { k: "m_counterfeit", d: maxBy(cand, fooled) } : null;
+  }
   mTempt(who: string, t: Player | null) {
     if (t && t.trust > 0) {
       t.trust -= 1;
@@ -864,6 +923,7 @@ export class Game {
       case "m_extract": this.mExtract(pl.name, a.d); break;
       case "m_obscure": this.mObscure(pl.name, a.d); break;
       case "m_tempt": this.mTempt(pl.name, a.t); break;
+      case "m_counterfeit": this.mCounterfeit(pl.name, a.d); break;
       case "pass": break;
     }
     this.checkPartyWin();
@@ -879,6 +939,7 @@ export class Game {
 
   // ================= BLOCK AI =================
   botChoice(pl: Player, d: District, card: Card, style: Style = "careful"): Choice {
+    card = this.looks(pl, d, card);
     const see = pl.sight[d];
     const safe = pl.corruption + this.takeCost() < K.FLIP;
     const urgent = this.pressure[d] >= K.CAPTURE - 1;
@@ -894,7 +955,7 @@ export class Game {
     return "WALK";
   }
   botFace(pl: Player, d: District, style: Style): Action {
-    const score = (c: Card) => (pl.sight[d] < 1 ? 0 : !c.trap ? 2 : pl.sight[d] >= c.lever ? 3 : 0);
+    const score = (c: Card) => ((c = this.looks(pl, d, c)), pl.sight[d] < 1 ? 0 : !c.trap ? 2 : pl.sight[d] >= c.lever ? 3 : 0);
     const card = maxBy(this.dealsFor(pl, d), score);
     return { k: "face", d, choice: this.botChoice(pl, d, card, style), card };
   }
@@ -962,7 +1023,7 @@ export class Game {
     const ov = this.ov();
     if (this.overlord && ov) {
       const moves = this.overlordMoveCount();
-      for (let i = 0; i < moves; i++) this.do(ov, overlordMove ? overlordMove() : this.machineAiMove(this.struck));
+      for (let i = 0; i < moves; i++) this.do(ov, overlordMove ? overlordMove() : this.overlordAiMove(this.struck));
       this.tighten();
     } else if (this.grace > 0) {
       this.grace -= 1;
@@ -978,7 +1039,7 @@ export class Game {
   // ---- web-only glue (not in the Python engine): a person playing the Overlord moves one at a time ----
   overlordMoveCount() {
     const m = K.OVERLORD_MOVES[this.n()];
-    return Math.floor(m) + (m % 1 && this.round % 2 === 0 ? 1 : 0);
+    return Math.floor(m * this.round) - Math.floor(m * (this.round - 1)); // carry the remainder
   }
   /** After a person's Overlord moves: the same wrap-up machinePhase() does. */
   finishOverlordPhase(): string | null {
@@ -990,6 +1051,7 @@ export class Game {
     this.round += 1;
     this.struck = new Set();
     this.covered = false;
+    this.forged = false;
   }
   runAuto(maxRounds?: number, style: Style = "careful") {
     maxRounds = maxRounds || this.maxRounds;
@@ -1024,12 +1086,13 @@ export class Game {
   /** The real money behind the game's decisions: what the block signed, read its way out of, and walked away from. */
   money(): Money {
     const tot = (o: Signed["out"]) => this.signed.filter((x) => x.out === o).reduce((a, x) => a + x.dollars, 0);
+    const conned = tot("conned");
     const taken = this.signed.filter((x) => x.out === "taken");
     const played: Record<string, number> = {};
-    for (const x of this.signed) if (x.out === "played") played[x.who] = (played[x.who] ?? 0) + 1;
+    for (const x of this.signed) if (x.out === "played" || x.out === "conned") played[x.who] = (played[x.who] ?? 0) + 1;
     const most = Object.entries(played).length ? maxBy(Object.entries(played), (kv) => kv[1]) : null;
     return {
-      taken: tot("taken"), played: tot("played"), refused: tot("refused") + tot("wasted"),
+      taken: tot("taken"), played: tot("played") + conned, refused: tot("refused") + tot("wasted"),
       dodged: tot("dodged"), defused: tot("defused"), help: tot("help"),
       shortcuts: taken.length, worst: taken.length ? maxBy(taken, (x) => x.dollars) : null,
       playedMost: most ? { who: most[0], times: most[1] } : null,

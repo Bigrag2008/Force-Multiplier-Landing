@@ -1472,10 +1472,10 @@
   },
   "OVERLORD_MOVES": {
    "1": 1.5,
-   "2": 2,
-   "3": 4,
-   "4": 2.5,
-   "5": 3.5
+   "2": 1.875,
+   "3": 3.75,
+   "4": 2.25,
+   "5": 3.25
   },
   "BP_DISTRICTS": [
    "LENDING",
@@ -1507,7 +1507,9 @@
    "4": 2,
    "5": 2,
    "6": 3
-  }
+  },
+  "COUNTERFEIT_HAND": 3,
+  "CON_TRUST": 1
  },
  "dealTemplates": {
   "LENDING": [
@@ -2090,5 +2092,62 @@
   "a",
   "b",
   "c"
- ]
+ ],
+ "counterfeits": {
+  "LENDING": {
+   "front": "Neighborhood credit union loan: fixed low rate, no fees.",
+   "red": "A fair, fixed rate, and no fees to sign.",
+   "amber": "No deadline: take your time and read it at home.",
+   "blue": "COUNTERFEIT. A storefront lender using a look-alike name; the real rate is in a second agreement.",
+   "dollars": 1500,
+   "basis": "a high-cost loan dressed as a credit union",
+   "trap": true,
+   "lever": 3,
+   "counterfeit": true
+  },
+  "HOUSING": {
+   "front": "A fair lease: normal deposit, clear terms.",
+   "red": "Rent is the rent; the deposit is refundable.",
+   "amber": "Standard 30-day notice on both sides.",
+   "blue": "COUNTERFEIT. The landlord is a shell company with dozens of eviction filings; a fee addendum is stapled behind page 4.",
+   "dollars": 2500,
+   "basis": "a fee addendum and a deposit that never comes back",
+   "trap": true,
+   "lever": 3,
+   "counterfeit": true
+  },
+  "LABOR": {
+   "front": "Union-scale job: overtime and benefits from day one.",
+   "red": "Overtime, benefits, and the employer pays its share of taxes.",
+   "amber": "Your first check comes in two weeks.",
+   "blue": "COUNTERFEIT. A staffing agency borrowed the union's name; page 6 makes you a contractor with no overtime.",
+   "dollars": 3500,
+   "basis": "overtime and benefits that were never in the contract",
+   "trap": true,
+   "lever": 3,
+   "counterfeit": true
+  },
+  "HEALTH": {
+   "front": "The hospital's financial-help program: apply right here.",
+   "red": "Your bill could drop to a fraction, or to nothing.",
+   "amber": "Apply within 240 days of your first bill.",
+   "blue": "COUNTERFEIT. A medical-credit company dressed as the hospital's charity program; deferred interest applies.",
+   "dollars": 2000,
+   "basis": "deferred interest where charity care should have been",
+   "trap": true,
+   "lever": 3,
+   "counterfeit": true
+  },
+  "EDUCATION": {
+   "front": "Free help with your federal student loans.",
+   "red": "Federal repayment and forgiveness programs, filed for you.",
+   "amber": "Sign up before the program deadline.",
+   "blue": "COUNTERFEIT. A 'document prep' company charging for free federal forms, and keeping your login.",
+   "dollars": 1000,
+   "basis": "fees for free federal forms, and your account login",
+   "trap": true,
+   "lever": 3,
+   "counterfeit": true
+  }
+ }
 }

@@ -52,7 +52,7 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
             [
               ["party", "Block Party", "Start here: 3 districts, 8 rounds, about 25 minutes. No roles, no Owner."],
               ["coop", "Co-op", "The full game: the block against the Machine."],
-              ["overlord", "Overlord", "One player is the Machine (or the computer is)."],
+              ["overlord", "Overlord", "One player is the Machine (or the computer is), with 3 counterfeit deals up its sleeve."],
               ["chapter", "Campaign", "The Long Ledger, Chapter 3: The Map (1930s–1960s)."],
             ] as [Mode, string, string][]
           ).map(([m, t, d]) => (

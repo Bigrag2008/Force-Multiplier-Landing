@@ -26,6 +26,8 @@ export interface Card {
   basis?: string;
   /** a "sign now" pitch: its deadline is fake (deck_cards.RUSH) */
   rush?: boolean;
+  /** Overlord mode: a fake honest deal; only Read 3 sees it (deck_cards.COUNTERFEITS) */
+  counterfeit?: boolean;
 }
 /** a deal with blanks (game/deal_gen.py): rolled into a fresh Card for endless deals */
 export interface DealTemplate {
@@ -104,6 +106,8 @@ interface Constants {
   BP_ACTIONS: Record<string, number>;
   BP_HITS: Record<string, number>;
   FINE_PRINT_DIE: Record<string, number>;
+  COUNTERFEIT_HAND: number;
+  CON_TRUST: number;
 }
 interface Content {
   edition: string;
@@ -122,6 +126,7 @@ interface Content {
   constants: Constants;
   dealTemplates: Record<District, DealTemplate[]>;
   slotOrder: string[];
+  counterfeits: Record<District, Card>;
 }
 
 export const C = raw as unknown as Content;

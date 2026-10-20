@@ -27,7 +27,7 @@ export type WireAction =
   | { k: "commons"; place: PlaceKey }
   | { k: "reach"; t: string }
   | { k: "expose_uw" | "league" | "pass" }
-  | { k: "m_extract" | "m_obscure"; d: District }
+  | { k: "m_extract" | "m_obscure" | "m_counterfeit"; d: District }
   | { k: "m_tempt"; t: string | null };
 
 export type Move =
