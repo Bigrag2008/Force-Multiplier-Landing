@@ -56,6 +56,11 @@ export function HowToPlay() {
     <main className="mx-auto max-w-3xl px-4 py-10">
       <Link href="/" className="text-sm text-gold underline">{t("← The Second Number")}</Link>
       <h1 className="mt-4 text-4xl font-black text-gold">{t("How to play")}</h1>
+      <p className="mt-2">
+        <a href="/The_Second_Number_HOW_TO_PLAY.pdf" className="inline-block rounded-lg border border-gold px-4 py-2 font-bold text-gold hover:bg-gold/10">
+          {t("📄 The easy guide to print: the rules in plain words, with examples and a cheat sheet (PDF)")}
+        </a>
+      </p>
       <p className="mt-4 rounded-lg border border-[#7CFFB2]/50 bg-[#7CFFB2]/10 p-3 text-program/90">
         {rich(t("Rather learn by playing? <a>Learn to play</a> starts a guided game: the Coach glows on the move it would make, says why, and explains each rule the first time it comes up."), {
           a: (c) => <Link href="/learn" className="font-black text-[#7CFFB2] underline">{c}</Link>,

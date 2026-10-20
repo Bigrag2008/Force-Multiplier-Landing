@@ -493,4 +493,5 @@ export const pages: Record<string, string> = {
   "name the law, ordinance or record it comes from (source).": "nombra la ley, ordenanza o registro de donde viene (fuente).",
   "pick which layer beats it (red, amber or blue).": "escoge qué capa la vence (rojo, ámbar o azul).",
   "Pictures: say who made them (and that they said yes to them being used here).": "Imágenes: di quién las hizo (y que dieron permiso para usarlas aquí).",
+  "📄 The easy guide to print: the rules in plain words, with examples and a cheat sheet (PDF)": "📄 La guía fácil para imprimir: las reglas en palabras sencillas, con ejemplos y una hoja de repaso (PDF, en inglés)",
 };
