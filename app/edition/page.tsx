@@ -9,6 +9,36 @@ import {
 import { DISTRICT_COLOR, DISTRICT_SURFACE, titleCase } from "@/ui/theme";
 import { DistrictArt } from "@/ui/art/DistrictArt";
 import { shrinkPicture } from "@/ui/art/shrink";
+import { DISTRICT_NAMES_ES, t, tDistrict, useLang } from "@/i18n";
+import { rich } from "../_i18n/rich";
+
+const isDistrict = (d: string): d is District => d in DISTRICT_NAMES_ES;
+const dName = (d: string) => (isDistrict(d) ? tDistrict(d) : d === "ANY" ? t("ANY") : d);
+/** a label checkEdition() writes ("History LENDING #2: story"), for the screen */
+function tLabel(l: string): string {
+  let m: RegExpMatchArray | null;
+  const part: Record<string, string> = {
+    title: "title", story: "story", lesson: "lesson", name: "name", "what it helps with": "what it helps with", "what it says": "what it says",
+    "the cost (red)": "the cost (red)", "the clock (amber)": "the clock (amber)", "the connection (blue)": "the connection (blue)",
+  };
+  if ((m = l.match(/^(\w+): its nickname$/))) return t("{d}: its nickname", { d: dName(m[1]) });
+  if ((m = l.match(/^(\w+): its description$/))) return t("{d}: its description", { d: dName(m[1]) });
+  if ((m = l.match(/^(.+) \(your version\): its name$/))) return t("{place} (your version): its name", { place: t(m[1]) });
+  if ((m = l.match(/^History (\w+) #(\d+)(?:: (.+))?$/))) return t("History {d} #{n}", { d: dName(m[1]), n: m[2] }) + (m[3] ? `: ${t(part[m[3]] ?? m[3])}` : "");
+  if ((m = l.match(/^Local deal (\w+) #(\d+)(?:: (.+))?$/))) return t("Local deal {d} #{n}", { d: dName(m[1]), n: m[2] }) + (m[3] ? `: ${t(part[m[3]] ?? m[3])}` : "");
+  if ((m = l.match(/^Resource #(\d+): (.+)$/))) return t("Resource #{n}", { n: m[1] }) + `: ${t(part[m[2]] ?? m[2])}`;
+  if ((m = l.match(/^(.+): where it is$/))) return t("{place}: where it is", { place: t(m[1]) });
+  return l;
+}
+/** one of checkEdition()'s problems, for the screen (the check itself stays in English) */
+function tProblem(p: string): string {
+  let m: RegExpMatchArray | null;
+  if ((m = p.match(/^(.+) is empty\.$/))) return t("{label} is empty.", { label: tLabel(m[1]) });
+  if ((m = p.match(/^(.+) is too long \((\d+) of (\d+) characters\)\.$/))) return t("{label} is too long ({n} of {max} characters).", { label: tLabel(m[1]), n: m[2], max: m[3] });
+  if ((m = p.match(/^(.+?): (say where you checked it \(source\)\. History cards have to be true\.|name the law, ordinance or record it comes from \(source\)\.|pick which layer beats it \(red, amber or blue\)\.)$/)))
+    return `${tLabel(m[1])}: ${t(m[2])}`;
+  return t(p);
+}
 
 /** what each district stands for, so a city can find its own version */
 const WHAT: Record<District, string> = {
@@ -36,6 +66,7 @@ const DEAL_IDEAS: Record<District, string> = {
  * shared as a code or a file.
  */
 export default function EditionPage() {
+  useLang();
   const [list, setList] = useState<Edition[]>([]);
   const [ed, setEd] = useState<Edition | null>(null);
   const [importText, setImportText] = useState("");
@@ -45,60 +76,59 @@ export default function EditionPage() {
   const store = (next: Edition[]) => (setList(next), saveEditions(next));
   const save = (e: Edition) => {
     store(list.some((x) => x.id === e.id) ? list.map((x) => (x.id === e.id ? e : x)) : [...list, e]);
-    setMsg(`Saved “${e.name || "untitled"}” on this device.`);
+    setMsg(t("Saved “{name}” on this device.", { name: e.name || t("untitled") }));
   };
   const importIt = (text: string) => {
     const e = readEdition(text);
-    if (!e) return setMsg("That isn't an edition code or file.");
+    if (!e) return setMsg(t("That isn't an edition code or file."));
     const mine = list.some((x) => x.id === e.id) ? { ...e, id: `${e.id}-${Date.now().toString(36)}` } : e;
     store([...list, mine]);
     setImportText("");
-    setMsg(`Added “${mine.name}”.`);
+    setMsg(t("Added “{name}”.", { name: mine.name }));
   };
 
   if (ed) return <Editor ed={ed} setEd={setEd} onSave={save} onClose={() => setEd(null)} />;
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10">
-      <Link href="/" className="text-sm text-gold underline">← The Second Number</Link>
-      <h1 className="mt-4 text-4xl font-black text-gold">Your City editions</h1>
+      <Link href="/" className="text-sm text-gold underline">{t("← The Second Number")}</Link>
+      <h1 className="mt-4 text-4xl font-black text-gold">{t("Your City editions")}</h1>
       <p className="mt-2 max-w-3xl text-program/90">
-        The traps are the same everywhere. The place isn&apos;t. Make the game about your own side of town: what the five districts are called where
-        you live, where people gather, the true history your elders tell, and where to get real help. Same rules, same balance.
+        {t("The traps are the same everywhere. The place isn't. Make the game about your own side of town: what the five districts are called where you live, where people gather, the true history your elders tell, and where to get real help. Same rules, same balance.")}
       </p>
       <p className="mt-2 text-sm text-program/70">
-        Read <b>game/YOUR_CITY.md</b> first: how to research it, check every history card, and make it with your community, not just about it.
+        {rich(t("Read <b>game/YOUR_CITY.md</b> first: how to research it, check every history card, and make it with your community, not just about it."))}
       </p>
       {msg && <p className="mt-3 rounded-lg bg-gold/10 px-3 py-2 text-sm" role="status">{msg}</p>}
 
       <section className="mt-6 space-y-2">
-        <EditionRow ed={WEST_DAYTON} note="The reference edition, as the game ships." actions={<>
-          <Link href="/play" className="rounded-lg border border-white/25 px-3 py-1.5 text-sm">Play</Link>
-          <button className="rounded-lg border border-gold/60 px-3 py-1.5 text-sm font-bold text-gold" onClick={() => setEd({ ...structuredClone(WEST_DAYTON), id: `ed-${Date.now().toString(36)}`, name: "My copy of the West Dayton Edition" })}>Start from it</button>
+        <EditionRow ed={WEST_DAYTON} note={t("The reference edition, as the game ships.")} actions={<>
+          <Link href="/play" className="rounded-lg border border-white/25 px-3 py-1.5 text-sm">{t("Play")}</Link>
+          <button className="rounded-lg border border-gold/60 px-3 py-1.5 text-sm font-bold text-gold" onClick={() => setEd({ ...structuredClone(WEST_DAYTON), id: `ed-${Date.now().toString(36)}`, name: "My copy of the West Dayton Edition" })}>{t("Start from it")}</button>
         </>} />
         {list.map((e) => {
           const problems = checkEdition(e).length;
           return (
-            <EditionRow key={e.id} ed={e} note={problems ? `${problems} thing${problems === 1 ? "" : "s"} to finish before it can be played` : "Ready to play and share"} actions={<>
-              {!problems && <Link href={`/play?edition=${encodeURIComponent(e.id)}`} className="rounded-lg bg-gold px-3 py-1.5 text-sm font-bold text-night">Play</Link>}
-              <button className="rounded-lg border border-white/25 px-3 py-1.5 text-sm" onClick={() => setEd(structuredClone(e))}>Edit</button>
-              <button className="rounded-lg border border-white/25 px-3 py-1.5 text-sm" onClick={() => { if (window.confirm(`Delete “${e.name}” from this device?`)) store(list.filter((x) => x.id !== e.id)); }}>Delete</button>
+            <EditionRow key={e.id} ed={e} note={problems ? (problems === 1 ? t("1 thing to finish before it can be played") : t("{n} things to finish before it can be played", { n: problems })) : t("Ready to play and share")} actions={<>
+              {!problems && <Link href={`/play?edition=${encodeURIComponent(e.id)}`} className="rounded-lg bg-gold px-3 py-1.5 text-sm font-bold text-night">{t("Play")}</Link>}
+              <button className="rounded-lg border border-white/25 px-3 py-1.5 text-sm" onClick={() => setEd(structuredClone(e))}>{t("Edit")}</button>
+              <button className="rounded-lg border border-white/25 px-3 py-1.5 text-sm" onClick={() => { if (window.confirm(t("Delete “{name}” from this device?", { name: e.name }))) store(list.filter((x) => x.id !== e.id)); }}>{t("Delete")}</button>
             </>} />
           );
         })}
       </section>
 
       <div className="mt-6 flex flex-wrap gap-3">
-        <button className="rounded-xl bg-gold px-5 py-3 font-black text-night" onClick={() => setEd(blankEdition())}>Start a new edition</button>
+        <button className="rounded-xl bg-gold px-5 py-3 font-black text-night" onClick={() => setEd(blankEdition())}>{t("Start a new edition")}</button>
       </div>
 
       <section className="mt-8 rounded-2xl border border-white/15 bg-black/25 p-4">
-        <h2 className="font-black text-gold">Add an edition someone shared</h2>
-        <textarea aria-label="Edition code" className={`${field} mt-2 h-20 font-mono text-xs`} placeholder="SNE1.eyJ2Ijox…" value={importText} onChange={(e) => setImportText(e.target.value)} />
+        <h2 className="font-black text-gold">{t("Add an edition someone shared")}</h2>
+        <textarea aria-label={t("Edition code")} className={`${field} mt-2 h-20 font-mono text-xs`} placeholder="SNE1.eyJ2Ijox…" value={importText} onChange={(e) => setImportText(e.target.value)} />
         <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
-          <button className="rounded-lg bg-gold px-4 py-2 font-bold text-night disabled:opacity-50" disabled={!importText.trim()} onClick={() => importIt(importText)}>Add it</button>
+          <button className="rounded-lg bg-gold px-4 py-2 font-bold text-night disabled:opacity-50" disabled={!importText.trim()} onClick={() => importIt(importText)}>{t("Add it")}</button>
           <label className="cursor-pointer rounded-lg border border-white/25 px-4 py-2">
-            Or open a .json file
+            {t("Or open a .json file")}
             <input type="file" accept=".json,application/json" className="sr-only" onChange={async (e) => { const f = e.target.files?.[0]; if (f) importIt(await f.text()); }} />
           </label>
         </div>
@@ -108,10 +138,11 @@ export default function EditionPage() {
 }
 
 function EditionRow({ ed, note, actions }: { ed: Edition; note: string; actions: React.ReactNode }) {
+  useLang();
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/15 bg-white/5 p-3">
       <div>
-        <p className="font-black">{ed.name || "Untitled edition"}</p>
+        <p className="font-black">{ed.name || t("Untitled edition")}</p>
         <p className="text-xs text-program/70">{[ed.city, note].filter(Boolean).join(" · ")}</p>
       </div>
       <div className="flex flex-wrap gap-2">{actions}</div>
@@ -120,6 +151,7 @@ function EditionRow({ ed, note, actions }: { ed: Edition; note: string; actions:
 }
 
 function Editor({ ed, setEd, onSave, onClose }: { ed: Edition; setEd: (e: Edition) => void; onSave: (e: Edition) => void; onClose: () => void }) {
+  useLang();
   const problems = checkEdition(ed);
   const [copied, setCopied] = useState(false);
   const set = (patch: Partial<Edition>) => (setEd({ ...ed, ...patch }), setCopied(false));
@@ -138,74 +170,73 @@ function Editor({ ed, setEd, onSave, onClose }: { ed: Edition; setEd: (e: Editio
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10">
-      <button className="text-sm text-gold underline" onClick={onClose}>← Your editions</button>
-      <h1 className="mt-4 text-3xl font-black text-gold">{ed.name || "A new edition"}</h1>
+      <button className="text-sm text-gold underline" onClick={onClose}>{t("← Your editions")}</button>
+      <h1 className="mt-4 text-3xl font-black text-gold">{ed.name || t("A new edition")}</h1>
 
-      <Section title="The edition">
+      <Section title={t("The edition")}>
         <div className="grid gap-3 sm:grid-cols-2">
-          <Field label="Its name" hint="“East Side Detroit Edition”"><input className={field} value={ed.name} onChange={(e) => set({ name: e.target.value })} /></Field>
-          <Field label="The city" hint="“Detroit, Michigan”"><input className={field} value={ed.city} onChange={(e) => set({ city: e.target.value })} /></Field>
-          <Field label="What the board is called in play" hint="“the East Side” (used as: every deal on the East Side…)"><input className={field} value={ed.area} onChange={(e) => set({ area: e.target.value })} /></Field>
-          <Field label="Made by" hint="your group, school or neighborhood"><input className={field} value={ed.credits ?? ""} onChange={(e) => set({ credits: e.target.value })} /></Field>
+          <Field label={t("Its name")} hint={t("“East Side Detroit Edition”")}><input className={field} value={ed.name} onChange={(e) => set({ name: e.target.value })} /></Field>
+          <Field label={t("The city")} hint={t("“Detroit, Michigan”")}><input className={field} value={ed.city} onChange={(e) => set({ city: e.target.value })} /></Field>
+          <Field label={t("What the board is called in play")} hint={t("“the East Side” (used as: every deal on the East Side…)")}><input className={field} value={ed.area} onChange={(e) => set({ area: e.target.value })} /></Field>
+          <Field label={t("Made by")} hint={t("your group, school or neighborhood")}><input className={field} value={ed.credits ?? ""} onChange={(e) => set({ credits: e.target.value })} /></Field>
         </div>
       </Section>
 
-      <Section title="The five districts" sub="The deals in each district stay the same; this is where they happen in your city.">
+      <Section title={t("The five districts")} sub={t("The deals in each district stay the same; this is where they happen in your city.")}>
         {DISTRICTS.map((d) => (
           <div key={d} className="rounded-xl border-l-4 bg-white/5 p-3" style={{ borderColor: DISTRICT_COLOR[d] }}>
             <p><span className="rounded px-1.5 py-0.5 font-black" style={{ background: DISTRICT_SURFACE[d].bg, color: DISTRICT_SURFACE[d].fg }}>{titleCase(d)}</span></p>
-            <p className="text-xs text-program/70">{WHAT[d]} West Dayton: <i>{WEST_DAYTON.districts[d].sub}</i>.</p>
+            <p className="text-xs text-program/70">{t(WHAT[d])} {t("West Dayton:")} <i>{t(WEST_DAYTON.districts[d].sub)}</i>.</p>
             <div className="mt-2 grid gap-2 sm:grid-cols-[1fr_2fr]">
-              <Field label="Nickname" hint="shows under the district's name"><input className={field} value={ed.districts[d].sub} onChange={(e) => setDistrict(d, "sub", e.target.value)} /></Field>
-              <Field label="What it's like there" hint="one or two true sentences"><textarea className={`${field} h-[42px]`} value={ed.districts[d].flavor} onChange={(e) => setDistrict(d, "flavor", e.target.value)} /></Field>
+              <Field label={t("Nickname")} hint={t("shows under the district's name")}><input className={field} value={ed.districts[d].sub} onChange={(e) => setDistrict(d, "sub", e.target.value)} /></Field>
+              <Field label={t("What it's like there")} hint={t("one or two true sentences")}><textarea className={`${field} h-[42px]`} value={ed.districts[d].flavor} onChange={(e) => setDistrict(d, "flavor", e.target.value)} /></Field>
             </div>
             <DistrictPicture d={d} ed={ed} set={set} />
           </div>
         ))}
-        <Field label="Who made the pictures" hint="an artist, a class, a photographer: they said yes to their work being used here">
+        <Field label={t("Who made the pictures")} hint={t("an artist, a class, a photographer: they said yes to their work being used here")}>
           <input className={field} value={ed.art?.credit ?? ""} onChange={(e) => set({ art: { districts: ed.art?.districts ?? {}, credit: e.target.value } })} />
         </Field>
         <p className="text-xs text-program/60">
-          Pictures travel in the downloaded <b>.json</b> file (and in saved games), not in the share code, which stays short enough to paste.
-          Use art you made or have permission to use, and ask before showing anyone&apos;s face. Never draw the Machine as people from the neighborhood.
+          {rich(t("Pictures travel in the downloaded <b>.json</b> file (and in saved games), not in the share code, which stays short enough to paste. Use art you made or have permission to use, and ask before showing anyone's face. Never draw the Machine as people from the neighborhood."))}
         </p>
       </Section>
 
-      <Section title="Where the block gathers" sub="Five places people really go. What each one does in the game stays the same.">
+      <Section title={t("Where the block gathers")} sub={t("Five places people really go. What each one does in the game stays the same.")}>
         {PLACE_KEYS.map((k) => (
           <div key={k} className="rounded-xl bg-white/5 p-3">
-            <p className="text-xs text-program/70">West Dayton: <b>{WEST_DAYTON.places[k].name}</b> · in the game: {C.places[k].bonus}</p>
+            <p className="text-xs text-program/70">{t("West Dayton:")} <b>{t(WEST_DAYTON.places[k].name)}</b> · {t("in the game:")} {t(C.places[k].bonus)}</p>
             <div className="mt-2 grid gap-2 sm:grid-cols-3">
-              <Field label="Your place"><input className={field} value={ed.places[k].name} onChange={(e) => setPlace(k, "name", e.target.value)} /></Field>
-              <Field label="Where it is"><input className={field} value={ed.places[k].where} onChange={(e) => setPlace(k, "where", e.target.value)} /></Field>
-              <Field label="Why people go"><input className={field} value={ed.places[k].flavor} onChange={(e) => setPlace(k, "flavor", e.target.value)} /></Field>
+              <Field label={t("Your place")}><input className={field} value={ed.places[k].name} onChange={(e) => setPlace(k, "name", e.target.value)} /></Field>
+              <Field label={t("Where it is")}><input className={field} value={ed.places[k].where} onChange={(e) => setPlace(k, "where", e.target.value)} /></Field>
+              <Field label={t("Why people go")}><input className={field} value={ed.places[k].flavor} onChange={(e) => setPlace(k, "flavor", e.target.value)} /></Field>
             </div>
           </div>
         ))}
       </Section>
 
-      <Section title="Local history" sub="True stories of how your community fought back. The Elder tells them in play. Every card needs a source: a book, an archive, a museum, or an elder by name.">
+      <Section title={t("Local history")} sub={t("True stories of how your community fought back. The Elder tells them in play. Every card needs a source: a book, an archive, a museum, or an elder by name.")}>
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" checked={ed.historyMode === "replace"} onChange={(e) => set({ historyMode: e.target.checked ? "replace" : "add" })} />
-          Use only our cards in districts where we wrote some (otherwise yours join the base game&apos;s)
+          {t("Use only our cards in districts where we wrote some (otherwise yours join the base game's)")}
         </label>
         {([...DISTRICTS, "ANY"] as (District | "ANY")[]).map((d) => (
           <div key={d} className="rounded-xl bg-white/5 p-3">
             <div className="flex items-center justify-between">
-              <p className="font-black">{d === "ANY" ? "Any district" : titleCase(d)} <span className="text-xs font-normal text-program/60">({cards(d).length})</span></p>
-              <button className="rounded-lg border border-white/25 px-2 py-1 text-xs" onClick={() => setCards(d, [...cards(d), blankHistory()])}>+ Add a story</button>
+              <p className="font-black">{d === "ANY" ? t("Any district") : titleCase(d)} <span className="text-xs font-normal text-program/60">({cards(d).length})</span></p>
+              <button className="rounded-lg border border-white/25 px-2 py-1 text-xs" onClick={() => setCards(d, [...cards(d), blankHistory()])}>{t("+ Add a story")}</button>
             </div>
             {cards(d).map((h, i) => {
               const up = (k: keyof EditionHistory, v: string) => setCards(d, cards(d).map((x, j) => (j === i ? { ...x, [k]: v } : x)));
               return (
                 <div key={i} className="mt-2 grid gap-2 rounded-lg border border-white/10 p-2 sm:grid-cols-3">
-                  <Field label="Title"><input className={field} value={h.title} onChange={(e) => up("title", e.target.value)} /></Field>
-                  <Field label="Year"><input className={field} value={h.year} onChange={(e) => up("year", e.target.value)} /></Field>
-                  <Field label="Place"><input className={field} value={h.place} onChange={(e) => up("place", e.target.value)} /></Field>
-                  <div className="sm:col-span-3"><Field label="The story (read aloud)"><textarea className={`${field} h-20`} value={h.story} onChange={(e) => up("story", e.target.value)} /></Field></div>
-                  <div className="sm:col-span-2"><Field label="The lesson, in one line"><input className={field} value={h.lesson} onChange={(e) => up("lesson", e.target.value)} /></Field></div>
-                  <Field label="Source (where you checked it)"><input className={field} value={h.source ?? ""} onChange={(e) => up("source", e.target.value)} /></Field>
-                  <button className="text-left text-xs text-program/60 underline sm:col-span-3" onClick={() => setCards(d, cards(d).filter((_, j) => j !== i))}>Remove this story</button>
+                  <Field label={t("Title")}><input className={field} value={h.title} onChange={(e) => up("title", e.target.value)} /></Field>
+                  <Field label={t("Year")}><input className={field} value={h.year} onChange={(e) => up("year", e.target.value)} /></Field>
+                  <Field label={t("Place")}><input className={field} value={h.place} onChange={(e) => up("place", e.target.value)} /></Field>
+                  <div className="sm:col-span-3"><Field label={t("The story (read aloud)")}><textarea className={`${field} h-20`} value={h.story} onChange={(e) => up("story", e.target.value)} /></Field></div>
+                  <div className="sm:col-span-2"><Field label={t("The lesson, in one line")}><input className={field} value={h.lesson} onChange={(e) => up("lesson", e.target.value)} /></Field></div>
+                  <Field label={t("Source (where you checked it)")}><input className={field} value={h.source ?? ""} onChange={(e) => up("source", e.target.value)} /></Field>
+                  <button className="text-left text-xs text-program/60 underline sm:col-span-3" onClick={() => setCards(d, cards(d).filter((_, j) => j !== i))}>{t("Remove this story")}</button>
                 </div>
               );
             })}
@@ -213,7 +244,7 @@ function Editor({ ed, setEd, onSave, onClose }: { ed: Edition; setEd: (e: Editio
         ))}
       </Section>
 
-      <Section title="Local deals" sub="Deals from your own city or state, shuffled in with the base deck. Each one needs a source: the law, ordinance, policy or public record it comes from. Write the fine print the way it really reads.">
+      <Section title={t("Local deals")} sub={t("Deals from your own city or state, shuffled in with the base deck. Each one needs a source: the law, ordinance, policy or public record it comes from. Write the fine print the way it really reads.")}>
         {DISTRICTS.map((d) => {
           const deals = ed.deals?.[d] ?? [];
           const setDeals = (next: LocalDeal[]) => set({ deals: { ...(ed.deals ?? {}), [d]: next } });
@@ -221,37 +252,37 @@ function Editor({ ed, setEd, onSave, onClose }: { ed: Edition; setEd: (e: Editio
             <div key={d} className="rounded-xl border-l-4 bg-white/5 p-3" style={{ borderColor: DISTRICT_COLOR[d] }}>
               <div className="flex items-center justify-between gap-2">
                 <p><span className="rounded px-1.5 py-0.5 font-black" style={{ background: DISTRICT_SURFACE[d].bg, color: DISTRICT_SURFACE[d].fg }}>{titleCase(d)}</span> <span className="text-xs font-normal text-program/60">({deals.length})</span></p>
-                <button className="rounded-lg border border-white/25 px-2 py-1 text-xs" onClick={() => setDeals([...deals, blankDeal()])}>+ Add a deal</button>
+                <button className="rounded-lg border border-white/25 px-2 py-1 text-xs" onClick={() => setDeals([...deals, blankDeal()])}>{t("+ Add a deal")}</button>
               </div>
-              <p className="text-xs text-program/60">Ideas: {DEAL_IDEAS[d]}.</p>
+              <p className="text-xs text-program/60">{t("Ideas: {ideas}.", { ideas: t(DEAL_IDEAS[d]) })}</p>
               {deals.map((x, i) => {
                 const up = <K extends keyof LocalDeal>(k: K, v: LocalDeal[K]) => setDeals(deals.map((y, j) => (j === i ? { ...y, [k]: v } : y)));
                 return (
                   <div key={i} className="mt-2 grid gap-2 rounded-lg border border-white/10 p-2 sm:grid-cols-2">
-                    <div className="sm:col-span-2"><Field label="What it says (the pitch everyone sees)"><input className={field} value={x.front} onChange={(e) => up("front", e.target.value)} /></Field></div>
-                    <Field label="🔴 The cost (Read 1)"><textarea className={`${field} h-16`} value={x.red} onChange={(e) => up("red", e.target.value)} /></Field>
-                    <Field label="🟠 The clock (Read 2)"><textarea className={`${field} h-16`} value={x.amber} onChange={(e) => up("amber", e.target.value)} /></Field>
-                    <Field label="🔵 The connection (Read 3)"><textarea className={`${field} h-16`} value={x.blue} onChange={(e) => up("blue", e.target.value)} /></Field>
+                    <div className="sm:col-span-2"><Field label={t("What it says (the pitch everyone sees)")}><input className={field} value={x.front} onChange={(e) => up("front", e.target.value)} /></Field></div>
+                    <Field label={t("🔴 The cost (Read 1)")}><textarea className={`${field} h-16`} value={x.red} onChange={(e) => up("red", e.target.value)} /></Field>
+                    <Field label={t("🟠 The clock (Read 2)")}><textarea className={`${field} h-16`} value={x.amber} onChange={(e) => up("amber", e.target.value)} /></Field>
+                    <Field label={t("🔵 The connection (Read 3)")}><textarea className={`${field} h-16`} value={x.blue} onChange={(e) => up("blue", e.target.value)} /></Field>
                     <div className="space-y-2">
                       <label className="flex items-center gap-2 text-sm">
-                        <input type="checkbox" checked={!x.trap} onChange={(e) => up("trap", !e.target.checked)} /> It&apos;s an honest deal (real help)
+                        <input type="checkbox" checked={!x.trap} onChange={(e) => up("trap", !e.target.checked)} /> {t("It's an honest deal (real help)")}
                       </label>
                       {x.trap && (
-                        <Field label="Which layer beats it">
+                        <Field label={t("Which layer beats it")}>
                           <select className={field} value={x.lever} onChange={(e) => up("lever", Number(e.target.value))}>
-                            <option value={1} className="text-ink">Red: the cost is the weak point</option>
-                            <option value={2} className="text-ink">Amber: the deadline or your rights window</option>
-                            <option value={3} className="text-ink">Blue: name who&apos;s behind it</option>
+                            <option value={1} className="text-ink">{t("Red: the cost is the weak point")}</option>
+                            <option value={2} className="text-ink">{t("Amber: the deadline or your rights window")}</option>
+                            <option value={3} className="text-ink">{t("Blue: name who's behind it")}</option>
                           </select>
                         </Field>
                       )}
                     </div>
-                    <Field label="Real money ($)" hint={x.trap ? "what signing it typically costs one household" : "what the real help is worth"}>
+                    <Field label={t("Real money ($)")} hint={x.trap ? t("what signing it typically costs one household") : t("what the real help is worth")}>
                       <input className={field} inputMode="numeric" value={x.dollars || ""} onChange={(e) => up("dollars", Number(e.target.value.replace(/[^0-9]/g, "")) || 0)} />
                     </Field>
-                    <Field label="Why that much" hint="one line, like the answer key's"><input className={field} value={x.basis} onChange={(e) => up("basis", e.target.value)} /></Field>
-                    <div className="sm:col-span-2"><Field label="Source" hint="the law or ordinance by name and number, the policy, or the public record"><input className={field} value={x.source} onChange={(e) => up("source", e.target.value)} /></Field></div>
-                    <button className="text-left text-xs text-program/60 underline sm:col-span-2" onClick={() => setDeals(deals.filter((_, j) => j !== i))}>Remove this deal</button>
+                    <Field label={t("Why that much")} hint={t("one line, like the answer key's")}><input className={field} value={x.basis} onChange={(e) => up("basis", e.target.value)} /></Field>
+                    <div className="sm:col-span-2"><Field label={t("Source")} hint={t("the law or ordinance by name and number, the policy, or the public record")}><input className={field} value={x.source} onChange={(e) => up("source", e.target.value)} /></Field></div>
+                    <button className="text-left text-xs text-program/60 underline sm:col-span-2" onClick={() => setDeals(deals.filter((_, j) => j !== i))}>{t("Remove this deal")}</button>
                   </div>
                 );
               })}
@@ -260,52 +291,52 @@ function Editor({ ed, setEd, onSave, onClose }: { ed: Edition; setEd: (e: Editio
         })}
       </Section>
 
-      <Section title="Real help near you" sub="Shown at the end of every game in this edition, and on Read your own deal. Only list places you've confirmed are open and do what you say.">
+      <Section title={t("Real help near you")} sub={t("Shown at the end of every game in this edition, and on Read your own deal. Only list places you've confirmed are open and do what you say.")}>
         {ed.resources.map((r, i) => {
           const up = (k: keyof Resource, v: string) => setRes(ed.resources.map((x, j) => (j === i ? { ...x, [k]: v } : x)));
           return (
             <div key={i} className="grid gap-2 rounded-xl bg-white/5 p-3 sm:grid-cols-3">
-              <Field label="Name"><input className={field} value={r.name} onChange={(e) => up("name", e.target.value)} /></Field>
-              <Field label="What it helps with"><input className={field} placeholder="free tax prep" value={r.what} onChange={(e) => up("what", e.target.value)} /></Field>
-              <Field label="Where / how to reach it"><input className={field} value={r.where} onChange={(e) => up("where", e.target.value)} /></Field>
-              <button className="text-left text-xs text-program/60 underline sm:col-span-3" onClick={() => setRes(ed.resources.filter((_, j) => j !== i))}>Remove</button>
+              <Field label={t("Name")}><input className={field} value={r.name} onChange={(e) => up("name", e.target.value)} /></Field>
+              <Field label={t("What it helps with")}><input className={field} placeholder={t("free tax prep")} value={r.what} onChange={(e) => up("what", e.target.value)} /></Field>
+              <Field label={t("Where / how to reach it")}><input className={field} value={r.where} onChange={(e) => up("where", e.target.value)} /></Field>
+              <button className="text-left text-xs text-program/60 underline sm:col-span-3" onClick={() => setRes(ed.resources.filter((_, j) => j !== i))}>{t("Remove")}</button>
             </div>
           );
         })}
-        <button className="rounded-lg border border-white/25 px-3 py-1.5 text-sm" onClick={() => setRes([...ed.resources, { name: "", what: "", where: "" }])}>+ Add a place</button>
+        <button className="rounded-lg border border-white/25 px-3 py-1.5 text-sm" onClick={() => setRes([...ed.resources, { name: "", what: "", where: "" }])}>{t("+ Add a place")}</button>
       </Section>
 
-      <Section title="Preview">
+      <Section title={t("Preview")}>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
           {DISTRICTS.map((d) => (
             <div key={d} className="overflow-hidden rounded-lg border-2 bg-white text-ink" style={{ borderColor: DISTRICT_COLOR[d] }}>
               <div className="px-2 py-1 text-center" style={{ background: DISTRICT_SURFACE[d].bg, color: DISTRICT_SURFACE[d].fg }}>
-                <div className="text-xs font-black">{d}</div>
+                <div className="text-xs font-black">{tDistrict(d)}</div>
                 <div className="text-[10px] italic">{ed.districts[d].sub || "…"}</div>
               </div>
               <p className="p-2 text-[10px] leading-snug">{ed.districts[d].flavor || "…"}</p>
             </div>
           ))}
         </div>
-        <p className="mt-2 text-sm text-program/80">The Commons on {ed.area || "…"}: {PLACE_KEYS.map((k) => ed.places[k].name || "…").join(" · ")}</p>
+        <p className="mt-2 text-sm text-program/80">{t("The Commons on {area}: {places}", { area: ed.area || "…", places: PLACE_KEYS.map((k) => ed.places[k].name || "…").join(" · ") })}</p>
       </Section>
 
       <div className="sticky bottom-0 mt-8 space-y-3 rounded-t-2xl border border-gold/40 bg-night/95 p-4 backdrop-blur">
         {problems.length > 0 ? (
           <details>
-            <summary className="cursor-pointer text-sm text-[#ffd27a]">{problems.length} thing{problems.length === 1 ? "" : "s"} to finish before it can be played or shared</summary>
-            <ul className="mt-2 max-h-40 list-disc overflow-y-auto pl-5 text-xs text-program/80">{problems.map((p) => <li key={p}>{p}</li>)}</ul>
+            <summary className="cursor-pointer text-sm text-[#ffd27a]">{problems.length === 1 ? t("1 thing to finish before it can be played or shared") : t("{n} things to finish before it can be played or shared", { n: problems.length })}</summary>
+            <ul className="mt-2 max-h-40 list-disc overflow-y-auto pl-5 text-xs text-program/80">{problems.map((p) => <li key={p}>{tProblem(p)}</li>)}</ul>
           </details>
         ) : (
-          <p className="text-sm text-[#7CFFB2]">Ready to play and share.</p>
+          <p className="text-sm text-[#7CFFB2]">{t("Ready to play and share.")}</p>
         )}
         <div className="flex flex-wrap gap-2">
-          <button className="rounded-lg bg-gold px-4 py-2 font-bold text-night" onClick={() => onSave(ed)}>Save on this device</button>
+          <button className="rounded-lg bg-gold px-4 py-2 font-bold text-night" onClick={() => onSave(ed)}>{t("Save on this device")}</button>
           {!problems.length && (
             <>
-              <Link href={`/play?edition=${encodeURIComponent(ed.id)}`} onClick={() => onSave(ed)} className="rounded-lg border border-gold/60 px-4 py-2 font-bold text-gold">Save and play</Link>
-              <button className="rounded-lg border border-white/25 px-4 py-2" onClick={async () => { try { await navigator.clipboard.writeText(code); setCopied(true); } catch { setCopied(false); } }}>{copied ? "Code copied ✓" : "Copy a share code"}</button>
-              <button className="rounded-lg border border-white/25 px-4 py-2" onClick={download}>Download as a file</button>
+              <Link href={`/play?edition=${encodeURIComponent(ed.id)}`} onClick={() => onSave(ed)} className="rounded-lg border border-gold/60 px-4 py-2 font-bold text-gold">{t("Save and play")}</Link>
+              <button className="rounded-lg border border-white/25 px-4 py-2" onClick={async () => { try { await navigator.clipboard.writeText(code); setCopied(true); } catch { setCopied(false); } }}>{copied ? t("Code copied ✓") : t("Copy a share code")}</button>
+              <button className="rounded-lg border border-white/25 px-4 py-2" onClick={download}>{t("Download as a file")}</button>
             </>
           )}
         </div>
@@ -337,6 +368,7 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
 
 /** a district's own picture: the strip on the board, cropped to 5:2 and made small in the browser */
 function DistrictPicture({ d, ed, set }: { d: District; ed: Edition; set: (patch: Partial<Edition>) => void }) {
+  useLang();
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const src = ed.art?.districts[d];
@@ -352,12 +384,12 @@ function DistrictPicture({ d, ed, set }: { d: District; ed: Edition; set: (patch
         <DistrictArt d={d} src={src} />
       </div>
       <label className="cursor-pointer rounded-lg border border-white/25 px-3 py-1.5 text-xs hover:bg-white/10">
-        {busy ? "Making it small…" : src ? "Change the picture" : "Add a picture"}
+        {busy ? t("Making it small…") : src ? t("Change the picture") : t("Add a picture")}
         <input
           type="file"
           accept="image/*"
           className="sr-only"
-          aria-label={`A picture of ${titleCase(d)}`}
+          aria-label={t("A picture of {d}", { d: titleCase(d) })}
           onChange={async (e) => {
             const f = e.target.files?.[0];
             e.target.value = "";
@@ -367,7 +399,7 @@ function DistrictPicture({ d, ed, set }: { d: District; ed: Edition; set: (patch
             try {
               put(await shrinkPicture(f));
             } catch (x) {
-              setErr(x instanceof Error ? x.message : "That picture didn't work.");
+              setErr(x instanceof Error ? t(x.message) : t("That picture didn't work."));
             } finally {
               setBusy(false);
             }
@@ -376,7 +408,7 @@ function DistrictPicture({ d, ed, set }: { d: District; ed: Edition; set: (patch
       </label>
       {src && (
         <button className="text-xs text-program/60 underline" onClick={() => put(null)}>
-          Use West Dayton&apos;s drawing
+          {t("Use West Dayton's drawing")}
         </button>
       )}
       {err && <span className="text-xs text-[#ff9b9b]" role="alert">{err}</span>}

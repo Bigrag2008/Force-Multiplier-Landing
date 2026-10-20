@@ -143,9 +143,9 @@ export default function TeacherPage() {
               <div className="mt-4 rounded-xl border border-gold/40 bg-gold/10 p-4 text-sm">
                 <p className="font-black text-gold">{t("Talk it through: “{front}”", { front: tFront(talk.front) })}</p>
                 {talk.counterfeit ? (
-                  <p className="mt-1"><b className="text-[#c9a2ff]">{t("What it really was (Read 3, the blue layer):")}</b> {t(talk.blue)}</p>
+                  <p className="mt-1"><b className="text-[#c9a2ff]">{t("What it really was (Read 3, the blue layer):")}</b> {t(talk.blue ?? "")}</p>
                 ) : (
-                  <p className="mt-1"><b className="text-[#ff8a8a]">{talk.trap ? t("The second number:") : t("Why it was honest:")}</b> {t(talk.red)}</p>
+                  <p className="mt-1"><b className="text-[#ff8a8a]">{talk.trap ? t("The second number:") : t("Why it was honest:")}</b> {t(talk.red ?? "")}</p>
                 )}
                 {talk.dollars ? <p className="mt-1"><b>{t("Real money:")}</b> {usd(talk.dollars)}, {t(talk.basis ?? "")}.</p> : null}
                 <p className="mt-2 italic text-program/80">
