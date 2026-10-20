@@ -276,4 +276,6 @@ export const setup: Record<string, string> = {
   amber: "ámbar",
   blue: "azul",
   "Terrell (the block starts Chapter 3 a Trust down)": "Terrell (la cuadra empieza el Capítulo 3 con una Confianza menos)",
+  "Civic Armor (every Teach comes with cover)": "Armadura Cívica (cada Enseñar trae protección)",
+  "Someone wore the Crown (an extra strike in Chapter 4's first round)": "Alguien se puso la Corona (un golpe extra en la primera ronda del Capítulo 4)",
 };
