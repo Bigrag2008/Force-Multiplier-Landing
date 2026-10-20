@@ -7,3 +7,6 @@ next-env.d.ts
 
 # Python
 __pycache__/
+
+# copied from game/ at build time (scripts/copy_pdfs.mjs)
+public/*.pdf

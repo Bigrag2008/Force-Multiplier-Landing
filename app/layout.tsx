@@ -2,11 +2,18 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 
+// Links shared from the live site need its full address for the preview card. Vercel sets this one itself;
+// on another host, set SITE_URL (e.g. https://thesecondnumber.org).
+const SITE = process.env.SITE_URL ?? (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000");
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE),
   title: "The Second Number — West Dayton Edition",
   description: "A cooperative game about reading the hidden cost in every deal, and teaching your whole block to read it too.",
   // browser translation rewrites the page's text behind React's back (and would scramble the decoder ink), which crashes the game on the next update
   other: { google: "notranslate" },
+  openGraph: { type: "website", siteName: "The Second Number" },
+  twitter: { card: "summary_large_image" },
 };
 
 /**

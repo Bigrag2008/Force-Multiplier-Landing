@@ -40,7 +40,7 @@ To run the production build instead: `npm run build && npm start`.
 
 **Sound and access.** The game has sound (made in the browser, no audio files; 🔊 in the game's header mutes it). It plays by keyboard alone (a *Skip to your move* link, visible focus everywhere), reads out each move for screen readers, and has **Plain cards** for anyone the red-lens effect doesn't work for. District colors pass a color-blindness check and each district has a symbol ($ ⌂ ⚒ ✚ ✎), so color is never the only cue. Every page passes an axe accessibility audit.
 
-**How to play** on the home page has the short rules; [`game/RULES.md`](game/RULES.md) has the full rulebook. Prefer paper? Print [`game/The_Second_Number_PRINT_AND_PLAY.pdf`](game/The_Second_Number_PRINT_AND_PLAY.pdf). **Endless deals** on the home page rolls a fresh deal every press, for practice and classrooms; **Read your own deal** works out the second number of a real offer, on the device only; **Your City editions** set the game on your own side of town (your districts, gathering places, history and real help; see [`game/YOUR_CITY.md`](game/YOUR_CITY.md)); the **Teacher's view** adds up a class's games from the result codes tables copy at the end of a game (no accounts, nothing uploaded); [`game/BOOK_ONE.md`](game/BOOK_ONE.md) ties the game to the novel and describes the School Edition.
+**How to play** on the home page has the short rules; [`game/RULES.md`](game/RULES.md) has the full rulebook. Prefer paper? Print [`game/The_Second_Number_PRINT_AND_PLAY.pdf`](game/The_Second_Number_PRINT_AND_PLAY.pdf). **Endless deals** on the home page rolls a fresh deal every press, for practice and classrooms; **Read your own deal** works out the second number of a real offer, on the device only; **Your City editions** set the game on your own side of town (your districts, gathering places, history and real help; see [`game/YOUR_CITY.md`](game/YOUR_CITY.md)); the **Teacher's guide** (`/teacher/guide`, and [`game/The_Second_Number_TEACHER_GUIDE.pdf`](game/The_Second_Number_TEACHER_GUIDE.pdf)) fits a game into one class period with learning goals and questions for after; the **Teacher's view** adds up a class's games from the result codes tables copy at the end of a game (no accounts, nothing uploaded); [`game/BOOK_ONE.md`](game/BOOK_ONE.md) ties the game to the novel and describes the School Edition.
 
 ## Play on everyone's phones
 1. On the device that will be the table (a laptop or TV is best), choose **Play now**, set up the game and tick **📱 Play on everyone's phones**. A room opens with a four-letter code.
@@ -50,11 +50,18 @@ To run the production build instead: `npm run build && npm start`.
 
 **How it connects:** phones talk directly to the table device (WebRTC, through [PeerJS](https://peerjs.com)). PeerJS's free public server only introduces them, so there's nothing to sign up for or run. The table device is the referee: phones send moves, it checks each one and passes it on, and every device replays the same moves (`src/net/`). Most home and phone networks connect fine; a few strict networks (some workplaces and schools) block direct connections, and then playing on one device still works. To use your own PeerJS server, add `?peer=host:port` to the page address.
 
-## Put it online (Vercel, free tier)
-1. At [vercel.com/new](https://vercel.com/new), import this repo. Vercel detects Next.js; leave the settings as they are.
-2. Deploy. Every push to `main` updates the live link, and each pull request gets its own preview link.
+## Put it online
+Every page is static (no server code, no database), so it runs on any free host.
 
-Every page is static, so any static host works too (Netlify, Cloudflare Pages).
+**Vercel (simplest):**
+1. Sign in at [vercel.com](https://vercel.com) with GitHub and choose **Add New → Project**.
+2. Import **The-Second-Number**. Vercel detects Next.js; leave every setting as it is and press **Deploy**.
+3. In about two minutes you get a link like `the-second-number.vercel.app`. Every push to `main` updates it, and each pull request gets its own preview link.
+4. Optional: **Settings → Domains** adds your own address (e.g. `thesecondnumber.org`).
+
+Vercel's free plan is for non-commercial projects. If the site will sell the book or the game, use Vercel Pro, or **Cloudflare Pages** or **Netlify** (both free for commercial sites): import the repo, build command `npm run build`, and set `SITE_URL` to the site's address so shared links show the preview card.
+
+The build copies the PDFs in `game/` into the site (`scripts/copy_pdfs.mjs`), so the print-and-play kit and the teacher's guide download from the live site at `/The_Second_Number_PRINT_AND_PLAY.pdf` and `/The_Second_Number_TEACHER_GUIDE.pdf`.
 
 ## How the website stays true to the rules
 The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of truth: the balance tester and rule checks run against it. The website uses a TypeScript port ([`src/engine/engine.ts`](src/engine/engine.ts)) that must replay the Python engine's games exactly.
@@ -73,7 +80,7 @@ The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of tr
 ## Layout
 | Path | What |
 |---|---|
-| `app/` | Website pages: home, `/play`, `/learn` (the guided game; `?seed=` replays one), `/join` (a phone joining a room), `/how-to-play`. |
+| `app/` | Website pages: home, `/play`, `/learn` (the guided game; `?seed=` replays one), `/join` (a phone joining a room), `/how-to-play`, `/teacher` and `/teacher/guide`. |
 | `src/engine/` | The rules engine (TypeScript port), its content types and the shared RNG. |
 | `src/game/session.ts` | The round-by-round flow: who acts next, and what the table is asked. |
 | `src/net/` | Online play: the room's rules (who may make which move) and the PeerJS connection. |
@@ -86,6 +93,6 @@ The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of tr
 | `game/` | The game itself (see above). |
 
 ## Next steps
-- Sound, and the commissioned illustrations (see `game/ART_BRIEF.md`).
+- The commissioned illustrations (see `game/ART_BRIEF.md`), the Spanish edition, and the Book One campaign.
 
 Part of the Individual Democracy / Civic Armor universe.

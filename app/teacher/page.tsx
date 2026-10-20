@@ -60,6 +60,11 @@ export default function TeacherPage() {
       <p className="mt-2 rounded-lg border border-[#7CFFB2]/40 bg-[#7CFFB2]/10 px-3 py-2 text-sm text-program/90">
         🔒 No accounts and no upload. Codes hold only the first names students typed and how the game went, and they stay in this browser.
       </p>
+      <p className="mt-3">
+        <Link href="/teacher/guide" className="inline-block rounded-lg border border-gold px-4 py-2 font-bold text-gold hover:bg-gold/10">
+          📄 The teacher&apos;s guide: goals, a 50-minute plan and questions for after
+        </Link>
+      </p>
 
       <section className="mt-6 rounded-2xl border border-gold/40 bg-black/25 p-4">
         <label className="block font-bold" htmlFor="codes">Paste result codes (one or many)</label>
