@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import type { ClockTag } from "../game/moves";
+import { sounds } from "./sound";
 
 /** how long a "sign now" pitch gives you, in seconds */
 export const RUSH_SECONDS = 15;
@@ -19,6 +20,7 @@ export function useSignNow(rush: boolean, sight: number, on: boolean): [ClockSta
   const running = rush && on && !seen && left > 0;
   useEffect(() => {
     if (!running) return;
+    sounds.tick(left <= 5);
     const t = setTimeout(() => setLeft((x) => x - 1), 1000);
     return () => clearTimeout(t);
   }, [running, left]);

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, type RefObject } from "react";
 import type { Impact, Tone } from "./readImpact";
+import { sounds } from "./sound";
 
 const TONE: Record<Tone, { ink: string; bg: string; flash: string }> = {
   good: { ink: "#1f8a4c", bg: "#eafbef", flash: "rgba(63,163,77,0.28)" },
@@ -33,7 +34,7 @@ export function ImpactLayer({ impact, id }: { impact: Impact | null; id: number 
   const first = v ?? impact.moments[0];
   const start = timeline(impact).bannerStart;
   return (
-    <div key={id} aria-live="polite" className="pointer-events-none fixed inset-0 z-40">
+    <div key={id} aria-hidden className="pointer-events-none fixed inset-0 z-40">
       {TONE[first.tone].flash !== "rgba(0,0,0,0)" && (
         <div className="flash absolute inset-0" style={{ background: `radial-gradient(ellipse at center, transparent 35%, ${TONE[first.tone].flash} 100%)` }} />
       )}
@@ -86,4 +87,41 @@ export function useJolt(ref: RefObject<HTMLElement | null>, impact: Impact | nul
       // no vibration here: the jolt is enough
     }
   }, [impact, id, ref]);
+}
+
+/** The sound of a move, in the same order the screen plays it: the verdict, the strikes, the banners. */
+export function useImpactSound(impact: Impact | null, id: number) {
+  useEffect(() => {
+    if (!impact) return;
+    const v = impact.verdict;
+    if (v) {
+      if (v.kind === "walked") sounds.paper();
+      else {
+        sounds.stamp();
+        const follow = { defused: sounds.good, exposed: sounds.good, close: sounds.good, honest: sounds.help, shortcut: sounds.shady }[v.kind as string] ?? sounds.bad;
+        follow(0.12);
+      }
+    }
+    const { strikeStart, bannerStart } = timeline(impact);
+    impact.strikes.forEach((_, i) => sounds.strike(strikeStart + i * STRIKE_GAP));
+    impact.moments.forEach((m, i) => {
+      const at = bannerStart + i * BANNER_S;
+      if (m.kind === "awake") sounds.wake(at);
+      else if (m.kind === "won") sounds.win(at);
+      else if (m.kind === "forged" || m.kind === "sitout") sounds.shady(at);
+      else if (["captured", "fallen", "lost", "pattern"].includes(m.kind)) sounds.loss(at);
+      else sounds.good(at);
+    });
+  }, [impact, id]);
+}
+
+/** What a move did, as one plain sentence for screen readers (the overlay is visual only). */
+export function spokenImpact(impact: Impact | null): string {
+  if (!impact) return "";
+  const parts: string[] = [];
+  if (impact.verdict) parts.push(`${impact.verdict.title}. ${impact.verdict.sub}`);
+  const T = (d: string) => d.charAt(0) + d.slice(1).toLowerCase();
+  if (impact.strikes.length) parts.push(`The Machine struck ${impact.strikes.map(T).join(", ")}.`);
+  for (const m of impact.moments) parts.push(`${m.title}. ${m.sub}`);
+  return parts.join(" ");
 }

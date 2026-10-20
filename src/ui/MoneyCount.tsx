@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import type { Session } from "../game/session";
+import { sounds } from "./sound";
 
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
 
@@ -28,6 +29,10 @@ function CountUp({ to, ms = 1400 }: { to: number; ms?: number }) {
  */
 export function MoneyCount({ s }: { s: Session }) {
   const g = s.g;
+  // the register rings as the count adds up
+  useEffect(() => {
+    if (s.g.signed.length) sounds.register(0.9);
+  }, [s]);
   const m = g.money();
   const ck = s.clock;
   if (!g.signed.length) return null;

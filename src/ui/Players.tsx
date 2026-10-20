@@ -4,7 +4,7 @@ import type { Session } from "../game/session";
 import { RolePortrait } from "./art/RolePortrait";
 import { Float, type Changes } from "./Board";
 import { Icon, Pips } from "./icons";
-import { DISTRICT_COLOR } from "./theme";
+import { DISTRICT_COLOR, DISTRICT_SURFACE, titleCase } from "./theme";
 
 export function Players({ s, changes = null }: { s: Session; changes?: Changes }) {
   const g = s.g;
@@ -66,11 +66,19 @@ export function Players({ s, changes = null }: { s: Session; changes?: Changes }
               {p.role === "Veteran" && <span>Shields {p.shields}</span>}
               {p.role === "Elder" && <span>History {p.elderUsed ? "told" : "ready"}</span>}
             </div>
-            <div className="mt-2 flex items-center gap-1" aria-label="Read by district">
+            <div className="mt-2 flex items-center gap-1" role="group" aria-label="Read by district">
               <Icon name="sight" size={14} title="Read: how well you read each district" />
               {g.ds.map((d) => (
-                <div key={d} title={`${d}: Read ${p.sight[d]}`} className="relative flex-1 rounded px-1 py-0.5 text-center text-[10px] font-bold text-white" style={{ background: DISTRICT_COLOR[d], opacity: p.sight[d] ? 1 : 0.35 }}>
-                  {d.slice(0, 3)} {p.sight[d]}
+                <div
+                  key={d}
+                  title={`${d}: Read ${p.sight[d]}`}
+                  role="img"
+                  aria-label={`${titleCase(d)}: Read ${p.sight[d]}`}
+                  className="relative flex-1 whitespace-nowrap rounded border px-1 py-0.5 text-center text-[10px] font-bold"
+                  // Read 0 is an outline, not a faded fill, so the label stays readable
+                  style={p.sight[d] ? { background: DISTRICT_SURFACE[d].bg, borderColor: DISTRICT_SURFACE[d].bg, color: DISTRICT_SURFACE[d].fg } : { borderColor: DISTRICT_COLOR[d], color: "#cfc8df" }}
+                >
+                  <span aria-hidden>{d.slice(0, 3)} {p.sight[d]}</span>
                   {ch?.sight?.[d] ? <Float key={changes!.id} id={changes!.id} n={ch.sight[d]!} icon="sight" className="absolute -top-4 left-1/2 -translate-x-1/2" /> : null}
                 </div>
               ))}

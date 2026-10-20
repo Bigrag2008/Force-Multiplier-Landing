@@ -7,7 +7,7 @@ import { signed, type Delta } from "./changes";
 import { Icon, Pips, type IconName } from "./icons";
 import { STRIKE_GAP, timeline } from "./Impact";
 import type { Impact } from "./readImpact";
-import { DISTRICT_COLOR, titleCase } from "./theme";
+import { DISTRICT_COLOR, DISTRICT_MARK, DISTRICT_SURFACE, DISTRICT_TEXT, SQUEEZE_TEXT, titleCase } from "./theme";
 
 export type Changes = { id: number; delta: Delta; lines: string[] } | null;
 
@@ -24,27 +24,23 @@ export function Float({ id, n, icon, className = "" }: { id: number; n: number; 
   );
 }
 
-function Track({ value, max, color, label, name, end }: { value: number; max: number; color: string; label: ReactNode; name: string; end: string }) {
+function Track({ value, max, color, ink, label, name, end }: { value: number; max: number; color: string; ink: string; label: ReactNode; name: string; end: string }) {
+  // `color` draws the boxes; `ink` is the same color deepened so small text on white reads at 4.5:1
   return (
     <div>
       <div className="flex items-center justify-between gap-1 whitespace-nowrap text-[10px] font-bold uppercase">
         <span className="inline-flex items-center gap-1">{label}</span>
-        <span className="text-[9px]" style={{ color }}>{end}</span>
+        <span className="text-[9px]" style={{ color: ink }}>{end}</span>
       </div>
-      <div className="mt-0.5 grid grid-cols-4 gap-1" aria-label={`${name} ${value} of ${max}`}>
-        {Array.from({ length: max + 1 }, (_, i) => (
-          <div
-            key={i}
-            className="h-6 rounded text-center text-xs font-black leading-6"
-            style={{
-              border: `2px solid ${color}`,
-              background: i <= value && value > 0 && i > 0 ? color : "white",
-              color: i <= value && value > 0 && i > 0 ? "white" : color,
-            }}
-          >
-            {i}
-          </div>
-        ))}
+      <div className="mt-0.5 grid grid-cols-4 gap-1" role="img" aria-label={`${name} ${value} of ${max}`}>
+        {Array.from({ length: max + 1 }, (_, i) => {
+          const on = i <= value && value > 0 && i > 0;
+          return (
+            <div key={i} aria-hidden className="h-6 rounded text-center text-xs font-black leading-6" style={{ border: `2px solid ${color}`, background: on ? ink : "white", color: on ? "white" : ink }}>
+              {i}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -68,6 +64,8 @@ function DistrictBlock({ s, d, highlight, changes, impact }: { s: Session; d: Di
   const delay = hitAt >= 0 || mudAt >= 0 ? `${t0 + (hitAt >= 0 ? hitAt : mudAt) * STRIKE_GAP}s` : "0s";
   return (
     <div
+      role="group"
+      aria-label={`${titleCase(d)}, ${g.ed.districts[d].sub}: Clarity ${c} of ${K.WAKE}, Squeeze ${p} of ${K.CAPTURE}${status ? `, ${status.t.toLowerCase()}` : ""}${g.threads.has(d) ? ", thread traced" : ""}`}
       key={motion && motion !== "lights-on" ? `${d}-${changes?.id}` : d}
       className={`relative rounded-xl border-2 bg-white text-ink shadow ${highlight ? "ring-4 ring-gold" : ""} ${motion}`}
       style={{ borderColor: DISTRICT_COLOR[d], ["--delay" as string]: delay }}
@@ -91,18 +89,18 @@ function DistrictBlock({ s, d, highlight, changes, impact }: { s: Session; d: Di
           </div>
         </div>
       )}
-      <div className="rounded-t-lg px-2 py-1.5 text-center text-white" style={{ background: DISTRICT_COLOR[d] }}>
-        <div className="text-sm font-black tracking-wide">{d}</div>
-        <div className="text-[10px] italic opacity-90">{g.ed.districts[d].sub}</div>
+      <div className="rounded-t-lg px-2 py-1.5 text-center" style={{ background: DISTRICT_SURFACE[d].bg, color: DISTRICT_SURFACE[d].fg }}>
+        <div className="text-sm font-black tracking-wide"><span aria-hidden>{DISTRICT_MARK[d]} </span>{d}</div>
+        <div className="text-[10px] italic">{g.ed.districts[d].sub}</div>
       </div>
       <div className="h-12 overflow-hidden border-b-2" style={{ borderColor: DISTRICT_COLOR[d] }} title={g.ed.districts[d].flavor}>
         <DistrictArt d={d} />
       </div>
       <div className="space-y-2 p-2">
-        <Track value={c} max={K.WAKE} color={DISTRICT_COLOR[d]} name="Clarity" label={<><Icon name="clarity" size={12} color={DISTRICT_COLOR[d]} /> Clarity</>} end="3 = awake" />
-        <Track value={p} max={K.CAPTURE} color="#E63946" name="Squeeze" label={<><Icon name="pressure" size={12} /> Squeeze</>} end="3 = captured" />
+        <Track value={c} max={K.WAKE} color={DISTRICT_COLOR[d]} ink={DISTRICT_TEXT[d]} name="Clarity" label={<><Icon name="clarity" size={12} color={DISTRICT_COLOR[d]} /> Clarity</>} end="3 = awake" />
+        <Track value={p} max={K.CAPTURE} color="#E63946" ink={SQUEEZE_TEXT} name="Squeeze" label={<><Icon name="pressure" size={12} /> Squeeze</>} end="3 = captured" />
         <div className="flex items-center justify-between text-[11px]">
-          <span className="font-black" style={{ color: status?.c }}>{status?.t ?? " "}</span>
+          <span className="font-black" style={{ color: status ? (status.t === "AWAKE" ? "#8a5a00" : SQUEEZE_TEXT) : undefined }}>{status?.t ?? " "}</span>
           {g.threads.has(d) ? <span className="font-bold text-[#2F8FD8]">🔵 thread</span> : null}
           {g.struck.has(d) && s.phase !== "machine" ? <span className="text-black/40">struck</span> : null}
         </div>
@@ -224,7 +222,7 @@ function GoalTrack({ s, changes }: { s: Session; changes: Changes }) {
           <li
             key={st.title}
             className={`relative rounded-lg border p-2 text-[11px] leading-snug transition ${
-              st.state === "done" ? "border-gold/60 bg-gold/15" : st.state === "now" ? "border-gold bg-gold/10 shadow-[0_0_14px_rgba(242,182,50,0.35)]" : "border-white/15 opacity-60"
+              st.state === "done" ? "border-gold/60 bg-gold/15" : st.state === "now" ? "border-gold bg-gold/10 shadow-[0_0_14px_rgba(242,182,50,0.35)]" : "border-dashed border-white/25"
             }`}
           >
             <span className="flex items-center gap-1.5 text-xs font-black text-gold">

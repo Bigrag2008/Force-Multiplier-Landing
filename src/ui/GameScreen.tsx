@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { ImpactLayer, useJolt } from "./Impact";
+import { ImpactLayer, spokenImpact, useImpactSound, useJolt } from "./Impact";
+import { setSoundOn, soundOn } from "./sound";
 import { readImpact } from "./readImpact";
 import type { Move } from "../game/moves";
 import type { Session } from "../game/session";
@@ -70,9 +71,13 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
   const impact = useMemo(() => (changes ? readImpact(g, changes.lines, changes.delta) : null), [changes, g]);
   const root = useRef<HTMLDivElement>(null);
   useJolt(root, impact, changes?.id ?? 0);
+  useImpactSound(impact, changes?.id ?? 0);
+  const [sound, setSound] = useState(true);
+  useEffect(() => setSound(soundOn()), []); // eslint-disable-line react-hooks/set-state-in-effect
 
   return (
-    <div className="mx-auto max-w-7xl space-y-4 px-4 py-4">
+    <main className="mx-auto max-w-7xl space-y-4 px-4 py-4">
+      <a href="#your-move" className="skip-link">Skip to your move</a>
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-gold/30 pb-3">
         <div>
           <h1 className="text-2xl font-black text-gold">The Second Number</h1>
@@ -91,6 +96,14 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
               📗 Open the Green Book when a capture is coming
             </label>
           )}
+          <button
+            className="rounded-md border border-white/25 px-2 py-1 hover:bg-white/10"
+            aria-pressed={sound}
+            onClick={() => (setSoundOn(!sound), setSound(!sound))}
+            title={sound ? "Turn the sound off" : "Turn the sound on"}
+          >
+            {sound ? "🔊 Sound" : "🔇 Muted"}
+          </button>
           <button className="rounded-md border border-white/25 px-2 py-1 hover:bg-white/10" onClick={() => setShowIntro(true)}>
             Story
           </button>
@@ -119,7 +132,7 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
         {/* on phones the actions come first; on wide screens they sit beside the board */}
         <div className="order-first space-y-4 lg:order-none">
           {net?.room}
-          <div key={panelKey}>
+          <div key={panelKey} id="your-move" tabIndex={-1} aria-label="Your move">
             {!myMove && <WaitingPanel s={s} who={waiting!} />}
             {myMove && s.phase === "turn" && <TurnPanel s={s} play={play} local={local} />}
             {myMove && s.phase === "fallen" && <MachinePanel s={s} play={play} local={local} who="fallen" />}
@@ -134,11 +147,13 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
       </div>
 
       <ImpactLayer impact={impact} id={changes?.id ?? 0} />
+      {/* screen readers hear what each move did, once, in plain words */}
+      <p className="sr-only" aria-live="polite" role="status">{spokenImpact(impact)}</p>
 
       {showIntro && <IntroComic onDone={closeIntro} where={g.ed.id === "west-dayton" ? undefined : `${cap(g.ed.area)} of ${g.ed.city.split(",")[0]}`} />}
 
       {showHistory && g.historyCard && (
-        <div role="dialog" aria-modal="true" aria-labelledby="history-title" className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={closeHistory}>
+        <div role="dialog" aria-modal="true" aria-labelledby="history-title" className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={closeHistory} onKeyDown={(e) => e.key === "Escape" && closeHistory()}>
           <div className="max-w-lg rounded-2xl border-2 border-gold bg-program p-6 text-ink shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <p className="text-xs font-black uppercase tracking-widest text-[#5a3d1e]">History · read it aloud</p>
             <h2 id="history-title" className="mt-1 text-2xl font-black">{g.historyCard.title}</h2>
@@ -151,7 +166,7 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }
 

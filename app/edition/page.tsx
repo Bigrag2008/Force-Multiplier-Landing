@@ -6,7 +6,7 @@ import {
   blankEdition, checkEdition, encodeEdition, loadEditions, PLACE_KEYS, readEdition, saveEditions, WEST_DAYTON,
   type Edition, type EditionHistory, type LocalDeal, type Resource,
 } from "@/engine/edition";
-import { DISTRICT_COLOR, titleCase } from "@/ui/theme";
+import { DISTRICT_COLOR, DISTRICT_SURFACE, titleCase } from "@/ui/theme";
 
 /** what each district stands for, so a city can find its own version */
 const WHAT: Record<District, string> = {
@@ -269,7 +269,7 @@ function Editor({ ed, setEd, onSave, onClose }: { ed: Edition; setEd: (e: Editio
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
           {DISTRICTS.map((d) => (
             <div key={d} className="overflow-hidden rounded-lg border-2 bg-white text-ink" style={{ borderColor: DISTRICT_COLOR[d] }}>
-              <div className="px-2 py-1 text-center text-white" style={{ background: DISTRICT_COLOR[d] }}>
+              <div className="px-2 py-1 text-center" style={{ background: DISTRICT_SURFACE[d].bg, color: DISTRICT_SURFACE[d].fg }}>
                 <div className="text-xs font-black">{d}</div>
                 <div className="text-[10px] italic">{ed.districts[d].sub || "…"}</div>
               </div>

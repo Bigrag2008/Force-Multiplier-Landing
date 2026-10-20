@@ -23,7 +23,7 @@ Every deal offers the same three choices (defined in the rules, not per card):
 """
 
 DISTRICT_COLORS = {   # AfriCOBRA "Kool-Aid" brights — see ART_DIRECTION.md
- "LENDING":"#3FA34D","HOUSING":"#E03C31","LABOR":"#1F7AE0",
+ "LENDING":"#1E9E78","HOUSING":"#E03C31","LABOR":"#1F7AE0",
  "HEALTH":"#8E3BB8","EDUCATION":"#F28C1B",
 }
 

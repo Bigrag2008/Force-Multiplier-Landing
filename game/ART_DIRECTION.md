@@ -30,7 +30,7 @@ The **district colors** follow AfriCOBRA's Kool-Aid brights, each named for a fl
 | Night base (backgrounds, the Machine) | After Hours | `#1B1530` |
 | Paper (cards, rulebook) | Church Program | `#F6EEDC` |
 | Accent, titles, Props | Funk Gold | `#F2B632` |
-| Lending | Lime | `#3FA34D` |
+| Lending | Teal-green | `#1E9E78` (was lime `#3FA34D`; moved so Lending and Education stay distinct for red-blind players) |
 | Housing | Fruit Punch | `#E03C31` |
 | Labor | Blue Raspberry | `#1F7AE0` |
 | Health | Grape | `#8E3BB8` |

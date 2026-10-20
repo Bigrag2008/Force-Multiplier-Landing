@@ -9,7 +9,7 @@ import { CoachBadge, CoachBox, picked, safe, ShortcutBadge } from "./Coach";
 import { Icon, type IconName } from "./icons";
 import { DealCard } from "./DealCard";
 import { clockTag, SignNowClock, useSignNow } from "./SignNowClock";
-import { DISTRICT_COLOR, titleCase } from "./theme";
+import { DISTRICT_SURFACE, DISTRICT_MARK, titleCase } from "./theme";
 import type { Local, Play } from "./useSession";
 
 /** where the player is in the turn menu (this device only; drawn cards live in the session) */
@@ -39,8 +39,8 @@ function DistrictButtons({ ds, onPick, disabled, note, best }: { ds: District[];
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
       {ds.map((d) => (
-        <button key={d} className={`${btn} text-white${picked(d === best)}`} style={{ background: DISTRICT_COLOR[d] }} disabled={disabled?.(d)} onClick={() => onPick(d)}>
-          <span>{titleCase(d)}</span>
+        <button key={d} className={`${btn}${picked(d === best)}`} style={{ background: DISTRICT_SURFACE[d].bg, color: DISTRICT_SURFACE[d].fg }} disabled={disabled?.(d)} onClick={() => onPick(d)}>
+          <span><span aria-hidden>{DISTRICT_MARK[d]} </span>{titleCase(d)}</span>
           {note && <span className="block text-[10px] font-normal opacity-90">{note(d)}</span>}
           {d === best && <CoachBadge />}
         </button>

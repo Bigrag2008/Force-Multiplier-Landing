@@ -137,10 +137,12 @@ export function Icon({ name, size = 16, color, title, className = "" }: { name: 
 /** A row of pips: filled up to `value`, out of `max`. Reads faster than "3/5". */
 export function Pips({ value, max, color, danger }: { value: number; max: number; color: string; danger?: number }) {
   return (
-    <span className="inline-flex gap-0.5 align-middle" aria-hidden>
+    <span className="inline-flex gap-0.5 align-middle">
+      <span className="sr-only">{value} of {max}</span>
       {Array.from({ length: max }, (_, i) => (
         <span
           key={i}
+          aria-hidden
           className="inline-block h-2 w-2 rounded-full border"
           style={{ borderColor: danger !== undefined && i + 1 >= danger ? "#ff8a8a" : color, background: i < value ? color : "transparent" }}
         />

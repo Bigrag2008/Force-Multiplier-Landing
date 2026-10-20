@@ -5,7 +5,7 @@
   --after-hours: #1B1530;
   --program: #F6EEDC;
   --funk-gold: #F2B632;
-  --lending: #3FA34D;
+  --lending: #1E9E78;
   --housing: #E03C31;
   --labor: #1F7AE0;
   --health: #8E3BB8;
@@ -32,6 +32,19 @@ body {
   background: var(--after-hours);
   color: var(--program);
 }
+
+/* keyboard play: every control shows where you are */
+:focus-visible {
+  outline: 3px solid #F2B632;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+/* a skip link, hidden until it's focused */
+.skip-link {
+  position: absolute; left: 8px; top: -60px; z-index: 60;
+  background: #F2B632; color: #1B1530; font-weight: 800; padding: 8px 12px; border-radius: 8px;
+}
+.skip-link:focus { top: 8px; }
 
 /* what a move changed: numbers float up off the board, and the spot glows */
 @keyframes float-up {

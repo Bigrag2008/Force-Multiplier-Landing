@@ -15,7 +15,7 @@ One wide scene per district. On the website they show as a banner strip (about 5
 
 | District | Color (Kool-Aid flavor) | Scene | Landmarks to draw on (stylized, not photo-real) |
 |---|---|---|---|
-| **Lending** | Lime `#3FA34D` | Payday on every corner: the bank branch closed, the storefront lenders open | Check-cashing and payday storefronts with hand-painted signs; a shuttered branch |
+| **Lending** | Teal-green `#1E9E78` | Payday on every corner: the bank branch closed, the storefront lenders open | Check-cashing and payday storefronts with hand-painted signs; a shuttered branch |
 | **Housing** | Fruit Punch `#E03C31` | Wright-Dunbar to Madden Hills: historic homes, empty lots, families who never left | The Paul Laurence Dunbar House; brick row houses on the stoop; a "For Sale" lot |
 | **Labor** | Blue Raspberry `#1F7AE0` | After the plants closed (GM Moraine 2008, NCR's move 2009) | A plant gate, cold smokestacks; people who still show up for each other |
 | **Health** | Grape `#8E3BB8` | A hospital gone: Good Samaritan closed in 2018 | The closed hospital; the long way to care; a neighbor checking on a neighbor |

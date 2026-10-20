@@ -5,7 +5,7 @@ import { DISTRICTS, type Card, type District } from "@/engine/content";
 import { makeDeal } from "@/engine/dealgen";
 import { Rng } from "@/engine/rng";
 import { DealCard } from "@/ui/DealCard";
-import { DISTRICT_COLOR, titleCase } from "@/ui/theme";
+import { DISTRICT_SURFACE, DISTRICT_MARK, titleCase } from "@/ui/theme";
 
 /** Endless deals: a fresh deal every press, rolled from the templates, for practice and classrooms. */
 export default function DealsPage() {
@@ -34,8 +34,8 @@ export default function DealsPage() {
       </p>
       <div className="mt-6 flex flex-wrap gap-2">
         {DISTRICTS.map((x) => (
-          <button key={x} className={`rounded-lg px-3 py-2 text-sm font-black text-white ${x === d ? "ring-2 ring-gold" : "opacity-80"}`} style={{ background: DISTRICT_COLOR[x] }} onClick={() => deal(x)}>
-            {titleCase(x)}
+          <button key={x} className={`rounded-lg px-3 py-2 text-sm font-black ${x === d ? "ring-2 ring-gold" : ""}`} aria-pressed={x === d} style={{ background: DISTRICT_SURFACE[x].bg, color: DISTRICT_SURFACE[x].fg }} onClick={() => deal(x)}>
+            <span aria-hidden>{DISTRICT_MARK[x]} </span>{titleCase(x)}
           </button>
         ))}
       </div>
@@ -59,6 +59,7 @@ export default function DealsPage() {
       <p className="mt-2 text-sm text-program/80">
         Have a real one? <Link href="/my-deal" className="font-bold text-gold underline">Read your own deal</Link>.
       </p>
+      <h2 className="sr-only">This deal</h2>
       <div className="mt-6">{card && <DealCard key={count} card={card} district={d} sight={sight} formId={`${d.slice(0, 3)}-NEW`} math={math} />}</div>
     </main>
   );

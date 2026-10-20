@@ -1,8 +1,8 @@
 "use client";
-import { useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import { C, type Card, type District } from "../engine/content";
 import { DealAnatomy } from "./DealAnatomy";
-import { DISTRICT_COLOR, LAYER_COLOR, LAYER_LABEL, LEVER_WORD, titleCase } from "./theme";
+import { DISTRICT_MARK, DISTRICT_SURFACE, LAYER_COLOR, LAYER_LABEL, LEVER_WORD, titleCase } from "./theme";
 
 const LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$%";
 function hash(s: string) {
@@ -17,7 +17,35 @@ function decoyRows(seed: string, rows: number, cols: number) {
   return Array.from({ length: rows }, () => Array.from({ length: cols }, () => LETTERS[next() % LETTERS.length]).join(""));
 }
 
-function DecoderZone({ text, seed }: { text: string; seed: string }) {
+/** "Plain cards": the hidden layers you can read, in plain dark text, for anyone the red-lens effect doesn't work for */
+const PLAIN_KEY = "sn-plain-cards";
+function usePlainCards(): [boolean, (on: boolean) => void] {
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    try {
+      setOn(window.localStorage.getItem(PLAIN_KEY) === "on"); // eslint-disable-line react-hooks/set-state-in-effect
+    } catch {
+      // no storage: lens cards
+    }
+  }, []);
+  const set = (v: boolean) => {
+    setOn(v);
+    try {
+      window.localStorage.setItem(PLAIN_KEY, v ? "on" : "off");
+    } catch {
+      // the setting lasts this visit
+    }
+  };
+  return [on, set];
+}
+
+function DecoderZone({ text, seed, plain }: { text: string; seed: string; plain?: boolean }) {
+  if (plain)
+    return (
+      <p className="rounded-sm border border-black/20 bg-white px-1.5 py-1 text-[13px] font-bold leading-snug text-ink" style={{ minHeight: 64 }}>
+        {text}
+      </p>
+    );
   return (
     <div className="relative overflow-hidden rounded-sm" style={{ background: "#FFEDED", minHeight: 64 }}>
       <div aria-hidden className="pointer-events-none absolute inset-0 select-none font-bold leading-[7px]" style={{ color: "#ED2633", fontSize: 10 }}>
@@ -86,9 +114,9 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
   const [lensY, setLensY] = useState(110);
   const [glassesOn, setGlassesOn] = useState(false);
   const [explain, setExplain] = useState(false);
+  const [plainCards, setPlainCards] = usePlainCards();
   const area = useRef<HTMLDivElement>(null);
   const drag = useRef<number | null>(null);
-  const color = DISTRICT_COLOR[district];
   const lever = effectiveLever ?? card.lever;
 
   const layers = [
@@ -118,15 +146,15 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
   return (
     <div className="w-full max-w-sm">
       <article className="relative isolate overflow-hidden rounded-xl border border-black/40 bg-program text-ink shadow-xl" aria-label={`Deal in ${titleCase(district)}`}>
-        <header className="flex items-center justify-between px-3 py-1.5 text-white" style={{ background: color }}>
-          <span className="text-sm font-black tracking-wide">{heading ?? district}</span>
+        <header className="flex items-center justify-between px-3 py-1.5" style={{ background: DISTRICT_SURFACE[district].bg, color: DISTRICT_SURFACE[district].fg }}>
+          <span className="text-sm font-black tracking-wide">{heading ?? <><span aria-hidden>{DISTRICT_MARK[district]} </span>{district}</>}</span>
           <span className="text-[10px] opacity-90">FORM {formId ?? "—"}</span>
         </header>
         {card.die !== undefined && (
           <p className="bg-black/5 px-3 py-1 text-[11px] font-bold">🎲 The fine print rolled {card.die}: this trap&apos;s lever is in {LEVER_WORD[card.lever]}.</p>
         )}
         <div className="border-b border-dashed border-black/20 px-3 pb-2 pt-2">
-          <div className="flex justify-between text-[9px] font-bold uppercase text-black/50">
+          <div className="flex justify-between text-[9px] font-bold uppercase text-black/70">
             <span>What you see</span>
             <span className="italic normal-case">{plain ? "your real deal" : (sub ?? C.dayton[district].sub)}</span>
           </div>
@@ -135,10 +163,10 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
         <div ref={area} className="relative space-y-2 px-3 py-2">
           {layers.map(({ n, text }) => (
             <section key={n}>
-              <h4 className="mb-0.5 flex items-center gap-1.5 text-[10px] font-black uppercase">
+              <h3 className="mb-0.5 flex items-center gap-1.5 text-[10px] font-black uppercase">
                 <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: LAYER_COLOR[n] }} />
                 Read {n} · {LAYER_LABEL[n]}
-              </h4>
+              </h3>
               {n === 1 && needsMath ? (
                 <WorkItOut card={card} onDone={(guess) => setWorked({ card, guess })} />
               ) : sight >= n ? (
@@ -149,8 +177,7 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
                       {card.answer.toLocaleString("en-US")}
                     </p>
                   )}
-                  <DecoderZone text={text} seed={card.front + n} />
-                  {glassesOn && <span className="sr-only">{text}</span>}
+                  <DecoderZone text={text} seed={card.front + n} plain={plainCards} />
                 </>
               ) : (
                 <div className="flex min-h-[64px] items-center justify-center rounded-sm border border-dashed border-black/25 text-[12px] text-black/55">
@@ -159,7 +186,7 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
               )}
             </section>
           ))}
-          {sight >= 1 && (
+          {sight >= 1 && !plainCards && (
             <div
               role="slider"
               aria-label="Reading glasses: drag up and down to read the second number"
@@ -185,11 +212,23 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
         </footer>
       </article>
       {sight >= 1 ? (
-        <div className="mt-2 flex items-center justify-between gap-2 text-xs text-program/80">
-          <span>Drag the red glasses over the card to read it.</span>
-          <button className="rounded-md border border-gold/60 px-2 py-1 font-semibold text-gold hover:bg-gold/10" onClick={() => setGlassesOn((v) => !v)}>
-            {glassesOn ? "Take glasses off" : "Put glasses on"}
-          </button>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-program/80">
+          <span>{plainCards ? "Plain cards: the layers you can read, in plain text." : "Drag the red glasses over the card to read it."}</span>
+          <span className="flex gap-2">
+            {!plainCards && (
+              <button className="rounded-md border border-gold/60 px-2 py-1 font-semibold text-gold hover:bg-gold/10" aria-pressed={glassesOn} onClick={() => setGlassesOn((v) => !v)}>
+                {glassesOn ? "Take glasses off" : "Put glasses on"}
+              </button>
+            )}
+            <button
+              className="rounded-md border border-white/30 px-2 py-1 font-semibold hover:bg-white/10"
+              aria-pressed={plainCards}
+              title="For anyone the red-lens effect doesn't work for: color-blind players, low vision, screen readers"
+              onClick={() => setPlainCards(!plainCards)}
+            >
+              {plainCards ? "Lens cards" : "Plain cards"}
+            </button>
+          </span>
         </div>
       ) : (
         <p className="mt-2 text-xs text-program/80">Read 0 in {titleCase(district)}: you can only see the pitch. Most deals are traps.</p>
