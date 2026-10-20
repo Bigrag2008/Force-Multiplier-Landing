@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Card } from "@/engine/content";
+import { LAST_EDITION, loadEditions, type Edition } from "@/engine/edition";
 import { fmtRate, readDeal, verdict, type Kind, type Often, type RealDeal } from "@/game/realdeal";
 import { DealCard } from "@/ui/DealCard";
 
@@ -72,7 +73,17 @@ export default function MyDealPage() {
   const [math, setMath] = useState(false);
   const [shown, setShown] = useState<{ name: string; deal: RealDeal; id: number } | null>(null);
   const [saved, setSaved] = useState<Saved[]>([]);
-  useEffect(() => setSaved(loadSaved()), []); // eslint-disable-line react-hooks/set-state-in-effect
+  // real help near you: from the Your City edition this device played last
+  const [help, setHelp] = useState<Edition | null>(null);
+  useEffect(() => {
+    setSaved(loadSaved()); // eslint-disable-line react-hooks/set-state-in-effect
+    try {
+      const id = window.localStorage.getItem(LAST_EDITION);
+      setHelp(loadEditions().find((e) => e.id === id && e.resources.length > 0) ?? null);
+    } catch {
+      // no storage: no local list
+    }
+  }, []);
 
   const num = (k: string) => Number((vals[k] ?? "").replace(/[$,\s]/g, "")) || 0;
   const build = (): RealDeal | null => {
@@ -158,6 +169,17 @@ export default function MyDealPage() {
         setSaved(list);
         storeSaved(list);
       }} />}
+
+      {shown && help && (
+        <section className="mt-6 rounded-xl border border-[#7CFFB2]/40 bg-[#7CFFB2]/10 p-4">
+          <h2 className="font-black text-[#7CFFB2]">Real help in {help.city}</h2>
+          <ul className="mt-2 space-y-1 text-sm">
+            {help.resources.map((r) => (
+              <li key={r.name}><b>{r.name}</b>: {r.what}{r.where ? <span className="text-program/75"> · {r.where}</span> : null}</li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {saved.length > 0 && (
         <section className="mt-8">

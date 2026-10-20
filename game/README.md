@@ -5,6 +5,7 @@ A cooperative board game about reading the hidden cost in every deal, and teachi
 | File | What it is |
 |---|---|
 | `RULES.md` | The table rulebook (v4): one word per idea, the Block Party intro, the ladder, and the house rules. Matches the engine rule for rule. |
+| `YOUR_CITY.md` | How to make a Your City edition: your districts, places, history and real help, on the website or as a file, and how to print it (`print_kit/build_print_and_play.py --edition my-city.json`). `editions/west-dayton.json` is the example. |
 | `BOOK_ONE.md` | The novel and the game: how the Sight maps to the lens, a four-chapter *Book One* campaign (prototype), and the School Edition. |
 | `deal_gen.py` | Deal templates with blanks, for endless deals and the math variant. The website rolls the same templates. |
 | `The_Second_Number_BOARD_GAME.md` | The design brief: vision, soul, roadmap. |

@@ -45,6 +45,23 @@ def hx(h): h=h.lstrip("#"); return tuple(int(h[i:i+2],16)/255 for i in (0,2,4))
 NAVY=hx("1B1530"); GOLD=hx("F2B632"); GOLDL=hx("F7CF6B"); CREAM=hx("F6EEDC"); INK=hx("1b1b1f")
 GREY=hx("6b6676"); LGREY=hx("dcd6cc")
 EDITION=Dk.EDITION
+CITY, AREA, SHORT = "Dayton, Ohio", "the West Side", "West Dayton"
+ED=None   # a Your City edition (--edition my-city.json): see game/YOUR_CITY.md
+
+def load_edition(path):
+    """Lay a Your City edition over the base content: district nicknames, places, History, the names.
+    Same shape as the website's edition file (src/engine/edition.ts); the rules and deals don't change."""
+    global ED, EDITION, CITY, AREA, SHORT, OUT
+    import json
+    ED=json.load(open(path,encoding="utf-8"))
+    EDITION=ED["name"]; CITY=ED["city"]; AREA=ED["area"]; SHORT=EDITION.replace(" Edition","")
+    for d,v in ED["districts"].items(): Dk.DAYTON[d]=dict(Dk.DAYTON[d], **v)
+    for k,v in ED["places"].items(): Dk.PLACES[k]=dict(Dk.PLACES[k], **{x:v[x] for x in ("name","where","flavor") if v.get(x)})
+    for d,cards in (ED.get("history") or {}).items():
+        mine=[{k:c.get(k,"") for k in ("title","year","place","story","lesson")} for c in cards or []]
+        if mine: Dk.HISTORY[d]=mine if ED.get("historyMode")=="replace" else Dk.HISTORY[d]+mine
+    slug=re.sub(r"[^a-z0-9]+","_",EDITION.lower()).strip("_")
+    OUT=os.path.join(ROOT,f"The_Second_Number_{slug}_PRINT_AND_PLAY.pdf")
 LAYER_COL={1:hx("e63946"),2:hx("e0a526"),3:hx("2f8fd8")}
 LAYER_NAME={1:"COST",2:"CLOCK",3:"CONNECTION"}
 LEVER_WORD={1:"RED",2:"AMBER",3:"BLUE"}
@@ -80,7 +97,7 @@ def footer(c, label, w=PAGE_W):
 
 def sheet_label(c, label):
     c.setFont("DV",6); fill(c,GREY)
-    c.drawString(GRID_X0+0.12*inch,PAGE_H-0.15*inch,f"Second Number · West Dayton · {label}")
+    c.drawString(GRID_X0+0.12*inch,PAGE_H-0.15*inch,f"Second Number · {SHORT} · {label}")
 
 # ================= decoder zone =================
 LETTERS="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$%"
@@ -254,7 +271,7 @@ def build_other_cards(c):
                      "Revealed when total Clarity reaches 9. Until then, watch the board and deduce it."))
     for s_,txt in Dk.SCENARIOS.items():
         dayton="Dayton" in txt
-        cards.append((hx("3b2f5c") if not dayton else GOLD,"SCENARIO","West Dayton" if dayton else "setup",s_,txt,None))
+        cards.append((hx("3b2f5c") if not dayton else GOLD,"SCENARIO","West Dayton" if dayton and not ED else "setup",s_,txt,None))
     for combo,name,lesson in Dk.PATTERNS:
         cards.append((hx("8b1e1e"),"MACHINE PATTERN"," + ".join(DABBR[d] for d in combo),
                       name.title() if name.isupper() else name,lesson,
@@ -435,7 +452,7 @@ def build_cover(c):
     fill(c,GOLDL); c.setFont("DVB",10); c.drawCentredString(cx,PAGE_H-6.85*inch,"IN THIS KIT")
     fill(c,CREAM); c.setFont("DV",9.2)
     items=["The lens: printer test + Grandma's reading glasses to cut out","Rulebook and quick reference",
-           "The West Dayton board · 5 player boards · tokens",
+           f"The {SHORT} board · 5 player boards · tokens",
            "Role cards as church hand fans · the Cookout plate · the Sou-Sou can",
            f"{n_deals} Deal cards ({n_deals-n_hon} real traps, {n_hon} honest deals) + backs",
            f"4 Owners · {len(Dk.SCENARIOS)} Scenarios · {len(Dk.PATTERNS)} Patterns · {n_hist} History cards · the Green Book",
@@ -443,7 +460,8 @@ def build_cover(c):
     y=PAGE_H-7.15*inch
     for it in items: c.drawCentredString(cx,y,it); y-=13.5
     fill(c,GREY); c.setFont("DVI",8)
-    c.drawCentredString(cx,1.3*inch,"Made for the West Side of Dayton, Ohio. Part of the Individual Democracy / Civic Armor universe.")
+    c.drawCentredString(cx,1.3*inch,(f"Made for {AREA} of {CITY}" + (f", by {ED['credits']}" if ED and ED.get("credits") else "") + ". A Your City edition of The Second Number."
+     if ED else "Made for the West Side of Dayton, Ohio. Part of the Individual Democracy / Civic Armor universe."))
     c.showPage()
 
 def build_lens_page(c):
@@ -688,7 +706,7 @@ def player_board(c,y0,role,gift):
     acts=[("Study","+1 Read in a district. +1 Props."),
           ("Face a deal","Read what your Read allows → TAKE / WALK / NEGOTIATE."),
           ("Teach","+1 Read to a teammate where you read better. 1 Trust (Translator: free). +2 Props. Call and response: +1 Props each."),
-          ("Commons","Gather at a West Side place: +2 Trust, −1 Shady, plus its bonus (see the board)."),
+          ("Commons",f"Gather at a place on {AREA}: +2 Trust, −1 Shady, plus its bonus (see the board)."),
           ("Reach","2 Trust: a Fallen friend comes home at Shady 4. +3 Props."),
           ("Trace","Underworld open, Read 3, district awake → place a thread. +2 Props."),
           ("Expose","3 threads traced → the block wins.")]
@@ -768,7 +786,7 @@ def rules_story():
     return story
 
 def reference_story():
-    s=[PageBreak(),Paragraph("Quick reference — West Dayton Edition",ST["h1"])]
+    s=[PageBreak(),Paragraph(f"Quick reference — {EDITION}",ST["h1"])]
     rows=[["Your turn","Take your actions (2–3, see setup table): Study · Face a deal · Teach · Commons · Reach · Trace · Expose."],
           ["Facing a deal","Draw from a district. Lens over the zones your Read unlocks. Then TAKE / WALK / NEGOTIATE."],
           ["Honest deal","TAKE: +2 Trust, +1 Clarity, +1 Props. WALK: −1 Trust. NEGOTIATE: the Trust is wasted."],
@@ -850,9 +868,27 @@ def canvas_pdf(*builders):
     for b in builders: b(c)
     c.save(); buf.seek(0); return buf
 
+def edition_story():
+    """A Your City edition's own pages: where it happens, its places, its history and its real help."""
+    s=[PageBreak(),Paragraph(EDITION,ST["h1"]),
+       Paragraph(f"{CITY}. " + (f"Made by {inline(ED['credits'])}. " if ED.get("credits") else "")
+                 + "Where the rulebook says West Dayton, read this page: the rules, the deals and the balance are the same everywhere.",ST["p"]),
+       Paragraph("The five districts",ST["h2"])]
+    s+=md_table(["| District | Here | What it's like |"]+[f"| {d.title()} | {Dk.DAYTON[d]['sub']} | {Dk.DAYTON[d]['flavor']} |" for d in Dk.DECK])
+    s+=[Paragraph(f"Where the block gathers on {AREA}",ST["h2"])]
+    s+=md_table(["| Place | Where | In the game |"]+[f"| {P['name']} | {P['where']} | {P['bonus']} |" for P in Dk.PLACES.values()])
+    hist=[(d,c) for d,cards in (ED.get("history") or {}).items() for c in cards or []]
+    if hist:
+        s+=[Paragraph("Local history, and where it was checked",ST["h2"])]
+        s+=md_table(["| District | Story | Source |"]+[f"| {'Any' if d=='ANY' else d.title()} | {c.get('title','')} ({c.get('year','')}) | {c.get('source','')} |" for d,c in hist])
+    if ED.get("resources"):
+        s+=[Paragraph(f"Real help in {CITY}",ST["h2"])]
+        s+=md_table(["| Name | What it helps with | Where |"]+[f"| {r['name']} | {r['what']} | {r.get('where','')} |" for r in ED["resources"]])
+    return s
+
 def main():
     parts=[canvas_pdf(build_cover,build_lens_page,build_glasses),
-           platypus_pdf(rules_story()+reference_story(),"Rulebook"),
+           platypus_pdf(rules_story()+reference_story()+(edition_story() if ED else []),"Rulebook"),
            canvas_pdf(build_block_party,build_board,build_player_boards,build_fans_and_pieces,build_tokens,build_deal_pages,build_other_cards),
            platypus_pdf(key_story()[1:],"Answer key"),
            platypus_pdf(templates_story()[1:],"Endless deals"),
@@ -865,4 +901,6 @@ def main():
     with open(OUT,"wb") as f: w.write(f)
     print(f"wrote {OUT} ({len(w.pages)} pages)")
 
-if __name__=="__main__": main()
+if __name__=="__main__":
+    if "--edition" in sys.argv: load_edition(sys.argv[sys.argv.index("--edition")+1])
+    main()

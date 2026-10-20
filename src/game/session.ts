@@ -4,6 +4,7 @@
  * state machine the UI can step through, waiting for a person at every decision.
  */
 import { K, type Card, type District } from "../engine/content";
+import type { Edition } from "../engine/edition";
 import { newGame, type Action, type Game, type Player } from "../engine/engine";
 import { cardFromWire, fromWire, type Move, type WireAction } from "./moves";
 
@@ -33,6 +34,8 @@ export interface SessionConfig {
   math?: boolean;
   /** "sign now" deals count down while you decide (on unless turned off) */
   clocks?: boolean;
+  /** a Your City edition (the whole edition travels with the game, so saves and phones get it too) */
+  edition?: Edition;
 }
 
 /** a card drawn and waiting on the current player: kept in the session, so a reload can't redraw it */
@@ -75,6 +78,7 @@ export class Session {
       finePrint: !!config.finePrint,
       terrell: !!config.terrell,
       endless: !!config.endless,
+      edition: config.edition,
     });
     this.overlordHuman = !!config.overlordHuman;
     this.coach = !!config.coach;

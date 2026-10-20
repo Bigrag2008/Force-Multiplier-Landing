@@ -5,7 +5,7 @@
  * and never touches the random number generator. Deal advice uses only the layers
  * the player can already read, so the Coach teaches reading instead of cheating.
  */
-import { C, K, type Card, type Choice, type District, type PlaceKey } from "../engine/content";
+import { K, type Card, type Choice, type District, type PlaceKey } from "../engine/content";
 import { maxBy, minBy, type Game, type Player } from "../engine/engine";
 import type { Session } from "./session";
 
@@ -39,11 +39,11 @@ export interface Advice<P> {
 /** What the current player should do with their next action, and why. */
 export function adviseTurn(g: Game, p: Player, actionsLeft: number): Advice<TurnPick> {
   const act = g.active();
-  const placeWhy = (place: PlaceKey) => `${C.places[place].name}: ${C.places[place].bonus}`;
+  const placeWhy = (place: PlaceKey) => `${g.places[place].name}: ${g.places[place].bonus}`;
   const commons = (place: PlaceKey, why: string): Advice<TurnPick> =>
     g.party
       ? { pick: { k: "commons", place: "BARBERSHOP" }, title: "Gather with the block", why: `${why} Gathering gives +2 Trust and −1 Shady.` }
-      : { pick: { k: "commons", place }, title: `Gather at ${C.places[place].name}`, why: `${why} ${placeWhy(place)}` };
+      : { pick: { k: "commons", place }, title: `Gather at ${g.places[place].name}`, why: `${why} ${placeWhy(place)}` };
 
   if (g.canExpose())
     return { pick: { k: "expose_uw" }, title: "Expose the Underworld — win the game", why: `You've traced ${g.threads.size} threads. Drag the one machine into the light.` };
@@ -203,8 +203,8 @@ const L = (id: string, title: string, body: string): Lesson => ({ id, title, bod
 export function lessonsDue(s: Session, view: "board" | "deal" = "board", sight = 0): Lesson[] {
   const g = s.g;
   const out: Lesson[] = [];
-  if (g.party) out.push(L("welcome", "Welcome to the Block Party", `Every deal on the West Side has a second number: the real cost hidden under the pitch. Three districts, ${K.BP_ROUNDS} rounds. Learn to read the deals, teach each other, and wake ${K.BP_WAKE_TO_WIN} of the 3 districts (Clarity 3) to win. Lose two districts to the Machine (Squeeze 3), or run out of rounds, and the block falls. Taking a trap is a shortcut: it costs ${K.BP_TAKE} Shady chips, and at ${K.BP_SIT_OUT} you sit out a turn.`));
-  else out.push(L("welcome", "Welcome to the block", `Every deal on the West Side has a second number: the real cost hidden under the pitch. Together you'll learn to read it, teach each other, and wake the five districts. Wake enough of them (total Clarity ${K.UNDERWORLD_AT}) and the Underworld opens; trace ${K.THREADS_TO_WIN} threads and expose the one machine behind it all. Lose two districts to the Machine, or run out of rounds (${K.MAX_ROUNDS}), and the block falls.`));
+  if (g.party) out.push(L("welcome", "Welcome to the Block Party", `Every deal on ${g.ed.area} has a second number: the real cost hidden under the pitch. Three districts, ${K.BP_ROUNDS} rounds. Learn to read the deals, teach each other, and wake ${K.BP_WAKE_TO_WIN} of the 3 districts (Clarity 3) to win. Lose two districts to the Machine (Squeeze 3), or run out of rounds, and the block falls. Taking a trap is a shortcut: it costs ${K.BP_TAKE} Shady chips, and at ${K.BP_SIT_OUT} you sit out a turn.`));
+  else out.push(L("welcome", "Welcome to the block", `Every deal on ${g.ed.area} has a second number: the real cost hidden under the pitch. Together you'll learn to read it, teach each other, and wake the five districts. Wake enough of them (total Clarity ${K.UNDERWORLD_AT}) and the Underworld opens; trace ${K.THREADS_TO_WIN} threads and expose the one machine behind it all. Lose two districts to the Machine, or run out of rounds (${K.MAX_ROUNDS}), and the block falls.`));
   if (s.phase === "turn") {
     const p = s.player;
     out.push(L("turn", "Your turn", `${p.name}, you have ${g.actions()} actions. Your Read in each district is on your player card: at Read 0 you can't read anything; Read 1 shows the red layer (the cost), 2 the amber (the clock), 3 the blue (the connection). Trust pays for negotiating and teaching. The glowing button is my pick, with the reason. You can always choose your own.`));

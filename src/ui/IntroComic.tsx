@@ -299,7 +299,8 @@ const PANELS: { title: string; scene: () => ReactNode; text: ReactNode }[] = [
 ];
 
 /** The four-panel story. `onDone` starts the game. */
-export function IntroComic({ onDone }: { onDone: () => void }) {
+/** `where`: a Your City edition's setting ("The East Side of Detroit"); the first panel names it */
+export function IntroComic({ onDone, where }: { onDone: () => void; where?: string }) {
   const [i, setI] = useState(0);
   const next = useRef<HTMLButtonElement>(null);
   const last = i === PANELS.length - 1;
@@ -331,7 +332,7 @@ export function IntroComic({ onDone }: { onDone: () => void }) {
               {i + 1}. {P.title}
             </span>
           </div>
-          <figcaption className="min-h-[88px] p-3 text-[15px] leading-snug text-ink sm:text-base">{P.text}</figcaption>
+          <figcaption className="min-h-[88px] p-3 text-[15px] leading-snug text-ink sm:text-base">{i === 0 && where ? <>{where}. The barbershop, the church, Grandma&apos;s kitchen. <b>Your block</b>: people who look out for each other.</> : P.text}</figcaption>
         </figure>
         <div className="mt-3 flex items-center justify-between gap-2">
           <button className="rounded-lg border border-white/25 px-4 py-2 font-bold text-program disabled:opacity-30" disabled={i === 0} onClick={() => setI(i - 1)}>

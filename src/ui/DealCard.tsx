@@ -49,6 +49,8 @@ export interface DealCardProps {
   plain?: boolean;
   /** the label in the header, instead of the district */
   heading?: string;
+  /** the district's local nickname (from the game's edition) */
+  sub?: string;
 }
 
 /** The math variant: the red layer stays shut until you've worked out the second number. */
@@ -77,7 +79,7 @@ function WorkItOut({ card, onDone }: { card: Card; onDone: (guess: string) => vo
  * locked layers carry no text at all. Drag Grandma's reading glasses over the card
  * (or put them on with the button) to read the second number.
  */
-export function DealCard({ card, district, sight, effectiveLever, formId, math, plain, heading }: DealCardProps) {
+export function DealCard({ card, district, sight, effectiveLever, formId, math, plain, heading, sub }: DealCardProps) {
   // the math variant: which card's second number has been worked out, and what the guess was
   const [worked, setWorked] = useState<{ card: Card; guess: string } | null>(null);
   const needsMath = !!math && card.answer !== undefined && sight >= 1 && worked?.card !== card;
@@ -126,7 +128,7 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
         <div className="border-b border-dashed border-black/20 px-3 pb-2 pt-2">
           <div className="flex justify-between text-[9px] font-bold uppercase text-black/50">
             <span>What you see</span>
-            <span className="italic normal-case">{plain ? "your real deal" : C.dayton[district].sub}</span>
+            <span className="italic normal-case">{plain ? "your real deal" : (sub ?? C.dayton[district].sub)}</span>
           </div>
           <p className="mt-0.5 text-[15px] font-extrabold leading-tight">{card.front}</p>
         </div>

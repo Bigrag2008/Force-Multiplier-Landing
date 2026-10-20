@@ -1,6 +1,6 @@
 "use client";
 import type { ReactNode } from "react";
-import { C, K, type District } from "../engine/content";
+import { K, type District } from "../engine/content";
 import type { Session } from "../game/session";
 import { DistrictArt } from "./art/DistrictArt";
 import { signed, type Delta } from "./changes";
@@ -93,9 +93,9 @@ function DistrictBlock({ s, d, highlight, changes, impact }: { s: Session; d: Di
       )}
       <div className="rounded-t-lg px-2 py-1.5 text-center text-white" style={{ background: DISTRICT_COLOR[d] }}>
         <div className="text-sm font-black tracking-wide">{d}</div>
-        <div className="text-[10px] italic opacity-90">{C.dayton[d].sub}</div>
+        <div className="text-[10px] italic opacity-90">{g.ed.districts[d].sub}</div>
       </div>
-      <div className="h-12 overflow-hidden border-b-2" style={{ borderColor: DISTRICT_COLOR[d] }} title={C.dayton[d].flavor}>
+      <div className="h-12 overflow-hidden border-b-2" style={{ borderColor: DISTRICT_COLOR[d] }} title={g.ed.districts[d].flavor}>
         <DistrictArt d={d} />
       </div>
       <div className="space-y-2 p-2">
@@ -115,7 +115,7 @@ export function Board({ s, highlight, changes = null, impact = null }: { s: Sess
   const g = s.g;
   const patterns = g.activePatterns();
   return (
-    <section aria-label="The West Dayton board" className="space-y-3">
+    <section aria-label={`The ${g.ed.name} board`} className="space-y-3">
       <GoalTrack s={s} changes={changes} />
       {/* the ending: every porch light on, or the lights go out across the block */}
       <div

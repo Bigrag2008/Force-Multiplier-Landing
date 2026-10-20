@@ -42,6 +42,9 @@ export default function Home() {
         <Link href="/teacher" className="rounded-xl border border-white/30 px-6 py-3 text-lg font-bold hover:bg-white/10">
           🍎 Teacher&apos;s view
         </Link>
+        <Link href="/edition" className="rounded-xl border border-white/30 px-6 py-3 text-lg font-bold hover:bg-white/10">
+          🏘 Your City editions
+        </Link>
       </div>
       <ul className="mt-12 grid gap-4 sm:grid-cols-3">
         {[

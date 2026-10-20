@@ -1,0 +1,60 @@
+{
+ "v": 1,
+ "id": "west-dayton",
+ "name": "West Dayton Edition",
+ "city": "Dayton, Ohio",
+ "area": "the West Side",
+ "credits": "The Second Number",
+ "districts": {
+  "LENDING": {
+   "sub": "Payday on every corner",
+   "flavor": "Where the bank branches thin out, the storefront lenders fill in."
+  },
+  "HOUSING": {
+   "sub": "Wright-Dunbar to Madden Hills",
+   "flavor": "Historic homes, empty lots, and families who never left."
+  },
+  "LABOR": {
+   "sub": "After the plants closed",
+   "flavor": "GM's Moraine plant closed in 2008 and NCR moved its headquarters out in 2009. The good jobs left; the fine print didn't."
+  },
+  "HEALTH": {
+   "sub": "A hospital gone",
+   "flavor": "Good Samaritan Hospital in northwest Dayton closed in 2018. Care got farther away; the bills didn't."
+  },
+  "EDUCATION": {
+   "sub": "Dunbar High to Central State",
+   "flavor": "Paul Laurence Dunbar High School, Sinclair downtown, Wilberforce and Central State down the road."
+  }
+ },
+ "places": {
+  "BARBERSHOP": {
+   "name": "The Barbershop & Beauty Shop",
+   "where": "West Third Street",
+   "flavor": "Where the news really travels. Somebody in the chair already read the fine print."
+  },
+  "CHURCH": {
+   "name": "The Church",
+   "where": "on the corner, every Sunday",
+   "flavor": "Come as you are. Leave a little lighter."
+  },
+  "ADVENTURE": {
+   "name": "Adventure Central",
+   "where": "Wesleyan MetroPark",
+   "flavor": "The young people's learning center in the park. Practice makes sight."
+  },
+  "MARKET": {
+   "name": "Gem City Market",
+   "where": "the co-op grocery on Salem Avenue",
+   "flavor": "Owned by the neighborhood it feeds. Shop around before you sign."
+  },
+  "KITCHEN": {
+   "name": "Grandma's Kitchen Table",
+   "where": "the house everybody ends up at",
+   "flavor": "Sit down. Eat. Now show me the paper they gave you."
+  }
+ },
+ "history": {},
+ "historyMode": "add",
+ "resources": []
+}

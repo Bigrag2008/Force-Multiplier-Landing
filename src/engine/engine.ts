@@ -7,6 +7,7 @@
  */
 import { C, DISTRICTS, K, type Card, type Chapter, type Choice, type District, type HistoryCard, type PlaceKey } from "./content";
 import { makeDeal } from "./dealgen";
+import { historyOf, placesOf, WEST_DAYTON, type Edition } from "./edition";
 import { Rng } from "./rng";
 
 export const LAYERS: [number, "red" | "amber" | "blue", string][] = [
@@ -91,6 +92,8 @@ export interface GameOptions {
   terrell?: boolean;
   /** deals rolled from templates instead of the printed deck */
   endless?: boolean;
+  /** a Your City edition: the places and History cards where this game happens (default: West Dayton) */
+  edition?: Edition;
 }
 
 /** one deal decision, and its real money */
@@ -173,6 +176,10 @@ export class Game {
   maxRounds: number;
   /** every card drawn, in order (endless and fine-print cards aren't in the deck) */
   dealt: Card[] = [];
+  /** where this game happens: its districts' names, its gathering places, its History deck */
+  ed: Edition;
+  places: typeof C.places;
+  historyDeck: Record<District | "ANY", HistoryCard[]>;
   /** every deal decision, with its real money (see money()) */
   signed: Signed[] = [];
   /** Overlord mode: counterfeit deals waiting on top of piles, one slipped this round, and how many are left */
@@ -186,6 +193,9 @@ export class Game {
     this.finePrint = !!o.finePrint;
     this.terrell = !!o.terrell;
     this.endless = !!o.endless;
+    this.ed = o.edition ?? WEST_DAYTON;
+    this.places = placesOf(this.ed);
+    this.historyDeck = historyOf(this.ed);
     this.ds = this.party ? [...K.BP_DISTRICTS] : [...DISTRICTS];
     this.maxRounds = this.party ? K.BP_ROUNDS : K.MAX_ROUNDS;
     this.chapter = o.chapter ? C.chapters[o.chapter] : null;
@@ -512,7 +522,7 @@ export class Game {
       this.emit(`${pl.name} gathers with the block. Trust +2` + (had ? `, Shady −${had - pl.corruption}` : "") + "." + covered);
       return;
     }
-    const P = C.places[place];
+    const P = this.places[place];
     this.emit(
       `${pl.name} gathers at ${P.name} (${P.where}). Trust +2` + (had ? `, Shady −${had - pl.corruption}` : "") + "." + covered,
     );
@@ -615,7 +625,7 @@ export class Game {
     pl.elderUsed = true;
     this.clarity[d] = K.WAKE;
     pl.legend += 2;
-    const h = (this.historyCard = this.rng.choice([...C.history[d], ...C.history.ANY]));
+    const h = (this.historyCard = this.rng.choice([...this.historyDeck[d], ...this.historyDeck.ANY]));
     this.emit(`${pl.name} teaches the History of ${d}: ${h.title} (${h.year}, ${h.place}).`);
     this.emit(`  ${h.story}`);
     this.emit(`  "${h.lesson}"  ${d} AWAKE. Props +2.`);

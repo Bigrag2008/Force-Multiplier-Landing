@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { ImpactLayer, useJolt } from "./Impact";
 import { readImpact } from "./readImpact";
-import { C } from "../engine/content";
 import type { Move } from "../game/moves";
 import type { Session } from "../game/session";
 import { waitingOn } from "../net/protocol";
@@ -78,7 +77,7 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
         <div>
           <h1 className="text-2xl font-black text-gold">The Second Number</h1>
           <p className="text-xs text-program/70">
-            {C.edition} · {g.overlord ? "Overlord mode" : g.scenario} · round {g.round}/{g.maxRounds}
+            {g.ed.name} · {g.overlord ? "Overlord mode" : g.scenario} · round {g.round}/{g.maxRounds}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 text-sm">
@@ -136,7 +135,7 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
 
       <ImpactLayer impact={impact} id={changes?.id ?? 0} />
 
-      {showIntro && <IntroComic onDone={closeIntro} />}
+      {showIntro && <IntroComic onDone={closeIntro} where={g.ed.id === "west-dayton" ? undefined : `${cap(g.ed.area)} of ${g.ed.city.split(",")[0]}`} />}
 
       {showHistory && g.historyCard && (
         <div role="dialog" aria-modal="true" aria-labelledby="history-title" className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={closeHistory}>
@@ -155,6 +154,9 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
     </div>
   );
 }
+
+/** "the West Side" → "The West Side" */
+const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 
 /** someone else's turn, on their own phone */
 function WaitingPanel({ s, who }: { s: Session; who: string }) {

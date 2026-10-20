@@ -32,6 +32,13 @@ content=dict(
     constants={k:getattr(E,k) for k in CONST_NAMES},
     dealTemplates=G.TEMPLATES, slotOrder=list(G.SLOT_ORDER), counterfeits=D.COUNTERFEITS,
 )
+# the reference Your City edition (same shape as src/engine/edition.ts): a starting point for a new one
+ref=dict(v=1, id="west-dayton", name=D.EDITION, city="Dayton, Ohio", area="the West Side", credits="The Second Number",
+         districts={d:dict(sub=v["sub"],flavor=v["flavor"]) for d,v in D.DAYTON.items()},
+         places={k:dict(name=v["name"],where=v["where"],flavor=v["flavor"]) for k,v in D.PLACES.items()},
+         history={}, historyMode="add", resources=[])
+os.makedirs(os.path.join(GAME,"editions"),exist_ok=True)
+with open(os.path.join(GAME,"editions","west-dayton.json"),"w",encoding="utf-8") as f: json.dump(ref,f,ensure_ascii=False,indent=1)
 out=os.path.join(os.path.dirname(HERE),"src","content","content.json")
 with open(out,"w",encoding="utf-8") as f: json.dump(jsonable(content),f,ensure_ascii=False,indent=1)
 print(f"wrote {out}: {sum(len(v) for v in D.DECK.values())} deals, {len(CH.CHAPTERS)} chapter(s)")

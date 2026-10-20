@@ -95,7 +95,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
         <div className="grid gap-4 md:grid-cols-2">
           {pd.cards.map((card, i) => (
             <div key={i} className="space-y-2">
-              <DealCard card={g.looks(p, pd.d, card)} district={pd.d} sight={p.sight[pd.d]} effectiveLever={g.lever(pd.d, g.looks(p, pd.d, card))} formId={formId(s, pd.d, card)} math={s.config.math} />
+              <DealCard card={g.looks(p, pd.d, card)} district={pd.d} sub={g.ed.districts[pd.d].sub} sight={p.sight[pd.d]} effectiveLever={g.lever(pd.d, g.looks(p, pd.d, card))} formId={formId(s, pd.d, card)} math={s.config.math} />
               <button className={primary + picked(card === best)} onClick={() => setChosen(card)}>
                 <span>Face this deal</span>
                 {card === best && <CoachBadge />}
@@ -194,8 +194,8 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
       <Panel key={pending.k} title="Gather where?" sub="Every place: +2 Trust, −1 Shady, plus its bonus.">
         <CoachBox s={s} run={run} advice={pick?.k === "commons" ? tip : null} />
         <div className="grid gap-2">
-          {(Object.keys(C.places) as PlaceKey[]).map((key) => {
-            const P = C.places[key];
+          {(Object.keys(g.places) as PlaceKey[]).map((key) => {
+            const P = g.places[key];
             const used = key === "KITCHEN" && g.kitchenUsed;
             return (
               <button key={key} className={`${ghost} text-left${picked(key === best && !used)}`} disabled={used} onClick={() => act({ k: "commons", place: key })}>
@@ -232,7 +232,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
     { kind: "teach", icon: "teach", label: "Teach", hint: p.role === "Translator" || p.freeTeach ? "free" : "1 Trust", on: () => setPending({ k: "teachWho" }), disabled: !others.length },
     g.party
       ? { kind: "commons", icon: "commons", label: "Gather", hint: "+2 Trust, −1 Shady", on: () => act({ k: "commons", place: "BARBERSHOP" }) }
-      : { kind: "commons", icon: "commons", label: "Commons", hint: "gather on the West Side", on: () => setPending({ k: "commons" }) },
+      : { kind: "commons", icon: "commons", label: "Commons", hint: `gather on ${g.ed.area}`, on: () => setPending({ k: "commons" }) },
     { kind: "reach", icon: "reach", label: "Reach", hint: "2 Trust: bring a Fallen friend home", on: () => setPending({ k: "reach" }), show: fallen.length > 0, disabled: p.trust < 2 },
     { kind: "history", icon: "history", label: "Teach the History", hint: "Elder, once: wake a district", on: () => setPending({ k: "pick", for: "history" }), show: p.role === "Elder" && !p.elderUsed },
     { kind: "trace", icon: "clue", label: "Trace a thread", hint: "Read 3 in an awake district", on: () => setPending({ k: "pick", for: "trace" }), show: g.uwOpen, disabled: !g.ds.some((d) => g.canTrace(p, d)) },
@@ -297,7 +297,7 @@ function FaceDeal({ s, play, run, d, card, deal }: { s: Session; play: Play; run
     <Panel key="face" title={`${p.name} faces a deal in ${titleCase(d)}`} sub="Read what you can, then decide.">
       <CoachBox s={s} run={run} view="deal" sight={p.sight[d]} advice={deal} />
       <SignNowClock state={clock} left={left} />
-      <DealCard card={g.looks(p, d, card)} district={d} sight={p.sight[d]} effectiveLever={g.lever(d, g.looks(p, d, card))} formId={formId(s, d, card)} math={s.config.math} />
+      <DealCard card={g.looks(p, d, card)} district={d} sub={g.ed.districts[d].sub} sight={p.sight[d]} effectiveLever={g.lever(d, g.looks(p, d, card))} formId={formId(s, d, card)} math={s.config.math} />
       <div className="grid gap-2 sm:grid-cols-3">
         {choice("TAKE", "accept it")}
         {choice("WALK", "refuse it")}

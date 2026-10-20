@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { C } from "../engine/content";
+import { checkEdition, LAST_EDITION, loadEditions, WEST_DAYTON, type Edition } from "../engine/edition";
 import type { Mode, SessionConfig } from "../game/session";
 import { RolePortrait } from "./art/RolePortrait";
 
@@ -18,6 +19,21 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
   const [online, setOnline] = useState(false);
   const [rules, setRules] = useState({ finePrint: false, terrell: false, endless: false, math: false, clocks: true });
   const party = mode === "party";
+  // Your City editions saved on this device (only ones ready to play); ?edition=<id> picks one
+  const [editions, setEditions] = useState<Edition[]>([]);
+  const [editionId, setEditionId] = useState(WEST_DAYTON.id);
+  useEffect(() => {
+    const ready = loadEditions().filter((e) => checkEdition(e).length === 0);
+    setEditions(ready); // eslint-disable-line react-hooks/set-state-in-effect
+    let pick: string | null = new URLSearchParams(window.location.search).get("edition");
+    try {
+      pick ??= window.localStorage.getItem(LAST_EDITION);
+    } catch {
+      // no storage: West Dayton
+    }
+    if (pick && ready.some((e) => e.id === pick)) setEditionId(pick);
+  }, []);
+  const edition = editions.find((e) => e.id === editionId);
   const rule = (k: keyof typeof rules) => (e: { target: { checked: boolean } }) => setRules({ ...rules, [k]: e.target.checked });
   const field = "rounded-lg border border-white/20 bg-white/10 px-3 py-2";
   const dupRoles = !party && new Set(roles.slice(0, count)).size < count;
@@ -42,7 +58,13 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
           endless: rules.endless,
           math: rules.endless && rules.math,
           clocks: rules.clocks,
+          ...(edition ? { edition } : {}),
         }, online);
+        try {
+          window.localStorage.setItem(LAST_EDITION, editionId);
+        } catch {
+          // no storage: nothing to remember
+        }
       }}
     >
       <fieldset>
@@ -64,6 +86,19 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
           ))}
         </div>
       </fieldset>
+
+      <div className="space-y-1">
+        <label htmlFor="edition" className="font-bold">Where you&apos;re playing</label>
+        <select id="edition" className={`${field} w-full`} value={editionId} onChange={(e) => setEditionId(e.target.value)}>
+          <option value={WEST_DAYTON.id} className="text-ink">{WEST_DAYTON.name} ({WEST_DAYTON.city})</option>
+          {editions.map((e) => (
+            <option key={e.id} value={e.id} className="text-ink">{e.name} ({e.city})</option>
+          ))}
+        </select>
+        <p className="text-xs text-program/70">
+          Make one for your own side of town: <a href="/edition" className="text-gold underline">Your City editions</a>.
+        </p>
+      </div>
 
       <div className="flex flex-wrap items-center gap-3">
         <label htmlFor="count" className="font-bold">Players on the block</label>

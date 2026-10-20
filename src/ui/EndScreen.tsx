@@ -24,6 +24,19 @@ export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
         </p>
       )}
       <MoneyCount s={s} />
+      {g.ed.resources.length > 0 && (
+        <div className="mt-5 rounded-xl border border-[#7CFFB2]/40 bg-[#7CFFB2]/10 p-4">
+          <h3 className="font-black text-[#7CFFB2]">Real help in {g.ed.city}</h3>
+          <ul className="mt-2 space-y-1 text-sm">
+            {g.ed.resources.map((r) => (
+              <li key={r.name}>
+                <b>{r.name}</b>: {r.what}{r.where ? <span className="text-program/75"> · {r.where}</span> : null}
+              </li>
+            ))}
+          </ul>
+          {g.ed.credits && <p className="mt-2 text-xs text-program/60">From the {g.ed.name}, made by {g.ed.credits}.</p>}
+        </div>
+      )}
       <ResultCode s={s} />
       {!won && fallen.length > 0 && (
         <p className="mt-3 text-[#ff9b9b]">{fallen[0].name} won the board as the Machine, and earned 0 Props. You win nothing by becoming it.</p>
