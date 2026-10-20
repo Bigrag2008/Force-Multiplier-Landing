@@ -1,6 +1,6 @@
 # THE SECOND NUMBER — Rulebook (v4, West Dayton Edition)
 
-*A cooperative game for 2–5 players, ages 12+. The Block Party intro takes about 25 minutes; the full game, 45–60.*
+*A cooperative game for 1–5 players, ages 12+. The Block Party intro takes about 25 minutes; the full game, 45–60.*
 *Read the machine. Wake the block. Crack the Underworld. Don't become it.*
 
 These rules match `sn_engine.py` exactly. If you change one, change the other, then re-run `python3 balance_test.py` and `python3 test_rules.py`.
@@ -273,6 +273,14 @@ Turn any of these on. Each is in the website's setup, and in `sn_engine.py` as a
 
 ## A block that remembers (the website)
 Play on as the same block. After each full co-op game, your block keeps what happened, one block per Your City edition: districts you **woke** start the next game a step ahead (**Clarity +1**), districts that were **captured** carry a **scar** (**Squeeze +1**), and after a **loss** the community rallies (everyone **+1 Trust**). Wake a scarred district to heal it. Tested over runs of 8 games: no losing spiral (2 players win 43% after a loss and 42% after a win; 4 players 50% and 55%). Block Party always starts fresh. At the table: write the woken and captured districts on the back of the rulebook and set them up next time.
+
+## Solo: one reader, and the block that isn't at the table
+Finished the novel and want to play tonight? Play alone, with one role (the Student learns fastest).
+- **5 actions a turn.** The Machine strikes 1, 1, 1, 2 (1.25 a round, carrying the remainder); in the Block Party, 3 actions against 0.75 strikes a round; against the computer Overlord, 2.25 moves a round.
+- **Teach a neighbor** (an action, 1 Trust; free for the Translator or after the barbershop): there's no one at the table to teach, so you teach the neighbors who aren't. In a district where you have Read 1 or more, **Clarity +1**, Props +2. It's how one reader wakes a whole district.
+- **The Underworld:** trace **2** threads (not 3), then Expose.
+- **Chapters:** the League forms with your one signature; the Empty Throne only asks that you've taught (a neighbor counts).
+Tested at 46–70% wins in every mode and chapter, and the shortcut still tempts: careful play wins 60%, never taking it 30%, grabbing every one 2%.
 
 ## Campaigns
 Two campaigns string games together, each chapter one game with its own setup and twist. Play any chapter on its own, or play them in order as one family: what you win or lose carries forward. On the website: **Play → Campaign**; the website keeps the family on the device.

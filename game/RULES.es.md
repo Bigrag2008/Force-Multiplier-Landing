@@ -1,6 +1,6 @@
 # EL SEGUNDO NÚMERO — Reglamento (v4, Edición West Dayton)
 
-*Un juego cooperativo para 2–5 jugadores, de 12 años en adelante. La introducción Block Party dura unos 25 minutos; el juego completo, 45–60.*
+*Un juego cooperativo para 1–5 jugadores, de 12 años en adelante. La introducción Block Party dura unos 25 minutos; el juego completo, 45–60.*
 *Lee la máquina. Despierta la cuadra. Rompe el Inframundo. No te conviertas en él.*
 
 Estas reglas coinciden exactamente con `sn_engine.py`. Si cambias una, cambia la otra, y luego vuelve a correr `python3 balance_test.py` y `python3 test_rules.py`.
@@ -273,6 +273,14 @@ Activen cualquiera de estas. Cada una está en la preparación del sitio web, y 
 
 ## Una cuadra que recuerda (el sitio web)
 Sigan jugando como la misma cuadra. Después de cada partida cooperativa completa, su cuadra guarda lo que pasó, una cuadra por cada edición de tu ciudad: los distritos que **despertaron** empiezan la siguiente partida un paso adelante (**Claridad +1**), los distritos que fueron **capturados** cargan una **cicatriz** (**Presión +1**), y después de una **derrota** la comunidad se une (todos **+1 de Confianza**). Despierten un distrito con cicatriz para sanarlo. Probado en series de 8 partidas: no hay espiral de derrotas (2 jugadores ganan el 43% después de perder y el 42% después de ganar; 4 jugadores, 50% y 55%). El Block Party siempre empieza de cero. En la mesa: anoten los distritos despiertos y capturados en la contraportada del reglamento y prepárenlos la próxima vez.
+
+## Solo: una persona que lee, y la cuadra que no está en la mesa
+¿Terminaste la novela y quieres jugar esta noche? Juega solo, con un rol (la Estudiante aprende más rápido).
+- **5 acciones por turno.** La Máquina golpea 1, 1, 1, 2 (1.25 por ronda, arrastrando el resto); en la Block Party, 3 acciones contra 0.75 golpes por ronda; contra el Amo de la computadora, 2.25 movimientos por ronda.
+- **Enseñar a un vecino** (una acción, 1 de Confianza; gratis para el Traductor o después de la barbería): no hay nadie en la mesa a quien enseñar, así que le enseñas a los vecinos que no están. En un distrito donde tienes Lectura 1 o más, **Claridad +1**, Respeto +2. Así es como una sola persona que lee despierta un distrito entero.
+- **El Inframundo:** rastrea **2** hilos (no 3), y luego Expón.
+- **Capítulos:** la Liga se forma con tu única firma; el Trono Vacío solo pide que hayas enseñado (un vecino cuenta).
+Probado: entre 46 y 70% de victorias en cada modo y capítulo, y el atajo todavía tienta: jugar con cuidado gana 60%, nunca tomarlo 30%, agarrarlos todos 2%.
 
 ## Campañas
 Dos campañas encadenan partidas, cada capítulo una partida con su propia preparación y su giro. Jueguen cualquier capítulo por separado, o júeguenlos en orden como una sola familia: lo que ganen o pierdan pasa al siguiente. En el sitio web: **Jugar → Campaña**; el sitio guarda a la familia en el dispositivo.

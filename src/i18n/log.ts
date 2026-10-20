@@ -208,6 +208,13 @@ export const LOG_RULES: Rule[] = [
   [new RegExp(`^${N} is at the Desk: no time to teach\\. Quit the Desk first \\(an action\\)\\.$`), (m) => `${nm(m[1])} está en el Escritorio: no hay tiempo para enseñar. Primero deja el Escritorio (una acción).`],
   [new RegExp(`^${N} can't teach ${N} ${D} — you can only teach what you read better\\.$`), (m) => `${nm(m[1])} no le puede enseñar ${dd(m[3])} a ${nm(m[2])} — solo puedes enseñar lo que lees mejor.`],
   [new RegExp(`^${N} lacks Trust to teach\\.$`), (m) => `A ${nm(m[1])} le falta Confianza para enseñar.`],
+  // solo: the neighbors who aren't at the table
+  [
+    new RegExp(`^${N} teaches a neighbor to read ${D}, and they say the second number back\\. Clarity (\\d+)→(\\d+)\\. Props \\+2\\.$`),
+    (m) => `${nm(m[1])} le enseña a un vecino a leer ${dd(m[2])}, y le repite el segundo número. Claridad ${m[3]}→${m[4]}. Respeto +2.`,
+  ],
+  [new RegExp(`^${N} can't teach ${D} yet: you need Read 1 there\\.$`), (m) => `${nm(m[1])} todavía no puede enseñar ${dd(m[2])}: necesitas Lectura 1 ahí.`],
+  [new RegExp(`^There's someone at the table to teach\\.$`), () => `Hay alguien en la mesa a quien enseñarle.`],
   [
     new RegExp(`^${N} teaches ${N} to read ${D}\\. Read (\\d+)→(\\d+)( \\(free\\))?\\. Props \\+2\\.$`),
     (m) => `${nm(m[1])} le enseña a ${nm(m[2])} a leer ${dd(m[3])}. Lectura ${m[4]}→${m[5]}${m[6] ? " (gratis)" : ""}. Respeto +2.`,

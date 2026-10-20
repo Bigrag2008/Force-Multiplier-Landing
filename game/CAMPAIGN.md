@@ -82,7 +82,7 @@ Each chapter is one game of the base game (Co-op) with its own deals, setup, twi
 ---
 
 ## Balance
-Every chapter is tested on its own at 2–5 players, and whole campaigns are played by bots with random Family Decisions (`python3 balance_test.py`, section CAMPAIGNS). On its own, each chapter sits between about 50% and 72% block wins; in a family campaign, the win rate after a lost chapter and after a won one stay within a few points (no spiral), and The Map, the hardest chapter, holds 40–50%.
+Every chapter is tested on its own at 1–5 players (solo: 46–70%), and whole campaigns are played by bots with random Family Decisions (`python3 balance_test.py`, section CAMPAIGNS). On its own, each chapter sits between about 50% and 72% block wins; in a family campaign, the win rate after a lost chapter and after a won one stay within a few points (no spiral), and The Map, the hardest chapter, holds 40–50%.
 
 ## Still to make for print
 1. **The historian's pass** on every era card ([`eras/FACT_CHECK.md`](eras/FACT_CHECK.md) lists what each writer wasn't sure of), and the financial reviewer on the Chapter 5 cards.

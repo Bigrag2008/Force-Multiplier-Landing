@@ -24,7 +24,7 @@ const LEVER = ["", "red", "amber", "blue"];
 const lev = (n: number) => t(LEVER[n]);
 
 export type TurnPick =
-  | { k: "study" | "face" | "history" | "trace"; d: District }
+  | { k: "study" | "face" | "history" | "trace" | "neighbor"; d: District }
   | { k: "teach"; d: District; t: string }
   | { k: "commons"; place: PlaceKey }
   | { k: "reach"; t: string }
@@ -110,6 +110,12 @@ export function adviseTurn(g: Game, p: Player, actionsLeft: number): Advice<Turn
   const building = g.ds.filter((d) => g.clarity[d] < K.WAKE);
   if (!building.length) return commons(g.botPlace(p), t("Every district is awake. Rebuild your Trust while the Underworld opens."));
   const tgt = minBy(building, (d) => [g.clarity[d], -p.sight[d]]);
+  if (g.solo() && p.sight[tgt] >= 1 && p.trust >= K.SOLO_TEACH_AT && g.pressure[tgt] < K.CAPTURE - 1)
+    return {
+      pick: { k: "neighbor", d: tgt },
+      title: t("Teach a neighbor to read {d}", { d: T(tgt) }),
+      why: t("Playing alone, the block is the neighbors who aren't at the table. Teaching one costs 1 Trust and makes {d} clearer (+1 Clarity), and it's how one reader wakes a whole district.", { d: T(tgt) }),
+    };
   if (p.sight[tgt] >= 1) {
     const learner = act.find((x) => x !== p && x.sight[tgt] < p.sight[tgt]);
     if (learner && (p.role === "Translator" || p.freeTeach || (p.trust >= 2 && learner.sight[tgt] === 0))) {

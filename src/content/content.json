@@ -3029,21 +3029,21 @@
    "HOUSING"
   ],
   "ACTIONS": {
-   "1": 4,
+   "1": 5,
    "2": 3,
    "3": 3,
    "4": 2,
    "5": 2
   },
   "MACHINE_HITS": {
-   "1": 1,
+   "1": 1.25,
    "2": 1.5,
    "3": 3,
    "4": 1.5,
    "5": 2.5
   },
   "OVERLORD_MOVES": {
-   "1": 1.5,
+   "1": 2.25,
    "2": 1.875,
    "3": 3.75,
    "4": 2.25,
@@ -3066,7 +3066,7 @@
    "5": 2
   },
   "BP_HITS": {
-   "1": 1,
+   "1": 0.75,
    "2": 0.75,
    "3": 1.75,
    "4": 3,
@@ -3083,7 +3083,10 @@
   "COUNTERFEIT_HAND": 3,
   "CON_TRUST": 1,
   "CLOSE_READ": 5,
-  "FACE_TOKENS": 1
+  "FACE_TOKENS": 1,
+  "SOLO_THREADS": 2,
+  "SOLO_TEACH_AT": 2,
+  "SOLO_NEIGHBOR": 1
  },
  "dealTemplates": {
   "LENDING": [

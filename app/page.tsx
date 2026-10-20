@@ -49,7 +49,7 @@ export default function Home() {
       </div>
       <ul className="mt-12 grid gap-4 sm:grid-cols-3">
         {[
-          ["2–5 players", "On one device, passed around the table: the cookout, the classroom, the kitchen table."],
+          ["1–5 players", "On one device, passed around the table: the cookout, the classroom, the kitchen table. Or alone, the night you finish the book."],
           ["25 to 60 minutes", "Start with the Block Party (25 minutes), then the full game: co-op, Overlord, or Chapter 3 of the campaign."],
           ["Real traps", "Every deal card is a real, documented trap, with honest deals mixed in."],
         ].map(([h, d]) => (

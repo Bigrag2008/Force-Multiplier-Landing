@@ -354,4 +354,10 @@ export const panels: Record<string, string> = {
   "The clock ran out. The Machine holds the block.": "Se acabó el tiempo. La Máquina se queda con la cuadra.",
   "Two districts fell. The Machine holds the block.": "Cayeron dos distritos. La Máquina se queda con la cuadra.",
   "The whole block fell. The Machine won wearing your faces.": "Cayó toda la cuadra. La Máquina ganó con sus caras.",
+  // solo
+  "Teach a neighbor": "Enseñar a un vecino",
+  "Teach a neighbor to read…": "Enséñale a un vecino a leer…",
+  "free: +1 Clarity where you read": "gratis: +1 Claridad donde lees",
+  "1 Trust: +1 Clarity where you read": "1 de Confianza: +1 Claridad donde lees",
+  "Clarity {a}→{b}": "Claridad {a}→{b}",
 };

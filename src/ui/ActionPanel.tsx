@@ -17,7 +17,7 @@ import type { Local, Play } from "./useSession";
 /** where the player is in the turn menu (this device only; drawn cards live in the session) */
 type Pending =
   | { k: "menu" }
-  | { k: "pick"; for: "study" | "face" | "history" | "trace" }
+  | { k: "pick"; for: "study" | "face" | "history" | "trace" | "neighbor" }
   | { k: "teachWho" }
   | { k: "teachWhere"; t: Player }
   | { k: "commons" }
@@ -150,18 +150,19 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
 
   if (pending.k === "pick") {
     const f = pending.for;
-    const title = t({ study: "Study which district?", face: "Face a deal where?", history: "Teach the History of…", trace: "Trace the thread under…" }[f]);
+    const title = t({ study: "Study which district?", face: "Face a deal where?", history: "Teach the History of…", trace: "Trace the thread under…", neighbor: "Teach a neighbor to read…" }[f]);
     return (
       <Panel key={pending.k} title={title}>
         <CoachBox s={s} run={run} advice={pick?.k === f ? tip : null} />
         <DistrictButtons ds={g.ds}
           best={pick?.k === f ? pick.d : undefined}
-          disabled={(d) => (f === "study" ? p.sight[d] >= 3 : f === "trace" ? !g.canTrace(p, d) : false)}
-          note={(d) => (f === "history" ? t("wakes {d}", { d: titleCase(d) }) : t("your Read {n}", { n: p.sight[d] }))}
+          disabled={(d) => (f === "study" ? p.sight[d] >= 3 : f === "trace" ? !g.canTrace(p, d) : f === "neighbor" ? p.sight[d] < 1 || g.clarity[d] >= K.WAKE : false)}
+          note={(d) => (f === "history" ? t("wakes {d}", { d: titleCase(d) }) : f === "neighbor" ? t("Clarity {a}→{b}", { a: g.clarity[d], b: Math.min(K.WAKE, g.clarity[d] + K.SOLO_NEIGHBOR) }) : t("your Read {n}", { n: p.sight[d] }))}
           onPick={(d) => {
             if (f === "study") act({ k: "study", d });
             else if (f === "trace") act({ k: "trace", d });
             else if (f === "history") act({ k: "history", d });
+            else if (f === "neighbor") act({ k: "neighbor", d });
             else play({ t: "deal", d });
           }}
         />
@@ -245,7 +246,9 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
   const options: { kind: string; icon: IconName; label: string; hint: string; on: () => void; show?: boolean; disabled?: boolean; gold?: boolean }[] = [
     { kind: "study", icon: "sight", label: "Study", hint: p.practice ? t("+1 Read in a district (+2 now)") : t("+1 Read in a district"), on: () => setPending({ k: "pick", for: "study" }) },
     { kind: "face", icon: "deal", label: "Face a deal", hint: atDesk ? t("not while you're at the Desk") : p.shopAround ? t("draw 2, face 1") : t("read it, then TAKE / WALK / NEGOTIATE"), on: () => setPending({ k: "pick", for: "face" }), disabled: atDesk },
-    { kind: "teach", icon: "teach", label: "Teach", hint: atDesk ? t("not while you're at the Desk") : p.role === "Translator" || p.freeTeach ? t("free") : t("1 Trust"), on: () => setPending({ k: "teachWho" }), disabled: !others.length || atDesk },
+    g.solo()
+      ? { kind: "neighbor", icon: "teach", label: "Teach a neighbor", hint: p.role === "Translator" || p.freeTeach ? t("free: +1 Clarity where you read") : t("1 Trust: +1 Clarity where you read"), on: () => setPending({ k: "pick", for: "neighbor" }), disabled: !g.ds.some((d) => p.sight[d] >= 1 && g.clarity[d] < K.WAKE) }
+      : { kind: "teach", icon: "teach", label: "Teach", hint: atDesk ? t("not while you're at the Desk") : p.role === "Translator" || p.freeTeach ? t("free") : t("1 Trust"), on: () => setPending({ k: "teachWho" }), disabled: !others.length || atDesk },
     g.party
       ? { kind: "commons", icon: "commons", label: "Gather", hint: t("+2 Trust, −1 Shady"), on: () => act({ k: "commons", place: "BARBERSHOP" }) }
       : { kind: "commons", icon: "commons", label: "Commons", hint: t("gather on {area}", { area: t(g.ed.area) }), on: () => setPending({ k: "commons" }) },

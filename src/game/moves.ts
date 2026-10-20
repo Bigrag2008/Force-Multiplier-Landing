@@ -21,7 +21,7 @@ export function cardFromWire(g: Game, w: WireCard): Card {
 }
 
 export type WireAction =
-  | { k: "study" | "history" | "trace"; d: District }
+  | { k: "study" | "history" | "trace" | "neighbor"; d: District }
   | { k: "face"; d: District; choice: Choice; card?: WireCard; clock?: ClockTag; by?: string }
   | { k: "teach"; t: string; d: District; response?: boolean }
   | { k: "commons"; place: PlaceKey }

@@ -50,14 +50,14 @@ SOUSOU_HAND     = 4    # Trust in the Sou-Sou pot that pays out one hand
 LEAGUE_PUSH     = ("HOUSING",)        # Chapter 3: where a formed League pushes back, each Machine phase
 # per player count: actions per turn, Machine hits per round, Overlord actions per round
 # (tuned with balance_test.py so every count plays in the 40–70% band)
-ACTIONS         = {1:4, 2:3, 3:3, 4:2, 5:2}
+ACTIONS         = {1:5, 2:3, 3:3, 4:2, 5:2}
 # Strikes per round, carrying the remainder (1.5 = 1, 2, 1, 2…). Printed on the round track.
 # "One strike per 4 actions" was tested (balance_test.py): it fits 2 and 5 players, but 3 players
 # win ~73% under it and 4 players drop to ~45%, so the table stays a table.
-MACHINE_HITS    = {1:1, 2:1.5, 3:3, 4:1.5, 5:2.5}
+MACHINE_HITS    = {1:1.25, 2:1.5, 3:3, 4:1.5, 5:2.5}
 # Overlord moves per round, carrying the remainder like the strikes: 2 players 1 then 2, 2, 2…;
 # 3 players 3, 4, 4, 4; 4 players 2, 2, 2, 3; 5 players 3, 3, 3, 4. Set with its counterfeits in hand.
-OVERLORD_MOVES  = {1:1.5, 2:1.875, 3:3.75, 4:2.25, 5:3.25}
+OVERLORD_MOVES  = {1:2.25, 2:1.875, 3:3.75, 4:2.25, 5:3.25}
 # ---- Block Party: the 25-minute intro (RULES.md) ----
 BP_DISTRICTS    = ("LENDING","HOUSING","EDUCATION")
 BP_ROUNDS       = 8
@@ -65,13 +65,17 @@ BP_WAKE_TO_WIN  = 2    # wake 2 of the 3 districts
 BP_TAKE         = 2    # Shady chips for taking a trap
 BP_SIT_OUT      = 3    # Shady chips that sit you out a turn (no Fall in Block Party)
 BP_ACTIONS      = {1:3, 2:2, 3:2, 4:2, 5:2}
-BP_HITS         = {1:1, 2:0.75, 3:1.75, 4:3, 5:4}   # strikes per round, carrying the remainder (repeats allowed)
+BP_HITS         = {1:0.75, 2:0.75, 3:1.75, 4:3, 5:4}   # strikes per round, carrying the remainder (repeats allowed)
 COUNTERFEIT_HAND = 3   # Overlord mode: counterfeit deals per game, at most one a round; each is one of its moves
 CON_TRUST       = 1    # Trust lost when you're conned by one
 CLOSE_READ      = 5    # Close reads: one layer short of the lever, NEGOTIATE succeeds on this roll or higher (d6)
 FACE_TOKENS     = 1    # "Render?": times each player can be read by a teammate; the Cookout gives it back
 # ---- the fine-print die: which layer holds a trap's lever, rolled on every draw ----
 FINE_PRINT_DIE  = {1:1, 2:1, 3:1, 4:2, 5:2, 6:3}   # 1–3 red · 4–5 amber · 6 blue
+# ---- solo: one player, and the neighbors who aren't at the table (RULES.md, Solo) ----
+SOLO_THREADS    = 2    # Underworld threads a solo player traces before exposing the Owner
+SOLO_TEACH_AT   = 2    # the solo bot teaches a neighbor when it has this much Trust
+SOLO_NEIGHBOR   = 1    # Clarity a "Teach a neighbor" adds where you read the district
 
 class Player:
     def __init__(self, name, role):
@@ -220,6 +224,7 @@ class Game:
         self.log.append(s)
         if self.verbose: print(s)
     def blk(self):    return [p for p in self.players if p.role!="Overlord"]
+    def solo(self):   return len(self.blk())==1
     def active(self): return [p for p in self.blk() if not p.flipped]
     def ov(self):     return next((p for p in self.players if p.role=="Overlord"), None)
     def n(self):      return max(1,min(5,len(self.blk())))
@@ -231,7 +236,7 @@ class Game:
     def active_patterns(self):
         if self.party: return []                  # no Patterns in Block Party
         return [(c,n,l) for c,n,l in PATTERNS if all(self.gripped(d) for d in c)]
-    def threads_needed(self): return THREADS_TO_WIN
+    def threads_needed(self): return SOLO_THREADS if self.solo() else THREADS_TO_WIN
     def can_trace(self,pl,d):
         return self.uw_open and pl.sight[d]>=3 and self.clarity[d]>=WAKE and d not in self.threads
     def can_expose(self): return self.uw_open and len(self.threads)>=self.threads_needed() and not self.throne_blocks()
@@ -307,12 +312,12 @@ class Game:
         idle=[p.name for p in act if p.name not in self.taught]
         if idle: return f"everyone has to teach first ({', '.join(idle)} hasn't)"
         tot=sum(p.legend for p in act); top=max(act,key=lambda p:p.legend)
-        if tot and top.legend*2>tot: return f"{top.name} holds more than half the table's Props: no neck for a crown"
+        if tot and top.legend*2>tot and not self.solo(): return f"{top.name} holds more than half the table's Props: no neck for a crown"
         return None
 
     # ---- the League (Chapter 3): sign the pledge to withhold together ----
     def has_league(self): return bool(self.chapter and self.chapter.get("league"))
-    def league_needed(self): return max(2,len(self.active()))
+    def league_needed(self): return 1 if self.solo() else max(2,len(self.active()))
 
     def sign_league(self, pl):
         if not self.has_league() or self.league_formed:
@@ -515,6 +520,18 @@ class Game:
                 if nxt:
                     self.emit(f"  ⛓ The Chain: {t.name} turns and teaches {nxt.name}, right there, for free.")
                     had=t.free_teach; t.free_teach=True; self.teach(t,nxt,d,True,chained=True); t.free_teach=had
+
+    def teach_neighbor(self, pl, d):
+        """Solo: teach one of the neighbors who aren't at the table. 1 Trust (free for the Translator, or after the
+        barbershop); you need Read 1 there. The district gets clearer, because now more of the block can read it."""
+        if not self.solo(): self.emit("  There's someone at the table to teach."); return
+        if pl.sight[d]<1: self.emit(f"  {pl.name} can't teach {d} yet: you need Read 1 there."); return
+        free=(pl.role=="Translator") or pl.free_teach
+        if not free and pl.trust<1: self.emit(f"  {pl.name} lacks Trust to teach."); return
+        if not free: pl.trust-=1
+        elif pl.role!="Translator": pl.free_teach=False
+        old=self.clarity[d]; self.clarity[d]=min(WAKE,old+SOLO_NEIGHBOR); pl.legend+=2; self.taught.add(pl.name)
+        self.emit(f"{pl.name} teaches a neighbor to read {d}, and they say the second number back. Clarity {old}→{self.clarity[d]}. Props +2.")
 
     def commons(self, pl, place="BARBERSHOP"):
         """+2 Trust, −1 Shady, plus the place's bonus."""
@@ -847,6 +864,7 @@ class Game:
         elif k=="expose_uw":self.expose_uw(pl)
         elif k=="league":   self.sign_league(pl)
         elif k=="march":    self.march(pl)
+        elif k=="neighbor": self.teach_neighbor(pl,a[1])
         elif k=="leave_desk": self.leave_desk(pl)
         elif k=="m_extract":self.m_extract(pl.name,a[2])
         elif k=="m_obscure":self.m_obscure(pl.name,a[2])
@@ -926,6 +944,9 @@ class Game:
             act=self.active(); top=max(act,key=lambda p:p.legend)
             if pl is top: return ("commons",)+self.bot_place(pl)     # the leader steps back
         a=self.base_block_ai(pl,style)
+        if self.solo() and a[0] in ("face","study") and pl.trust>=SOLO_TEACH_AT:      # solo: spread the reading
+            d=a[1]
+            if pl.sight[d]>=1 and self.clarity[d]<WAKE and self.pressure[d]<CAPTURE-1: return ("neighbor",d,None)
         if a[0] in ("face","teach") and self.desk==pl.name:      # at the Desk: study instead
             d=a[1] if a[0]=="face" else a[2]
             return ("study",d,None) if pl.sight[d]<3 else ("commons",)+self.bot_place(pl)

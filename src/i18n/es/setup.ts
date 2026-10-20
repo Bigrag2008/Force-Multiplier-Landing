@@ -278,4 +278,8 @@ export const setup: Record<string, string> = {
   "Terrell (the block starts Chapter 3 a Trust down)": "Terrell (la cuadra empieza el Capítulo 3 con una Confianza menos)",
   "Civic Armor (every Teach comes with cover)": "Armadura Cívica (cada Enseñar trae protección)",
   "Someone wore the Crown (an extra strike in Chapter 4's first round)": "Alguien se puso la Corona (un golpe extra en la primera ronda del Capítulo 4)",
+  // solo
+  "1 (solo: just me)": "1 (solo: yo nomás)",
+  "Teach a neighbor to read {d}": "Enséñale a un vecino a leer {d}",
+  "Playing alone, the block is the neighbors who aren't at the table. Teaching one costs 1 Trust and makes {d} clearer (+1 Clarity), and it's how one reader wakes a whole district.": "Si juegas solo, la cuadra son los vecinos que no están en la mesa. Enseñarle a uno cuesta 1 de Confianza y aclara {d} (+1 Claridad): así es como una sola persona que lee despierta un distrito entero.",
 };

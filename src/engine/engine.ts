@@ -29,6 +29,7 @@ export type Action =
   | { k: "expose_uw" }
   | { k: "league" }
   | { k: "march" }
+  | { k: "neighbor"; d: District }
   | { k: "leave_desk" }
   | { k: "m_extract"; d: District }
   | { k: "m_obscure"; d: District }
@@ -465,7 +466,7 @@ export class Game {
     if (idle.length) return `everyone has to teach first (${idle.join(", ")} hasn't)`;
     const tot = act.reduce((s, p) => s + p.legend, 0);
     const top = maxBy(act, (p) => p.legend);
-    if (tot && top.legend * 2 > tot) return `${top.name} holds more than half the table's Props: no neck for a crown`;
+    if (tot && top.legend * 2 > tot && !this.solo()) return `${top.name} holds more than half the table's Props: no neck for a crown`;
     return null;
   }
 
@@ -499,6 +500,10 @@ export class Game {
   blk() {
     return this.players.filter((p) => p.role !== "Overlord");
   }
+  /** one player, and the neighbors who aren't at the table */
+  solo() {
+    return this.blk().length === 1;
+  }
   active() {
     return this.blk().filter((p) => !p.flipped);
   }
@@ -528,7 +533,7 @@ export class Game {
     return C.patterns.filter((p) => p.combo.every((d) => this.gripped(d)));
   }
   threadsNeeded() {
-    return K.THREADS_TO_WIN;
+    return this.solo() ? K.SOLO_THREADS : K.THREADS_TO_WIN;
   }
   canTrace(pl: Player, d: District) {
     return this.uwOpen && pl.sight[d] >= 3 && this.clarity[d] >= K.WAKE && !this.threads.has(d);
@@ -546,7 +551,7 @@ export class Game {
     return !!(this.chapter && this.chapter.league);
   }
   leagueNeeded() {
-    return Math.max(2, this.active().length);
+    return this.solo() ? 1 : Math.max(2, this.active().length);
   }
   signLeague(pl: Player) {
     if (!this.hasLeague() || this.leagueFormed) {
@@ -819,6 +824,23 @@ export class Game {
         }
       }
     }
+  }
+  /**
+   * Solo: teach one of the neighbors who aren't at the table. 1 Trust (free for the Translator, or after the
+   * barbershop); you need Read 1 there. The district gets clearer, because now more of the block can read it.
+   */
+  teachNeighbor(pl: Player, d: District) {
+    if (!this.solo()) return this.emit("  There's someone at the table to teach.");
+    if (pl.sight[d] < 1) return this.emit(`  ${pl.name} can't teach ${d} yet: you need Read 1 there.`);
+    const free = pl.role === "Translator" || pl.freeTeach;
+    if (!free && pl.trust < 1) return this.emit(`  ${pl.name} lacks Trust to teach.`);
+    if (!free) pl.trust -= 1;
+    else if (pl.role !== "Translator") pl.freeTeach = false;
+    const old = this.clarity[d];
+    this.clarity[d] = Math.min(K.WAKE, old + K.SOLO_NEIGHBOR);
+    pl.legend += 2;
+    this.taught.add(pl.name);
+    this.emit(`${pl.name} teaches a neighbor to read ${d}, and they say the second number back. Clarity ${old}→${this.clarity[d]}. Props +2.`);
   }
   commons(pl: Player, place: PlaceKey = "BARBERSHOP") {
     if (place === "KITCHEN" && this.kitchenUsed) place = "BARBERSHOP";
@@ -1258,6 +1280,7 @@ export class Game {
       case "expose_uw": this.exposeUw(pl); break;
       case "league": this.signLeague(pl); break;
       case "march": this.march(pl); break;
+      case "neighbor": this.teachNeighbor(pl, a.d); break;
       case "leave_desk": this.leaveDesk(pl); break;
       case "m_extract": this.mExtract(pl.name, a.d); break;
       case "m_obscure": this.mObscure(pl.name, a.d); break;
@@ -1335,6 +1358,11 @@ export class Game {
       if (pl === top) return { k: "commons", place: this.botPlace(pl) }; // the leader steps back
     }
     const a = this.baseBlockAi(pl, style);
+    if (this.solo() && (a.k === "face" || a.k === "study") && pl.trust >= K.SOLO_TEACH_AT) {
+      // solo: spread the reading
+      const d = a.d;
+      if (pl.sight[d] >= 1 && this.clarity[d] < K.WAKE && this.pressure[d] < K.CAPTURE - 1) return { k: "neighbor", d };
+    }
     if ((a.k === "face" || a.k === "teach") && this.desk === pl.name) {
       // at the Desk: study instead
       const d = a.d;

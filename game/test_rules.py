@@ -298,6 +298,21 @@ def test_book_one_flags_carry():
     nia=g.by_name("Nia"); assert all(v>=1 for v in nia.sight.values())
     assert all(p.trust==E.START_TRUST-1 for p in g.blk())               # Terrell: the block starts a Trust down
 
+# ---- Solo ----
+def test_solo_teaches_the_neighbors_who_arent_there():
+    g=E.new_game(seed=1, roster=[("Marcus","Student")], scenario="A Quiet Year", owner="The Algorithm"); p=g.players[0]
+    assert g.solo() and g.actions()==5 and g.threads_needed()==2
+    g.teach_neighbor(p,"LENDING"); assert g.clarity["LENDING"]==0           # needs Read 1 there
+    p.sight["LENDING"]=1; p.trust=1; g.teach_neighbor(p,"LENDING")
+    assert g.clarity["LENDING"]==1 and p.trust==0 and p.legend==2
+    g.teach_neighbor(p,"LENDING"); assert g.clarity["LENDING"]==1          # no Trust left
+    g2,q=game(); q.sight["LENDING"]=2; g2.teach_neighbor(q,"LENDING"); assert g2.clarity["LENDING"]==0   # not with a table
+
+def test_solo_league_and_throne():
+    g=E.new_game(seed=1, chapter="THE_MAP", roster=[("Dre","Organizer")]); g.sign_league(g.players[0]); assert g.league_formed
+    g=E.new_game(seed=1, chapter="B1_THRONE", roster=[("Nia","Student")]); g.uw_open=True; g.threads={"LENDING","HOUSING"}
+    assert not g.can_expose(); g.taught={"Nia"}; g.players[0].legend=9; assert g.can_expose()
+
 def test_clock_is_a_loss():
     g=E.new_game(seed=3); g.run_auto(max_rounds=1)
     assert g.result in ("MACHINE_WIN","BLOCK_WIN")

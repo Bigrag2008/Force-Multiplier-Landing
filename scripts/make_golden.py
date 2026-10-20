@@ -80,6 +80,14 @@ configs.append(dict(mode="chapter", chapter="THE_MAP", players=4, style="careful
 configs.append(dict(mode="chapter", chapter="THE_MAP", players=3, style="careful", seed=965, rot=2, campaign=dict(MID_LEDGER, decisions={"UP_NORTH":"HOUSE"})))
 configs.append(dict(mode="chapter", chapter="PLANTS_CLOSE", players=5, style="careful", seed=966, rot=0, campaign=dict(MID_LEDGER, decisions={"VOICE":"ORGANIZE"})))
 
+# solo: every mode, and a few chapters
+for i,(mode,rules,ch) in enumerate((("coop",{},None),("coop",{"party":True},None),("overlord",{},None),("coop",{"terrell":True,"finePrint":True},None),
+                                     ("chapter",{},"THE_MAP"),("chapter",{},"VOICE"),("chapter",{},"B1_CHAIN"),("chapter",{},"B1_THRONE"))):
+    for style in ("careful","human"):
+        c=dict(mode=mode, players=1, style=style, seed=1100+i*10+(style=="human"), rot=i, rules=rules)
+        if ch: c["chapter"]=ch
+        configs.append(c)
+
 games=[]
 for cfg in configs:
     g=E.new_game(overlord=cfg["mode"]=="overlord", seed=cfg["seed"], roster=[tuple(x) for x in roster(cfg["players"],cfg["rot"])],

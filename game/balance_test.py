@@ -118,6 +118,24 @@ def campaign_report(n):
                   f"final Ledger {sum(ledgers)/len(ledgers):+.1f}")
     return rows,spiral
 
+def solo_report(n):
+    """One player: every mode and every chapter, and whether the shortcut still tempts."""
+    import chapters as CH
+    rows=[]
+    def rate(**kw):
+        w=0
+        for i in range(n):
+            rng=random.Random(i*7919+11)
+            party=kw.get("party") or (kw.get("chapter") and CH.CHAPTERS[kw["chapter"]]["mode"]=="party")
+            g=E.new_game(seed=rng.randrange(10**9),roster=roster_for(1,rng,party),**{k:v for k,v in kw.items() if k!="style"})
+            w+=g.run_auto(style=kw.get("style","careful"))=="BLOCK_WIN"
+        return w/n
+    for label,kw in [("Co-op",{}),("Block Party",dict(party=True)),("Overlord",dict(overlord=True))]+[(f"{CH.CHAPTERS[k]['campaign']} {CH.CHAPTERS[k]['number']}. {CH.CHAPTERS[k]['title']}",dict(chapter=k)) for k in CH.CHAPTERS]:
+        w=rate(**kw); rows.append((label,w)); print(f"  {label:<34} {100*w:3.0f}%")
+    styles={s:rate(style=s) for s in ("never","careful","greedy")}
+    print("  shortcut (co-op): " + " · ".join(f"{s} {100*w:.0f}%" for s,w in styles.items()))
+    return rows,styles
+
 def pct(a,b): return f"{100*a/b:5.1f}%" if b else "   -  "
 def wr(st,n): return st["BLOCK_WIN"]/n
 
@@ -189,6 +207,9 @@ if __name__=="__main__":
     print("\n=== CAMPAIGNS: THE LONG LEDGER AND BOOK ONE (careful bot) ===")
     camp_rows,spiral=campaign_report(n)
 
+    print("\n=== SOLO (one player, careful bot) ===")
+    solo_rows,solo_styles=solo_report(n)
+
     print("\n--- verdict ---")
     for k,(care,human) in party_ok:
         ok=0.50<=care<=0.85 and 0.50<=human<=0.85
@@ -213,6 +234,10 @@ if __name__=="__main__":
     for camp,k,aw,al in spiral:
         ok=abs(aw-al)<=0.12
         print(f"  {camp:<8} {k}p carry-over {'no spiral' if ok else 'NEEDS TUNING'}  (after a win {100*aw:.0f}% · after a loss {100*al:.0f}%)")
+    for label,w in solo_rows:
+        print(f"  Solo {label:<30} {'healthy' if 0.40<=w<=0.75 else 'NEEDS TUNING'}  ({w*100:.0f}% wins)")
+    ok=solo_styles["careful"]>solo_styles["never"] and solo_styles["greedy"]<solo_styles["careful"]
+    print(f"  Solo shortcut {'tempting AND dangerous' if ok else 'NEEDS TUNING'}  (never {solo_styles['never']*100:.0f}% · careful {solo_styles['careful']*100:.0f}% · greedy {solo_styles['greedy']*100:.0f}%)")
     deep = tot and st['neg_amber']/tot>=0.15
     print(f"  Deep Read   {'matters' if deep else 'NEEDS TUNING'}  (amber = {pct(st['neg_amber'],tot).strip()} of defusals; "
           f"blue/Read 3 is required to trace every winning thread)")

@@ -20,7 +20,7 @@ export default function OpenGraphImage() {
         <div style={{ fontSize: 40, marginTop: 28, maxWidth: 980, lineHeight: 1.25 }}>
           A cooperative game about the hidden cost in every deal. Read the machine. Wake the block.
         </div>
-        <div style={{ fontSize: 28, marginTop: 40, color: "#E63946", fontWeight: 700 }}>Free to play in the browser · 2–5 players · classrooms welcome</div>
+        <div style={{ fontSize: 28, marginTop: 40, color: "#E63946", fontWeight: 700 }}>Free to play in the browser · 1–5 players · classrooms welcome</div>
       </div>
     ),
     size,

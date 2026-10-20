@@ -46,7 +46,7 @@ The game and the novel *The Second Number* (Book One) are built to the same rule
 - **Twist, no neck for a crown:** you can't Expose until every player has taught at least once, and not while any one player holds more than half of the table's Props.
 - **After:** the book's last scene is on a porch. If you won, read it aloud.
 
-**Balance:** each chapter plays at 50–80% block wins across 2–5 players, close to the mode it's built on (`balance_test.py`, CAMPAIGNS); the flags carried between chapters don't snowball.
+**Balance:** each chapter plays at 50–80% block wins across 2–5 players (46–70% solo), close to the mode it's built on (`balance_test.py`, CAMPAIGNS); the flags carried between chapters don't snowball.
 
 ## The School Edition
 

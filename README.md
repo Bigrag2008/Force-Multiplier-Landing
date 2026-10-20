@@ -2,7 +2,7 @@
 
 *Read the machine. Wake the block. Crack the Underworld. Don't become it.*
 
-A cooperative game for 2–5 players about the hidden cost in every deal: the payday loan, the rent-to-own couch, the "free" first month. Learn to read the second number, teach your whole block to read it, and drag the one machine behind them all into the light. Set on the West Side of Dayton, Ohio, and built from Black American culture.
+A cooperative game for 1–5 players about the hidden cost in every deal: the payday loan, the rent-to-own couch, the "free" first month. Learn to read the second number, teach your whole block to read it, and drag the one machine behind them all into the light. Set on the West Side of Dayton, Ohio, and built from Black American culture.
 
 This repo holds everything: the **website where you play it online**, and the **game itself** (rules engine, rulebook, print-and-play kit, campaign and design docs).
 
@@ -25,7 +25,7 @@ To run the production build instead: `npm run build && npm start`.
 **First time?** Choose **Learn to play** on the home page. A four-panel comic tells the story in about 30 seconds (the block, the deals, the Machine, your mission); it opens before every guided game, the first time you play on a device, and any time from **Story** in the game's header. It starts a guided three-player **Block Party** (the 25-minute intro: 3 districts, 8 rounds, no roles) with the Coach: on every decision, the Coach glows on the move it would make and says why, and each rule is explained the first time it comes up. You can always choose your own move.
 
 1. Open the site and choose **Play now**.
-2. **Set the table:** choose a mode, then the number of players (2–5), each player's name and role, and (in co-op) a scenario. Start with *The Audit* or *A Quiet Year*.
+2. **Set the table:** choose a mode, then the number of players (1–5; 1 is solo, see the rulebook's Solo section), each player's name and role, and (in co-op) a scenario. Start with *The Audit* or *A Quiet Year*.
    - **Co-op:** the block against the Machine.
    - **Overlord:** one player is the Machine, or the computer is.
    - **Campaign:** *The Long Ledger* (one family, six eras) or *Book One* (four chapters that follow the novel). Play the family's next chapter (the site keeps the family on this device: its Ledger, stickers, decisions and flags), or any chapter on its own.

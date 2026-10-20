@@ -215,8 +215,8 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
       <div className="flex flex-wrap items-center gap-3">
         <label htmlFor="count" className="font-bold">{t("Players on the block")}</label>
         <select id="count" className={field} value={count} onChange={(e) => setCount(+e.target.value)}>
-          {[2, 3, 4, 5].map((n) => (
-            <option key={n} value={n} className="text-ink">{n}</option>
+          {[1, 2, 3, 4, 5].map((n) => (
+            <option key={n} value={n} className="text-ink">{n === 1 ? t("1 (solo: just me)") : n}</option>
           ))}
         </select>
       </div>

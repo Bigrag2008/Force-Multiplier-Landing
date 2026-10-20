@@ -35,6 +35,15 @@ describe("Session flow", () => {
           expect(s.g.round).toBeLessThanOrEqual(12);
         });
 
+  for (const mode of ["coop", "overlord", "party"] as Mode[])
+    for (const seed of [1, 2, 3])
+      it(`solo ${mode} seed ${seed} reaches an ending, and the Coach's picks are legal`, () => {
+        const roster = [{ name: "Nia", role: mode === "party" ? "Neighbor" : "Student" }];
+        const s = playOut(mode, 1, 600 + seed, false, { roster });
+        expect(s.phase).toBe("over");
+        expect(s.g.solo()).toBe(true);
+      });
+
   for (const key of Object.keys(C.chapters))
     for (const n of [2, 4, 5])
       it(`chapter ${key} ${n}p reaches an ending`, () => {

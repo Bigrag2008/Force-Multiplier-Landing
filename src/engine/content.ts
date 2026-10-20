@@ -145,6 +145,9 @@ interface Constants {
   CON_TRUST: number;
   CLOSE_READ: number;
   FACE_TOKENS: number;
+  SOLO_THREADS: number;
+  SOLO_TEACH_AT: number;
+  SOLO_NEIGHBOR: number;
 }
 interface Content {
   edition: string;
