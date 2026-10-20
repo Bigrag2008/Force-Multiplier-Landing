@@ -10,8 +10,10 @@ import type { Move } from "../game/moves";
 import type { Session } from "../game/session";
 import { hostRoom, joinRoom, type GuestLink, type HostLink } from "../net/peer";
 import { mayMove, PHONE_GONE_MS, PING_MS, seatsOf, type SeatMap, type ToGuest, type ToHost } from "../net/protocol";
+import { t, useLang } from "../i18n";
 import { RolePortrait } from "./art/RolePortrait";
 import { GameScreen, type Net } from "./GameScreen";
+import { theRole } from "./Players";
 import type { GameStart } from "./useSession";
 
 const joinUrl = (code: string) => `${window.location.origin}/join?room=${code}${window.location.search.includes("peer=") ? `&${window.location.search.slice(1).split("&").find((x) => x.startsWith("peer="))}` : ""}`;
@@ -147,35 +149,36 @@ export function HostGame({ start, code, onQuit }: { start: GameStart; code: stri
 }
 
 function RoomCard({ code, status, error, seats, taken }: { code: string; status: string; error: string; seats: string[]; taken: Set<string> }) {
+  useLang();
   const [open, setOpen] = useState(true);
   const url = typeof window === "undefined" ? "" : joinUrl(code);
   return (
-    <section aria-label="Online room" className="mb-4 rounded-xl border-2 border-[#7CFFB2]/60 bg-[#7CFFB2]/10 p-3 text-sm">
+    <section aria-label={t("Online room")} className="mb-4 rounded-xl border-2 border-[#7CFFB2]/60 bg-[#7CFFB2]/10 p-3 text-sm">
       <div className="flex items-center justify-between gap-2">
         <p className="font-black">
-          {status === "open" ? "📱 Room open" : status === "opening" ? "📱 Opening the room…" : "📱 Room closed"}{" "}
+          📱 {status === "open" ? t("Room open") : status === "opening" ? t("Opening the room…") : t("Room closed")}{" "}
           <span className="ml-1 rounded bg-night px-2 py-0.5 font-mono text-base tracking-[0.3em] text-[#7CFFB2]" data-room-code={code}>
             {code}
           </span>
         </p>
         <button className="text-xs underline" onClick={() => setOpen(!open)}>
-          {open ? "Hide" : "Show"}
+          {open ? t("Hide") : t("Show")}
         </button>
       </div>
-      {status === "failed" && <p className="mt-1 text-[#ff9b9b]">{error} You can still play on this device.</p>}
+      {status === "failed" && <p className="mt-1 text-[#ff9b9b]">{t(error)} {t("You can still play on this device.")}</p>}
       {open && status !== "failed" && (
         <>
           <p className="mt-1 text-program/85">
-            On each phone, open <b className="break-all">{url.replace(/^https?:\/\//, "").split("?")[0]}</b> and enter <b>{code}</b>, or share{" "}
+            {t("On each phone, open")} <b className="break-all">{url.replace(/^https?:\/\//, "").split("?")[0]}</b> {t("and enter")} <b>{code}</b>{t(", or share")}{" "}
             <button className="font-bold text-[#7CFFB2] underline" onClick={() => navigator.clipboard?.writeText(url)}>
-              the join link
+              {t("the join link")}
             </button>
-            . Seats nobody takes are played here.
+            . {t("Seats nobody takes are played here.")}
           </p>
           <ul className="mt-2 flex flex-wrap gap-2">
             {seats.map((n) => (
               <li key={n} className={`rounded-full px-2 py-0.5 text-xs font-bold ${taken.has(n) ? "bg-[#7CFFB2] text-night" : "bg-white/10"}`}>
-                {n}: {taken.has(n) ? "on a phone" : "here"}
+                {n}: {taken.has(n) ? t("on a phone") : t("here")}
               </li>
             ))}
           </ul>
@@ -194,6 +197,7 @@ type JoinState =
   | { k: "lost" };
 
 export function JoinGame({ initialCode }: { initialCode: string }) {
+  useLang();
   const [code, setCode] = useState(initialCode);
   const [state, setState] = useState<JoinState>({ k: "enter" });
   const link = useRef<GuestLink | null>(null);
@@ -265,7 +269,7 @@ export function JoinGame({ initialCode }: { initialCode: string }) {
           if (retries.current++ < 10) setTimeout(() => connectRef.current?.(room, true), 3000);
           return;
         }
-        setState({ k: "enter", error: (e as Error)?.message?.includes("answered") ? `No game is open with the code ${room}. Check the code on the host's screen.` : "Couldn't connect. Check the internet connection and the code." });
+        setState({ k: "enter", error: (e as Error)?.message?.includes("answered") ? t("No game is open with the code {room}. Check the code on the host's screen.", { room }) : t("Couldn't connect. Check the internet connection and the code.") });
       }
     },
     [take],
@@ -324,7 +328,7 @@ export function JoinGame({ initialCode }: { initialCode: string }) {
               <p className="mb-3 flex items-center gap-2 rounded-lg border border-[#7CFFB2]/50 bg-[#7CFFB2]/10 p-2 text-sm">
                 <RolePortrait role={state.names[state.you] ?? ""} size={28} />
                 <span>
-                  📱 Room <b className="font-mono tracking-widest">{code}</b> · you&apos;re <b>{state.you}</b>
+                  📱 {t("Room")} <b className="font-mono tracking-widest">{code}</b> · {t("you're")} <b>{state.you}</b>
                 </span>
               </p>
             ),
@@ -339,7 +343,7 @@ export function JoinGame({ initialCode }: { initialCode: string }) {
 
   return (
     <main className="mx-auto max-w-md px-4 py-10">
-      <h1 className="text-3xl font-black text-gold">Join a game</h1>
+      <h1 className="text-3xl font-black text-gold">{t("Join a game")}</h1>
       {(state.k === "enter" || state.k === "connecting") && (
         <form
           className="mt-6 space-y-3"
@@ -349,7 +353,7 @@ export function JoinGame({ initialCode }: { initialCode: string }) {
           }}
         >
           <label htmlFor="room" className="block font-bold">
-            Room code <span className="text-sm font-normal text-program/70">(on the host&apos;s screen)</span>
+            {t("Room code")} <span className="text-sm font-normal text-program/70">{t("(on the host's screen)")}</span>
           </label>
           <input
             id="room"
@@ -361,21 +365,21 @@ export function JoinGame({ initialCode }: { initialCode: string }) {
             maxLength={4}
             onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z]/g, ""))}
           />
-          {state.k === "enter" && state.error && <p className="text-sm text-[#ff9b9b]">{state.error}</p>}
+          {state.k === "enter" && state.error && <p className="text-sm text-[#ff9b9b]">{t(state.error)}</p>}
           <button type="submit" disabled={code.length !== 4 || state.k === "connecting"} className="w-full rounded-xl bg-gold px-4 py-3 text-lg font-black text-night disabled:opacity-50">
-            {state.k === "connecting" ? "Connecting…" : "Join"}
+            {state.k === "connecting" ? t("Connecting…") : t("Join")}
           </button>
         </form>
       )}
       {state.k === "seat" && (
         <section className="mt-6">
-          <h2 className="text-lg font-black">Which seat is yours?</h2>
+          <h2 className="text-lg font-black">{t("Which seat is yours?")}</h2>
           <div className="mt-3 grid gap-2">
             {Object.entries(state.seats).map(([name, where]) => (
               <button key={name} disabled={where !== "host"} onClick={() => link.current?.send({ type: "claim", seat: name })} className="flex items-center gap-3 rounded-xl border border-white/20 px-3 py-2 text-left font-bold disabled:opacity-40">
                 <RolePortrait role={state.names[name] ?? ""} size={34} />
                 <span>
-                  {name} <span className="block text-xs font-normal text-program/70">the {state.names[name]}{where !== "host" ? " · taken" : ""}</span>
+                  {name} <span className="block text-xs font-normal text-program/70">{theRole(state.names[name])}{where !== "host" ? ` · ${t("taken")}` : ""}</span>
                 </span>
               </button>
             ))}
@@ -384,9 +388,9 @@ export function JoinGame({ initialCode }: { initialCode: string }) {
       )}
       {state.k === "lost" && (
         <section className="mt-6 space-y-3">
-          <p>Lost the connection to the host. Trying to reconnect…</p>
+          <p>{t("Lost the connection to the host. Trying to reconnect…")}</p>
           <button className="w-full rounded-xl bg-gold px-4 py-3 font-black text-night" onClick={() => connect(code)}>
-            Rejoin {code}
+            {t("Rejoin {code}", { code })}
           </button>
         </section>
       )}

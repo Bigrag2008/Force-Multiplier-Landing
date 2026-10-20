@@ -5,6 +5,7 @@
  */
 import { C, type District } from "../engine/content";
 import type { Signed } from "../engine/engine";
+import { t } from "../i18n";
 import type { Session } from "./session";
 
 export interface GameResult {
@@ -154,12 +155,18 @@ export function classPicture(list: GameResult[]): ClassPicture {
   };
 }
 
+/** a result's mode ("Block Party", "Chapter 3"), in the reader's language: for display only, the code keeps the English */
+export function modeWord(mode: string): string {
+  const ch = /^Chapter (\d+)$/.exec(mode);
+  return ch ? t("Chapter {n}", { n: ch[1] }) : t(mode);
+}
+
 /** a spreadsheet of the games, one row each */
 export function toCsv(list: GameResult[]): string {
   const q = (v: unknown) => `"${String(v).replace(/"/g, '""')}"`;
-  const head = ["date", "table", "players", "mode", "result", "rounds", "avg read", "traps signed $", "stayed out of $", "got played $", "real help walked away from $", "real help taken $", "clock: rushed", "clock: waited"];
+  const head = ["date", "table", "players", "mode", "result", "rounds", "avg read", "traps signed $", "stayed out of $", "got played $", "real help walked away from $", "real help taken $", "clock: rushed", "clock: waited"].map((h) => t(h));
   const rows = list.map((r) => [
-    new Date(r.at).toISOString().slice(0, 10), r.table, r.names.join(" / "), r.mode, r.won ? "won" : "lost", r.rounds, r.read,
+    new Date(r.at).toISOString().slice(0, 10), r.table, r.names.join(" / "), modeWord(r.mode), r.won ? t("won") : t("lost"), r.rounds, r.read,
     r.money.taken, r.money.defused + r.money.dodged, r.money.played, r.money.refused, r.money.help, r.clock.rushed, r.clock.waited,
   ]);
   return [head, ...rows].map((row) => row.map(q).join(",")).join("\n");

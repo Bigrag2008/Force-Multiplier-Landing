@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import type { ClockTag } from "../game/moves";
+import { t, useLang } from "../i18n";
 import { sounds } from "./sound";
 
 /** how long a "sign now" pitch gives you, in seconds */
@@ -30,17 +31,18 @@ export function useSignNow(rush: boolean, sight: number, on: boolean): [ClockSta
 }
 
 export function SignNowClock({ state, left }: { state: ClockState; left: number }) {
+  useLang();
   if (state === "off") return null;
   if (state === "seen")
     return (
       <div className="rounded-lg border-2 border-[#E0A526] bg-[#E0A526]/15 px-3 py-2 text-sm" role="status">
-        <b className="text-[#E0A526]">⏱ <s>&ldquo;Offer ends today!&rdquo;</s></b> Your amber Read sees the clock: the deadline is fake. Take your time.
+        <b className="text-[#E0A526]">⏱ <s>&ldquo;{t("Offer ends today!")}&rdquo;</s></b> {t("Your amber Read sees the clock: the deadline is fake. Take your time.")}
       </div>
     );
   if (state === "expired")
     return (
       <div className="stamp-settle rounded-lg border-2 border-[#7CFFB2] bg-[#7CFFB2]/10 px-3 py-2 text-sm" role="status">
-        <b className="text-[#7CFFB2]">STILL HERE.</b> The offer didn&apos;t expire. It never does. Slowing down cost you nothing.
+        <b className="text-[#7CFFB2]">{t("STILL HERE.")}</b> {t("The offer didn't expire. It never does. Slowing down cost you nothing.")}
       </div>
     );
   const urgent = left <= 5;
@@ -50,7 +52,7 @@ export function SignNowClock({ state, left }: { state: ClockState; left: number 
       role="timer"
       aria-live={urgent ? "assertive" : "off"}
     >
-      <span className="text-sm font-black uppercase tracking-wide text-[#ff8a8a]">⏱ Offer expires — sign now!</span>
+      <span className="text-sm font-black uppercase tracking-wide text-[#ff8a8a]">⏱ {t("Offer expires — sign now!")}</span>
       <span className="font-mono text-2xl font-black tabular-nums text-white">0:{String(left).padStart(2, "0")}</span>
     </div>
   );

@@ -6,6 +6,7 @@
  */
 import { K, type District } from "../engine/content";
 import type { Carry, Game } from "../engine/engine";
+import { t, tDistrictTitle } from "../i18n";
 
 export interface BlockMemory {
   games: number;
@@ -68,15 +69,15 @@ export function rememberGame(editionId: string, gameId: string, g: Game): BlockM
   return next;
 }
 
-const T = (d: string) => d.charAt(0) + d.slice(1).toLowerCase();
+const T = (d: string) => tDistrictTitle(d as District);
 /** "Housing starts stronger; Labor carries a scar; the community rallies" */
 export function describeCarry(c: Carry): string {
   const strong = Object.keys(c.clarity ?? {}).map(T);
   const scars = Object.keys(c.pressure ?? {}).map(T);
   const parts = [
-    ...(strong.length ? [`${strong.join(", ")} start${strong.length === 1 ? "s" : ""} stronger`] : []),
-    ...(scars.length ? [`${scars.join(", ")} carr${scars.length === 1 ? "ies" : "y"} a scar`] : []),
-    ...(c.rally ? ["the community rallies (+1 Trust each)"] : []),
+    ...(strong.length ? [strong.length === 1 ? t("{ds} starts stronger", { ds: strong[0] }) : t("{ds} start stronger", { ds: strong.join(", ") })] : []),
+    ...(scars.length ? [scars.length === 1 ? t("{ds} carries a scar", { ds: scars[0] }) : t("{ds} carry a scar", { ds: scars.join(", ") })] : []),
+    ...(c.rally ? [t("the community rallies (+1 Trust each)")] : []),
   ];
-  return parts.length ? parts.join("; ") : "a fresh start";
+  return parts.length ? parts.join("; ") : t("a fresh start");
 }

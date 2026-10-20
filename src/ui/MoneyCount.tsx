@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import type { Session } from "../game/session";
 import { sounds } from "./sound";
+import { t, useLang } from "../i18n";
 
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
 
@@ -28,6 +29,7 @@ function CountUp({ to, ms = 1400 }: { to: number; ms?: number }) {
  * "This game, the block signed $14,300 of traps and walked away from $2,100 of real help."
  */
 export function MoneyCount({ s }: { s: Session }) {
+  useLang();
   const g = s.g;
   // the register rings as the count adds up
   useEffect(() => {
@@ -37,51 +39,51 @@ export function MoneyCount({ s }: { s: Session }) {
   const ck = s.clock;
   if (!g.signed.length) return null;
   // era cards count in their own era's dollars; the rest of the deck in today's
-  const era = g.chapter?.era_dollars ? ` (era cards in ${g.chapter.era_dollars})` : "";
+  const era = g.chapter?.era_dollars ? " " + t("(era cards in {era})", { era: t(g.chapter.era_dollars) }) : "";
   const kept = m.defused + m.dodged;
   return (
-    <div className="mt-5 rounded-xl border border-white/20 bg-black/30 p-4" aria-label="The second number, this game">
-      <h3 className="text-xs font-black uppercase tracking-widest text-gold">The second number, this game{era}</h3>
+    <div className="mt-5 rounded-xl border border-white/20 bg-black/30 p-4" aria-label={t("The second number, this game")}>
+      <h3 className="text-xs font-black uppercase tracking-widest text-gold">{t("The second number, this game")}{era}</h3>
       <p className="mt-2 text-lg leading-snug">
-        The block signed <b className="text-2xl text-[#ff8a8a]"><CountUp to={m.taken} /></b> of traps
+        {t("The block signed")} <b className="text-2xl text-[#ff8a8a]"><CountUp to={m.taken} /></b> {t("of traps")}
         {m.refused > 0 ? (
           <>
-            {" "}and walked away from <b className="text-2xl text-[#ffb35c]"><CountUp to={m.refused} /></b> of real help.
+            {" "}{t("and walked away from")} <b className="text-2xl text-[#ffb35c]"><CountUp to={m.refused} /></b> {t("of real help.")}
           </>
         ) : (
           "."
         )}
       </p>
       <dl className="mt-3 grid grid-cols-2 gap-2 text-sm">
-        <Stat label="Stayed out of" value={kept} tone="#7CFFB2" sub={`${usd(m.defused)} read and defused · ${usd(m.dodged)} walked away from`} />
-        <Stat label="Real help taken" value={m.help} tone="#F2B632" />
-        <Stat label="Shortcuts signed" value={m.taken} tone="#ff8a8a" sub={`${m.shortcuts} shortcut${m.shortcuts === 1 ? "" : "s"}`} />
-        <Stat label="Got played on" value={m.played} tone="#ff8a8a" />
+        <Stat label={t("Stayed out of")} value={kept} tone="#7CFFB2" sub={t("{a} read and defused · {b} walked away from", { a: usd(m.defused), b: usd(m.dodged) })} />
+        <Stat label={t("Real help taken")} value={m.help} tone="#F2B632" />
+        <Stat label={t("Shortcuts signed")} value={m.taken} tone="#ff8a8a" sub={m.shortcuts === 1 ? t("1 shortcut") : t("{n} shortcuts", { n: m.shortcuts })} />
+        <Stat label={t("Got played on")} value={m.played} tone="#ff8a8a" />
       </dl>
       {m.worst && (
         <p className="mt-3 rounded-lg border border-[#ff8a8a]/40 bg-[#ff8a8a]/10 p-2 text-sm">
-          <b>The most expensive shortcut:</b> {m.worst.who} signed <i>&ldquo;{m.worst.front}&rdquo;</i>: <b className="text-[#ff8a8a]">{usd(m.worst.dollars)}</b>
-          {m.worst.basis && <span className="text-program/75">, {m.worst.basis}</span>}.
+          <b>{t("The most expensive shortcut:")}</b> {t("{name} signed", { name: m.worst.who })} <i>&ldquo;{t(m.worst.front)}&rdquo;</i>: <b className="text-[#ff8a8a]">{usd(m.worst.dollars)}</b>
+          {m.worst.basis && <span className="text-program/75">, {t(m.worst.basis)}</span>}.
         </p>
       )}
       {ck.rushed + ck.waited > 0 && (
         <p className="mt-2 text-sm">
-          ⏱ <b>{ck.rushed}</b> decision{ck.rushed === 1 ? "" : "s"} made with a fake clock running
-          {ck.rushedDollars > 0 && <> (<b className="text-[#ff8a8a]">{usd(ck.rushedDollars)}</b> of traps signed in the rush)</>}
-          {ck.waited > 0 && <>; <b className="text-[#7CFFB2]">{ck.waited}</b> fake deadline{ck.waited === 1 ? "" : "s"} waited out, at no cost</>}.
+          ⏱ <b>{ck.rushed}</b> {ck.rushed === 1 ? t("decision made with a fake clock running") : t("decisions made with a fake clock running")}
+          {ck.rushedDollars > 0 && <> (<b className="text-[#ff8a8a]">{usd(ck.rushedDollars)}</b> {t("of traps signed in the rush")})</>}
+          {ck.waited > 0 && <>; <b className="text-[#7CFFB2]">{ck.waited}</b> {ck.waited === 1 ? t("fake deadline waited out, at no cost") : t("fake deadlines waited out, at no cost")}</>}.
         </p>
       )}
       {m.playedMost && (
         <p className="mt-2 text-sm">
-          <b>{m.playedMost.who}</b> got played {m.playedMost.times === 1 ? "once" : `${m.playedMost.times} times`}: negotiating without the Read to back it.
+          <b>{m.playedMost.who}</b> {m.playedMost.times === 1 ? t("got played once") : t("got played {n} times", { n: m.playedMost.times })}: {t("negotiating without the Read to back it.")}
         </p>
       )}
       <p className="mt-3 rounded-lg bg-gold/10 p-2 text-sm">
-        Got a real deal at home: a phone plan, a car loan, a receipt?{" "}
-        <a href="/my-deal" className="font-black text-gold underline">Read its second number</a>. Nothing leaves your device.
+        {t("Got a real deal at home: a phone plan, a car loan, a receipt?")}{" "}
+        <a href="/my-deal" className="font-black text-gold underline">{t("Read its second number")}</a>. {t("Nothing leaves your device.")}
       </p>
       <p className="mt-3 text-xs text-program/60">
-        Typical real-world amounts for one household over about a year, not quotes. Every card&apos;s figure and its basis are in the rulebook&apos;s answer key.
+        {t("Typical real-world amounts for one household over about a year, not quotes. Every card's figure and its basis are in the rulebook's answer key.")}
       </p>
     </div>
   );

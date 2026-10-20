@@ -6,12 +6,15 @@ import { checkEdition, LAST_EDITION, loadEditions, WEST_DAYTON, type Edition } f
 import { describeCarry, forgetBlock, loadBlock, type BlockMemory } from "../game/block";
 import { describeStickers, FLAG_WORDS, forgetFamily, loadFamily, type CampaignKey, type Family } from "../game/family";
 import type { Mode, SessionConfig } from "../game/session";
+import { t, useLang } from "../i18n";
+import { titleCase } from "./theme";
 import { RolePortrait } from "./art/RolePortrait";
 
 const ROLES = Object.keys(C.roles);
 const DEFAULT_NAMES = C.roster.map((r) => r.name);
 
 export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean) => void }) {
+  useLang();
   const [mode, setMode] = useState<Mode>("coop");
   const [count, setCount] = useState(4);
   const [names, setNames] = useState<string[]>(DEFAULT_NAMES);
@@ -98,7 +101,7 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
       }}
     >
       <fieldset>
-        <legend className="text-lg font-black text-gold">How are you playing?</legend>
+        <legend className="text-lg font-black text-gold">{t("How are you playing?")}</legend>
         <div className="mt-2 grid gap-2 sm:grid-cols-2">
           {(
             [
@@ -107,11 +110,11 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
               ["overlord", "Overlord", "One player is the Machine (or the computer is), with 3 counterfeit deals up its sleeve."],
               ["chapter", "Campaign", "The Long Ledger (one family, six eras) or Book One (four chapters that follow the novel)."],
             ] as [Mode, string, string][]
-          ).map(([m, t, d]) => (
+          ).map(([m, title, d]) => (
             <label key={m} className={`cursor-pointer rounded-xl border p-3 ${mode === m ? "border-gold bg-gold/10" : "border-white/20"}`}>
               <input type="radio" name="mode" className="sr-only" checked={mode === m} onChange={() => setMode(m)} />
-              <span className="block font-black">{t}</span>
-              <span className="block text-xs text-program/75">{d}</span>
+              <span className="block font-black">{t(title)}</span>
+              <span className="block text-xs text-program/75">{t(d)}</span>
             </label>
           ))}
         </div>
@@ -119,13 +122,13 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
 
       {mode === "chapter" && (
         <fieldset className="space-y-3 rounded-xl border border-gold/40 p-3">
-          <legend className="px-1 font-bold">Which campaign?</legend>
+          <legend className="px-1 font-bold">{t("Which campaign?")}</legend>
           <div className="grid gap-2 sm:grid-cols-2">
             {(Object.entries(C.campaigns) as [CampaignKey, (typeof C.campaigns)[string]][]).map(([k, c]) => (
               <label key={k} className={`cursor-pointer rounded-xl border p-3 ${camp === k ? "border-gold bg-gold/10" : "border-white/20"}`}>
                 <input type="radio" name="campaign" className="sr-only" checked={camp === k} onChange={() => setCamp(k)} />
-                <span className="block font-black">{c.title}</span>
-                <span className="block text-xs text-program/75">{c.blurb}</span>
+                <span className="block font-black">{t(c.title)}</span>
+                <span className="block text-xs text-program/75">{t(c.blurb)}</span>
               </label>
             ))}
           </div>
@@ -134,19 +137,19 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
               <label className="flex items-start gap-2">
                 <input type="radio" name="asFamily" className="mt-1" checked={asFamily && !!famNext} disabled={!famNext} onChange={() => setAsFamily(true)} />
                 <span>
-                  <b>{family.state.played.length ? "Continue the family" : "Start the family"}</b>
+                  <b>{family.state.played.length ? t("Continue the family") : t("Start the family")}</b>
                   {famNext ? (
-                    <>: Chapter {C.chapters[famNext].number}, <i>{C.chapters[famNext].title}</i> ({C.chapters[famNext].era}).</>
+                    <>: {t("Chapter {n}", { n: C.chapters[famNext].number })}, <i>{t(C.chapters[famNext].title)}</i> ({t(C.chapters[famNext].era)}).</>
                   ) : (
-                    <>: the family has played every chapter (Ledger {family.state.ledger > 0 ? "+" : ""}{family.state.ledger}).</>
+                    <>: {t("the family has played every chapter (Ledger {n}).", { n: `${family.state.ledger > 0 ? "+" : ""}${family.state.ledger}` })}</>
                   )}
                   {family.state.played.length > 0 && (
                     <span className="block text-xs text-program/70">
-                      {family.state.played.length} chapter{family.state.played.length === 1 ? "" : "s"} played · Ledger {family.state.ledger > 0 ? "+" : ""}
+                      {family.state.played.length === 1 ? t("1 chapter played") : t("{n} chapters played", { n: family.state.played.length })} · {t("Ledger")} {family.state.ledger > 0 ? "+" : ""}
                       {family.state.ledger}
                       {camp === "LEDGER" ? ` · ${describeStickers(family.state)}` : ""}
-                      {family.state.flags.length ? ` · ${family.state.flags.map((f) => FLAG_WORDS[f] ?? f).join("; ")}` : ""}
-                      {family.state.rally ? " · the community rallies (+1 Trust each)" : ""}
+                      {family.state.flags.length ? ` · ${family.state.flags.map((f) => t(FLAG_WORDS[f] ?? f)).join("; ")}` : ""}
+                      {family.state.rally ? ` · ${t("the community rallies (+1 Trust each)")}` : ""}
                     </span>
                   )}
                 </span>
@@ -154,22 +157,22 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
               <label className="mt-2 flex items-start gap-2">
                 <input type="radio" name="asFamily" className="mt-1" checked={!asFamily || !famNext} onChange={() => setAsFamily(false)} />
                 <span>
-                  <b>Play one chapter on its own</b>
-                  <span className="block text-xs text-program/70">Nothing carries in or out.</span>
+                  <b>{t("Play one chapter on its own")}</b>
+                  <span className="block text-xs text-program/70">{t("Nothing carries in or out.")}</span>
                 </span>
               </label>
               {(!asFamily || !famNext) && (
-                <select aria-label="Chapter" className={`${field} mt-2 w-full`} value={pickChapter} onChange={(e) => setPickChapter(e.target.value)}>
+                <select aria-label={t("Chapter")} className={`${field} mt-2 w-full`} value={pickChapter} onChange={(e) => setPickChapter(e.target.value)}>
                   {C.campaigns[camp].chapters.map((k) => (
                     <option key={k} value={k} className="text-ink">
-                      Chapter {C.chapters[k].number}: {C.chapters[k].title} ({C.chapters[k].era})
+                      {t("Chapter {n}", { n: C.chapters[k].number })}: {t(C.chapters[k].title)} ({t(C.chapters[k].era)})
                     </option>
                   ))}
                 </select>
               )}
               {family.state.played.length > 0 && (
-                <button type="button" className="mt-2 text-xs text-program/60 underline" onClick={() => { if (window.confirm("Start a new family? This one's record is forgotten.")) { forgetFamily(camp); setFamily(loadFamily(camp)); } }}>
-                  Start a new family
+                <button type="button" className="mt-2 text-xs text-program/60 underline" onClick={() => { if (window.confirm(t("Start a new family? This one's record is forgotten."))) { forgetFamily(camp); setFamily(loadFamily(camp)); } }}>
+                  {t("Start a new family")}
                 </button>
               )}
             </div>
@@ -177,16 +180,16 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
           {chap && (
             <div className="rounded-lg bg-black/25 p-3 text-sm">
               <p>
-                <b className="text-gold">Chapter {chap.number}: {chap.title}</b> ({chap.era}). {chap.intro}
+                <b className="text-gold">{t("Chapter {n}", { n: chap.number })}: {t(chap.title)}</b> ({t(chap.era)}). {t(chap.intro)}
               </p>
-              <p className="mt-1"><b>The twist:</b> {chap.twist}</p>
+              <p className="mt-1"><b>{t("The twist:")}</b> {t(chap.twist)}</p>
               {rebuilt.length > 0 && (
                 <label className="mt-2 block">
-                  <b>Before the plants close, the family chooses:</b>
+                  <b>{t("Before the plants close, the family chooses:")}</b>
                   <select className={`${field} mt-1 w-full`} value={release} onChange={(e) => setRelease(e.target.value as District | "")}>
-                    <option value="" className="text-ink">Defend what we built (the Machine strikes {rebuilt.map((d) => d.charAt(0) + d.slice(1).toLowerCase()).join(" and ")} first)</option>
+                    <option value="" className="text-ink">{t("Defend what we built (the Machine strikes {ds} first)", { ds: rebuilt.map((d) => titleCase(d)).join(t(" and ")) })}</option>
                     {rebuilt.map((d) => (
-                      <option key={d} value={d} className="text-ink">Let {d.charAt(0) + d.slice(1).toLowerCase()} go (remove a Rebuilt sticker)</option>
+                      <option key={d} value={d} className="text-ink">{t("Let {d} go (remove a Rebuilt sticker)", { d: titleCase(d) })}</option>
                     ))}
                   </select>
                 </label>
@@ -197,20 +200,20 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
       )}
 
       <div className="space-y-1">
-        <label htmlFor="edition" className="font-bold">Where you&apos;re playing</label>
+        <label htmlFor="edition" className="font-bold">{t("Where you're playing")}</label>
         <select id="edition" className={`${field} w-full`} value={editionId} onChange={(e) => setEditionId(e.target.value)}>
-          <option value={WEST_DAYTON.id} className="text-ink">{WEST_DAYTON.name} ({WEST_DAYTON.city})</option>
+          <option value={WEST_DAYTON.id} className="text-ink">{t(WEST_DAYTON.name)} ({WEST_DAYTON.city})</option>
           {editions.map((e) => (
             <option key={e.id} value={e.id} className="text-ink">{e.name} ({e.city})</option>
           ))}
         </select>
         <p className="text-xs text-program/70">
-          Make one for your own side of town: <a href="/edition" className="text-gold underline">Your City editions</a>.
+          {t("Make one for your own side of town:")} <a href="/edition" className="text-gold underline">{t("Your City editions")}</a>.
         </p>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <label htmlFor="count" className="font-bold">Players on the block</label>
+        <label htmlFor="count" className="font-bold">{t("Players on the block")}</label>
         <select id="count" className={field} value={count} onChange={(e) => setCount(+e.target.value)}>
           {[2, 3, 4, 5].map((n) => (
             <option key={n} value={n} className="text-ink">{n}</option>
@@ -219,32 +222,32 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
       </div>
 
       <fieldset className="space-y-2">
-        <legend className="font-bold">The crew</legend>
+        <legend className="font-bold">{t("The crew")}</legend>
         {Array.from({ length: count }, (_, i) => (
           <div key={i} className={`grid items-center gap-2 ${party ? "grid-cols-1" : "grid-cols-[auto_1fr_1fr]"}`}>
             {!party && <RolePortrait role={roles[i]} size={34} />}
-            <input aria-label={`Player ${i + 1} name`} className={field} value={names[i]} onChange={(e) => setNames(names.map((n, j) => (j === i ? e.target.value : n)))} />
-            {!party && <select aria-label={`Player ${i + 1} role`} className={field} value={roles[i]} onChange={(e) => setRoles(roles.map((r, j) => (j === i ? e.target.value : r)))}>
+            <input aria-label={t("Player {n} name", { n: i + 1 })} className={field} value={names[i]} onChange={(e) => setNames(names.map((n, j) => (j === i ? e.target.value : n)))} />
+            {!party && <select aria-label={t("Player {n} role", { n: i + 1 })} className={field} value={roles[i]} onChange={(e) => setRoles(roles.map((r, j) => (j === i ? e.target.value : r)))}>
               {ROLES.map((r) => (
-                <option key={r} value={r} className="text-ink">The {r}</option>
+                <option key={r} value={r} className="text-ink">{t(`The ${r}`)}</option>
               ))}
             </select>}
           </div>
         ))}
-        {dupRoles && <p className="text-sm text-[#ff9b9b]">Each player needs a different role.</p>}
-        {dupNames && <p className="text-sm text-[#ff9b9b]">Each player needs a different name (and &ldquo;The Owner&rdquo; is taken).</p>}
+        {dupRoles && <p className="text-sm text-[#ff9b9b]">{t("Each player needs a different role.")}</p>}
+        {dupNames && <p className="text-sm text-[#ff9b9b]">{t("Each player needs a different name (and “The Owner” is taken).")}</p>}
       </fieldset>
 
       {mode === "coop" && (
         <div className="space-y-1">
-          <label htmlFor="scenario" className="font-bold">Scenario</label>
+          <label htmlFor="scenario" className="font-bold">{t("Scenario")}</label>
           <select id="scenario" className={`${field} w-full`} value={scenario} onChange={(e) => setScenario(e.target.value)}>
-            <option value="random" className="text-ink">Surprise me</option>
+            <option value="random" className="text-ink">{t("Surprise me")}</option>
             {Object.keys(C.scenarios).map((s) => (
-              <option key={s} value={s} className="text-ink">{s}</option>
+              <option key={s} value={s} className="text-ink">{t(s)}</option>
             ))}
           </select>
-          <p className="text-xs text-program/70">{scenario !== "random" ? C.scenarios[scenario] : "A random scenario."} Start with The Audit or A Quiet Year.</p>
+          <p className="text-xs text-program/70">{scenario !== "random" ? t(C.scenarios[scenario]) : t("A random scenario.")} {t("Start with {a} or {b}.", { a: t("The Audit"), b: t("A Quiet Year") })}</p>
         </div>
       )}
       {mode === "coop" && (
@@ -252,17 +255,17 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
           <label className="flex items-start gap-2">
             <input type="checkbox" className="mt-1" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
             <span>
-              <b>🏘 Our block remembers</b>
+              <b>{t("🏘 Our block remembers")}</b>
               <span className="block text-xs text-program/70">
                 {memory
-                  ? `${memory.games} game${memory.games === 1 ? "" : "s"} so far (${memory.wins} won). This game: ${describeCarry(memory.carry)}.`
-                  : "Play on as the same block: districts you wake start the next game stronger, and captured ones carry a scar."}
+                  ? `${memory.games === 1 ? t("1 game so far ({w} won).", { w: memory.wins }) : t("{n} games so far ({w} won).", { n: memory.games, w: memory.wins })} ${t("This game: {carry}.", { carry: describeCarry(memory.carry) })}`
+                  : t("Play on as the same block: districts you wake start the next game stronger, and captured ones carry a scar.")}
               </span>
             </span>
           </label>
           {memory && (
-            <button type="button" className="ml-6 mt-1 text-xs text-program/60 underline" onClick={() => { if (window.confirm("Start a new block? This one's memory is forgotten.")) { forgetBlock(editionId); setMemory(null); } }}>
-              Start a new block
+            <button type="button" className="ml-6 mt-1 text-xs text-program/60 underline" onClick={() => { if (window.confirm(t("Start a new block? This one's memory is forgotten."))) { forgetBlock(editionId); setMemory(null); } }}>
+              {t("Start a new block")}
             </button>
           )}
         </div>
@@ -270,44 +273,44 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
       {playMode === "overlord" && (
         <label className="flex items-center gap-2">
           <input type="checkbox" checked={overlordHuman} onChange={(e) => setOverlordHuman(e.target.checked)} />
-          A person plays the Overlord (otherwise the computer does)
+          {t("A person plays the Overlord (otherwise the computer does)")}
         </label>
       )}
 
       <fieldset className="space-y-2 rounded-xl border border-white/15 p-3">
-        <legend className="px-1 font-bold">House rules {party ? "" : "(for tables that know the game)"}</legend>
+        <legend className="px-1 font-bold">{party ? t("House rules") : t("House rules (for tables that know the game)")}</legend>
         {!party && (
           <>
             <label className="flex items-start gap-2">
               <input type="checkbox" className="mt-1" checked={rules.finePrint} onChange={rule("finePrint")} />
-              <span><b>🎲 Fine-print dice</b><span className="block text-xs text-program/70">Each trap&apos;s lever is rolled when it&apos;s drawn (1–3 red, 4–5 amber, 6 blue), so nobody can learn the deck by heart.</span></span>
+              <span><b>{t("🎲 Fine-print dice")}</b><span className="block text-xs text-program/70">{t("Each trap's lever is rolled when it's drawn (1–3 red, 4–5 amber, 6 blue), so nobody can learn the deck by heart.")}</span></span>
             </label>
             <label className="flex items-start gap-2">
               <input type="checkbox" className="mt-1" checked={rules.partial} onChange={rule("partial")} />
-              <span><b>🎲 Close reads</b><span className="block text-xs text-program/70">One layer short of a trap&apos;s lever, NEGOTIATE rolls a die: 5–6 talks them down (Squeeze −1); anything else, you get played.</span></span>
+              <span><b>{t("🎲 Close reads")}</b><span className="block text-xs text-program/70">{t("One layer short of a trap's lever, NEGOTIATE rolls a die: 5–6 talks them down (Squeeze −1); anything else, you get played.")}</span></span>
             </label>
             <label className="flex items-start gap-2">
               <input type="checkbox" className="mt-1" checked={rules.render} onChange={rule("render")} />
-              <span><b><i>Render?</i></b><span className="block text-xs text-program/70">Each player has one Face token. Facing a deal, you can let a teammate who reads that district better read it for you; it costs your Face. The Cookout gives it back. From the novel: the Sight&apos;s offer Marcus learns to refuse.</span></span>
+              <span><b><i>{t("Render?")}</i></b><span className="block text-xs text-program/70">{t("Each player has one Face token. Facing a deal, you can let a teammate who reads that district better read it for you; it costs your Face. The Cookout gives it back. From the novel: the Sight's offer Marcus learns to refuse.")}</span></span>
             </label>
             <label className="flex items-start gap-2">
               <input type="checkbox" className="mt-1" checked={rules.terrell} onChange={rule("terrell")} />
-              <span><b>The Terrell rule</b><span className="block text-xs text-program/70">Teaching gives Read, not cover. Confront a trap in a district you were taught before the block has your back (any Commons, or the Veteran&apos;s lesson) and it backfires: +1 Squeeze.</span></span>
+              <span><b>{t("The Terrell rule")}</b><span className="block text-xs text-program/70">{t("Teaching gives Read, not cover. Confront a trap in a district you were taught before the block has your back (any Commons, or the Veteran's lesson) and it backfires: +1 Squeeze.")}</span></span>
             </label>
           </>
         )}
         <label className="flex items-start gap-2">
           <input type="checkbox" className="mt-1" checked={rules.clocks} onChange={rule("clocks")} />
-          <span><b>⏱ Sign-now clocks</b><span className="block text-xs text-program/70">Some deals push you to sign before you can think: a clock counts down while you decide. The deadline is always fake, and Read 2 shows you that. On by default.</span></span>
+          <span><b>{t("⏱ Sign-now clocks")}</b><span className="block text-xs text-program/70">{t("Some deals push you to sign before you can think: a clock counts down while you decide. The deadline is always fake, and Read 2 shows you that. On by default.")}</span></span>
         </label>
         <label className="flex items-start gap-2">
           <input type="checkbox" className="mt-1" checked={rules.endless} onChange={rule("endless")} />
-          <span><b>♾ Endless deals</b><span className="block text-xs text-program/70">Deals are rolled fresh from templates: the numbers change every draw.</span></span>
+          <span><b>{t("♾ Endless deals")}</b><span className="block text-xs text-program/70">{t("Deals are rolled fresh from templates: the numbers change every draw.")}</span></span>
         </label>
         {rules.endless && (
           <label className="ml-6 flex items-start gap-2">
             <input type="checkbox" className="mt-1" checked={rules.math} onChange={rule("math")} />
-            <span><b>✏️ Work it out</b><span className="block text-xs text-program/70">The math variant: at Read 1 you work out the second number yourself before the red layer opens. Good for classrooms.</span></span>
+            <span><b>{t("✏️ Work it out")}</b><span className="block text-xs text-program/70">{t("The math variant: at Read 1 you work out the second number yourself before the red layer opens. Good for classrooms.")}</span></span>
           </label>
         )}
       </fieldset>
@@ -315,25 +318,25 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
       <label className="flex items-start gap-2">
         <input type="checkbox" className="mt-1" checked={coach} onChange={(e) => setCoach(e.target.checked)} />
         <span>
-          <b>Coach me as we play</b>
-          <span className="block text-xs text-program/70">The Coach glows on the move it would make, says why, and explains each rule the first time it comes up. Turn it off any time.</span>
+          <b>{t("Coach me as we play")}</b>
+          <span className="block text-xs text-program/70">{t("The Coach glows on the move it would make, says why, and explains each rule the first time it comes up. Turn it off any time.")}</span>
         </span>
       </label>
 
       <label className="flex items-start gap-2">
         <input type="checkbox" className="mt-1" checked={online} onChange={(e) => setOnline(e.target.checked)} />
         <span>
-          <b>📱 Play on everyone&apos;s phones</b>
+          <b>{t("📱 Play on everyone's phones")}</b>
           <span className="block text-xs text-program/70">
-            This device becomes the table and opens a room with a code. Everyone joins from their phone (Join a game on the home page) and plays their own seat; deal cards stay private on the reader&apos;s phone. Any seat nobody takes is played here.
+            {t("This device becomes the table and opens a room with a code. Everyone joins from their phone (Join a game on the home page) and plays their own seat; deal cards stay private on the reader's phone. Any seat nobody takes is played here.")}
           </span>
         </span>
       </label>
 
       <button type="submit" disabled={dupRoles || dupNames} className="w-full rounded-xl bg-gold px-4 py-3 text-lg font-black text-night disabled:opacity-50">
-        Start the game
+        {t("Start the game")}
       </button>
-      <p className="text-center text-xs text-program/60">{online ? "This device is the table; phones join with the room code." : "One device, passed around the table. Everyone can see the board."}</p>
+      <p className="text-center text-xs text-program/60">{online ? t("This device is the table; phones join with the room code.") : t("One device, passed around the table. Everyone can see the board.")}</p>
     </form>
   );
 }

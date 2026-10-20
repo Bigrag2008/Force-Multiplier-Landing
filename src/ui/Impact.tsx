@@ -2,6 +2,8 @@
 import { useEffect, type RefObject } from "react";
 import type { Impact, Tone } from "./readImpact";
 import { sounds } from "./sound";
+import { t } from "../i18n";
+import { titleCase } from "./theme";
 
 const TONE: Record<Tone, { ink: string; bg: string; flash: string }> = {
   good: { ink: "#1f8a4c", bg: "#eafbef", flash: "rgba(63,163,77,0.28)" },
@@ -120,8 +122,7 @@ export function spokenImpact(impact: Impact | null): string {
   if (!impact) return "";
   const parts: string[] = [];
   if (impact.verdict) parts.push(`${impact.verdict.title}. ${impact.verdict.sub}`);
-  const T = (d: string) => d.charAt(0) + d.slice(1).toLowerCase();
-  if (impact.strikes.length) parts.push(`The Machine struck ${impact.strikes.map(T).join(", ")}.`);
+  if (impact.strikes.length) parts.push(t("The Machine struck {list}.", { list: impact.strikes.map(titleCase).join(", ") }));
   for (const m of impact.moments) parts.push(`${m.title}. ${m.sub}`);
   return parts.join(" ");
 }

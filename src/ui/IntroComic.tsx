@@ -5,6 +5,7 @@
  */
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { C } from "../engine/content";
+import { t, useLang } from "../i18n";
 
 const NIGHT = "#1B1530";
 const GOLD = "#F2B632";
@@ -99,7 +100,7 @@ function SceneBlock() {
       <rect x="226" y="96" width="70" height="44" fill="#6b4a2b" />
       <rect x="226" y="88" width="70" height="12" fill={CREAM} />
       <text x="261" y="97.5" textAnchor="middle" fontSize="8" fontWeight="900" fill={NIGHT} fontFamily="system-ui, sans-serif">
-        BARBERSHOP
+        {t("BARBERSHOP")}
       </text>
       <rect x="234" y="106" width="30" height="20" fill="#ffe08a" />
       <rect x="300" y="98" width="7" height="34" rx="3" fill="white" />
@@ -110,7 +111,7 @@ function SceneBlock() {
       <Person x={150} y={152} skin={SKIN[1]} shirt="#7cc4ff" s={0.8} />
       <Person x={196} y={150} skin={SKIN[2]} shirt="#ff7a90" />
       <Bubble x={60} y={46} w={78}>
-        Hey neighbor!
+        {t("Hey neighbor!")}
       </Bubble>
     </svg>
   );
@@ -131,24 +132,24 @@ function SceneDeals() {
       <rect x="14" y="20" width="132" height="130" fill="#3a2f55" />
       <rect x="22" y="28" width="116" height="30" rx="4" fill={NIGHT} stroke={RED} strokeWidth="2.5" />
       <text x="80" y="49" textAnchor="middle" fontSize="17" fontWeight="900" fill={RED} fontFamily="system-ui, sans-serif" style={{ filter: "drop-shadow(0 0 4px #E63946)" }}>
-        QUICK CA$H
+        {t("QUICK CA$H")}
       </text>
       <rect x="28" y="70" width="44" height="80" fill="#ffe08a" opacity="0.85" />
       <rect x="84" y="70" width="52" height="40" fill="#ffe08a" opacity="0.85" />
       <text x="110" y="95" textAnchor="middle" fontSize="9" fontWeight="900" fill={RED} fontFamily="system-ui, sans-serif">
-        OPEN
+        {t("OPEN")}
       </text>
       {/* the flyer */}
       <g transform="rotate(-4 220 95)">
         <rect x="160" y="24" width="140" height="140" rx="4" fill={CREAM} stroke={NIGHT} strokeWidth="2" />
         <text x="230" y="52" textAnchor="middle" fontSize="13" fontWeight="900" fill={NIGHT} fontFamily="system-ui, sans-serif">
-          NEED CASH?
+          {t("NEED CASH?")}
         </text>
         <text x="230" y="84" textAnchor="middle" fontSize="26" fontWeight="900" fill="#2f6b3a" fontFamily="system-ui, sans-serif">
           $375
         </text>
         <text x="230" y="100" textAnchor="middle" fontSize="11" fontWeight="800" fill={NIGHT} fontFamily="system-ui, sans-serif">
-          TODAY! EASY!
+          {t("TODAY! EASY!")}
         </text>
         {[112, 118, 124, 130, 136, 142, 148].map((y) => (
           <rect key={y} x="172" y={y} width={y % 12 ? 112 : 96} height="2.2" fill="#00000055" />
@@ -157,9 +158,9 @@ function SceneDeals() {
       {/* the glasses reveal the fine print */}
       <g clipPath="url(#lens)">
         <rect x="180" y="100" width="72" height="72" fill="#fff2b8" />
-        {["$56 FEE", "EVERY 2 WKS", "= 391% APR"].map((t, k) => (
-          <text key={t} x="216" y={128 + k * 11} textAnchor="middle" fontSize="8" fontWeight="900" fill={RED} fontFamily="system-ui, sans-serif">
-            {t}
+        {["$56 FEE", "EVERY 2 WKS", "= 391% APR"].map((line, k) => (
+          <text key={line} x="216" y={128 + k * 11} textAnchor="middle" fontSize="8" fontWeight="900" fill={RED} fontFamily="system-ui, sans-serif">
+            {t(line)}
           </text>
         ))}
       </g>
@@ -167,7 +168,7 @@ function SceneDeals() {
       <circle cx="216" cy="138" r="32" fill="none" stroke={RED} strokeWidth="2.5" />
       <path d="M240 160 L256 176" stroke={NIGHT} strokeWidth="7" strokeLinecap="round" />
       <Bubble x={20} y={156} w={112} tail="right">
-        What&apos;s the catch?
+        {t("What's the catch?")}
       </Bubble>
     </svg>
   );
@@ -235,7 +236,7 @@ function SceneMission() {
         <path d="M-4 -2 h2 M2 -2 h2 M-3 4 q3 -3 6 0" stroke="#000" strokeWidth="1.5" />
       </g>
       <text x="258" y="80" textAnchor="middle" fontSize="9" fontWeight="900" fill={GOLD} fontFamily="system-ui, sans-serif">
-        EXPOSED
+        {t("EXPOSED")}
       </text>
       <rect x="84" y="140" width="24" height="12" rx="2" fill="#555" transform="rotate(-40 96 146)" />
       {/* five districts, waking up */}
@@ -246,61 +247,51 @@ function SceneMission() {
         </g>
       ))}
       <text x="60" y="80" textAnchor="middle" fontSize="8" fontWeight="900" fill={CREAM} fontFamily="system-ui, sans-serif">
-        5 DISTRICTS AWAKE
+        {t("5 DISTRICTS AWAKE")}
       </text>
       <rect y="160" width="320" height="20" fill="#2a2140" />
       <Person x={40} y={140} skin={SKIN[0]} shirt={GOLD} glasses s={1.15} />
       <Person x={78} y={142} skin={SKIN[3]} shirt="#7cc4ff" glasses s={1.15} />
       <Person x={148} y={140} skin={SKIN[2]} shirt="#ff7a90" glasses s={1.15} wave />
       <Bubble x={112} y={88} w={124}>
-        We read it. Together.
+        {t("We read it. Together.")}
       </Bubble>
     </svg>
   );
 }
 
-const PANELS: { title: string; scene: () => ReactNode; text: ReactNode }[] = [
+/** a translated line with **bold** spans */
+function rich(s: string): ReactNode {
+  return s.split("**").map((part, k) => (k % 2 ? <b key={k}>{part}</b> : part));
+}
+
+const PANELS: { title: string; scene: () => ReactNode; text: string }[] = [
   {
     title: "The block",
     scene: SceneBlock,
-    text: (
-      <>
-        The West Side of Dayton. The barbershop, the church, Grandma&apos;s kitchen. <b>Your block</b>: people who look out for each other.
-      </>
-    ),
+    text: "The West Side of Dayton. The barbershop, the church, Grandma's kitchen. **Your block**: people who look out for each other.",
   },
   {
     title: "The deals",
     scene: SceneDeals,
-    text: (
-      <>
-        Every corner has a deal that sounds good. But every deal has a <b>second number</b>: the real cost, hidden in the fine print. You have to learn to read it.
-      </>
-    ),
+    text: "Every corner has a deal that sounds good. But every deal has a **second number**: the real cost, hidden in the fine print. You have to learn to read it.",
   },
   {
     title: "The Machine",
     scene: SceneMachine,
-    text: (
-      <>
-        Behind every trap is one <b>Machine</b>. It squeezes the block, district by district. And someone is hiding behind it: <b>the Owner</b>.
-      </>
-    ),
+    text: "Behind every trap is one **Machine**. It squeezes the block, district by district. And someone is hiding behind it: **the Owner**.",
   },
   {
     title: "Your mission",
     scene: SceneMission,
-    text: (
-      <>
-        <b>Read</b> the deals. <b>Teach</b> each other. <b>Wake</b> the five districts, then drag the Owner into the light. You win or lose <b>together</b>, and every shortcut has a cost: don&apos;t become the Machine.
-      </>
-    ),
+    text: "**Read** the deals. **Teach** each other. **Wake** the five districts, then drag the Owner into the light. You win or lose **together**, and every shortcut has a cost: don't become the Machine.",
   },
 ];
 
 /** The four-panel story. `onDone` starts the game. */
 /** `where`: a Your City edition's setting ("The East Side of Detroit"); the first panel names it */
 export function IntroComic({ onDone, where }: { onDone: () => void; where?: string }) {
+  useLang();
   const [i, setI] = useState(0);
   const next = useRef<HTMLButtonElement>(null);
   const last = i === PANELS.length - 1;
@@ -320,31 +311,31 @@ export function IntroComic({ onDone, where }: { onDone: () => void; where?: stri
     <div role="dialog" aria-modal="true" aria-labelledby="intro-title" className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-night/95 p-3">
       <div className="w-full max-w-2xl">
         <div className="mb-2 flex items-center justify-between text-xs text-program/70">
-          <span className="font-black uppercase tracking-[0.25em] text-gold">The Second Number</span>
+          <span className="font-black uppercase tracking-[0.25em] text-gold">{t("The Second Number")}</span>
           <button className="rounded-md border border-white/25 px-2 py-1 hover:bg-white/10" onClick={onDone}>
-            Skip the story
+            {t("Skip the story")}
           </button>
         </div>
         <figure className="overflow-hidden rounded-xl border-4 border-black bg-program shadow-[6px_6px_0_#000]">
           <div className="relative aspect-[16/9] border-b-4 border-black">
             <P.scene />
             <span id="intro-title" className="absolute left-2 top-2 rotate-[-2deg] border-2 border-black bg-gold px-2 py-0.5 text-sm font-black uppercase text-night shadow-[2px_2px_0_#000]">
-              {i + 1}. {P.title}
+              {i + 1}. {t(P.title)}
             </span>
           </div>
-          <figcaption className="min-h-[88px] p-3 text-[15px] leading-snug text-ink sm:text-base">{i === 0 && where ? <>{where}. The barbershop, the church, Grandma&apos;s kitchen. <b>Your block</b>: people who look out for each other.</> : P.text}</figcaption>
+          <figcaption className="min-h-[88px] p-3 text-[15px] leading-snug text-ink sm:text-base">{rich(i === 0 && where ? t("{where}. The barbershop, the church, Grandma's kitchen. **Your block**: people who look out for each other.", { where }) : t(P.text))}</figcaption>
         </figure>
         <div className="mt-3 flex items-center justify-between gap-2">
           <button className="rounded-lg border border-white/25 px-4 py-2 font-bold text-program disabled:opacity-30" disabled={i === 0} onClick={() => setI(i - 1)}>
-            Back
+            {t("Back")}
           </button>
-          <div className="flex gap-1.5" aria-label={`Panel ${i + 1} of ${PANELS.length}`}>
+          <div className="flex gap-1.5" aria-label={t("Panel {n} of {total}", { n: i + 1, total: PANELS.length })}>
             {PANELS.map((_, k) => (
-              <button key={k} aria-label={`Panel ${k + 1}`} className={`h-2.5 w-2.5 rounded-full ${k === i ? "bg-gold" : "bg-white/30"}`} onClick={() => setI(k)} />
+              <button key={k} aria-label={t("Panel {n}", { n: k + 1 })} className={`h-2.5 w-2.5 rounded-full ${k === i ? "bg-gold" : "bg-white/30"}`} onClick={() => setI(k)} />
             ))}
           </div>
           <button ref={next} className="rounded-lg bg-gold px-5 py-2 font-black text-night hover:brightness-110" onClick={() => (last ? onDone() : setI(i + 1))}>
-            {last ? "Let's play" : "Next"}
+            {last ? t("Let's play") : t("Next")}
           </button>
         </div>
       </div>

@@ -10,6 +10,8 @@ import { Icon, type IconName } from "./icons";
 import { DealCard } from "./DealCard";
 import { clockTag, SignNowClock, useSignNow } from "./SignNowClock";
 import { DISTRICT_SURFACE, DISTRICT_MARK, titleCase } from "./theme";
+import { t, tCard, useLang } from "../i18n";
+import { tLog } from "../i18n/log";
 import type { Local, Play } from "./useSession";
 
 /** where the player is in the turn menu (this device only; drawn cards live in the session) */
@@ -26,6 +28,7 @@ const primary = `${btn} bg-gold text-night hover:brightness-110`;
 const ghost = `${btn} border border-white/25 text-program hover:bg-white/10`;
 
 function Panel({ title, children, sub }: { title: ReactNode; sub?: ReactNode; children: ReactNode }) {
+  useLang();
   return (
     <section className="rounded-xl border border-gold/40 bg-night/80 p-4 shadow-lg">
       <h2 className="text-lg font-black text-gold">{title}</h2>
@@ -36,6 +39,7 @@ function Panel({ title, children, sub }: { title: ReactNode; sub?: ReactNode; ch
 }
 
 function DistrictButtons({ ds, onPick, disabled, note, best }: { ds: District[]; onPick: (d: District) => void; disabled?: (d: District) => boolean; note?: (d: District) => string; best?: District }) {
+  useLang();
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
       {ds.map((d) => (
@@ -49,6 +53,14 @@ function DistrictButtons({ ds, onPick, disabled, note, best }: { ds: District[];
   );
 }
 
+/** the engine's reason the Throne can't be taken yet, in the current language (display only) */
+function throneWords(why: string) {
+  let m: RegExpMatchArray | null;
+  if ((m = why.match(/^everyone has to teach first \((.+) hasn't\)$/))) return t("everyone has to teach first ({names} hasn't)", { names: m[1] });
+  if ((m = why.match(/^(.+) holds more than half the table's Props: no neck for a crown$/))) return t("{name} holds more than half the table's Props: no neck for a crown", { name: m[1] });
+  return t(why);
+}
+
 const formId = (s: Session, d: District, card: Card) =>
   s.g.deck[d].includes(card)
     ? `${d.slice(0, 3)}-${String(s.g.deck[d].indexOf(card) + 1).padStart(2, "0")}`
@@ -58,6 +70,7 @@ const formId = (s: Session, d: District, card: Card) =>
 
 /** The current player's turn. Keyed by the parent per action, so its local state resets. */
 export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: Local }) {
+  useLang();
   const [pending, setPending] = useState<Pending>({ k: "menu" });
   /** after shopping around: which of the two deals this player chose to face */
   const [chosen, setChosen] = useState<Card | null>(null);
@@ -66,7 +79,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
   const others = g.active().filter((x) => x !== p);
   const back = (
     <button className={ghost} onClick={() => setPending({ k: "menu" })}>
-      Back
+      {t("Back")}
     </button>
   );
   const act = (a: Action) => play({ t: "act", a: toWire(g, a) });
@@ -79,7 +92,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
     const tip = safe(() => adviseDeal(g, p, d, g.looks(p, d, card)));
     // the math variant: don't give away the second number before the table has worked it out
     if (tip && s.config.math && card.answer !== undefined && p.sight[d] >= 1)
-      return { ...tip, title: "Work it out first", why: "Work out the second number on the card and check it. Then read the red layer: it tells you whether this is a trap. My pick is lit up if you want it." };
+      return { ...tip, title: t("Work it out first"), why: t("Work out the second number on the card and check it. Then read the red layer: it tells you whether this is a trap. My pick is lit up if you want it.") };
     return tip;
   };
 
@@ -90,14 +103,14 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
     const best = s.coach ? maxBy(pd.cards, rank) : null;
     const bestTip = best && dealTip(pd.d, best);
     return (
-      <Panel key="choose" title="You shopped around: two deals" sub="Read both, then face one.">
-        <CoachBox s={s} run={run} view="deal" sight={p.sight[pd.d]} advice={bestTip && { title: `Face deal ${pd.cards.indexOf(best!) + 1}, then ${bestTip.pick}`, why: bestTip.why }} />
+      <Panel key="choose" title={t("You shopped around: two deals")} sub={t("Read both, then face one.")}>
+        <CoachBox s={s} run={run} view="deal" sight={p.sight[pd.d]} advice={bestTip && { title: t("Face deal {n}, then {pick}", { n: pd.cards.indexOf(best!) + 1, pick: t(bestTip.pick) }), why: bestTip.why }} />
         <div className="grid gap-4 md:grid-cols-2">
           {pd.cards.map((card, i) => (
             <div key={i} className="space-y-2">
-              <DealCard card={g.looks(p, pd.d, card)} district={pd.d} sub={g.ed.districts[pd.d].sub} sight={p.sight[pd.d]} effectiveLever={g.lever(pd.d, g.looks(p, pd.d, card))} formId={formId(s, pd.d, card)} math={s.config.math} />
+              <DealCard card={g.looks(p, pd.d, card)} district={pd.d} sub={t(g.ed.districts[pd.d].sub)} sight={p.sight[pd.d]} effectiveLever={g.lever(pd.d, g.looks(p, pd.d, card))} formId={formId(s, pd.d, card)} math={s.config.math} />
               <button className={primary + picked(card === best)} onClick={() => setChosen(card)}>
-                <span>Face this deal</span>
+                <span>{t("Face this deal")}</span>
                 {card === best && <CoachBadge />}
               </button>
             </div>
@@ -111,23 +124,24 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
     return <FaceDeal key={g.dealt.indexOf(dealCard)} s={s} play={play} run={run} d={pd.d} card={dealCard} deal={dealTip(pd.d, dealCard)} />;
 
   if (pd?.k === "teach") {
-    const t = g.players.find((x) => x.name === pd.to)!;
+    const to = g.players.find((x) => x.name === pd.to)!;
     const { d, card } = pd;
+    const shownCard = tCard(card);
     return (
-      <Panel key="respond" title="Call and response" sub={`${p.name}, read this aloud to ${t.name}. Then ${t.name} says the second number back.`}>
+      <Panel key="respond" title={t("Call and response")} sub={t("{name}, read this aloud to {to}. Then {to} says the second number back.", { name: p.name, to: to.name })}>
         <blockquote className="rounded-lg border-l-4 border-gold bg-white/5 p-3">
-          <p className="font-bold">“{card.front}”</p>
+          <p className="font-bold">“{shownCard.front}”</p>
           <p className="mt-2 text-sm">
-            <span className="font-black text-[#ff8a8a]">The second number:</span> {card.red}
+            <span className="font-black text-[#ff8a8a]">{t("The second number:")}</span> {shownCard.red}
           </p>
         </blockquote>
         <div className="grid gap-2 sm:grid-cols-2">
-          <button className={primary + picked(s.coach)} onClick={() => act({ k: "teach", t, d, response: true })}>
-            <span>{t.name} said it back (+1 Props each)</span>
+          <button className={primary + picked(s.coach)} onClick={() => act({ k: "teach", t: to, d, response: true })}>
+            <span>{t("{name} said it back (+1 Props each)", { name: to.name })}</span>
             {s.coach && <CoachBadge />}
           </button>
-          <button className={ghost} onClick={() => act({ k: "teach", t, d, response: false })}>
-            Not this time
+          <button className={ghost} onClick={() => act({ k: "teach", t: to, d, response: false })}>
+            {t("Not this time")}
           </button>
         </div>
       </Panel>
@@ -136,14 +150,14 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
 
   if (pending.k === "pick") {
     const f = pending.for;
-    const title = { study: "Study which district?", face: "Face a deal where?", history: "Teach the History of…", trace: "Trace the thread under…" }[f];
+    const title = t({ study: "Study which district?", face: "Face a deal where?", history: "Teach the History of…", trace: "Trace the thread under…" }[f]);
     return (
       <Panel key={pending.k} title={title}>
         <CoachBox s={s} run={run} advice={pick?.k === f ? tip : null} />
         <DistrictButtons ds={g.ds}
           best={pick?.k === f ? pick.d : undefined}
           disabled={(d) => (f === "study" ? p.sight[d] >= 3 : f === "trace" ? !g.canTrace(p, d) : false)}
-          note={(d) => (f === "history" ? `wakes ${titleCase(d)}` : `your Read ${p.sight[d]}`)}
+          note={(d) => (f === "history" ? t("wakes {d}", { d: titleCase(d) }) : t("your Read {n}", { n: p.sight[d] }))}
           onPick={(d) => {
             if (f === "study") act({ k: "study", d });
             else if (f === "trace") act({ k: "trace", d });
@@ -158,14 +172,14 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
 
   if (pending.k === "teachWho")
     return (
-      <Panel key={pending.k} title="Teach whom?" sub="You can only teach a district you read better than they do.">
+      <Panel key={pending.k} title={t("Teach whom?")} sub={t("You can only teach a district you read better than they do.")}>
         <CoachBox s={s} run={run} advice={pick?.k === "teach" ? tip : null} />
         <div className="grid gap-2 sm:grid-cols-2">
-          {others.map((t) => (
-            <button key={t.name} className={ghost + picked(pick?.k === "teach" && pick.t === t.name)} disabled={!g.ds.some((d) => p.sight[d] > t.sight[d])} onClick={() => setPending({ k: "teachWhere", t })}>
-              <span>{t.name} </span>
-              <span className="text-xs font-normal">the {t.role}</span>
-              {pick?.k === "teach" && pick.t === t.name && <CoachBadge />}
+          {others.map((o) => (
+            <button key={o.name} className={ghost + picked(pick?.k === "teach" && pick.t === o.name)} disabled={!g.ds.some((d) => p.sight[d] > o.sight[d])} onClick={() => setPending({ k: "teachWhere", t: o })}>
+              <span>{o.name} </span>
+              <span className="text-xs font-normal">{t("the {role}", { role: t(o.role) })}</span>
+              {pick?.k === "teach" && pick.t === o.name && <CoachBadge />}
             </button>
           ))}
         </div>
@@ -174,14 +188,14 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
     );
 
   if (pending.k === "teachWhere") {
-    const t = pending.t;
+    const to = pending.t;
     return (
-      <Panel key={pending.k} title={`Teach ${t.name} which district?`} sub={p.role === "Translator" || p.freeTeach ? "This Teach is free." : "Costs 1 Trust."}>
+      <Panel key={pending.k} title={t("Teach {name} which district?", { name: to.name })} sub={p.role === "Translator" || p.freeTeach ? t("This Teach is free.") : t("Costs 1 Trust.")}>
         <DistrictButtons ds={g.ds}
-          best={pick?.k === "teach" && pick.t === t.name ? pick.d : undefined}
-          disabled={(d) => p.sight[d] <= t.sight[d]}
-          note={(d) => `you ${p.sight[d]} · ${t.name} ${t.sight[d]}`}
-          onPick={(d) => play({ t: "teachCard", to: t.name, d })}
+          best={pick?.k === "teach" && pick.t === to.name ? pick.d : undefined}
+          disabled={(d) => p.sight[d] <= to.sight[d]}
+          note={(d) => t("you {a} · {name} {b}", { a: p.sight[d], name: to.name, b: to.sight[d] })}
+          onPick={(d) => play({ t: "teachCard", to: to.name, d })}
         />
         {back}
       </Panel>
@@ -191,7 +205,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
   if (pending.k === "commons") {
     const best = pick?.k === "commons" ? pick.place : s.coach ? g.botPlace(p) : null;
     return (
-      <Panel key={pending.k} title="Gather where?" sub="Every place: +2 Trust, −1 Shady, plus its bonus.">
+      <Panel key={pending.k} title={t("Gather where?")} sub={t("Every place: +2 Trust, −1 Shady, plus its bonus.")}>
         <CoachBox s={s} run={run} advice={pick?.k === "commons" ? tip : null} />
         <div className="grid gap-2">
           {(Object.keys(g.places) as PlaceKey[]).map((key) => {
@@ -199,8 +213,8 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
             const used = key === "KITCHEN" && g.kitchenUsed;
             return (
               <button key={key} className={`${ghost} text-left${picked(key === best && !used)}`} disabled={used} onClick={() => act({ k: "commons", place: key })}>
-                <span className="block">{P.name} <span className="text-xs font-normal text-program/70">· {P.where}</span></span>
-                <span className="block text-xs font-normal text-gold">{used ? "Grandma already fed the block this game." : P.bonus}</span>
+                <span className="block">{t(P.name)} <span className="text-xs font-normal text-program/70">· {t(P.where)}</span></span>
+                <span className="block text-xs font-normal text-gold">{used ? t("Grandma already fed the block this game.") : t(P.bonus)}</span>
                 {key === best && !used && <CoachBadge />}
               </button>
             );
@@ -213,11 +227,11 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
 
   if (pending.k === "reach")
     return (
-      <Panel key={pending.k} title="Reach a Fallen friend" sub="Costs 2 Trust. They come home at Shady 4.">
-        {g.blk().filter((x) => x.flipped).map((t) => (
-          <button key={t.name} className={primary + picked(pick?.k === "reach" && pick.t === t.name)} onClick={() => act({ k: "reach", t })}>
-            <span>Reach {t.name}</span>
-            {pick?.k === "reach" && pick.t === t.name && <CoachBadge />}
+      <Panel key={pending.k} title={t("Reach a Fallen friend")} sub={t("Costs 2 Trust. They come home at Shady 4.")}>
+        {g.blk().filter((x) => x.flipped).map((f) => (
+          <button key={f.name} className={primary + picked(pick?.k === "reach" && pick.t === f.name)} onClick={() => act({ k: "reach", t: f })}>
+            <span>{t("Reach {name}", { name: f.name })}</span>
+            {pick?.k === "reach" && pick.t === f.name && <CoachBadge />}
           </button>
         ))}
         {back}
@@ -229,28 +243,28 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
   const atDesk = g.desk === p.name;
   const throne = g.uwOpen && g.threads.size >= g.threadsNeeded() ? g.throneBlocks() : null;
   const options: { kind: string; icon: IconName; label: string; hint: string; on: () => void; show?: boolean; disabled?: boolean; gold?: boolean }[] = [
-    { kind: "study", icon: "sight", label: "Study", hint: "+1 Read in a district" + (p.practice ? " (+2 now)" : ""), on: () => setPending({ k: "pick", for: "study" }) },
-    { kind: "face", icon: "deal", label: "Face a deal", hint: atDesk ? "not while you're at the Desk" : p.shopAround ? "draw 2, face 1" : "read it, then TAKE / WALK / NEGOTIATE", on: () => setPending({ k: "pick", for: "face" }), disabled: atDesk },
-    { kind: "teach", icon: "teach", label: "Teach", hint: atDesk ? "not while you're at the Desk" : p.role === "Translator" || p.freeTeach ? "free" : "1 Trust", on: () => setPending({ k: "teachWho" }), disabled: !others.length || atDesk },
+    { kind: "study", icon: "sight", label: "Study", hint: p.practice ? t("+1 Read in a district (+2 now)") : t("+1 Read in a district"), on: () => setPending({ k: "pick", for: "study" }) },
+    { kind: "face", icon: "deal", label: "Face a deal", hint: atDesk ? t("not while you're at the Desk") : p.shopAround ? t("draw 2, face 1") : t("read it, then TAKE / WALK / NEGOTIATE"), on: () => setPending({ k: "pick", for: "face" }), disabled: atDesk },
+    { kind: "teach", icon: "teach", label: "Teach", hint: atDesk ? t("not while you're at the Desk") : p.role === "Translator" || p.freeTeach ? t("free") : t("1 Trust"), on: () => setPending({ k: "teachWho" }), disabled: !others.length || atDesk },
     g.party
-      ? { kind: "commons", icon: "commons", label: "Gather", hint: "+2 Trust, −1 Shady", on: () => act({ k: "commons", place: "BARBERSHOP" }) }
-      : { kind: "commons", icon: "commons", label: "Commons", hint: `gather on ${g.ed.area}`, on: () => setPending({ k: "commons" }) },
-    { kind: "reach", icon: "reach", label: "Reach", hint: "2 Trust: bring a Fallen friend home", on: () => setPending({ k: "reach" }), show: fallen.length > 0, disabled: p.trust < 2 },
-    { kind: "history", icon: "history", label: "Teach the History", hint: "Elder, once: wake a district", on: () => setPending({ k: "pick", for: "history" }), show: p.role === "Elder" && !p.elderUsed },
-    { kind: "trace", icon: "clue", label: "Trace a thread", hint: "Read 3 in an awake district", on: () => setPending({ k: "pick", for: "trace" }), show: g.uwOpen, disabled: !g.ds.some((d) => g.canTrace(p, d)) },
-    { kind: "league", icon: "league", label: "Sign the League pledge", hint: `${g.league.size}/${g.leagueNeeded()} this round`, on: () => act({ k: "league" }), show: g.hasLeague() && !g.leagueFormed && !g.league.has(p.name) },
-    { kind: "march", icon: "league", label: "Call the March", hint: "once a game: everyone +2 Trust, −1 Shady, covered", on: () => act({ k: "march" }), show: g.canMarch() },
-    { kind: "leave_desk", icon: "door", label: "Quit the Desk", hint: "for good: face deals and teach again", on: () => act({ k: "leave_desk" }), show: atDesk },
-    { kind: "expose_uw", icon: "expose", label: "EXPOSE THE UNDERWORLD", hint: "you win", on: () => act({ k: "expose_uw" }), show: g.canExpose(), gold: true },
-    { kind: "throne", icon: "expose", label: "No neck for a crown", hint: `You can't Expose yet: ${throne}.`, on: () => undefined, show: !!throne, disabled: true },
+      ? { kind: "commons", icon: "commons", label: "Gather", hint: t("+2 Trust, −1 Shady"), on: () => act({ k: "commons", place: "BARBERSHOP" }) }
+      : { kind: "commons", icon: "commons", label: "Commons", hint: t("gather on {area}", { area: t(g.ed.area) }), on: () => setPending({ k: "commons" }) },
+    { kind: "reach", icon: "reach", label: "Reach", hint: t("2 Trust: bring a Fallen friend home"), on: () => setPending({ k: "reach" }), show: fallen.length > 0, disabled: p.trust < 2 },
+    { kind: "history", icon: "history", label: "Teach the History", hint: t("Elder, once: wake a district"), on: () => setPending({ k: "pick", for: "history" }), show: p.role === "Elder" && !p.elderUsed },
+    { kind: "trace", icon: "clue", label: "Trace a thread", hint: t("Read 3 in an awake district"), on: () => setPending({ k: "pick", for: "trace" }), show: g.uwOpen, disabled: !g.ds.some((d) => g.canTrace(p, d)) },
+    { kind: "league", icon: "league", label: "Sign the League pledge", hint: t("{a}/{b} this round", { a: g.league.size, b: g.leagueNeeded() }), on: () => act({ k: "league" }), show: g.hasLeague() && !g.leagueFormed && !g.league.has(p.name) },
+    { kind: "march", icon: "league", label: "Call the March", hint: t("once a game: everyone +2 Trust, −1 Shady, covered"), on: () => act({ k: "march" }), show: g.canMarch() },
+    { kind: "leave_desk", icon: "door", label: "Quit the Desk", hint: t("for good: face deals and teach again"), on: () => act({ k: "leave_desk" }), show: atDesk },
+    { kind: "expose_uw", icon: "expose", label: "EXPOSE THE UNDERWORLD", hint: t("you win"), on: () => act({ k: "expose_uw" }), show: g.canExpose(), gold: true },
+    { kind: "throne", icon: "expose", label: "No neck for a crown", hint: t("You can't Expose yet: {why}.", { why: throneWords(throne ?? "") }), on: () => undefined, show: !!throne, disabled: true },
   ];
   return (
     <Panel
       key={pending.k}
-      title={`${p.name}'s turn`}
+      title={t("{name}'s turn", { name: p.name })}
       sub={
         <>
-          The {p.role}: {C.roles[p.role] ?? "a neighbor on the block"} · <b>{s.actionsLeft}</b> action{s.actionsLeft === 1 ? "" : "s"} left
+          {t("The {role}", { role: t(p.role) })}: {C.roles[p.role] ? t(C.roles[p.role]) : t("a neighbor on the block")} · {s.actionsLeft === 1 ? t("1 action left") : t("{n} actions left", { n: s.actionsLeft })}
         </>
       }
     >
@@ -262,7 +276,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
             <button key={o.label} className={(o.gold ? primary : `${ghost} text-left`) + picked(pick?.k === o.kind)} disabled={o.disabled} onClick={o.on}>
               <span className="flex items-center gap-1.5">
                 <Icon name={o.icon} size={16} color={o.gold ? "#1B1530" : "#F2B632"} />
-                {o.label}
+                {t(o.label)}
               </span>
               <span className="block text-xs font-normal text-program/70">{o.hint}</span>
               {pick?.k === o.kind && <CoachBadge />}
@@ -270,7 +284,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
           ))}
       </div>
       <button className={`${ghost} w-full`} onClick={() => play({ t: "end" })}>
-        End turn (pass the device)
+        {t("End turn (pass the device)")}
       </button>
     </Panel>
   );
@@ -283,6 +297,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
 function FaceDeal({ s, play, run, d, card, deal }: { s: Session; play: Play; run: Local; d: District; card: Card; deal: ReturnType<typeof adviseDeal> | null }) {
   const g = s.g;
   const p = s.player;
+  useLang();
   const cost = g.negCost(d);
   const [byName, setBy] = useState<string | null>(null);
   const by = byName ? g.players.find((x) => x.name === byName) ?? null : null;
@@ -303,25 +318,25 @@ function FaceDeal({ s, play, run, d, card, deal }: { s: Session; play: Play; run
       disabled={c === "NEGOTIATE" && p.trust < cost}
       onClick={() => decide(c)}
     >
-      <span>{c === "TAKE" && clock === "running" ? "SIGN NOW" : c}</span>
+      <span>{c === "TAKE" && clock === "running" ? t("SIGN NOW") : t(c)}</span>
       <span className="block text-[11px] font-normal">{label}</span>
       {advice?.pick === c && <CoachBadge />}
       {advice?.alt?.pick === c && <ShortcutBadge falls={advice.alt.falls} />}
     </button>
   );
   return (
-    <Panel key="face" title={`${p.name} faces a deal in ${titleCase(d)}`} sub="Read what you can, then decide.">
+    <Panel key="face" title={t("{name} faces a deal in {d}", { name: p.name, d: titleCase(d) })} sub={t("Read what you can, then decide.")}>
       <CoachBox s={s} run={run} view="deal" sight={see} advice={advice} />
       {offers.length > 0 && !by && (
         <div className="rounded-lg border border-[#c9a2ff]/50 bg-[#7b3fd1]/15 p-3 text-sm">
-          <p className="font-serif text-lg italic text-[#e3d2ff]">Render?</p>
+          <p className="font-serif text-lg italic text-[#e3d2ff]">{t("Render?")}</p>
           <p className="text-program/85">
-            A teammate who reads {titleCase(d)} better can read this one for you. It costs your Face ({p.face} left); the Cookout gives it back. Or read it yourself.
+            {t("A teammate who reads {d} better can read this one for you. It costs your Face ({n} left); the Cookout gives it back. Or read it yourself.", { d: titleCase(d), n: p.face })}
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             {offers.map((x) => (
               <button key={x.name} className="rounded-lg border border-[#c9a2ff]/60 px-3 py-1.5 font-bold text-[#e3d2ff]" onClick={() => setBy(x.name)}>
-                Let {x.name} read it (Read {x.sight[d]})
+                {t("Let {name} read it (Read {n})", { name: x.name, n: x.sight[d] })}
               </button>
             ))}
           </div>
@@ -329,15 +344,15 @@ function FaceDeal({ s, play, run, d, card, deal }: { s: Session; play: Play; run
       )}
       {by && (
         <p className="rounded-lg bg-[#7b3fd1]/15 px-3 py-2 text-sm text-[#e3d2ff]">
-          {by.name} is reading it for you, with Read {see}. <button className="ml-2 text-xs underline" onClick={() => setBy(null)}>Read it myself</button>
+          {t("{name} is reading it for you, with Read {n}.", { name: by.name, n: see })} <button className="ml-2 text-xs underline" onClick={() => setBy(null)}>{t("Read it myself")}</button>
         </p>
       )}
       <SignNowClock state={clock} left={left} />
-      <DealCard key={see} card={shown} district={d} sub={g.ed.districts[d].sub} sight={see} effectiveLever={g.lever(d, shown)} formId={formId(s, d, card)} math={s.config.math} />
+      <DealCard key={see} card={shown} district={d} sub={t(g.ed.districts[d].sub)} sight={see} effectiveLever={g.lever(d, shown)} formId={formId(s, d, card)} math={s.config.math} />
       <div className="grid gap-2 sm:grid-cols-3">
-        {choice("TAKE", "accept it")}
-        {choice("WALK", "refuse it")}
-        {choice("NEGOTIATE", close ? `${cost} Trust · a close read: 5–6 on a die beats it` : `${cost} Trust · beats a trap if Read ≥ lever`)}
+        {choice("TAKE", t("accept it"))}
+        {choice("WALK", t("refuse it"))}
+        {choice("NEGOTIATE", close ? t("{n} Trust · a close read: 5–6 on a die beats it", { n: cost }) : t("{n} Trust · beats a trap if Read ≥ lever", { n: cost }))}
       </div>
     </Panel>
   );
@@ -345,58 +360,59 @@ function FaceDeal({ s, play, run, d, card, deal }: { s: Session; play: Play; run
 
 /** The Machine moving through a Fallen player, or a person playing the Overlord. */
 export function MachinePanel({ s, play, local, who }: { s: Session; play: Play; local: Local; who: "fallen" | "overlord" }) {
+  useLang();
   const [mode, setMode] = useState<null | "m_extract" | "m_obscure" | "m_tempt" | "m_counterfeit">(null);
   const g = s.g;
-  const name = who === "fallen" ? s.player.name : g.ov()?.name ?? "The Owner";
+  const name = who === "fallen" ? s.player.name : g.ov()?.name ?? t("The Owner");
   const go = (a: Action) => play({ t: who, a: toWire(g, a) });
   return (
     <Panel
-      title={who === "fallen" ? `The Machine moves through ${name}` : `${name}: the Overlord moves`}
-      sub={`${s.movesLeft} move${s.movesLeft === 1 ? "" : "s"} left. One move per district per round: the Machine spreads, it doesn't snipe.`}
+      title={who === "fallen" ? t("The Machine moves through {name}", { name }) : t("{name}: the Overlord moves", { name })}
+      sub={(s.movesLeft === 1 ? t("1 move left.") : t("{n} moves left.", { n: s.movesLeft })) + " " + t("One move per district per round: the Machine spreads, it doesn't snipe.")}
     >
       {who === "fallen" && <CoachBox s={s} run={local} />}
       {mode === null && (
         <div key="menu" className="grid gap-2 sm:grid-cols-2">
-          <button className={ghost} onClick={() => setMode("m_extract")}>Strike <span className="block text-xs font-normal">+1 Squeeze</span></button>
-          <button className={ghost} onClick={() => setMode("m_obscure")}>Muddy <span className="block text-xs font-normal">−1 Clarity</span></button>
-          <button className={ghost} onClick={() => setMode("m_tempt")}>Tempt <span className="block text-xs font-normal">−1 Trust</span></button>
+          <button className={ghost} onClick={() => setMode("m_extract")}>{t("Strike")} <span className="block text-xs font-normal">{t("+1 Squeeze")}</span></button>
+          <button className={ghost} onClick={() => setMode("m_obscure")}>{t("Muddy")} <span className="block text-xs font-normal">{t("−1 Clarity")}</span></button>
+          <button className={ghost} onClick={() => setMode("m_tempt")}>{t("Tempt")} <span className="block text-xs font-normal">{t("−1 Trust")}</span></button>
           {who === "overlord" && (
             <button className={ghost} disabled={!g.canCounterfeit()} onClick={() => setMode("m_counterfeit")}>
-              Counterfeit{" "}
+              {t("Counterfeit")}{" "}
               <span className="block text-xs font-normal">
-                {g.forged ? "one a round: done" : `a fake honest deal in a pile · ${g.forgeries} left`}
+                {g.forged ? t("one a round: done") : t("a fake honest deal in a pile · {n} left", { n: g.forgeries })}
               </span>
             </button>
           )}
-          <button className={ghost} onClick={() => go(who === "overlord" ? g.overlordAiMove(g.struck) : g.machineAiMove(g.struck))}>Let the Machine choose</button>
+          <button className={ghost} onClick={() => go(who === "overlord" ? g.overlordAiMove(g.struck) : g.machineAiMove(g.struck))}>{t("Let the Machine choose")}</button>
         </div>
       )}
       {who === "overlord" && g.counterfeits.size > 0 && (
-        <p className="text-xs text-[#c9a2ff]">Your counterfeits wait in: {[...g.counterfeits].map(titleCase).join(", ")}. Only Read 3 sees them. Keep it off the table&apos;s screens.</p>
+        <p className="text-xs text-[#c9a2ff]">{t("Your counterfeits wait in: {list}. Only Read 3 sees them. Keep it off the table's screens.", { list: [...g.counterfeits].map(titleCase).join(", ") })}</p>
       )}
       {mode === "m_counterfeit" && (
         <DistrictButtons
           ds={g.ds}
           disabled={(d) => g.counterfeits.has(d)}
-          note={(d) => (g.counterfeits.has(d) ? "one waiting here" : `${g.active().filter((x) => x.sight[d] >= 3).length} can read blue here`)}
+          note={(d) => (g.counterfeits.has(d) ? t("one waiting here") : t("{n} can read blue here", { n: g.active().filter((x) => x.sight[d] >= 3).length }))}
           onPick={(d) => (setMode(null), go({ k: "m_counterfeit", d }))}
         />
       )}
       {(mode === "m_extract" || mode === "m_obscure") && (
-        <DistrictButtons ds={g.ds} disabled={(d) => g.struck.has(d)} note={(d) => (g.struck.has(d) ? "already moved here" : `Squeeze ${g.pressure[d]} · Clarity ${g.clarity[d]}`)} onPick={(d) => (setMode(null), go({ k: mode, d }))} />
+        <DistrictButtons ds={g.ds} disabled={(d) => g.struck.has(d)} note={(d) => (g.struck.has(d) ? t("already moved here") : t("Squeeze {a} · Clarity {b}", { a: g.pressure[d], b: g.clarity[d] }))} onPick={(d) => (setMode(null), go({ k: mode, d }))} />
       )}
       {mode === "m_tempt" && (
         <div className="grid gap-2 sm:grid-cols-2">
-          {g.active().map((t) => (
-            <button key={t.name} className={ghost} disabled={t.trust < 1} onClick={() => (setMode(null), go({ k: "m_tempt", t }))}>
-              {t.name} (Trust {t.trust})
+          {g.active().map((q) => (
+            <button key={q.name} className={ghost} disabled={q.trust < 1} onClick={() => (setMode(null), go({ k: "m_tempt", t: q }))}>
+              {t("{name} (Trust {n})", { name: q.name, n: q.trust })}
             </button>
           ))}
         </div>
       )}
       {mode && (
         <button className={ghost} onClick={() => setMode(null)}>
-          Back
+          {t("Back")}
         </button>
       )}
     </Panel>
@@ -405,15 +421,16 @@ export function MachinePanel({ s, play, local, who }: { s: Session; play: Play; 
 
 export function CookoutPanel({ s, play, local }: { s: Session; play: Play; local: Local }) {
   const g = s.g;
+  useLang();
   const [picks, setPicks] = useState<Record<string, District>>(() => Object.fromEntries(g.active().map((p) => [p.name, g.cookoutGain(p)[0]])));
   const tip = s.coach ? safe(() => adviseCookout(g)) : null;
   return (
-    <Panel title={`Round ${g.round}: call the Cookout?`} sub="Once per game. Nobody takes actions this round. Everyone gets +2 Trust, −1 Shady, +1 Props, and catches up to the best reader at the table in one district. The Machine still moves.">
+    <Panel title={t("Round {n}: call the Cookout?", { n: g.round })} sub={t("Once per game. Nobody takes actions this round. Everyone gets +2 Trust, −1 Shady, +1 Props, and catches up to the best reader at the table in one district. The Machine still moves.")}>
       <CoachBox s={s} run={local} advice={tip} />
       <div className="space-y-2">
         {g.active().map((p) => (
           <label key={p.name} className="flex items-center justify-between gap-2 text-sm">
-            <span>{p.name} catches up in</span>
+            <span>{t("{name} catches up in", { name: p.name })}</span>
             <select className="rounded bg-white/10 px-2 py-1" value={picks[p.name]} onChange={(e) => setPicks({ ...picks, [p.name]: e.target.value as District })}>
               {g.ds.map((d) => (
                 <option key={d} value={d} className="text-ink">
@@ -426,11 +443,11 @@ export function CookoutPanel({ s, play, local }: { s: Session; play: Play; local
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
         <button className={primary + picked(tip?.pick === true)} onClick={() => play({ t: "cookout", call: true, picks })}>
-          <span>🍖 Call the Cookout</span>
+          <span>🍖 {t("Call the Cookout")}</span>
           {tip?.pick === true && <CoachBadge />}
         </button>
         <button className={ghost + picked(tip?.pick === false)} onClick={() => play({ t: "cookout", call: false })}>
-          <span>Not this round</span>
+          <span>{t("Not this round")}</span>
           {tip?.pick === false && <CoachBadge />}
         </button>
       </div>
@@ -440,24 +457,25 @@ export function CookoutPanel({ s, play, local }: { s: Session; play: Play; local
 
 export function SousouPanel({ s, play, local }: { s: Session; play: Play; local: Local }) {
   const g = s.g;
+  useLang();
   const payers = g.active().filter((p) => p.trust >= 1).length;
   const pays = s.sousouWouldPay();
   const [d, setD] = useState<District>(() => g.ds.reduce((a, x) => (g.pressure[x] > g.pressure[a] ? x : a), g.ds[0]));
   const tip = s.coach ? safe(() => adviseSousou(s)) : null;
   return (
-    <Panel title="The Sou-Sou" sub={`Everyone with Trust puts 1 in the can (${payers} would). At ${K.SOUSOU_HAND}, the next player's hand clears 2 Squeeze: no Shady.`}>
+    <Panel title={t("The Sou-Sou")} sub={t("Everyone with Trust puts 1 in the can ({n} would). At {hand}, the next player's hand clears 2 Squeeze: no Shady.", { n: payers, hand: K.SOUSOU_HAND })}>
       <CoachBox s={s} run={local} advice={tip} />
       <p className="text-sm">
-        Pot {g.pot}/{K.SOUSOU_HAND} · next hand: <b>{g.nextHand()?.name}</b>
-        {pays ? " · this throw pays out!" : ""}
+        {t("Pot {a}/{b} · next hand:", { a: g.pot, b: K.SOUSOU_HAND })} <b>{g.nextHand()?.name}</b>
+        {pays ? " · " + t("this throw pays out!") : ""}
       </p>
       {pays && (
         <label className="flex items-center justify-between gap-2 text-sm">
-          <span>{g.nextHand()?.name} pays off the debt in</span>
+          <span>{t("{name} pays off the debt in", { name: g.nextHand()?.name ?? "" })}</span>
           <select className="rounded bg-white/10 px-2 py-1" value={d} onChange={(e) => setD(e.target.value as District)}>
             {g.ds.map((x) => (
               <option key={x} value={x} className="text-ink">
-                {titleCase(x)} (Squeeze {g.pressure[x]})
+                {titleCase(x)} ({t("Squeeze {n}", { n: g.pressure[x] })})
               </option>
             ))}
           </select>
@@ -465,11 +483,11 @@ export function SousouPanel({ s, play, local }: { s: Session; play: Play; local:
       )}
       <div className="grid gap-2 sm:grid-cols-2">
         <button className={primary + picked(tip?.pick === true)} onClick={() => play({ t: "sousou", hand: true, d })}>
-          <span>Throw a hand</span>
+          <span>{t("Throw a hand")}</span>
           {tip?.pick === true && <CoachBadge />}
         </button>
         <button className={ghost + picked(tip?.pick === false)} onClick={() => play({ t: "sousou", hand: false })}>
-          <span>Not this round</span>
+          <span>{t("Not this round")}</span>
           {tip?.pick === false && <CoachBadge />}
         </button>
       </div>
@@ -478,19 +496,20 @@ export function SousouPanel({ s, play, local }: { s: Session; play: Play; local:
 }
 
 export function MachineReport({ s, play, local }: { s: Session; play: Play; local: Local }) {
+  useLang();
   const lines = s.g.log.slice(s.stepStart);
   return (
-    <Panel title="The Machine moves" sub="Here's what happened while the block was gathering itself.">
+    <Panel title={t("The Machine moves")} sub={t("Here's what happened while the block was gathering itself.")}>
       <CoachBox s={s} run={local} />
       <ul className="max-h-60 space-y-1 overflow-y-auto text-sm">
         {lines.map((l, i) => (
           <li key={i} className={l.startsWith("  ") ? "pl-3 text-program/90" : "font-semibold"}>
-            {l.trim()}
+            {tLog(l.trim())}
           </li>
         ))}
       </ul>
       <button className={primary} onClick={() => play({ t: "next" })}>
-        Start round {s.g.round + 1}
+        {t("Start round {n}", { n: s.g.round + 1 })}
       </button>
     </Panel>
   );
@@ -498,21 +517,22 @@ export function MachineReport({ s, play, local }: { s: Session; play: Play; loca
 
 /** Book One, Chapter 2: at the start of round 2, does anyone take the Desk? */
 export function DeskPanel({ s, play }: { s: Session; play: Play; local: Local }) {
+  useLang();
   const g = s.g;
   return (
     <Panel
-      title="A county job: the Desk"
-      sub="One player may take the Desk. At the Desk: +1 Trust every round, but no facing deals and no teaching, and every second round its paperwork feeds the Machine an extra strike. Quitting it, for good, takes an action."
+      title={t("A county job: the Desk")}
+      sub={t("One player may take the Desk. At the Desk: +1 Trust every round, but no facing deals and no teaching, and every second round its paperwork feeds the Machine an extra strike. Quitting it, for good, takes an action.")}
     >
       <div className="grid gap-2 sm:grid-cols-2">
         {g.active().map((p) => (
           <button key={p.name} className={`${ghost} text-left`} onClick={() => play({ t: "desk", who: p.name })}>
-            🪑 {p.name} takes the Desk
+            🪑 {t("{name} takes the Desk", { name: p.name })}
           </button>
         ))}
       </div>
       <button className={primary} onClick={() => play({ t: "desk", who: null })}>
-        Nobody takes it
+        {t("Nobody takes it")}
       </button>
     </Panel>
   );
@@ -520,18 +540,19 @@ export function DeskPanel({ s, play }: { s: Session; play: Play; local: Local })
 
 /** Book One, Chapter 3, with a person playing the Overlord: offer the Crown? */
 export function CrownOfferPanel({ s, play }: { s: Session; play: Play; local: Local }) {
+  useLang();
   const g = s.g;
   return (
-    <Panel title="Offer the Crown?" sub="Once a game. If they wear it, they can't Fall and everyone else loses 1 Trust a round. If they refuse, you get one extra move this round.">
+    <Panel title={t("Offer the Crown?")} sub={t("Once a game. If they wear it, they can't Fall and everyone else loses 1 Trust a round. If they refuse, you get one extra move this round.")}>
       <div className="grid gap-2 sm:grid-cols-2">
         {g.active().map((p) => (
           <button key={p.name} className={`${ghost} text-left`} onClick={() => play({ t: "crownOffer", to: p.name })}>
-            👑 Offer it to {p.name} <span className="block text-xs font-normal text-program/70">Shady {p.corruption} · Trust {p.trust}</span>
+            👑 {t("Offer it to {name}", { name: p.name })} <span className="block text-xs font-normal text-program/70">{t("Shady {a} · Trust {b}", { a: p.corruption, b: p.trust })}</span>
           </button>
         ))}
       </div>
       <button className={primary} onClick={() => play({ t: "crownOffer", to: null })}>
-        Not this round
+        {t("Not this round")}
       </button>
     </Panel>
   );
@@ -539,20 +560,21 @@ export function CrownOfferPanel({ s, play }: { s: Session; play: Play; local: Lo
 
 /** Book One, Chapter 3: the offered player wears the Crown or refuses it */
 export function CrownPanel({ s, play }: { s: Session; play: Play; local: Local }) {
+  useLang();
   const to = s.crownTo!;
   const p = s.g.byName(to);
   return (
     <Panel
-      title={`${to}: the Owner offers you the Crown`}
-      sub="A way up, out of the life. Wear it, and you can't Fall, but every other player loses 1 Trust at the start of every round. Refuse, and the Owner takes one extra move this round."
+      title={t("{name}: the Owner offers you the Crown", { name: to })}
+      sub={t("A way up, out of the life. Wear it, and you can't Fall, but every other player loses 1 Trust at the start of every round. Refuse, and the Owner takes one extra move this round.")}
     >
-      {p && <p className="text-sm">You carry {p.corruption} Shady (at {K.FLIP} you Fall) and {p.trust} Trust.</p>}
+      {p && <p className="text-sm">{t("You carry {a} Shady (at {flip} you Fall) and {b} Trust.", { a: p.corruption, flip: K.FLIP, b: p.trust })}</p>}
       <div className="grid gap-2 sm:grid-cols-2">
         <button className={ghost} onClick={() => play({ t: "crown", to, wear: true })}>
-          👑 Wear it
+          👑 {t("Wear it")}
         </button>
         <button className={primary} onClick={() => play({ t: "crown", to, wear: false })}>
-          Refuse it
+          {t("Refuse it")}
         </button>
       </div>
     </Panel>

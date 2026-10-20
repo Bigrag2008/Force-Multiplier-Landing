@@ -1,5 +1,7 @@
+"use client";
 /** A labeled sample deal card: what each part of a real card means, and how to beat a trap. */
 import { K } from "../engine/content";
+import { t, tDistrict, useLang } from "../i18n";
 import { Icon } from "./icons";
 import { LAYER_COLOR } from "./theme";
 
@@ -16,15 +18,16 @@ const PARTS: { n: number; title: string; body: string; color?: string }[] = [
 ];
 
 export function DealAnatomy() {
+  useLang();
   return (
-    <figure className="mt-2 rounded-lg bg-black/20 p-2" aria-label="How to read a deal card">
+    <figure className="mt-2 rounded-lg bg-black/20 p-2" aria-label={t("How to read a deal card")}>
       <div className="grid gap-3 sm:grid-cols-[150px_1fr]">
         {/* the sample card */}
         <div className="relative mx-auto w-[150px] overflow-hidden rounded-lg border border-black/40 bg-program text-ink shadow" aria-hidden>
-          <div className="bg-lending px-2 py-0.5 text-[9px] font-black text-white">LENDING</div>
+          <div className="bg-lending px-2 py-0.5 text-[9px] font-black text-white">{tDistrict("LENDING")}</div>
           <div className="flex items-start gap-1 border-b border-dashed border-black/20 px-1.5 py-1">
             <Num n={1} />
-            <p className="text-[9px] font-extrabold leading-tight">&ldquo;Quick Cash: $375 today!&rdquo;</p>
+            <p className="text-[9px] font-extrabold leading-tight">&ldquo;{t("Quick Cash: $375 today!")}&rdquo;</p>
           </div>
           {[1, 2, 3].map((n) => (
             <div key={n} className="flex items-center gap-1 px-1.5 py-1">
@@ -43,20 +46,20 @@ export function DealAnatomy() {
             <li key={p.n} className="flex gap-1.5">
               <Num n={p.n} />
               <span>
-                <b style={{ color: p.color }}>{p.title}:</b> {p.body}
+                <b style={{ color: p.color }}>{t(p.title)}:</b> {t(p.body)}
               </span>
             </li>
           ))}
         </ol>
       </div>
       <figcaption className="mt-2 rounded-md border border-gold/40 bg-night/60 p-2 text-[12px] leading-snug">
-        <b className="text-gold">Beating a trap:</b> NEGOTIATE works when your <Icon name="sight" size={12} /> Read reaches the trap&apos;s lever:{" "}
+        <b className="text-gold">{t("Beating a trap:")}</b> {t("NEGOTIATE works when your")} <Icon name="sight" size={12} /> {t("Read reaches the trap's lever:")}{" "}
         {[1, 2, 3].map((n) => (
           <span key={n} className="mx-0.5 inline-flex items-center gap-0.5 whitespace-nowrap rounded px-1 font-bold text-white" style={{ background: LAYER_COLOR[n] }}>
-            {["red", "amber", "blue"][n - 1]} = Read {n}
+            {t(["red", "amber", "blue"][n - 1])} = {t("Read {n}", { n })}
           </span>
         ))}
-        . It costs {K.NEG_COST} <Icon name="trust" size={12} /> Trust. Below the lever you get played, so WALK instead.
+        {t(". It costs {n}", { n: K.NEG_COST })} <Icon name="trust" size={12} /> {t("Trust. Below the lever you get played, so WALK instead.")}
       </figcaption>
     </figure>
   );
@@ -64,13 +67,14 @@ export function DealAnatomy() {
 
 /** What each icon means, for the first turn. */
 export function StatKey() {
+  useLang();
   const rows: [Parameters<typeof Icon>[0]["name"], string, string][] = [
-    ["sight", "Read", "how well you read a district (0–3)"],
-    ["trust", "Trust", "spend it to negotiate and teach"],
-    ["corruption", "Shady", `shortcuts add it; at ${K.FLIP} you Fall (Block Party: at ${K.BP_SIT_OUT} you sit out a turn)`],
-    ["legend", "Props", "earned by lifting people up"],
-    ["clarity", "Clarity", `a district wakes at ${K.WAKE}`],
-    ["pressure", "Squeeze", `the Machine's grip; ${K.CAPTURE} = captured`],
+    ["sight", "Read", t("how well you read a district (0–3)")],
+    ["trust", "Trust", t("spend it to negotiate and teach")],
+    ["corruption", "Shady", t("shortcuts add it; at {flip} you Fall (Block Party: at {sit} you sit out a turn)", { flip: K.FLIP, sit: K.BP_SIT_OUT })],
+    ["legend", "Props", t("earned by lifting people up")],
+    ["clarity", "Clarity", t("a district wakes at {n}", { n: K.WAKE })],
+    ["pressure", "Squeeze", t("the Machine's grip; {n} = captured", { n: K.CAPTURE })],
   ];
   return (
     <ul className="mt-2 grid gap-1 rounded-lg bg-black/20 p-2 text-[12px] sm:grid-cols-2">
@@ -78,7 +82,7 @@ export function StatKey() {
         <li key={name} className="flex items-center gap-1.5">
           <Icon name={icon} size={15} />
           <span>
-            <b>{name}</b>: {what}
+            <b>{t(name)}</b>: {what}
           </span>
         </li>
       ))}

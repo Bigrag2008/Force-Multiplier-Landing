@@ -7,8 +7,10 @@ import { GameScreen } from "@/ui/GameScreen";
 import { HostGame } from "@/ui/Online";
 import { Setup } from "@/ui/Setup";
 import type { GameStart } from "@/ui/useSession";
+import { t, useLang } from "@/i18n";
 
 export default function PlayPage() {
+  useLang();
   const [start, setStart] = useState<GameStart | null>(null);
   /** online: this device hosts the room with this code */
   const [room, setRoom] = useState<string | null>(null);
@@ -24,7 +26,7 @@ export default function PlayPage() {
     return (
       <main className="px-4 py-8">
         <ContinueCard onContinue={(save) => begin({ save }, save.room ?? null)} />
-        <h1 className="mb-6 text-center text-4xl font-black text-gold">Set the table</h1>
+        <h1 className="mb-6 text-center text-4xl font-black text-gold">{t("Set the table")}</h1>
         <Setup onStart={(config, online) => begin({ config }, online ? newRoomCode() : null)} />
       </main>
     );

@@ -5,6 +5,7 @@
  * through src/ui/art/manifest.ts.
  */
 import type { ReactNode } from "react";
+import { t } from "../../i18n";
 import { ART } from "./manifest";
 
 const INK = "#1B1530";
@@ -141,7 +142,7 @@ export function RolePortrait({ role, size = 44, title }: { role: string; size?: 
     return <circle key={i} cx={30 + 27 * Math.cos(a)} cy={30 + 27 * Math.sin(a)} r="4.2" fill={GOLD} stroke={INK} strokeWidth="1" />;
   });
   return (
-    <svg viewBox="-2 -2 64 80" width={size} height={(size * 80) / 64} className="shrink-0" role="img" aria-label={title ?? `The ${role}`}>
+    <svg viewBox="-2 -2 64 80" width={size} height={(size * 80) / 64} className="shrink-0" role="img" aria-label={title ?? t(`The ${role}`)}>
       <rect x="27" y="52" width="6" height="24" rx="2" fill="#8a5a2b" stroke={INK} strokeWidth="1.2" />
       {scallops}
       <circle cx="30" cy="30" r="27" fill={GOLD} stroke={INK} strokeWidth="1.2" />

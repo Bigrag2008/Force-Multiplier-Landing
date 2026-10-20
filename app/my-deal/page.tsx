@@ -3,8 +3,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Card } from "@/engine/content";
 import { LAST_EDITION, loadEditions, type Edition } from "@/engine/edition";
-import { fmtRate, readDeal, verdict, type Kind, type Often, type RealDeal } from "@/game/realdeal";
+import { FAIR_CAP, fmtRate, readDeal, verdict, type Kind, type Often, type RealDeal } from "@/game/realdeal";
 import { DealCard } from "@/ui/DealCard";
+import { getLang, t, useLang } from "@/i18n";
+import { rich } from "../_i18n/rich";
 
 /** saved deals live only in this browser */
 const KEY = "sn-my-deals";
@@ -49,6 +51,32 @@ const CONNECTION: Record<Kind, string> = {
 const LOOKS: Record<Kind, string> = { payments: "the cash price", fee: "the amount you get", monthly: "the advertised price" };
 
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
+/** the default name stays English in storage; shown in the current language */
+const dealName = (n: string) => (n === "My deal" ? t("My deal") : n);
+/** a rate for the screen ("over 999%" in words) */
+const rateWord = (apr: number) => {
+  const s = fmtRate(apr);
+  return s === "over 999%" ? t("over 999%") : s;
+};
+/** the math line, for the screen only: the numbers stay, the words change */
+function tMath(s: string): string {
+  if (getLang() === "en") return s;
+  return s
+    .replace(/ down \+ /, " de enganche + ")
+    .replace(/ × (\d+) payments/, " × $1 pagos")
+    .replace(/ in fees/, " en cargos")
+    .replace(/ fee × 1 time = /, " de cargo × 1 vez = ")
+    .replace(/ fee × (\d+) times = /, " de cargo × $1 veces = ")
+    .replace(/ to borrow /, " por un préstamo de ")
+    .replace(/ a month × (\d+) months/, " al mes × $1 meses");
+}
+/** the verdict's words for the screen (realdeal.ts writes them in English) */
+function tVerdict(text: string, r: { apr: number | null; extra: number; looks: number }): string {
+  if (getLang() === "en") return text;
+  if (text.startsWith("About ") && r.apr !== null) return t("About {rate} a year. That's over {cap}%, the cap the law puts on loans to service members. This is priced like a trap.", { rate: rateWord(r.apr), cap: FAIR_CAP });
+  if (text.startsWith("You'd pay ")) return t("You'd pay {pct}% more than it looks like it costs.", { pct: Math.round((r.extra / r.looks) * 100) });
+  return t(text);
+}
 
 function loadSaved(): Saved[] {
   try {
@@ -66,6 +94,7 @@ function storeSaved(list: Saved[]) {
 }
 
 export default function MyDealPage() {
+  useLang();
   const [kind, setKind] = useState<Kind>("payments");
   const [name, setName] = useState("");
   const [often, setOften] = useState<Often>("week");
@@ -103,14 +132,13 @@ export default function MyDealPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
-      <Link href="/" className="text-sm text-gold underline">← The Second Number</Link>
-      <h1 className="mt-4 text-4xl font-black text-gold">Read your own deal</h1>
+      <Link href="/" className="text-sm text-gold underline">{t("← The Second Number")}</Link>
+      <h1 className="mt-4 text-4xl font-black text-gold">{t("Read your own deal")}</h1>
       <p className="mt-2 max-w-2xl text-program/90">
-        Got a real offer: a phone plan, a car loan, a rent-to-own receipt? Put in its numbers and read its second number with the same glasses you
-        use in the game.
+        {t("Got a real offer: a phone plan, a car loan, a rent-to-own receipt? Put in its numbers and read its second number with the same glasses you use in the game.")}
       </p>
       <p className="mt-2 rounded-lg border border-[#7CFFB2]/40 bg-[#7CFFB2]/10 px-3 py-2 text-sm text-program/90">
-        🔒 Nothing you type leaves this device. There&apos;s no account and no upload; saved deals stay in this browser.
+        {t("🔒 Nothing you type leaves this device. There's no account and no upload; saved deals stay in this browser.")}
       </p>
 
       <form
@@ -122,45 +150,45 @@ export default function MyDealPage() {
         }}
       >
         <fieldset>
-          <legend className="font-bold">What kind of deal?</legend>
+          <legend className="font-bold">{t("What kind of deal?")}</legend>
           <div className="mt-2 grid gap-2 sm:grid-cols-3">
-            {KINDS.map(([k, t, d]) => (
+            {KINDS.map(([k, title, d]) => (
               <label key={k} className={`cursor-pointer rounded-xl border p-3 ${kind === k ? "border-gold bg-gold/10" : "border-white/20"}`}>
                 <input type="radio" name="kind" className="sr-only" checked={kind === k} onChange={() => (setKind(k), setShown(null))} />
-                <span className="block font-black">{t}</span>
-                <span className="block text-xs text-program/75">{d}</span>
+                <span className="block font-black">{t(title)}</span>
+                <span className="block text-xs text-program/75">{t(d)}</span>
               </label>
             ))}
           </div>
         </fieldset>
         <label className="block">
-          <span className="font-bold">What is it?</span>
-          <input className={`${field} mt-1`} placeholder="Rent-to-own couch at the store on Third" value={name} onChange={(e) => setName(e.target.value)} />
+          <span className="font-bold">{t("What is it?")}</span>
+          <input className={`${field} mt-1`} placeholder={t("Rent-to-own couch at the store on Third")} value={name} onChange={(e) => setName(e.target.value)} />
         </label>
         <div className="grid gap-3 sm:grid-cols-2">
           {FIELDS[kind].map(([k, label, hint]) => (
             <label key={k} className="block">
-              <span className="font-bold">{label}</span>
+              <span className="font-bold">{t(label)}</span>
               <input className={`${field} mt-1`} inputMode="decimal" value={vals[k] ?? ""} onChange={(e) => setVals({ ...vals, [k]: e.target.value })} />
-              <span className="mt-0.5 block text-xs text-program/60">{hint}</span>
+              <span className="mt-0.5 block text-xs text-program/60">{t(hint)}</span>
             </label>
           ))}
           {kind === "payments" && (
             <label className="block">
-              <span className="font-bold">How often?</span>
+              <span className="font-bold">{t("How often?")}</span>
               <select className={`${field} mt-1`} value={often} onChange={(e) => setOften(e.target.value as Often)}>
-                <option value="week" className="text-ink">Every week</option>
-                <option value="2weeks" className="text-ink">Every 2 weeks</option>
-                <option value="month" className="text-ink">Every month</option>
+                <option value="week" className="text-ink">{t("Every week")}</option>
+                <option value="2weeks" className="text-ink">{t("Every 2 weeks")}</option>
+                <option value="month" className="text-ink">{t("Every month")}</option>
               </select>
             </label>
           )}
         </div>
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={math} onChange={(e) => setMath(e.target.checked)} /> Let me work out the second number first
+          <input type="checkbox" checked={math} onChange={(e) => setMath(e.target.checked)} /> {t("Let me work out the second number first")}
         </label>
         <button type="submit" disabled={!ready} className="w-full rounded-xl bg-gold px-4 py-3 text-lg font-black text-night disabled:opacity-50">
-          Read it
+          {t("Read it")}
         </button>
       </form>
 
@@ -172,7 +200,7 @@ export default function MyDealPage() {
 
       {shown && help && (
         <section className="mt-6 rounded-xl border border-[#7CFFB2]/40 bg-[#7CFFB2]/10 p-4">
-          <h2 className="font-black text-[#7CFFB2]">Real help in {help.city}</h2>
+          <h2 className="font-black text-[#7CFFB2]">{t("Real help in {city}", { city: help.city })}</h2>
           <ul className="mt-2 space-y-1 text-sm">
             {help.resources.map((r) => (
               <li key={r.name}><b>{r.name}</b>: {r.what}{r.where ? <span className="text-program/75"> · {r.where}</span> : null}</li>
@@ -183,21 +211,21 @@ export default function MyDealPage() {
 
       {saved.length > 0 && (
         <section className="mt-8">
-          <h2 className="text-xl font-black text-gold">Saved on this device</h2>
+          <h2 className="text-xl font-black text-gold">{t("Saved on this device")}</h2>
           <ul className="mt-2 space-y-2">
             {saved.map((sv, i) => {
               const r = readDeal(sv.deal);
               return (
                 <li key={sv.savedAt} className="flex items-center justify-between gap-2 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm">
                   <button className="text-left underline" onClick={() => setShown({ name: sv.name, deal: sv.deal, id: Date.now() })}>
-                    {sv.name}
+                    {dealName(sv.name)}
                   </button>
                   <span>
-                    second number <b className="text-[#ff8a8a]">{usd(r.extra)}</b>
-                    {r.apr ? <> · {fmtRate(r.apr)} a year</> : null}
+                    {t("second number")} <b className="text-[#ff8a8a]">{usd(r.extra)}</b>
+                    {r.apr ? <> · {t("{rate} a year", { rate: rateWord(r.apr) })}</> : null}
                   </span>
                   <button
-                    aria-label={`Delete ${sv.name}`}
+                    aria-label={t("Delete {name}", { name: dealName(sv.name) })}
                     className="rounded border border-white/20 px-2 text-xs"
                     onClick={() => {
                       const list = saved.filter((_, j) => j !== i);
@@ -205,7 +233,7 @@ export default function MyDealPage() {
                       storeSaved(list);
                     }}
                   >
-                    Delete
+                    {t("Delete")}
                   </button>
                 </li>
               );
@@ -215,39 +243,43 @@ export default function MyDealPage() {
       )}
 
       <p className="mt-8 text-sm text-program/70">
-        Practice on <Link href="/deals" className="text-gold underline">endless deals</Link>, or <Link href="/play" className="text-gold underline">play the game</Link>. This
-        page does the arithmetic on the numbers you give it; it isn&apos;t financial advice. Check them against the paper.
+        {rich(t("Practice on <deals>endless deals</deals>, or <play>play the game</play>. This page does the arithmetic on the numbers you give it; it isn't financial advice. Check them against the paper."), {
+          deals: (c) => <Link href="/deals" className="text-gold underline">{c}</Link>,
+          play: (c) => <Link href="/play" className="text-gold underline">{c}</Link>,
+        })}
       </p>
     </main>
   );
 }
 
 function Result({ name, deal, math, onSave }: { name: string; deal: RealDeal; math: boolean; onSave: () => void }) {
+  useLang();
   const r = readDeal(deal);
   const v = verdict(r);
   const [kept, setKept] = useState(false);
-  const rate = r.apr !== null ? ` That's about ${fmtRate(r.apr)} a year.` : "";
+  const rate = r.apr !== null ? t(" That's about {rate} a year.", { rate: rateWord(r.apr) }) : "";
+  // the card is only shown (never played), so it is written in the current language
   const card: Card = {
-    front: name,
-    red: `The second number: ${usd(r.total)} in all (${r.math}). That's ${usd(r.extra)} more than ${LOOKS[deal.kind]}.${rate}`,
-    amber: CLOCK[deal.kind],
-    blue: CONNECTION[deal.kind],
+    front: dealName(name),
+    red: t("The second number: {total} in all ({math}). That's {extra} more than {looks}.", { total: usd(r.total), math: tMath(r.math), extra: usd(r.extra), looks: t(LOOKS[deal.kind]) }) + rate,
+    amber: t(CLOCK[deal.kind]),
+    blue: t(CONNECTION[deal.kind]),
     trap: r.extra > 0,
     lever: 1,
-    ask: r.math.replace(/ = \$[\d,]+$/, " = ?"),
+    ask: tMath(r.math.replace(/ = \$[\d,]+$/, " = ?")),
     answer: Math.round(r.total),
   };
   const tone = { bad: "border-[#E63946] bg-[#E63946]/15 text-[#ff8a8a]", warn: "border-[#E0A526] bg-[#E0A526]/15 text-[#ffd27a]", ok: "border-[#7CFFB2] bg-[#7CFFB2]/10 text-[#7CFFB2]" }[v.tone];
   return (
     <section className="mt-8 space-y-4" aria-live="polite">
       <div className={`rounded-xl border-2 p-4 ${tone}`}>
-        <p className="text-xs font-black uppercase tracking-widest">The second number</p>
+        <p className="text-xs font-black uppercase tracking-widest">{t("The second number")}</p>
         <p className="mt-1 text-4xl font-black">{usd(r.extra)}</p>
-        <p className="mt-1 text-sm text-program/90">{v.text}</p>
+        <p className="mt-1 text-sm text-program/90">{tVerdict(v.text, r)}</p>
       </div>
-      <DealCard card={card} district="LENDING" sight={3} plain heading="YOUR DEAL" formId="YOURS" math={math} />
+      <DealCard card={card} district="LENDING" sight={3} plain heading={t("YOUR DEAL")} formId="YOURS" math={math} />
       <button className="rounded-lg border border-gold/60 px-3 py-2 text-sm font-bold text-gold disabled:opacity-50" disabled={kept} onClick={() => (onSave(), setKept(true))}>
-        {kept ? "Saved on this device" : "Save it on this device"}
+        {kept ? t("Saved on this device") : t("Save it on this device")}
       </button>
     </section>
   );

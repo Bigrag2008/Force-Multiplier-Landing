@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef } from "react";
 import type { Session } from "../game/session";
+import { t, useLang } from "../i18n";
+import { tLog } from "../i18n/log";
 
 function tone(line: string) {
   if (/✖|⚠|got played|FALLEN|clock ran out|strikes|muddies|tempts|backfires|sits|COUNTERFEIT: it only|counterfeit into|not enough|buries|feeds|whispers|peels|collections|creeps|covers|scare/.test(line)) return "text-[#ff9b9b]";
@@ -10,6 +12,7 @@ function tone(line: string) {
 }
 
 export function EventFeed({ s, version }: { s: Session; version: number }) {
+  useLang();
   const end = useRef<HTMLDivElement>(null);
   // braces matter: newer browsers return a Promise from scrollIntoView, and React would call it as a cleanup
   useEffect(() => {
@@ -18,11 +21,11 @@ export function EventFeed({ s, version }: { s: Session; version: number }) {
   const lines = s.g.log.slice(-60);
   const offset = s.g.log.length - lines.length;
   return (
-    <section aria-label="What happened" aria-live="polite" className="max-h-72 overflow-y-auto rounded-xl border border-white/10 bg-black/30 p-3 font-mono text-[12px] leading-relaxed">
-      {lines.length === 0 && <p className="text-program/60">The story of the game appears here.</p>}
+    <section aria-label={t("What happened")} aria-live="polite" className="max-h-72 overflow-y-auto rounded-xl border border-white/10 bg-black/30 p-3 font-mono text-[12px] leading-relaxed">
+      {lines.length === 0 && <p className="text-program/60">{t("The story of the game appears here.")}</p>}
       {lines.map((l, i) => (
         <p key={offset + i} className={`${tone(l)} ${offset + i >= s.stepStart ? "" : "opacity-70"} ${l.startsWith("  ") ? "pl-4" : ""}`}>
-          {l.trim()}
+          {tLog(l).trim()}
         </p>
       ))}
       <div ref={end} />

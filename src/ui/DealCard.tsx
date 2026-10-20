@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } fr
 import { C, type Card, type District } from "../engine/content";
 import { DealAnatomy } from "./DealAnatomy";
 import { DISTRICT_MARK, DISTRICT_SURFACE, LAYER_COLOR, LAYER_LABEL, LEVER_WORD, titleCase } from "./theme";
+import { t, tCard, tDistrict, useLang } from "../i18n";
 
 const LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$%";
 function hash(s: string) {
@@ -40,6 +41,7 @@ function usePlainCards(): [boolean, (on: boolean) => void] {
 }
 
 function DecoderZone({ text, seed, plain }: { text: string; seed: string; plain?: boolean }) {
+  useLang();
   if (plain)
     return (
       <p className="rounded-sm border border-black/20 bg-white px-1.5 py-1 text-[13px] font-bold leading-snug text-ink" style={{ minHeight: 64 }}>
@@ -83,6 +85,7 @@ export interface DealCardProps {
 
 /** The math variant: the red layer stays shut until you've worked out the second number. */
 function WorkItOut({ card, onDone }: { card: Card; onDone: (guess: string) => void }) {
+  useLang();
   const [guess, setGuess] = useState("");
   return (
     <form
@@ -92,11 +95,11 @@ function WorkItOut({ card, onDone }: { card: Card; onDone: (guess: string) => vo
         onDone(guess);
       }}
     >
-      <p className="font-extrabold">Work out the second number</p>
-      <p className="mt-0.5">{card.ask}</p>
+      <p className="font-extrabold">{t("Work out the second number")}</p>
+      <p className="mt-0.5">{tCard(card).ask}</p>
       <div className="mt-1 flex gap-2">
-        <input aria-label="Your answer" inputMode="numeric" className="w-28 rounded border border-black/30 px-2 py-0.5" value={guess} onChange={(e) => setGuess(e.target.value)} />
-        <button type="submit" className="rounded bg-ink px-2 py-0.5 font-bold text-program">Check</button>
+        <input aria-label={t("Your answer")} inputMode="numeric" className="w-28 rounded border border-black/30 px-2 py-0.5" value={guess} onChange={(e) => setGuess(e.target.value)} />
+        <button type="submit" className="rounded bg-ink px-2 py-0.5 font-bold text-program">{t("Check")}</button>
       </div>
     </form>
   );
@@ -108,6 +111,9 @@ function WorkItOut({ card, onDone }: { card: Card; onDone: (guess: string) => vo
  * (or put them on with the button) to read the second number.
  */
 export function DealCard({ card, district, sight, effectiveLever, formId, math, plain, heading, sub }: DealCardProps) {
+  useLang();
+  // the words on the card, in the current language (display only: the game keeps the original card)
+  const tc = tCard(card);
   // the math variant: which card's second number has been worked out, and what the guess was
   const [worked, setWorked] = useState<{ card: Card; guess: string } | null>(null);
   const needsMath = !!math && card.answer !== undefined && sight >= 1 && worked?.card !== card;
@@ -120,9 +126,9 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
   const lever = effectiveLever ?? card.lever;
 
   const layers = [
-    { n: 1, text: plain ? card.red : card.red + (card.trap ? `   ▸ LEVER: ${LEVER_WORD[lever]}${lever < card.lever ? " (the League reads it together)" : ""}` : "   ▸ HONEST DEAL — no trap, no lever.") },
-    { n: 2, text: card.amber },
-    { n: 3, text: card.blue },
+    { n: 1, text: plain ? tc.red : tc.red + (card.trap ? "   ▸ " + t("LEVER: {word}", { word: t(LEVER_WORD[lever]) }) + (lever < card.lever ? " " + t("(the League reads it together)") : "") : "   ▸ " + t("HONEST DEAL — no trap, no lever.")) },
+    { n: 2, text: tc.amber },
+    { n: 3, text: tc.blue },
   ];
 
   const move = (clientY: number) => {
@@ -145,27 +151,27 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
 
   return (
     <div className="w-full max-w-sm">
-      <article className="relative isolate overflow-hidden rounded-xl border border-black/40 bg-program text-ink shadow-xl" aria-label={`Deal in ${titleCase(district)}`}>
+      <article className="relative isolate overflow-hidden rounded-xl border border-black/40 bg-program text-ink shadow-xl" aria-label={t("Deal in {d}", { d: titleCase(district) })}>
         <header className="flex items-center justify-between px-3 py-1.5" style={{ background: DISTRICT_SURFACE[district].bg, color: DISTRICT_SURFACE[district].fg }}>
-          <span className="text-sm font-black tracking-wide">{heading ?? <><span aria-hidden>{DISTRICT_MARK[district]} </span>{district}</>}</span>
-          <span className="text-[10px] opacity-90">FORM {formId ?? "—"}</span>
+          <span className="text-sm font-black tracking-wide">{heading ?? <><span aria-hidden>{DISTRICT_MARK[district]} </span>{tDistrict(district)}</>}</span>
+          <span className="text-[10px] opacity-90">{t("FORM {id}", { id: formId ?? "—" })}</span>
         </header>
         {card.die !== undefined && (
-          <p className="bg-black/5 px-3 py-1 text-[11px] font-bold">🎲 The fine print rolled {card.die}: this trap&apos;s lever is in {LEVER_WORD[card.lever]}.</p>
+          <p className="bg-black/5 px-3 py-1 text-[11px] font-bold">🎲 {t("The fine print rolled {n}: this trap's lever is in {word}.", { n: card.die, word: t(LEVER_WORD[card.lever]) })}</p>
         )}
         <div className="border-b border-dashed border-black/20 px-3 pb-2 pt-2">
           <div className="flex justify-between text-[9px] font-bold uppercase text-black/70">
-            <span>What you see</span>
-            <span className="italic normal-case">{plain ? "your real deal" : (sub ?? C.dayton[district].sub)}</span>
+            <span>{t("What you see")}</span>
+            <span className="italic normal-case">{plain ? t("your real deal") : (sub ?? t(C.dayton[district].sub))}</span>
           </div>
-          <p className="mt-0.5 text-[15px] font-extrabold leading-tight">{card.front}</p>
+          <p className="mt-0.5 text-[15px] font-extrabold leading-tight">{tc.front}</p>
         </div>
         <div ref={area} className="relative space-y-2 px-3 py-2">
           {layers.map(({ n, text }) => (
             <section key={n}>
               <h3 className="mb-0.5 flex items-center gap-1.5 text-[10px] font-black uppercase">
                 <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: LAYER_COLOR[n] }} />
-                Read {n} · {LAYER_LABEL[n]}
+                {t("Read {n}", { n })} · {t(LAYER_LABEL[n])}
               </h3>
               {n === 1 && needsMath ? (
                 <WorkItOut card={card} onDone={(guess) => setWorked({ card, guess })} />
@@ -173,7 +179,7 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
                 <>
                   {n === 1 && worked?.card === card && card.answer !== undefined && (
                     <p className="mb-1 text-[11px] font-bold">
-                      {Number(worked.guess.replace(/[^0-9.-]/g, "")) === card.answer ? "✓ You got it: " : `You said ${worked.guess || "nothing"}. The second number: `}
+                      {Number(worked.guess.replace(/[^0-9.-]/g, "")) === card.answer ? t("✓ You got it: ") : t("You said {guess}. The second number: ", { guess: worked.guess || t("nothing") })}
                       {card.answer.toLocaleString("en-US")}
                     </p>
                   )}
@@ -181,7 +187,7 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
                 </>
               ) : (
                 <div className="flex min-h-[64px] items-center justify-center rounded-sm border border-dashed border-black/25 text-[12px] text-black/55">
-                  🔒 Locked: needs Read {n} in {titleCase(district)}
+                  🔒 {t("Locked: needs Read {n} in {d}", { n, d: titleCase(district) })}
                 </div>
               )}
             </section>
@@ -189,7 +195,7 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
           {sight >= 1 && !plainCards && (
             <div
               role="slider"
-              aria-label="Reading glasses: drag up and down to read the second number"
+              aria-label={t("Reading glasses: drag up and down to read the second number")}
               aria-valuenow={Math.round(lensY)}
               tabIndex={0}
               onPointerDown={onDown}
@@ -208,33 +214,33 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math, 
         </div>
         <footer className="flex items-center justify-between border-t border-black/10 px-3 py-1.5 text-[10px] text-black/55">
           <span className="font-bold text-black/70">X ____________</span>
-          <span>TAKE · WALK · NEGOTIATE</span>
+          <span>{t("TAKE")} · {t("WALK")} · {t("NEGOTIATE")}</span>
         </footer>
       </article>
       {sight >= 1 ? (
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-program/80">
-          <span>{plainCards ? "Plain cards: the layers you can read, in plain text." : "Drag the red glasses over the card to read it."}</span>
+          <span>{plainCards ? t("Plain cards: the layers you can read, in plain text.") : t("Drag the red glasses over the card to read it.")}</span>
           <span className="flex gap-2">
             {!plainCards && (
               <button className="rounded-md border border-gold/60 px-2 py-1 font-semibold text-gold hover:bg-gold/10" aria-pressed={glassesOn} onClick={() => setGlassesOn((v) => !v)}>
-                {glassesOn ? "Take glasses off" : "Put glasses on"}
+                {glassesOn ? t("Take glasses off") : t("Put glasses on")}
               </button>
             )}
             <button
               className="rounded-md border border-white/30 px-2 py-1 font-semibold hover:bg-white/10"
               aria-pressed={plainCards}
-              title="For anyone the red-lens effect doesn't work for: color-blind players, low vision, screen readers"
+              title={t("For anyone the red-lens effect doesn't work for: color-blind players, low vision, screen readers")}
               onClick={() => setPlainCards(!plainCards)}
             >
-              {plainCards ? "Lens cards" : "Plain cards"}
+              {plainCards ? t("Lens cards") : t("Plain cards")}
             </button>
           </span>
         </div>
       ) : (
-        <p className="mt-2 text-xs text-program/80">Read 0 in {titleCase(district)}: you can only see the pitch. Most deals are traps.</p>
+        <p className="mt-2 text-xs text-program/80">{t("Read 0 in {d}: you can only see the pitch. Most deals are traps.", { d: titleCase(district) })}</p>
       )}
       <button className="mt-1 text-xs font-semibold text-[#7CFFB2] underline" aria-expanded={explain} onClick={() => setExplain((v) => !v)}>
-        {explain ? "Hide the card guide" : "What's on this card?"}
+        {explain ? t("Hide the card guide") : t("What's on this card?")}
       </button>
       {explain && <DealAnatomy />}
     </div>

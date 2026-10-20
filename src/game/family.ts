@@ -4,7 +4,9 @@
  * the last game it wrote down.
  */
 import { advance, newState } from "../engine/campaign";
+import type { District } from "../engine/content";
 import type { CampaignState, ChapterResult } from "../engine/engine";
+import { t, tDistrictTitle } from "../i18n";
 
 export type CampaignKey = "LEDGER" | "BOOK_ONE";
 export interface Family {
@@ -52,9 +54,9 @@ export function recordChapter(c: CampaignKey, gameId: string, chapter: string, r
 /** "Housing Rebuilt ×1, Labor Scarred ×1" */
 export function describeStickers(st: CampaignState): string {
   const parts = Object.entries(st.stickers).map(
-    ([d, x]) => `${d.charAt(0) + d.slice(1).toLowerCase()}` + (x?.rebuilt ? ` Rebuilt ×${x.rebuilt}` : "") + (x?.scarred ? ` Scarred ×${x.scarred}` : ""),
+    ([d, x]) => tDistrictTitle(d as District) + (x?.rebuilt ? t(" Rebuilt ×{n}", { n: x.rebuilt }) : "") + (x?.scarred ? t(" Scarred ×{n}", { n: x.scarred }) : ""),
   );
-  return parts.length ? parts.join(", ") : "no stickers yet";
+  return parts.length ? parts.join(", ") : t("no stickers yet");
 }
 
 export const FLAG_WORDS: Record<string, string> = {
