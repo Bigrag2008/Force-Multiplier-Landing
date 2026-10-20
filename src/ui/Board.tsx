@@ -94,7 +94,7 @@ function DistrictBlock({ s, d, highlight, changes, impact }: { s: Session; d: Di
         <div className="text-[10px] italic">{g.ed.districts[d].sub}</div>
       </div>
       <div className="h-12 overflow-hidden border-b-2" style={{ borderColor: DISTRICT_COLOR[d] }} title={g.ed.districts[d].flavor}>
-        <DistrictArt d={d} />
+        <DistrictArt d={d} src={g.ed.art?.districts[d]} />
       </div>
       <div className="space-y-2 p-2">
         <Track value={c} max={K.WAKE} color={DISTRICT_COLOR[d]} ink={DISTRICT_TEXT[d]} name="Clarity" label={<><Icon name="clarity" size={12} color={DISTRICT_COLOR[d]} /> Clarity</>} end="3 = awake" />

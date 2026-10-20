@@ -7,6 +7,8 @@ import {
   type Edition, type EditionHistory, type LocalDeal, type Resource,
 } from "@/engine/edition";
 import { DISTRICT_COLOR, DISTRICT_SURFACE, titleCase } from "@/ui/theme";
+import { DistrictArt } from "@/ui/art/DistrictArt";
+import { shrinkPicture } from "@/ui/art/shrink";
 
 /** what each district stands for, so a city can find its own version */
 const WHAT: Record<District, string> = {
@@ -151,14 +153,22 @@ function Editor({ ed, setEd, onSave, onClose }: { ed: Edition; setEd: (e: Editio
       <Section title="The five districts" sub="The deals in each district stay the same; this is where they happen in your city.">
         {DISTRICTS.map((d) => (
           <div key={d} className="rounded-xl border-l-4 bg-white/5 p-3" style={{ borderColor: DISTRICT_COLOR[d] }}>
-            <p className="font-black" style={{ color: DISTRICT_COLOR[d] }}>{titleCase(d)}</p>
+            <p><span className="rounded px-1.5 py-0.5 font-black" style={{ background: DISTRICT_SURFACE[d].bg, color: DISTRICT_SURFACE[d].fg }}>{titleCase(d)}</span></p>
             <p className="text-xs text-program/70">{WHAT[d]} West Dayton: <i>{WEST_DAYTON.districts[d].sub}</i>.</p>
             <div className="mt-2 grid gap-2 sm:grid-cols-[1fr_2fr]">
               <Field label="Nickname" hint="shows under the district's name"><input className={field} value={ed.districts[d].sub} onChange={(e) => setDistrict(d, "sub", e.target.value)} /></Field>
               <Field label="What it's like there" hint="one or two true sentences"><textarea className={`${field} h-[42px]`} value={ed.districts[d].flavor} onChange={(e) => setDistrict(d, "flavor", e.target.value)} /></Field>
             </div>
+            <DistrictPicture d={d} ed={ed} set={set} />
           </div>
         ))}
+        <Field label="Who made the pictures" hint="an artist, a class, a photographer: they said yes to their work being used here">
+          <input className={field} value={ed.art?.credit ?? ""} onChange={(e) => set({ art: { districts: ed.art?.districts ?? {}, credit: e.target.value } })} />
+        </Field>
+        <p className="text-xs text-program/60">
+          Pictures travel in the downloaded <b>.json</b> file (and in saved games), not in the share code, which stays short enough to paste.
+          Use art you made or have permission to use, and ask before showing anyone&apos;s face. Never draw the Machine as people from the neighborhood.
+        </p>
       </Section>
 
       <Section title="Where the block gathers" sub="Five places people really go. What each one does in the game stays the same.">
@@ -210,7 +220,7 @@ function Editor({ ed, setEd, onSave, onClose }: { ed: Edition; setEd: (e: Editio
           return (
             <div key={d} className="rounded-xl border-l-4 bg-white/5 p-3" style={{ borderColor: DISTRICT_COLOR[d] }}>
               <div className="flex items-center justify-between gap-2">
-                <p className="font-black" style={{ color: DISTRICT_COLOR[d] }}>{titleCase(d)} <span className="text-xs font-normal text-program/60">({deals.length})</span></p>
+                <p><span className="rounded px-1.5 py-0.5 font-black" style={{ background: DISTRICT_SURFACE[d].bg, color: DISTRICT_SURFACE[d].fg }}>{titleCase(d)}</span> <span className="text-xs font-normal text-program/60">({deals.length})</span></p>
                 <button className="rounded-lg border border-white/25 px-2 py-1 text-xs" onClick={() => setDeals([...deals, blankDeal()])}>+ Add a deal</button>
               </div>
               <p className="text-xs text-program/60">Ideas: {DEAL_IDEAS[d]}.</p>
@@ -322,5 +332,54 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
       <span className="mt-1 block">{children}</span>
       {hint && <span className="mt-0.5 block text-xs text-program/55">{hint}</span>}
     </label>
+  );
+}
+
+/** a district's own picture: the strip on the board, cropped to 5:2 and made small in the browser */
+function DistrictPicture({ d, ed, set }: { d: District; ed: Edition; set: (patch: Partial<Edition>) => void }) {
+  const [err, setErr] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const src = ed.art?.districts[d];
+  const put = (v: string | null) => {
+    const districts = { ...(ed.art?.districts ?? {}) };
+    if (v) districts[d] = v;
+    else delete districts[d];
+    set({ art: Object.keys(districts).length || ed.art?.credit ? { districts, credit: ed.art?.credit ?? "" } : undefined });
+  };
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-3">
+      <div className="h-12 w-[120px] overflow-hidden rounded border-b-2 bg-black/30" style={{ borderColor: DISTRICT_COLOR[d] }}>
+        <DistrictArt d={d} src={src} />
+      </div>
+      <label className="cursor-pointer rounded-lg border border-white/25 px-3 py-1.5 text-xs hover:bg-white/10">
+        {busy ? "Making it small…" : src ? "Change the picture" : "Add a picture"}
+        <input
+          type="file"
+          accept="image/*"
+          className="sr-only"
+          aria-label={`A picture of ${titleCase(d)}`}
+          onChange={async (e) => {
+            const f = e.target.files?.[0];
+            e.target.value = "";
+            if (!f) return;
+            setErr(null);
+            setBusy(true);
+            try {
+              put(await shrinkPicture(f));
+            } catch (x) {
+              setErr(x instanceof Error ? x.message : "That picture didn't work.");
+            } finally {
+              setBusy(false);
+            }
+          }}
+        />
+      </label>
+      {src && (
+        <button className="text-xs text-program/60 underline" onClick={() => put(null)}>
+          Use West Dayton&apos;s drawing
+        </button>
+      )}
+      {err && <span className="text-xs text-[#ff9b9b]" role="alert">{err}</span>}
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 /** Your City editions: the same game, set somewhere else. */
 import { describe, expect, it } from "vitest";
 import { C, DISTRICTS } from "../src/engine/content";
-import { blankEdition, checkEdition, encodeEdition, historyOf, readEdition, WEST_DAYTON, type Edition } from "../src/engine/edition";
+import { blankEdition, checkEdition, encodeEdition, historyOf, MAX_ART, readEdition, WEST_DAYTON, type Edition } from "../src/engine/edition";
 import { newGame } from "../src/engine/engine";
 import { Session } from "../src/game/session";
 
@@ -80,3 +80,23 @@ describe("Your City editions", () => {
   });
 });
 
+
+describe("an edition's own pictures", () => {
+  const pic = "data:image/webp;base64," + "A".repeat(200);
+  const withArt = (art: unknown) => ({ ...blankEdition(), art }) as Edition;
+
+  it("keeps small real images, and drops anything else", () => {
+    const ed = readEdition(JSON.stringify(withArt({ districts: { LENDING: pic, HOUSING: "javascript:alert(1)", LABOR: "data:image/svg+xml;base64,PHN2Zz4=", HEALTH: "data:image/png;base64," + "A".repeat(MAX_ART) }, credit: "Ms. Jones's art class" })))!;
+    expect(Object.keys(ed.art!.districts)).toEqual(["LENDING"]);
+    expect(ed.art!.credit).toBe("Ms. Jones's art class");
+  });
+  it("travel in the .json file but not in the share code", () => {
+    const ed = withArt({ districts: { LENDING: pic }, credit: "us" });
+    expect(readEdition(JSON.stringify(ed))!.art?.districts.LENDING).toBe(pic);
+    expect(readEdition(encodeEdition(ed))!.art).toBeUndefined();
+  });
+  it("need a credit", () => {
+    expect(checkEdition(withArt({ districts: { LENDING: pic }, credit: "" })).some((p) => p.startsWith("Pictures"))).toBe(true);
+    expect(checkEdition(withArt({ districts: { LENDING: pic }, credit: "us" })).some((p) => p.startsWith("Pictures"))).toBe(false);
+  });
+});

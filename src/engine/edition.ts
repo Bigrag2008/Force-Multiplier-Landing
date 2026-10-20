@@ -56,6 +56,29 @@ export interface Edition {
   resources: Resource[];
   /** deals from your city or state, shuffled in with the base deck (not in endless deals or Chapter 3) */
   deals?: Partial<Record<District, LocalDeal[]>>;
+  /** your own pictures of the five districts, in place of West Dayton's (small images, kept in the edition itself) */
+  art?: EditionArt;
+}
+export interface EditionArt {
+  /** each one an image as a data: URL, made small in the browser (see src/ui/art/shrink.ts) */
+  districts: Partial<Record<District, string>>;
+  /** who made the pictures; they said yes to them being used */
+  credit: string;
+}
+/** the most a district picture may weigh, as text (about 120 KB of image) */
+export const MAX_ART = 160_000;
+const IMAGE = /^data:image\/(webp|jpeg|png);base64,[A-Za-z0-9+/=]+$/;
+/** only small, real images survive (a picture that isn't one is dropped, never shown) */
+export function cleanArt(art: unknown): EditionArt | undefined {
+  if (!art || typeof art !== "object") return undefined;
+  const a = art as Partial<EditionArt>;
+  const districts = Object.fromEntries(
+    DISTRICTS.flatMap((d) => {
+      const v = a.districts?.[d];
+      return typeof v === "string" && v.length <= MAX_ART && IMAGE.test(v) ? [[d, v]] : [];
+    }),
+  ) as EditionArt["districts"];
+  return Object.keys(districts).length ? { districts, credit: typeof a.credit === "string" ? a.credit : "" } : undefined;
 }
 
 /** an edition's local deals as playable cards */
@@ -137,6 +160,8 @@ export function checkEdition(ed: Edition): string[] {
       if (!x.source?.trim()) out.push(`${label}: name the law, ordinance or record it comes from (source).`);
       if (x.trap && ![1, 2, 3].includes(x.lever)) out.push(`${label}: pick which layer beats it (red, amber or blue).`);
     }
+  if (ed.art && Object.keys(ed.art.districts).length && !ed.art.credit?.trim())
+    out.push("Pictures: say who made them (and that they said yes to them being used here).");
   for (const [i, r] of ed.resources.entries()) {
     need(r.name, `Resource #${i + 1}: name`);
     need(r.what, `Resource #${i + 1}: what it helps with`);
@@ -162,8 +187,10 @@ export function blankEdition(): Edition {
 
 // ---- sharing: "SNE1." + base64url JSON (the same shape as a game's result code) ----
 const PREFIX = "SNE1.";
+/** a share code: everything but the pictures, so it stays short enough to paste (pictures travel in the .json file) */
 export function encodeEdition(ed: Edition): string {
-  const bytes = new TextEncoder().encode(JSON.stringify(ed));
+  const { art: _art, ...rest } = ed; // eslint-disable-line @typescript-eslint/no-unused-vars
+  const bytes = new TextEncoder().encode(JSON.stringify(rest));
   let bin = "";
   for (const b of bytes) bin += String.fromCharCode(b);
   return PREFIX + btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
@@ -191,6 +218,7 @@ export function readEdition(text: string): Edition | null {
       historyMode: ed.historyMode === "replace" ? "replace" : "add",
       resources: Array.isArray(ed.resources) ? ed.resources : [],
       deals: ed.deals && typeof ed.deals === "object" ? ed.deals : {},
+      art: cleanArt(ed.art),
     };
   } catch {
     return null;

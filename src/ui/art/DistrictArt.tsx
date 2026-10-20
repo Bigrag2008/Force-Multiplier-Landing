@@ -179,9 +179,9 @@ function Education() {
 
 const SCENES: Record<District, () => ReactNode> = { LENDING: Lending, HOUSING: Housing, LABOR: Labor, HEALTH: Health, EDUCATION: Education };
 
-/** The district's scene: commissioned art if the manifest has it, otherwise the drawn one. */
-export function DistrictArt({ d, className = "" }: { d: District; className?: string }) {
-  const img = ART.districts[d];
+/** The district's scene: a Your City edition's own picture, else commissioned art if the manifest has it, else the drawn one. */
+export function DistrictArt({ d, src, className = "" }: { d: District; src?: string; className?: string }) {
+  const img = src ?? ART.districts[d];
   // eslint-disable-next-line @next/next/no-img-element -- a plain static file, so the site stays hostable anywhere
   if (img) return <img src={img} alt="" className={`h-full w-full object-cover ${className}`} />;
   const Scene = SCENES[d];
