@@ -125,3 +125,7 @@ export const FLAG_WORDS: Record<string, string> = {
   CIVIC_ARMOR: "Civic Armor (every Teach comes with cover)",
   CROWN_WORN: "Someone wore the Crown (an extra strike in Chapter 4's first round)",
 };
+
+/** the printed envelope for a chapter (game/print_kit/build_chapter_pack.py names it the same way) */
+export const envelopeOf = (ch: { campaign: string; number: number; title: string }) =>
+  `/${ch.campaign === "LEDGER" ? "The_Long_Ledger" : "Book_One"}_Chapter${ch.number}_${ch.title.replace(/'/g, "").replace(/[^A-Za-z0-9]+/g, "_").replace(/^_|_$/g, "")}.pdf`;

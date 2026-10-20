@@ -2,7 +2,10 @@
 import { describe, expect, it } from "vitest";
 import { advance, newState } from "../src/engine/campaign";
 import type { ChapterResult } from "../src/engine/engine";
-import { encodeFamily, readFamily } from "../src/game/family";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { C } from "../src/engine/content";
+import { encodeFamily, envelopeOf, readFamily } from "../src/game/family";
 
 const res = (o: Partial<ChapterResult> = {}): ChapterResult => ({
   won: true, ledger: 3, rebuilt: ["LABOR"], scarred: ["HEALTH"], falls: 0, reaches: 0, league: false, redlining_broken: true,
@@ -33,5 +36,8 @@ describe("family codes", () => {
     expect(f.state.stickers).toEqual({ LABOR: { rebuilt: 2, scarred: 0 } });
     expect(f.state.decisions).toEqual({ FREEDOMS_LEDGER: "GO" });
     expect(f.state.played).toEqual([{ chapter: "TODAY", won: true, ledger: 0, decision: null }]);
+  });
+  it("every chapter's printed envelope is where setup links it", () => {
+    for (const ch of Object.values(C.chapters)) expect(existsSync(join(__dirname, "..", "game", envelopeOf(ch).slice(1))), envelopeOf(ch)).toBe(true);
   });
 });

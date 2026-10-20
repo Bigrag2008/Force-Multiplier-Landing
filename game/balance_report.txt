@@ -89,6 +89,22 @@ THE SECOND NUMBER — balance report (v4)
   whole Book One         4p  win after a win  67%  after a loss  69%  final Ledger +5.9
   whole Book One         5p  win after a win  63%  after a loss  54%  final Ledger +4.3
 
+=== SOLO (one player, careful bot) ===
+  Co-op                               60%
+  Block Party                         60%
+  Overlord                            68%
+  LEDGER 3. The Map                   50%
+  LEDGER 1. Freedom's Ledger          69%
+  LEDGER 2. Up North                  47%
+  LEDGER 4. Voice                     60%
+  LEDGER 5. The Plants Close          56%
+  LEDGER 6. Today                     65%
+  BOOK_ONE 1. The Chain               60%
+  BOOK_ONE 2. The Net                 59%
+  BOOK_ONE 3. The Crown               62%
+  BOOK_ONE 4. The Empty Throne        56%
+  shortcut (co-op): never 27% · careful 60% · greedy 3%
+
 --- verdict ---
   Block Party 2p healthy  (careful 69% · human 77%)
   Block Party 3p healthy  (careful 70% · human 67%)
@@ -131,4 +147,18 @@ THE SECOND NUMBER — balance report (v4)
   BOOK_ONE 3p carry-over no spiral  (after a win 69% · after a loss 67%)
   BOOK_ONE 4p carry-over no spiral  (after a win 67% · after a loss 69%)
   BOOK_ONE 5p carry-over no spiral  (after a win 63% · after a loss 54%)
+  Solo Co-op                          healthy  (60% wins)
+  Solo Block Party                    healthy  (60% wins)
+  Solo Overlord                       healthy  (68% wins)
+  Solo LEDGER 3. The Map              healthy  (50% wins)
+  Solo LEDGER 1. Freedom's Ledger     healthy  (69% wins)
+  Solo LEDGER 2. Up North             healthy  (47% wins)
+  Solo LEDGER 4. Voice                healthy  (60% wins)
+  Solo LEDGER 5. The Plants Close     healthy  (56% wins)
+  Solo LEDGER 6. Today                healthy  (65% wins)
+  Solo BOOK_ONE 1. The Chain          healthy  (60% wins)
+  Solo BOOK_ONE 2. The Net            healthy  (59% wins)
+  Solo BOOK_ONE 3. The Crown          healthy  (62% wins)
+  Solo BOOK_ONE 4. The Empty Throne   healthy  (56% wins)
+  Solo shortcut tempting AND dangerous  (never 27% · careful 60% · greedy 3%)
   Deep Read   matters  (amber = 20.3% of defusals; blue/Read 3 is required to trace every winning thread)

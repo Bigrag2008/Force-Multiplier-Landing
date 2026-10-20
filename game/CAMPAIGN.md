@@ -86,5 +86,5 @@ Every chapter is tested on its own at 1–5 players (solo: 46–70%), and whole 
 
 ## Still to make for print
 1. **The historian's pass** on every era card ([`eras/FACT_CHECK.md`](eras/FACT_CHECK.md) lists what each writer wasn't sure of), and the financial reviewer on the Chapter 5 cards.
-2. **Components:** sticker sheet, lineage sheet, Ledger track, six sealed envelopes (Chapter 3's is in the print kit: `print_kit/build_chapter_pack.py`).
+2. **Components (built):** every chapter's printed envelope, built from the same chapter definitions the website plays (`python3 print_kit/build_chapter_pack.py`): `The_Long_Ledger_Chapter1_Freedoms_Ledger.pdf` through `…Chapter6_Today.pdf`. Each has a cover, the rules page (setup, twist, Owner, carry-ins, ending, Family Decision), era deal cards with their own backs, and reference cards; Chapter 1 (and Chapter 3, where many tables start) adds the lineage sheet with the Ledger track, and the sticker sheet. Still to do: commissioned art, and a Spanish version.
 3. **Sold as:** a premium expansion box, *The Long Ledger*, after the base game.

@@ -95,6 +95,6 @@ The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of tr
 | `game/` | The game itself (see above). |
 
 ## Next steps
-- The commissioned illustrations (see `game/ART_BRIEF.md`), and printed envelopes for the campaign chapters beyond Chapter 3.
+- The commissioned illustrations (see `game/ART_BRIEF.md`), and Spanish versions of the chapter envelopes.
 
 Part of the Individual Democracy / Civic Armor universe.

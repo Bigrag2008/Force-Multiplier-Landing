@@ -292,4 +292,5 @@ export const setup: Record<string, string> = {
   "Bring a family from another device": "Traer una familia de otro dispositivo",
   "Paste the family code (it starts with SNF1.)": "Pega el código de la familia (empieza con SNF1.)",
   "Bring it in": "Traerla",
+  "🖨 Print this chapter's envelope (PDF, for playing on paper)": "🖨 Imprimir el sobre de este capítulo (PDF, para jugar en papel; en inglés)",
 };

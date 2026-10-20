@@ -17,8 +17,8 @@ A cooperative board game about reading the hidden cost in every deal, and teachi
 | `RULES.es.md` | The rulebook in Spanish. |
 | `i18n/` | The Spanish edition's card text (`es_*.json`) and the glossary every translation follows (`GLOSSARY.md`). |
 | `campaign.py` | What a family carries between chapters: the Ledger, stickers, decisions, flags. |
-| `The_Long_Ledger_Chapter3_The_Map.pdf` | The printable Chapter 3 envelope: rules, 30 era deals, chapter cards, lineage sheet, stickers. |
-| `print_kit/build_chapter_pack.py` | Rebuilds the Chapter 3 envelope. |
+| `The_Long_Ledger_Chapter*.pdf`, `Book_One_Chapter*.pdf` | The printable envelope for every campaign chapter: rules, era deals, chapter cards; the lineage sheet and stickers (Long Ledger 1 and 3) or the ledger sheet (Book One 1). |
+| `print_kit/build_chapter_pack.py` | Rebuilds every envelope (or one: `… THE_MAP`). |
 | *(repo root)* | **The online game:** the Next.js website at the top of this repo. See the main `README.md` to run, play and deploy it. |
 | `COMMUNITY.md` | People, partners, permissions and the fact-check list. |
 | `deck_cards.py` | All card content: 76 deals (60 traps with levers + 16 honest), roles, Owners, scenarios, patterns, History, Commons places, the Dayton setting. |

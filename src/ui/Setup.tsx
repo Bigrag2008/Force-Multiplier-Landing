@@ -4,12 +4,13 @@ import { letGo, nextChapter } from "../engine/campaign";
 import { C, type District } from "../engine/content";
 import { checkEdition, LAST_EDITION, loadEditions, WEST_DAYTON, type Edition } from "../engine/edition";
 import { describeCarry, forgetBlock, loadBlock, type BlockMemory } from "../game/block";
-import { describeStickers, FLAG_WORDS, forgetFamily, loadFamily, type CampaignKey, type Family } from "../game/family";
+import { describeStickers, envelopeOf, FLAG_WORDS, forgetFamily, loadFamily, type CampaignKey, type Family } from "../game/family";
 import { FamilyCode } from "./FamilyCode";
 import type { Mode, SessionConfig } from "../game/session";
 import { t, useLang } from "../i18n";
 import { titleCase } from "./theme";
 import { RolePortrait } from "./art/RolePortrait";
+
 
 const ROLES = Object.keys(C.roles);
 const DEFAULT_NAMES = C.roster.map((r) => r.name);
@@ -185,6 +186,9 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
                 <b className="text-gold">{t("Chapter {n}", { n: chap.number })}: {t(chap.title)}</b> ({t(chap.era)}). {t(chap.intro)}
               </p>
               <p className="mt-1"><b>{t("The twist:")}</b> {t(chap.twist)}</p>
+              <a href={envelopeOf(chap)} target="_blank" rel="noopener" className="mt-1 inline-block text-xs text-gold underline">
+                {t("🖨 Print this chapter's envelope (PDF, for playing on paper)")}
+              </a>
               {rebuilt.length > 0 && (
                 <label className="mt-2 block">
                   <b>{t("Before the plants close, the family chooses:")}</b>
