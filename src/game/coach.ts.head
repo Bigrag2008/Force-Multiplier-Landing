@@ -1,0 +1,39 @@
+/**
+ * The Coach: plays along with the table and holds a new player's hand.
+ *
+ * Everything here is pure: it reads the game, never changes it, never draws a card
+ * and never touches the random number generator. Deal advice uses only the layers
+ * the player can already read, so the Coach teaches reading instead of cheating.
+ */
+import { K, type Card, type Choice, type District, type PlaceKey } from "../engine/content";
+import { maxBy, minBy, type Game, type Player } from "../engine/engine";
+import { t, tDistrictTitle } from "../i18n";
+import type { Session } from "./session";
+
+/**
+ * What a shortcut costs, as far as the table can know. A hidden Owner can make it cost more
+ * (the Debt Buyer does), and the Coach mustn't give that clue away before the Owner is revealed.
+ */
+const takeCost = (g: Game) => (g.ownerShown || g.party ? g.takeCost() : K.TAKE_CORRUPT);
+const costWord = (g: Game) => (g.ownerShown || g.party ? `+${takeCost(g)}` : t("+{n} or more", { n: takeCost(g) }));
+/** the Shady that ends you: the Fall, or (Block Party) sitting out a turn */
+const limit = (g: Game) => (g.party ? K.BP_SIT_OUT : K.FLIP);
+
+const T = (d: District) => tDistrictTitle(d);
+const LEVER = ["", "red", "amber", "blue"];
+const lev = (n: number) => t(LEVER[n]);
+
+export type TurnPick =
+  | { k: "study" | "face" | "history" | "trace"; d: District }
+  | { k: "teach"; d: District; t: string }
+  | { k: "commons"; place: PlaceKey }
+  | { k: "reach"; t: string }
+  | { k: "expose_uw" | "league" };
+
+export interface Advice<P> {
+  pick: P;
+  title: string;
+  why: string;
+  /** the tempting road not taken, shown beside the pick so the choice is real */
+  alt?: { pick: P; title: string; why: string; falls: boolean };
+}

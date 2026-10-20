@@ -4,6 +4,8 @@ import { ImpactLayer, spokenImpact, useImpactSound, useJolt } from "./Impact";
 import { setSoundOn, soundOn } from "./sound";
 import { readImpact } from "./readImpact";
 import { C } from "../engine/content";
+import { t, useLang } from "../i18n";
+import { titleCase } from "./theme";
 import type { Move } from "../game/moves";
 import type { Session } from "../game/session";
 import { waitingOn } from "../net/protocol";
@@ -46,6 +48,7 @@ export interface Net {
  * `story`: "always" for the guided game; "first-time" shows the intro comic once per device.
  */
 export function GameScreen({ start, onQuit, story = "first-time", net }: { start: GameStart; onQuit: () => void; story?: "always" | "first-time"; net?: Net }) {
+  useLang();
   const { session: s, play, local, apply, version, changes } = useSession(start, { send: net?.send, onApplied: net?.onApplied, autosave: net?.autosave });
   const onReady = net?.onReady;
   useEffect(() => onReady?.(s, apply), [onReady, s, apply]);
@@ -78,50 +81,50 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
 
   return (
     <main className="mx-auto max-w-7xl space-y-4 px-4 py-4">
-      <a href="#your-move" className="skip-link">Skip to your move</a>
+      <a href="#your-move" className="skip-link">{t("Skip to your move")}</a>
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-gold/30 pb-3">
         <div>
-          <h1 className="text-2xl font-black text-gold">The Second Number</h1>
+          <h1 className="text-2xl font-black text-gold">{t("The Second Number")}</h1>
           <p className="text-xs text-program/70">
-            {g.ed.name} · {g.overlord ? "Overlord mode" : g.scenario} · round {g.round}/{g.maxRounds}
+            {t(g.ed.name)} · {g.overlord ? t("Overlord mode") : t(g.scenario)} · {t("round {n}/{max}", { n: g.round, max: g.maxRounds })}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 text-sm">
-          <label className="flex items-center gap-2" title="The Coach recommends a move, explains why, and teaches each rule the first time it comes up.">
+          <label className="flex items-center gap-2" title={t("The Coach recommends a move, explains why, and teaches each rule the first time it comes up.")}>
             <input type="checkbox" checked={s.coach} onChange={(e) => local((x) => (x.coach = e.target.checked))} />
-            🧑🏾‍🏫 Coach
+            🧑🏾‍🏫 {t("Coach")}
           </label>
           {!g.party && (
-            <label className="flex items-center gap-2" title="When a Machine strike would capture a district, open the Green Book automatically (once per game).">
+            <label className="flex items-center gap-2" title={t("When a Machine strike would capture a district, open the Green Book automatically (once per game).")}>
               <input type="checkbox" checked={s.autoGreenBook} onChange={(e) => play({ t: "greenbook", on: e.target.checked })} />
-              📗 Open the Green Book when a capture is coming
+              📗 {t("Open the Green Book when a capture is coming")}
             </label>
           )}
           <button
             className="rounded-md border border-white/25 px-2 py-1 hover:bg-white/10"
             aria-pressed={sound}
             onClick={() => (setSoundOn(!sound), setSound(!sound))}
-            title={sound ? "Turn the sound off" : "Turn the sound on"}
+            title={sound ? t("Turn the sound off") : t("Turn the sound on")}
           >
-            {sound ? "🔊 Sound" : "🔇 Muted"}
+            {sound ? `🔊 ${t("Sound")}` : `🔇 ${t("Muted")}`}
           </button>
           <button className="rounded-md border border-white/25 px-2 py-1 hover:bg-white/10" onClick={() => setShowIntro(true)}>
-            Story
+            {t("Story")}
           </button>
           <a href="/how-to-play" target="_blank" className="rounded-md border border-white/25 px-2 py-1 hover:bg-white/10">
-            Rules
+            {t("Rules")}
           </a>
           <button className="rounded-md border border-white/25 px-2 py-1 hover:bg-white/10" onClick={onQuit}>
-            New game
+            {t("New game")}
           </button>
         </div>
       </header>
 
       {intro && g.round === 1 && s.phase !== "over" && (
         <aside className="rounded-xl border border-gold/40 bg-black/25 p-3 text-sm">
-          <b className="text-gold">{C.campaigns[intro.campaign].title} · Chapter {intro.number}: {intro.title} ({intro.era}).</b> {intro.intro}
-          <p className="mt-1"><b>The twist:</b> {intro.twist}</p>
-          {intro.league && <p className="mt-1"><b>{intro.league.name}:</b> {intro.league.text}</p>}
+          <b className="text-gold">{t(C.campaigns[intro.campaign].title)} · {t("Chapter {n}", { n: intro.number })}: {t(intro.title)} ({t(intro.era)}).</b> {t(intro.intro)}
+          <p className="mt-1"><b>{t("The twist:")}</b> {t(intro.twist)}</p>
+          {intro.league && <p className="mt-1"><b>{t(intro.league.name)}:</b> {t(intro.league.text)}</p>}
         </aside>
       )}
 
@@ -133,7 +136,7 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
         {/* on phones the actions come first; on wide screens they sit beside the board */}
         <div className="order-first space-y-4 lg:order-none">
           {net?.room}
-          <div key={panelKey} id="your-move" tabIndex={-1} aria-label="Your move">
+          <div key={panelKey} id="your-move" tabIndex={-1} aria-label={t("Your move")}>
             {!myMove && <WaitingPanel s={s} who={waiting!} />}
             {myMove && s.phase === "turn" && <TurnPanel s={s} play={play} local={local} />}
             {myMove && s.phase === "fallen" && <MachinePanel s={s} play={play} local={local} who="fallen" />}
@@ -154,18 +157,18 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
       {/* screen readers hear what each move did, once, in plain words */}
       <p className="sr-only" aria-live="polite" role="status">{spokenImpact(impact)}</p>
 
-      {showIntro && <IntroComic onDone={closeIntro} where={g.ed.id === "west-dayton" ? undefined : `${cap(g.ed.area)} of ${g.ed.city.split(",")[0]}`} />}
+      {showIntro && <IntroComic onDone={closeIntro} where={g.ed.id === "west-dayton" ? undefined : t("{area} of {city}", { area: cap(t(g.ed.area)), city: g.ed.city.split(",")[0] })} />}
 
       {showHistory && g.historyCard && (
         <div role="dialog" aria-modal="true" aria-labelledby="history-title" className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={closeHistory} onKeyDown={(e) => e.key === "Escape" && closeHistory()}>
           <div className="max-w-lg rounded-2xl border-2 border-gold bg-program p-6 text-ink shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <p className="text-xs font-black uppercase tracking-widest text-[#5a3d1e]">History · read it aloud</p>
-            <h2 id="history-title" className="mt-1 text-2xl font-black">{g.historyCard.title}</h2>
-            <p className="text-sm text-black/60">{g.historyCard.year} · {g.historyCard.place}</p>
-            <p className="mt-3">{g.historyCard.story}</p>
-            <p className="mt-3 font-bold italic">“{g.historyCard.lesson}”</p>
+            <p className="text-xs font-black uppercase tracking-widest text-[#5a3d1e]">{t("History · read it aloud")}</p>
+            <h2 id="history-title" className="mt-1 text-2xl font-black">{t(g.historyCard.title)}</h2>
+            <p className="text-sm text-black/60">{t(g.historyCard.year)} · {t(g.historyCard.place)}</p>
+            <p className="mt-3">{t(g.historyCard.story)}</p>
+            <p className="mt-3 font-bold italic">“{t(g.historyCard.lesson)}”</p>
             <button className="mt-4 rounded-lg bg-night px-4 py-2 font-bold text-gold" onClick={closeHistory} autoFocus>
-              Back to the block
+              {t("Back to the block")}
             </button>
           </div>
         </div>
@@ -179,25 +182,26 @@ const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 
 /** someone else's turn, on their own phone */
 function WaitingPanel({ s, who }: { s: Session; who: string }) {
+  useLang();
   const pd = s.pending;
   const doing =
     s.phase === "fallen"
-      ? "The Machine is moving through them."
+      ? t("The Machine is moving through them.")
       : s.phase === "overlord" || s.phase === "crownOffer"
-        ? "The Overlord is choosing where to strike."
+        ? t("The Overlord is choosing where to strike.")
         : s.phase === "crown"
-          ? "The Owner has made them an offer. It's their call."
+          ? t("The Owner has made them an offer. It's their call.")
         : pd?.k === "deal"
-          ? `Reading a deal in ${pd.d.charAt(0) + pd.d.slice(1).toLowerCase()}…`
+          ? t("Reading a deal in {d}…", { d: titleCase(pd.d) })
           : pd?.k === "teach"
-            ? `Teaching ${pd.to}: listen for the second number.`
-            : `${s.actionsLeft} action${s.actionsLeft === 1 ? "" : "s"} left.`;
+            ? t("Teaching {name}: listen for the second number.", { name: pd.to })
+            : s.actionsLeft === 1 ? t("1 action left.") : t("{n} actions left.", { n: s.actionsLeft });
   return (
     <section className="rounded-xl border border-white/20 bg-night/80 p-4" aria-live="polite">
-      <p className="text-xs font-black uppercase tracking-widest text-program/60">Waiting on</p>
+      <p className="text-xs font-black uppercase tracking-widest text-program/60">{t("Waiting on")}</p>
       <h2 className="text-lg font-black text-gold">{who}</h2>
       <p className="mt-1 text-sm text-program/85">{doing}</p>
-      <p className="mt-2 text-xs text-program/60">It&apos;s their move, on their phone. The board updates as they play.</p>
+      <p className="mt-2 text-xs text-program/60">{t("It's their move, on their phone. The board updates as they play.")}</p>
     </section>
   );
 }
