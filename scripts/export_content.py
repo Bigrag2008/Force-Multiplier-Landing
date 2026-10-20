@@ -28,7 +28,7 @@ content=dict(
     dayton=D.DAYTON, deck=D.DECK, roles=D.ROLES,
     patterns=[dict(combo=list(c),name=n,lesson=l) for c,n,l in D.PATTERNS],
     owners=D.OWNERS, scenarios=D.SCENARIOS, history=D.HISTORY, places=D.PLACES,
-    chapters=CH.CHAPTERS, roster=[dict(name=n,role=r) for n,r in E.ROSTER],
+    chapters=CH.CHAPTERS, campaigns=CH.CAMPAIGNS, roster=[dict(name=n,role=r) for n,r in E.ROSTER],
     constants={k:getattr(E,k) for k in CONST_NAMES},
     dealTemplates=G.TEMPLATES, slotOrder=list(G.SLOT_ORDER), counterfeits=D.COUNTERFEITS,
 )

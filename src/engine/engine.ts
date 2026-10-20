@@ -28,6 +28,8 @@ export type Action =
   | { k: "trace"; d: District }
   | { k: "expose_uw" }
   | { k: "league" }
+  | { k: "march" }
+  | { k: "leave_desk" }
   | { k: "m_extract"; d: District }
   | { k: "m_obscure"; d: District }
   | { k: "m_tempt"; t: Player | null }
@@ -65,6 +67,8 @@ export class Player {
   flipped = false;
   shields: number;
   elderUsed = false;
+  /** Chapter 6 (Today): the Elder may teach History twice */
+  historyLeft = 1;
   freeTeach = false;
   shopAround = false;
   practice = false;
@@ -102,6 +106,23 @@ export interface GameOptions {
   render?: boolean;
   /** a block that remembers: last game's woken districts and scars (see remember()) */
   carry?: Carry | null;
+  /** a campaign's memory carried into a chapter (src/engine/campaign.ts) */
+  campaign?: CampaignState | null;
+}
+
+/** what a family carries between chapters (game/campaign.py) */
+export interface CampaignState {
+  campaign: "LEDGER" | "BOOK_ONE";
+  played: { chapter: string; won: boolean; ledger: number; decision: string | null }[];
+  ledger: number;
+  stickers: Partial<Record<District, { rebuilt: number; scarred: number }>>;
+  decisions: Record<string, string>;
+  flags: string[];
+  unlocks: string[];
+  rally: boolean;
+  falls: number;
+  defend: boolean;
+  quit_desk: string | null;
 }
 
 /** what a block remembers between games */
@@ -150,6 +171,9 @@ export interface ChapterResult {
   redlining_broken: boolean;
   unlocks: string[];
   rally: boolean;
+  burned: boolean;
+  quit_desk: string | null;
+  crown: string | null;
 }
 
 export class Game {
@@ -205,13 +229,50 @@ export class Game {
   counterfeits = new Set<District>();
   forged = false;
   forgeries = K.COUNTERFEIT_HAND;
+  /** what the family carries in (campaign.ts) */
+  campaign: Partial<CampaignState>;
+  /** Chapter 2: districts that open later */
+  late: Partial<Record<District, number>> = {};
+  /** Chapter 4: the March, once per game */
+  marched = false;
+  /** Chapter 5: Rebuilt districts the Machine strikes first */
+  defend: District[] = [];
+  /** Book One 4: who has taught */
+  taught = new Set<string>();
+  /** Book One 2: the Desk */
+  desk: string | null = null;
+  deskLeft: string | null = null;
+  deskOffered = false;
+  /** Book One 3: the Crown */
+  crowned: string | null = null;
+  crownOffered = false;
+  crownRefused = false;
+  /** the Terrell rule backfired, for the ledger */
+  backfires = 0;
+  /** Chapter 5 after "run for office": rounds the Owner's hidden hand rests */
+  handRests = 0;
+  humanOverlord = false;
 
   constructor(o: GameOptions = {}) {
     this.rng = new Rng(o.seed ?? Math.floor(Math.random() * 2 ** 31));
-    this.party = !!o.party && !o.overlord && !o.chapter;
-    this.finePrint = !!o.finePrint;
-    this.terrell = !!o.terrell;
-    this.endless = !!o.endless;
+    const ch0 = o.chapter ? C.chapters[o.chapter] : null;
+    let overlord = !!o.overlord;
+    let party = !!o.party;
+    let finePrint = !!o.finePrint;
+    let terrell = !!o.terrell;
+    let endless = !!o.endless;
+    if (ch0) {
+      // a chapter sets its own mode and house rules
+      overlord = ch0.mode === "overlord";
+      party = ch0.mode === "party";
+      finePrint = ch0.rules.fine_print ?? finePrint;
+      terrell = ch0.rules.terrell ?? terrell;
+      endless = ch0.rules.endless ?? endless;
+    }
+    this.party = party && !overlord && (!ch0 || ch0.mode === "party");
+    this.finePrint = finePrint;
+    this.terrell = terrell;
+    this.endless = endless;
     this.partial = !!o.partial;
     this.render = !!o.render;
     this.carry = o.carry ?? null;
@@ -220,16 +281,23 @@ export class Game {
     this.historyDeck = historyOf(this.ed);
     this.ds = this.party ? [...K.BP_DISTRICTS] : [...DISTRICTS];
     this.maxRounds = this.party ? K.BP_ROUNDS : K.MAX_ROUNDS;
-    this.chapter = o.chapter ? C.chapters[o.chapter] : null;
-    this.overlord = !!o.overlord;
+    this.chapter = ch0;
+    this.campaign = o.campaign ?? {};
+    this.overlord = overlord;
     this.ownerShown = this.overlord;
     const ch = this.chapter;
-    this.scenario = this.party ? "Block Party" : ch ? `Chapter ${ch.number}: ${ch.title}` : o.scenario || this.rng.choice(Object.keys(C.scenarios));
+    this.scenario = ch ? `Chapter ${ch.number}: ${ch.title}` : this.party ? "Block Party" : o.scenario || this.rng.choice(Object.keys(C.scenarios));
     // a Your City edition's local deals join the base deck (not Chapter 3's era decks)
     this.deck = Object.fromEntries(
       DISTRICTS.map((d) => [d, (ch && ch.decks[d]) || (localCards(this.ed, d).length ? [...C.deck[d], ...localCards(this.ed, d)] : C.deck[d])]),
     ) as Record<District, Card[]>;
-    if (ch) for (const [d, p] of Object.entries(ch.pressure)) this.pressure[d as District] = p as number;
+    if (ch) {
+      for (const [d, p] of Object.entries(ch.pressure)) this.pressure[d as District] = p as number;
+      if (ch.late && this.decided("FREEDOMS_LEDGER") !== "GO") {
+        this.late = { ...ch.late };
+        this.ds = this.ds.filter((d) => !(d in this.late));
+      }
+    }
     const start: Record<string, Partial<Record<District, number>>> = {
       "The Eviction Wave": { HOUSING: 2 },
       "The Closure": { EDUCATION: 3 },
@@ -242,6 +310,163 @@ export class Game {
     if (this.party) this.greenBook = false;
     this.ownerFace = ch && !this.overlord ? ch.face : this.owner;
     this.remember();
+    if (ch) this.carryIn();
+    this.handRests = ch && ch.key === "PLANTS_CLOSE" && this.decided("VOICE") === "RUN" ? 3 : 0;
+  }
+
+  // ---- the campaign: what a family carries into a chapter (campaign.ts, CAMPAIGN.md, BOOK_ONE.md) ----
+  decided(chapter: string): string | undefined {
+    return this.campaign.decisions?.[chapter];
+  }
+  flag(f: string) {
+    return (this.campaign.flags ?? []).includes(f);
+  }
+  /**
+   * Board stickers (Rebuilt: Clarity +1 each, or Squeeze −1 where the era starts it squeezed; Scarred: Squeeze +1
+   * each, never a capture), and the last Family Decision. Player effects are applied in newGame.
+   */
+  carryIn() {
+    const c = this.campaign;
+    const ch = this.chapter!;
+    if (!c || !Object.keys(c).length || ch.campaign !== "LEDGER") return;
+    const st = c.stickers ?? {};
+    for (const d of this.ds) {
+      const s = st[d];
+      if (!s) continue;
+      for (let i = 0; i < (s.rebuilt ?? 0); i++) {
+        // what the family built resists the era's grip first
+        if (this.pressure[d] > 0) this.pressure[d] -= 1;
+        else this.clarity[d] = Math.min(K.WAKE - 1, this.clarity[d] + 1);
+      }
+      if (s.scarred) this.pressure[d] = Math.min(K.CAPTURE - 1, this.pressure[d] + s.scarred);
+    }
+    if (ch.key === "UP_NORTH" && this.decided("FREEDOMS_LEDGER") === "STAY") this.pressure.LENDING = Math.min(K.CAPTURE - 1, this.pressure.LENDING + 1);
+    if (ch.key === "THE_MAP" && this.decided("UP_NORTH") === "HOUSE") this.pressure.HOUSING = Math.max(0, this.pressure.HOUSING - 1);
+    if (ch.key === "TODAY" && this.decided("PLANTS_CLOSE") === "HOLD") this.pressure.HOUSING = Math.min(K.CAPTURE - 1, this.pressure.HOUSING + 1);
+    if (ch.defend_choice && c.defend) this.defend = this.ds.filter((d) => st[d]?.rebuilt);
+    const kept = this.ds.filter((d) => st[d]?.rebuilt || st[d]?.scarred);
+    if (kept.length)
+      this.emit(
+        "🏘 The family's board: " +
+          kept.map((d) => `${d}` + (st[d]!.rebuilt ? ` Rebuilt ×${st[d]!.rebuilt}` : "") + (st[d]!.scarred ? ` Scarred ×${st[d]!.scarred}` : "")).join("; ") +
+          ".",
+      );
+  }
+
+  /** Chapter effects at the start of a round, before anyone acts. offerDesk: false when the table is asked instead. */
+  roundStart(offerDesk = true) {
+    for (const d of DISTRICTS) {
+      const r = this.late[d];
+      if (r !== undefined && this.round >= r) {
+        delete this.late[d];
+        this.ds = DISTRICTS.filter((x) => this.ds.includes(x) || x === d);
+        this.emit(`✦ The family is settled: ${d} opens.`);
+      }
+    }
+    if (offerDesk && this.deskDue()) {
+      this.deskOffered = true;
+      const pl = this.deskAi();
+      if (pl) this.takeDesk(pl);
+    }
+    this.deskPaycheck();
+    if (this.crowned) {
+      const hit = this.active().filter((p) => p.name !== this.crowned && p.trust > 0);
+      for (const p of hit) p.trust -= 1;
+      if (hit.length) this.emit(`  👑 ${this.crowned} wears the Crown. Everyone else pays for it: ${hit.map((p) => p.name).join(", ")} lose 1 Trust.`);
+    }
+  }
+  /** the Desk's +1 Trust a round (the table's question takes the Desk after roundStart, then pays it here) */
+  deskPaycheck() {
+    const pl = this.desk ? this.byName(this.desk) : null;
+    if (pl && pl.trust < K.MAX_TRUST) {
+      pl.trust += 1;
+      this.emit(`  ${pl.name} draws a county paycheck at the Desk. Trust +1.`);
+    }
+  }
+  byName(name: string) {
+    return this.players.find((p) => p.name === name) ?? null;
+  }
+
+  // ---- the Desk (Book One, Chapter 2) ----
+  deskDue() {
+    return !!this.chapter?.desk && this.round === 2 && !this.deskOffered;
+  }
+  /** The bot table gives the Desk to whoever reads least: they lose the least by not facing deals. */
+  deskAi(): Player | null {
+    const act = this.active();
+    if (act.length < 2) return null;
+    return minBy(act, (p) => this.ds.reduce((s, d) => s + p.sight[d], 0));
+  }
+  takeDesk(pl: Player) {
+    this.desk = pl.name;
+    this.emit(`🪑 ${pl.name} takes the Desk: a county job. +1 Trust every round, but no facing deals and no teaching while you sit there.`);
+  }
+  leaveDesk(pl: Player) {
+    if (this.desk !== pl.name) return this.emit(`  ${pl.name} isn't at the Desk.`);
+    this.desk = null;
+    this.deskLeft = pl.name;
+    pl.legend += 1;
+    this.emit(`${pl.name} quits the Desk, for good. Props +1.`);
+  }
+
+  // ---- the Crown (Book One, Chapter 3) ----
+  /** The Overlord's one offer. Wear it: you can't Fall, and everyone else loses 1 Trust a round. Refuse: one extra Overlord move this round. */
+  offerCrown(pl: Player, wear?: boolean) {
+    if (this.crownOffered || !this.chapter?.crown) return;
+    this.crownOffered = true;
+    this.emit(`👑 The Owner offers ${pl.name} the Crown: a way up, out of the life.`);
+    if (wear ?? this.crownAi(pl)) {
+      this.crowned = pl.name;
+      this.emit(`  ${pl.name} puts it on. They can't Fall now, and the whole block pays for it every round.`);
+    } else {
+      this.crownRefused = true;
+      pl.legend += 2;
+      this.emit(`  ${pl.name} refuses the Crown. Props +2. The Owner takes it out on the block: one extra move this round.`);
+    }
+  }
+  /** a bot near the edge takes the safety */
+  crownAi(pl: Player) {
+    return pl.corruption >= K.FLIP - 2;
+  }
+  /** The computer Overlord offers it from round 3, to whoever carries the most Shady. */
+  crownTarget(): Player | null {
+    if (this.crownOffered || this.round < 3 || !this.chapter?.crown) return null;
+    const act = this.active();
+    return act.length ? maxBy(act, (p) => [p.corruption, -p.trust]) : null;
+  }
+
+  // ---- the March (Chapter 4) ----
+  canMarch() {
+    return !!this.chapter?.march && !this.marched;
+  }
+  march(pl: Player) {
+    if (!this.canMarch()) return this.emit("  The March has already happened.");
+    this.marched = true;
+    pl.legend += 2;
+    this.emit(`✊🏾 ${pl.name} calls the March. The whole family walks together. Props +2.`);
+    for (const p of this.active()) {
+      p.trust = Math.min(K.MAX_TRUST, p.trust + 2);
+      const had = p.corruption;
+      p.corruption = Math.max(0, had - 1);
+      this.emit(`  ${p.name}: Trust +2` + (had ? ", Shady −1" : "") + "." + this.cover(p));
+    }
+  }
+  marchAi() {
+    const act = this.active();
+    return this.canMarch() && this.round >= 2 && act.reduce((s, p) => s + p.trust, 0) <= act.length;
+  }
+
+  // ---- the Empty Throne (Book One, Chapter 4) ----
+  /** Why you can't Expose yet, or null. */
+  throneBlocks(): string | null {
+    if (!this.chapter?.throne) return null;
+    const act = this.active();
+    const idle = act.filter((p) => !this.taught.has(p.name)).map((p) => p.name);
+    if (idle.length) return `everyone has to teach first (${idle.join(", ")} hasn't)`;
+    const tot = act.reduce((s, p) => s + p.legend, 0);
+    const top = maxBy(act, (p) => p.legend);
+    if (tot && top.legend * 2 > tot) return `${top.name} holds more than half the table's Props: no neck for a crown`;
+    return null;
   }
 
   /**
@@ -309,7 +534,7 @@ export class Game {
     return this.uwOpen && pl.sight[d] >= 3 && this.clarity[d] >= K.WAKE && !this.threads.has(d);
   }
   canExpose() {
-    return this.uwOpen && this.threads.size >= this.threadsNeeded();
+    return this.uwOpen && this.threads.size >= this.threadsNeeded() && !this.throneBlocks();
   }
   lever(d: District, card: Card) {
     if (this.leagueFormed && (d === "HOUSING" || d === "LENDING") && card.trap) return Math.min(card.lever, 1);
@@ -434,6 +659,7 @@ export class Game {
     return [this.draw(d)];
   }
   face(pl: Player, d: District, choice: Choice, card?: Card, by?: Player | null) {
+    if (this.desk === pl.name) return this.emit(`  ${pl.name} is at the Desk and can't face deals. Quit the Desk first (an action).`);
     card = card || this.draw(d);
     const trap = card.trap;
     const lever = this.lever(d, card);
@@ -493,7 +719,7 @@ export class Game {
       pl.trust -= cost;
       let roll = 0;
       if (trap && see >= lever) {
-        const amt = pl.role === "Organizer" ? 2 : 1;
+        const amt = pl.role === "Organizer" ? (this.chapter?.organizer_clears ?? 2) : 1;
         out = "defused";
         this.pressure[d] = Math.max(0, this.pressure[d] - amt);
         this.clarity[d] = Math.min(K.WAKE, this.clarity[d] + 1);
@@ -530,6 +756,7 @@ export class Game {
     this.signed.push({ who: pl.name, d, out: out!, front: card.front, dollars: card.dollars ?? 0, basis: card.basis ?? "" });
     if (bare) {
       pl.bare.delete(d);
+      this.backfires += 1;
       if (this.pressure[d] < K.CAPTURE) {
         this.pressure[d] += 1;
         this.emit(`  ⚠ It backfires: ${pl.name} read it but nobody had their back. Squeeze +1 in ${d} (${this.pressure[d]}/${K.CAPTURE}).`);
@@ -542,12 +769,15 @@ export class Game {
         pl.benched = true;
         this.emit(`  ⚠ ${pl.name} has ${K.BP_SIT_OUT} Shady chips: hand them back and sit out your next turn.`);
       }
+    } else if (pl.corruption >= K.FLIP && !pl.flipped && pl.name === this.crowned) {
+      this.emit(`  👑 ${pl.name} has ${pl.corruption} Shady, and the Crown keeps them standing.`);
     } else if (pl.corruption >= K.FLIP && !pl.flipped) {
       pl.flipped = true;
       this.emit(`  ⚠⚠ ${pl.name} HAS FALLEN. The Machine now moves through them.`);
     }
   }
-  teach(pl: Player, t: Player, d: District, response = true) {
+  teach(pl: Player, t: Player, d: District, response = true, chained = false) {
+    if (this.desk === pl.name) return this.emit(`  ${pl.name} is at the Desk: no time to teach. Quit the Desk first (an action).`);
     const free = pl.role === "Translator" || pl.freeTeach;
     if (pl.sight[d] <= t.sight[d]) {
       this.emit(`  ${pl.name} can't teach ${t.name} ${d} — you can only teach what you read better.`);
@@ -563,9 +793,11 @@ export class Game {
     if (!free) pl.trust -= 1;
     else if (pl.role !== "Translator") pl.freeTeach = false;
     pl.legend += 2;
+    this.taught.add(pl.name);
     this.emit(`${pl.name} teaches ${t.name} to read ${d}. Read ${old}→${t.sight[d]}${free ? " (free)" : ""}. Props +2.`);
     if (this.terrell) {
       if (pl.role === "Veteran") this.emit(`  The Veteran teaches the cover with it: ${t.name} is covered in ${d}.`);
+      else if (this.flag("CIVIC_ARMOR")) this.emit(`  Civic Armor: the cover comes with the lesson. ${t.name} is covered in ${d}.`);
       else {
         t.bare.add(d);
         this.emit(`  No cover yet: if ${t.name} confronts a trap in ${d} before the block has their back, it backfires.`);
@@ -575,12 +807,23 @@ export class Game {
       pl.legend += 1;
       t.legend += 1;
       this.emit(`  Call and response: ${t.name} says the second number back. Props +1 each.`);
+      if (this.chapter?.chain && !chained) {
+        const cand = this.active().filter((p) => p !== pl && p !== t && p.sight[d] < t.sight[d]);
+        if (cand.length) {
+          const nxt = minBy(cand, (p) => p.sight[d]);
+          this.emit(`  ⛓ The Chain: ${t.name} turns and teaches ${nxt.name}, right there, for free.`);
+          const had = t.freeTeach;
+          t.freeTeach = true;
+          this.teach(t, nxt, d, true, true);
+          t.freeTeach = had;
+        }
+      }
     }
   }
   commons(pl: Player, place: PlaceKey = "BARBERSHOP") {
     if (place === "KITCHEN" && this.kitchenUsed) place = "BARBERSHOP";
     pl.trust = Math.min(K.MAX_TRUST, pl.trust + 2);
-    const drop = place === "CHURCH" ? 2 : 1;
+    const drop = place === "CHURCH" ? (this.decided("UP_NORTH") === "CHURCH" && this.chapter?.key === "THE_MAP" ? 3 : 2) : 1;
     const had = pl.corruption;
     pl.corruption = Math.max(0, pl.corruption - drop);
     const covered = this.cover(pl);
@@ -689,10 +932,13 @@ export class Game {
       this.emit("  No History to teach.");
       return;
     }
-    pl.elderUsed = true;
+    pl.historyLeft -= 1;
+    pl.elderUsed = pl.historyLeft <= 0;
     this.clarity[d] = K.WAKE;
     pl.legend += 2;
-    const h = (this.historyCard = this.rng.choice([...this.historyDeck[d], ...this.historyDeck.ANY]));
+    const pool = [...this.historyDeck[d], ...this.historyDeck.ANY];
+    const mine = pool.filter((h) => (this.campaign.unlocks ?? []).includes(h.title)); // Today: the family's own History
+    const h = (this.historyCard = this.rng.choice(mine.length ? mine : pool));
     this.emit(`${pl.name} teaches the History of ${d}: ${h.title} (${h.year}, ${h.place}).`);
     this.emit(`  ${h.story}`);
     this.emit(`  "${h.lesson}"  ${d} AWAKE. Props +2.`);
@@ -814,8 +1060,9 @@ export class Game {
     return free.length ? { k: "m_extract", d: minBy(free, (x) => this.pressure[x]) } : { k: "pass" };
   }
   ownerPassive() {
-    if (this.overlord) return;
-    const o = this.owner;
+    if (this.overlord || this.round <= this.handRests) return;
+    let o: string | undefined = this.owner;
+    if (o === "The Ledger Keeper") o = ({ 1: "The Debt Buyer", 2: "The Recruiter", 3: "The Lobbyist" } as Record<number, string>)[this.round % 4]; // one hand, every era's face
     if (o === "The Lobbyist") {
       const best = this.ds.filter(
         (d) => 0 < this.clarity[d] && this.clarity[d] < K.WAKE && this.pressure[d] < K.CAPTURE && !this.struck.has(d),
@@ -874,7 +1121,16 @@ export class Game {
   }
   autoMachinePhase() {
     let hits = this.strikes();
-    if (this.owner === "The Algorithm") hits += 1;
+    if (this.owner === "The Algorithm" && this.round > this.handRests) hits += 1;
+    if (this.owner === "The Ledger Keeper" && this.round % 4 === 0) hits += 1; // wearing the Algorithm's face
+    if (this.desk && this.round % 2 === 0) {
+      hits += 1;
+      this.emit(`  ✖ The Desk's paperwork feeds the Machine: an extra strike while ${this.desk} sits there.`);
+    }
+    if (this.round === 1 && this.chapter?.throne && this.flag("CROWN_WORN")) {
+      hits += 1;
+      this.emit("  ✖ Somebody wore the Crown last chapter. The Machine remembers: an extra strike.");
+    }
     if (this.ownerShown) hits += 1;
     const struck = this.struck;
     if (this.scenario === "Payday Season" && this.round % 2 === 0 && !struck.has("LENDING") && this.pressure.LENDING < K.CAPTURE) {
@@ -885,7 +1141,7 @@ export class Game {
     for (let i = 0; i < Math.max(0, hits); i++) {
       const vuln = this.ds.filter((d) => this.clarity[d] < K.WAKE && this.pressure[d] < K.CAPTURE && !struck.has(d));
       if (!vuln.length) break;
-      const d = maxBy(vuln, (x) => [this.clarity[x], -this.pressure[x]]);
+      const d = maxBy(vuln, (x) => [b(this.defend.includes(x)), this.clarity[x], -this.pressure[x]]);
       struck.add(d);
       this.hit(d);
     }
@@ -917,7 +1173,11 @@ export class Game {
     const text = this.chapter ? this.chapter.face_text : `${this.owner} — ${C.owners[this.owner]}`;
     this.emit(`⚑ THE UNDERWORLD CRACKS OPEN. The Owner is ${text}`);
     this.emit(`  Trace ${this.threadsNeeded()} threads (Read 3 in a woken district) and expose it before it buries you.`);
-    if (this.owner === "The Lobbyist") {
+    if (this.owner === "The Lobbyist" && this.chapter?.reveal === "all") {
+      const awake = this.ds.filter((d) => this.clarity[d] >= K.WAKE); // the Council redraws the lines
+      for (const d of awake) this.clarity[d] -= 1;
+      if (awake.length) this.emit(`  ✖ ${this.ownerFace} redraws the lines: ${awake.join(", ")} lose${awake.length === 1 ? "s" : ""} 1 Clarity.`);
+    } else if (this.owner === "The Lobbyist") {
       const awake = this.ds.filter((d) => this.clarity[d] >= K.WAKE);
       if (awake.length) {
         const d = this.rng.choice(awake);
@@ -997,6 +1257,8 @@ export class Game {
       case "trace": this.trace(pl, a.d); break;
       case "expose_uw": this.exposeUw(pl); break;
       case "league": this.signLeague(pl); break;
+      case "march": this.march(pl); break;
+      case "leave_desk": this.leaveDesk(pl); break;
       case "m_extract": this.mExtract(pl.name, a.d); break;
       case "m_obscure": this.mObscure(pl.name, a.d); break;
       case "m_tempt": this.mTempt(pl.name, a.t); break;
@@ -1055,7 +1317,32 @@ export class Game {
     if (this.ds.some((x) => pl.sight[x] === 0 && this.clarity[x] < K.WAKE)) return "ADVENTURE";
     return "MARKET";
   }
+  /** The chapter twists around the base bot: the Desk, the March, everyone teaches for the Empty Throne. */
   blockAi(pl: Player, style: Style = "careful"): Action {
+    if (this.desk === pl.name) {
+      const hot = this.ds.some((d) => this.pressure[d] >= K.CAPTURE - 1 && pl.sight[d] >= 2);
+      if (this.round >= 6 || hot) return { k: "leave_desk" };
+    }
+    if (this.marchAi()) return { k: "march" };
+    if (this.chapter?.throne && !this.taught.has(pl.name) && pl.trust >= 1) {
+      for (const d of this.ds) {
+        const t = this.active().find((p) => p !== pl && p.sight[d] < pl.sight[d]);
+        if (t) return { k: "teach", t, d };
+      }
+    }
+    if (this.uwOpen && this.threads.size >= this.threadsNeeded() && this.throneBlocks()) {
+      const top = maxBy(this.active(), (p) => p.legend);
+      if (pl === top) return { k: "commons", place: this.botPlace(pl) }; // the leader steps back
+    }
+    const a = this.baseBlockAi(pl, style);
+    if ((a.k === "face" || a.k === "teach") && this.desk === pl.name) {
+      // at the Desk: study instead
+      const d = a.d;
+      return pl.sight[d] < 3 ? { k: "study", d } : { k: "commons", place: this.botPlace(pl) };
+    }
+    return a;
+  }
+  baseBlockAi(pl: Player, style: Style = "careful"): Action {
     if (style === "human") style = this.rng.random() < 0.2 ? "greedy" : "careful";
     if (this.canExpose()) return { k: "expose_uw" };
     for (const d of this.ds) if (this.canTrace(pl, d)) return { k: "trace", d };
@@ -1108,6 +1395,10 @@ export class Game {
     this.leagueRound();
     const ov = this.ov();
     if (this.overlord && ov) {
+      if (this.chapter?.crown && !this.humanOverlord) {
+        const t = this.crownTarget();
+        if (t) this.offerCrown(t);
+      }
       const moves = this.overlordMoveCount();
       for (let i = 0; i < moves; i++) this.do(ov, overlordMove ? overlordMove() : this.overlordAiMove(this.struck));
       this.tighten();
@@ -1125,7 +1416,12 @@ export class Game {
   // ---- web-only glue (not in the Python engine): a person playing the Overlord moves one at a time ----
   overlordMoveCount() {
     const m = K.OVERLORD_MOVES[this.n()];
-    return Math.floor(m * this.round) - Math.floor(m * (this.round - 1)); // carry the remainder
+    let moves = Math.floor(m * this.round) - Math.floor(m * (this.round - 1)); // carry the remainder
+    if (this.crownRefused) {
+      moves += 1;
+      this.crownRefused = false;
+    }
+    return moves;
   }
   /** After a person's Overlord moves: the same wrap-up machinePhase() does. */
   finishOverlordPhase(): string | null {
@@ -1143,6 +1439,7 @@ export class Game {
     maxRounds = maxRounds || this.maxRounds;
     while (this.round < maxRounds && !this.won) {
       this.beginRound();
+      this.roundStart();
       const feast = this.cookoutAi();
       if (feast) this.cookout();
       for (const pl of this.players) {
@@ -1196,9 +1493,12 @@ export class Game {
     const unlocks: string[] = [];
     if (this.chapter) {
       unlocks.push(...this.chapter.unlocks_always);
-      if (this.leagueFormed && won) unlocks.push(...this.chapter.unlocks_if_league_won);
+      if (won && (this.leagueFormed || !this.hasLeague())) unlocks.push(...this.chapter.unlocks_if_won);
     }
-    return { won, ledger, rebuilt: awake, scarred: captured, falls, reaches, league: this.leagueFormed, redlining_broken: !redlining, unlocks, rally: !won };
+    return {
+      won, ledger, rebuilt: awake, scarred: captured, falls, reaches, league: this.leagueFormed, redlining_broken: !redlining, unlocks,
+      rally: !won, burned: this.backfires > 0, quit_desk: this.deskLeft, crown: this.crowned,
+    };
   }
   timeUp() {
     this.won = true;
@@ -1214,8 +1514,37 @@ export function newGame(o: NewGameOptions = {}) {
   const g = new Game(o);
   g.players = (o.roster || C.roster).map((r) => new Player(r.name, r.role));
   if (g.scenario === "The Plants Close") for (const p of g.players) p.trust = 1;
+  if (g.chapter) carryPlayers(g);
   for (const p of g.players) p.face = g.render ? K.FACE_TOKENS : 0;
   if (g.carry?.rally && !g.overlord && !g.chapter && !g.party) for (const p of g.players) p.trust = Math.min(K.MAX_TRUST, p.trust + 1);
-  if (o.overlord) g.players.push(new Player("The Owner", "Overlord"));
+  if (g.overlord) g.players.push(new Player("The Owner", "Overlord"));
   return g;
+}
+
+/** A chapter's (and the family's) effects on the players, at setup. */
+function carryPlayers(g: Game) {
+  const ch = g.chapter!;
+  const every = (v: number) => perDistrict(() => v);
+  for (const p of g.players) {
+    if (ch.no_read) p.sight = every(0);
+    if (ch.start_trust !== undefined && ch.start_trust !== null) p.trust = ch.start_trust;
+    if (ch.history_twice) p.historyLeft = 2;
+  }
+  if (ch.key === "THE_MAP" && g.decided("UP_NORTH") === "SCHOOL")
+    for (const p of g.players) if (p.role === "Student") p.sight = perDistrict((d) => Math.max(1, p.sight[d]));
+  if (ch.key === "VOICE" && g.decided("THE_MAP") === "MOVE")
+    for (const p of g.players)
+      if (p.role === "Elder") {
+        p.sight = every(0);
+        p.elderUsed = true;
+        p.historyLeft = 0;
+      }
+  if (ch.key === "PLANTS_CLOSE" && g.decided("VOICE") === "ORGANIZE") for (const p of g.players) if (p.role === "Organizer") p.trust = K.MAX_TRUST;
+  if (ch.key === "TODAY" && g.decided("PLANTS_CLOSE") === "SELL") for (const p of g.players) p.trust = Math.min(K.MAX_TRUST, p.trust + 2);
+  if (ch.key === "B1_CROWN") {
+    if (g.flag("TERRELL")) for (const p of g.players) p.trust = Math.max(0, p.trust - 1);
+    const q = g.campaign.quit_desk ?? "";
+    for (const p of g.players) if (p.name === q) p.sight = perDistrict((d) => Math.max(1, p.sight[d]));
+  }
+  if (g.campaign.rally && ch.campaign === "LEDGER") for (const p of g.players) p.trust = Math.min(K.MAX_TRUST, p.trust + 1);
 }

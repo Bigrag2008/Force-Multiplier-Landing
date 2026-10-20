@@ -16,6 +16,9 @@ function playOut(mode: Mode, players: number, seed: number, overlordHuman = fals
       case "sousou": s.sousou(g.sousouAi()); break;
       case "overlord": s.overlordAct(g.machineAiMove(g.struck)); break;
       case "machine": s.nextRound(); break;
+      case "desk": s.desk(g.deskAi()?.name ?? null); break;
+      case "crownOffer": s.crownOffer(g.crownTarget()?.name ?? null); break;
+      case "crown": s.crown(g.crownAi(g.byName(s.crownTo!)!)); break;
     }
   }
   return s;
@@ -31,6 +34,37 @@ describe("Session flow", () => {
           expect(s.g.result).not.toBeNull();
           expect(s.g.round).toBeLessThanOrEqual(12);
         });
+
+  for (const key of Object.keys(C.chapters))
+    for (const n of [2, 4, 5])
+      it(`chapter ${key} ${n}p reaches an ending`, () => {
+        const ch = C.chapters[key];
+        const roster = ch.mode === "party" ? C.roster.slice(0, n).map((r) => ({ name: r.name, role: "Neighbor" })) : C.roster.slice(0, n);
+        const s = playOut("chapter", n, 300 + n, ch.mode === "overlord" && n === 4, { chapter: key, roster });
+        expect(s.phase).toBe("over");
+        expect(s.g.chapter?.key).toBe(key);
+        if (ch.desk) expect(s.g.deskOffered).toBe(true);
+        if (ch.late && s.g.round >= 3) expect(s.g.ds).toHaveLength(5);
+      });
+
+  it("Book One, Chapter 3: the offered player is asked, and refusing gives the Overlord an extra move", () => {
+    const s = new Session({ mode: "chapter", chapter: "B1_CROWN", roster: C.roster.slice(0, 3), seed: 5 });
+    let asked = false;
+    for (let step = 0; step < 5000 && s.phase !== "over" && !asked; step++) {
+      const g = s.g;
+      if (s.phase === "crown") {
+        asked = true;
+        expect(s.apply({ t: "crown", to: s.crownTo!, wear: false })).toBe(true);
+        expect(g.crownOffered && !g.crowned).toBe(true);
+        expect(g.round).toBeGreaterThanOrEqual(3);
+      } else if (s.phase === "cookout") s.cookout(false);
+      else if (s.phase === "turn") s.act(g.blockAi(s.player, "careful"));
+      else if (s.phase === "fallen") s.fallenAct(g.machineAiMove(g.struck));
+      else if (s.phase === "sousou") s.sousou(false);
+      else if (s.phase === "machine") s.nextRound();
+    }
+    expect(asked || s.phase === "over").toBe(true);
+  });
 
   for (const n of [2, 3, 4, 5])
     for (const seed of [1, 2, 3])

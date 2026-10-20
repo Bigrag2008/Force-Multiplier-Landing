@@ -5,12 +5,15 @@
  */
 import { K, type Card, type District } from "../engine/content";
 import type { Edition } from "../engine/edition";
-import { newGame, type Action, type Carry, type Game, type Player } from "../engine/engine";
+import { newGame, type Action, type CampaignState, type Carry, type Game, type Player } from "../engine/engine";
 import { cardFromWire, fromWire, type Move, type WireAction } from "./moves";
 
 export type Mode = "coop" | "overlord" | "chapter" | "party";
 export type Phase =
   | "cookout" // round start: call the Cookout?
+  | "desk" // Book One 2, round 2: who takes the Desk?
+  | "crownOffer" // Book One 3: a person playing the Overlord may offer the Crown
+  | "crown" // Book One 3: the offered player wears it or refuses
   | "turn" // a block player's actions
   | "fallen" // the Machine moves through a Fallen player
   | "sousou" // end of turns: throw a hand?
@@ -42,6 +45,11 @@ export interface SessionConfig {
   /** a block that remembers: keep this game for the next one, and what this one starts with (full co-op only) */
   remember?: boolean;
   carry?: Carry;
+  /** mode "chapter": which chapter (default The Map), and the campaign it's played in */
+  chapter?: string;
+  campaign?: CampaignState;
+  /** the chapter is the saved family's next one: write the result into the family at the end */
+  family?: boolean;
 }
 
 /** a card drawn and waiting on the current player: kept in the session, so a reload can't redraw it */
@@ -70,13 +78,16 @@ export class Session {
   room?: string;
   /** "sign now" deals: decisions made with the fake clock running, deadlines waited out, and traps signed in the rush */
   clock = { rushed: 0, waited: 0, rushedDollars: 0 };
+  /** Book One 3: who the Crown is being offered to */
+  crownTo: string | null = null;
 
   constructor(public config: SessionConfig) {
     // fix the seed now, so a save or another phone can rebuild this exact game
     if (config.seed === undefined) this.config = config = { ...config, seed: Math.floor(Math.random() * 2 ** 31) };
     this.g = newGame({
       overlord: config.mode === "overlord",
-      chapter: config.mode === "chapter" ? "THE_MAP" : undefined,
+      chapter: config.mode === "chapter" ? config.chapter || "THE_MAP" : undefined,
+      campaign: config.mode === "chapter" ? config.campaign : undefined,
       scenario: config.mode === "coop" ? config.scenario || undefined : undefined,
       roster: config.roster,
       seed: config.seed,
@@ -89,7 +100,8 @@ export class Session {
       render: !!config.render,
       carry: config.mode === "coop" ? config.carry : undefined,
     });
-    this.overlordHuman = !!config.overlordHuman;
+    this.overlordHuman = !!config.overlordHuman && this.g.overlord;
+    this.g.humanOverlord = this.overlordHuman;
     this.coach = !!config.coach;
     this.g.useGreenBook = () => this.autoGreenBook;
     this.startRound();
@@ -122,6 +134,9 @@ export class Session {
       case "overlord": return this.phase === "overlord";
       case "next": return this.phase === "machine";
       case "greenbook": return this.phase !== "over";
+      case "desk": return this.phase === "desk" && (m.who === null || this.g.active().some((p) => p.name === m.who));
+      case "crownOffer": return this.phase === "crownOffer" && (m.to === null || this.g.active().some((p) => p.name === m.to));
+      case "crown": return this.phase === "crown" && m.to === this.crownTo;
     }
   }
 
@@ -140,6 +155,9 @@ export class Session {
       case "overlord": this.overlordAct(fromWire(g, m.a)); break;
       case "next": this.nextRound(); break;
       case "greenbook": this.autoGreenBook = m.on; break;
+      case "desk": this.desk(m.who); break;
+      case "crownOffer": this.crownOffer(m.to); break;
+      case "crown": this.crown(m.wear); break;
     }
     this.moves.push(m);
     return true;
@@ -171,8 +189,25 @@ export class Session {
     g.beginRound();
     this.feast = false;
     this.stepStart = g.log.length;
+    g.roundStart(false);
+    if (g.deskDue()) this.phase = "desk";
+    else this.toCookout();
+  }
+  private toCookout() {
     if (this.cookoutAvailable()) this.phase = "cookout";
     else this.beginSeat(0);
+  }
+  /** Book One 2: the table says who takes the Desk (or nobody) */
+  desk(who: string | null) {
+    if (this.phase !== "desk") return;
+    const g = this.g;
+    g.deskOffered = true;
+    const p = who ? g.byName(who) : null;
+    if (p) {
+      g.takeDesk(p);
+      g.deskPaycheck();
+    } else g.emit("🪑 Nobody takes the Desk.");
+    this.toCookout();
   }
   /** answer the Cookout question at the start of a round */
   cookout(call: boolean, picks?: Record<string, District>) {
@@ -254,6 +289,39 @@ export class Session {
   private toMachine() {
     const g = this.g;
     g.endOfBlockTurns();
+    // Book One 3: the Overlord's one offer of the Crown, from round 3
+    if (g.chapter?.crown && !g.crownOffered && g.round >= 3 && g.active().length) {
+      if (this.overlordHuman) {
+        this.phase = "crownOffer";
+        return;
+      }
+      const t = g.crownTarget();
+      if (t) {
+        this.crownTo = t.name;
+        this.phase = "crown";
+        return;
+      }
+    }
+    this.machineMoves();
+  }
+  /** a person playing the Overlord offers the Crown to someone, or not this round */
+  crownOffer(to: string | null) {
+    if (this.phase !== "crownOffer") return;
+    if (to) {
+      this.crownTo = to;
+      this.phase = "crown";
+    } else this.machineMoves();
+  }
+  /** the offered player wears the Crown or refuses it */
+  crown(wear: boolean) {
+    if (this.phase !== "crown" || !this.crownTo) return;
+    const p = this.g.byName(this.crownTo);
+    if (p) this.g.offerCrown(p, wear);
+    this.crownTo = null;
+    this.machineMoves();
+  }
+  private machineMoves() {
+    const g = this.g;
     if (g.overlord && this.overlordHuman) {
       g.leagueRound();
       this.movesLeft = g.overlordMoveCount();

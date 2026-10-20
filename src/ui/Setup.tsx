@@ -1,8 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { C } from "../engine/content";
+import { letGo, nextChapter } from "../engine/campaign";
+import { C, type District } from "../engine/content";
 import { checkEdition, LAST_EDITION, loadEditions, WEST_DAYTON, type Edition } from "../engine/edition";
 import { describeCarry, forgetBlock, loadBlock, type BlockMemory } from "../game/block";
+import { describeStickers, FLAG_WORDS, forgetFamily, loadFamily, type CampaignKey, type Family } from "../game/family";
 import type { Mode, SessionConfig } from "../game/session";
 import { RolePortrait } from "./art/RolePortrait";
 
@@ -20,7 +22,19 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
   const [online, setOnline] = useState(false);
   const [rules, setRules] = useState({ finePrint: false, terrell: false, endless: false, math: false, clocks: true, partial: false, render: false });
   const [remember, setRemember] = useState(true);
-  const party = mode === "party";
+  // campaigns: The Long Ledger or Book One, played as the saved family or one chapter on its own
+  const [camp, setCamp] = useState<CampaignKey>("LEDGER");
+  const [family, setFamily] = useState<Family | null>(null);
+  const [asFamily, setAsFamily] = useState(true);
+  const [pickChapter, setPickChapter] = useState("THE_MAP");
+  const [release, setRelease] = useState<District | "">("");
+  useEffect(() => setFamily(loadFamily(camp)), [camp]); // eslint-disable-line react-hooks/set-state-in-effect
+  const famNext = family ? nextChapter(family.state) : null;
+  const chapterKey = asFamily && famNext ? famNext : pickChapter;
+  const chap = mode === "chapter" ? C.chapters[chapterKey] : null;
+  const playMode = chap ? chap.mode : mode;
+  const rebuilt = asFamily && family && chap?.defend_choice ? (Object.keys(family.state.stickers) as District[]).filter((d) => family.state.stickers[d]?.rebuilt) : [];
+  const party = playMode === "party";
   // Your City editions saved on this device (only ones ready to play); ?edition=<id> picks one
   const [editions, setEditions] = useState<Edition[]>([]);
   const [editionId, setEditionId] = useState(WEST_DAYTON.id);
@@ -56,7 +70,15 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
           mode,
           roster: Array.from({ length: count }, (_, i) => ({ name: names[i].trim() || DEFAULT_NAMES[i], role: party ? "Neighbor" : roles[i] })),
           scenario: mode === "coop" ? (scenario === "random" ? undefined : scenario) : undefined,
-          overlordHuman: mode === "overlord" && overlordHuman,
+          overlordHuman: playMode === "overlord" && overlordHuman,
+          ...(chap
+            ? {
+                chapter: chap.key,
+                ...(asFamily && famNext && family
+                  ? { family: true, campaign: chap.defend_choice ? letGo(family.state, release || null) : family.state }
+                  : {}),
+              }
+            : {}),
           coach,
           finePrint: !party && rules.finePrint,
           terrell: !party && rules.terrell,
@@ -83,7 +105,7 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
               ["party", "Block Party", "Start here: 3 districts, 8 rounds, about 25 minutes. No roles, no Owner."],
               ["coop", "Co-op", "The full game: the block against the Machine."],
               ["overlord", "Overlord", "One player is the Machine (or the computer is), with 3 counterfeit deals up its sleeve."],
-              ["chapter", "Campaign", "The Long Ledger, Chapter 3: The Map (1930s–1960s)."],
+              ["chapter", "Campaign", "The Long Ledger (one family, six eras) or Book One (four chapters that follow the novel)."],
             ] as [Mode, string, string][]
           ).map(([m, t, d]) => (
             <label key={m} className={`cursor-pointer rounded-xl border p-3 ${mode === m ? "border-gold bg-gold/10" : "border-white/20"}`}>
@@ -94,6 +116,85 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
           ))}
         </div>
       </fieldset>
+
+      {mode === "chapter" && (
+        <fieldset className="space-y-3 rounded-xl border border-gold/40 p-3">
+          <legend className="px-1 font-bold">Which campaign?</legend>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {(Object.entries(C.campaigns) as [CampaignKey, (typeof C.campaigns)[string]][]).map(([k, c]) => (
+              <label key={k} className={`cursor-pointer rounded-xl border p-3 ${camp === k ? "border-gold bg-gold/10" : "border-white/20"}`}>
+                <input type="radio" name="campaign" className="sr-only" checked={camp === k} onChange={() => setCamp(k)} />
+                <span className="block font-black">{c.title}</span>
+                <span className="block text-xs text-program/75">{c.blurb}</span>
+              </label>
+            ))}
+          </div>
+          {family && (
+            <div className="text-sm">
+              <label className="flex items-start gap-2">
+                <input type="radio" name="asFamily" className="mt-1" checked={asFamily && !!famNext} disabled={!famNext} onChange={() => setAsFamily(true)} />
+                <span>
+                  <b>{family.state.played.length ? "Continue the family" : "Start the family"}</b>
+                  {famNext ? (
+                    <>: Chapter {C.chapters[famNext].number}, <i>{C.chapters[famNext].title}</i> ({C.chapters[famNext].era}).</>
+                  ) : (
+                    <>: the family has played every chapter (Ledger {family.state.ledger > 0 ? "+" : ""}{family.state.ledger}).</>
+                  )}
+                  {family.state.played.length > 0 && (
+                    <span className="block text-xs text-program/70">
+                      {family.state.played.length} chapter{family.state.played.length === 1 ? "" : "s"} played · Ledger {family.state.ledger > 0 ? "+" : ""}
+                      {family.state.ledger}
+                      {camp === "LEDGER" ? ` · ${describeStickers(family.state)}` : ""}
+                      {family.state.flags.length ? ` · ${family.state.flags.map((f) => FLAG_WORDS[f] ?? f).join("; ")}` : ""}
+                      {family.state.rally ? " · the community rallies (+1 Trust each)" : ""}
+                    </span>
+                  )}
+                </span>
+              </label>
+              <label className="mt-2 flex items-start gap-2">
+                <input type="radio" name="asFamily" className="mt-1" checked={!asFamily || !famNext} onChange={() => setAsFamily(false)} />
+                <span>
+                  <b>Play one chapter on its own</b>
+                  <span className="block text-xs text-program/70">Nothing carries in or out.</span>
+                </span>
+              </label>
+              {(!asFamily || !famNext) && (
+                <select aria-label="Chapter" className={`${field} mt-2 w-full`} value={pickChapter} onChange={(e) => setPickChapter(e.target.value)}>
+                  {C.campaigns[camp].chapters.map((k) => (
+                    <option key={k} value={k} className="text-ink">
+                      Chapter {C.chapters[k].number}: {C.chapters[k].title} ({C.chapters[k].era})
+                    </option>
+                  ))}
+                </select>
+              )}
+              {family.state.played.length > 0 && (
+                <button type="button" className="mt-2 text-xs text-program/60 underline" onClick={() => { if (window.confirm("Start a new family? This one's record is forgotten.")) { forgetFamily(camp); setFamily(loadFamily(camp)); } }}>
+                  Start a new family
+                </button>
+              )}
+            </div>
+          )}
+          {chap && (
+            <div className="rounded-lg bg-black/25 p-3 text-sm">
+              <p>
+                <b className="text-gold">Chapter {chap.number}: {chap.title}</b> ({chap.era}). {chap.intro}
+              </p>
+              <p className="mt-1"><b>The twist:</b> {chap.twist}</p>
+              {rebuilt.length > 0 && (
+                <label className="mt-2 block">
+                  <b>Before the plants close, the family chooses:</b>
+                  <select className={`${field} mt-1 w-full`} value={release} onChange={(e) => setRelease(e.target.value as District | "")}>
+                    <option value="" className="text-ink">Defend what we built (the Machine strikes {rebuilt.map((d) => d.charAt(0) + d.slice(1).toLowerCase()).join(" and ")} first)</option>
+                    {rebuilt.map((d) => (
+                      <option key={d} value={d} className="text-ink">Let {d.charAt(0) + d.slice(1).toLowerCase()} go (remove a Rebuilt sticker)</option>
+                    ))}
+                  </select>
+                </label>
+              )}
+            </div>
+          )}
+        </fieldset>
+      )}
 
       <div className="space-y-1">
         <label htmlFor="edition" className="font-bold">Where you&apos;re playing</label>
@@ -166,7 +267,7 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
           )}
         </div>
       )}
-      {mode === "overlord" && (
+      {playMode === "overlord" && (
         <label className="flex items-center gap-2">
           <input type="checkbox" checked={overlordHuman} onChange={(e) => setOverlordHuman(e.target.checked)} />
           A person plays the Overlord (otherwise the computer does)

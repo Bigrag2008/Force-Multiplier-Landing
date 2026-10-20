@@ -26,7 +26,7 @@ export type WireAction =
   | { k: "teach"; t: string; d: District; response?: boolean }
   | { k: "commons"; place: PlaceKey }
   | { k: "reach"; t: string }
-  | { k: "expose_uw" | "league" | "pass" }
+  | { k: "expose_uw" | "league" | "march" | "leave_desk" | "pass" }
   | { k: "m_extract" | "m_obscure" | "m_counterfeit"; d: District }
   | { k: "m_tempt"; t: string | null };
 
@@ -43,7 +43,13 @@ export type Move =
   /** draw the card read aloud in a Teach's call and response */
   | { t: "teachCard"; to: string; d: District }
   /** the table's Green Book setting */
-  | { t: "greenbook"; on: boolean };
+  | { t: "greenbook"; on: boolean }
+  /** Book One, Chapter 2: who takes the Desk at the start of round 2 (null: nobody) */
+  | { t: "desk"; who: string | null }
+  /** Book One, Chapter 3: the Overlord offers the Crown; the player wears it or refuses */
+  | { t: "crown"; to: string; wear: boolean }
+  /** Book One, Chapter 3, with a person playing the Overlord: offer the Crown to someone (null: not this round) */
+  | { t: "crownOffer"; to: string | null };
 
 export function toWire(g: Game, a: Action): WireAction {
   switch (a.k) {

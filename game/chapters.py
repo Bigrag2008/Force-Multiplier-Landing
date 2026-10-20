@@ -187,8 +187,195 @@ CHAPTERS = {
                       "after, and every Housing and Lending trap can be negotiated with Read 1.")),
     unlocks_always=["The Redlining Maps"],
     unlocks_if_league_won=["The Contract Buyers League"],
-    decision=("Stay and fight for the house, or move to where the map says you can? Stay: Housing keeps its sticker, "
-              "and the Organizer gains +1 Props per League signature in Chapter 4. Move: remove one Scar from Housing, "
-              "but the Elder role skips a generation."),
+    decision=dict(text="Stay and fight for the house, or move to where the map says you can?",
+                  options=[dict(key="STAY", label="Stay and fight",
+                                text="Housing keeps its stickers, and the family's Ledger +1: they held the line."),
+                           dict(key="MOVE", label="Move",
+                                text="Remove one Scar from Housing, but the Elder stays behind: in Chapter 4 the Elder starts with no Read and no History.")]),
+    campaign="LEDGER", era_dollars="1950s dollars",
  ),
 }
+
+# ---------------------------------------------------------------------------------------------------
+# The rest of The Long Ledger (CAMPAIGN.md). Each chapter: one setup change and one twist, an era deck
+# for two districts (game/eras/), an Owner wearing the era's face, the History it unlocks, and the
+# Family Decision that changes the next chapter. A chapter plays on its own, or in order as a family
+# (campaign.py carries the Ledger, the stickers, the decisions and the unlocks between them).
+# ---------------------------------------------------------------------------------------------------
+from eras import ch1 as _ch1, ch2 as _ch2, ch4 as _ch4, ch5 as _ch5
+
+CHAPTERS["FREEDOMS_LEDGER"]=dict(
+    number=1, title="Freedom's Ledger", era="1865–1877",
+    intro=("The family is newly free. They save what they can, learn to read by lamplight, raise a church and a school, "
+           "and sign the only contracts on offer: the crop lien, the store's book, the year-long labor contract."),
+    pressure={"LENDING":2},
+    twist=("Nobody starts with Read, not even the Elder: the family learns everything at the table. "
+           "And the crop lien grips from the first day: Lending starts at Squeeze 2."),
+    no_read=True,
+    owner="The Debt Buyer", face="The Planter's Ledger",
+    face_text=("The Planter's Ledger: every shortcut costs +1 extra Shady, and each round the store calls in its book: "
+               "anyone carrying Shady loses 1 Trust. The Fallen strike twice as hard."),
+    decks=_ch1.DECKS,
+    unlocks_always=["The Freedman's Savings Bank"],
+    unlocks_if_won=["Wilberforce University"],
+    decision=dict(text="Go north now, or stay one more season and save?",
+                  options=[dict(key="GO", label="Go north now",
+                                text="Chapter 2 starts with all five districts open from round 1."),
+                           dict(key="STAY", label="Stay and save",
+                                text="The family's Ledger +1, but Chapter 2 starts with Lending at Squeeze 1 (the debt follows you).")]),
+    campaign="LEDGER", era_dollars="1870s dollars",
+)
+CHAPTERS["UP_NORTH"]=dict(
+    number=2, title="Up North", era="1910s–1940s",
+    intro=("The family steps off the train on Dayton's West Side with a labor agent's ticket and a room they haven't seen. "
+           "The plants are hiring. The fine print came north too."),
+    pressure={},
+    twist=("Only Lending, Housing and Labor are open at first. Health and Education open in round 3, "
+           "once the family is settled."),
+    late={"HEALTH":3, "EDUCATION":3},
+    owner="The Lobbyist", face="The Labor Agent",
+    face_text=("The Labor Agent: every round it leans on your strongest unfinished district (+1 Squeeze); "
+               "on reveal, knocks one woken district back to Clarity 1."),
+    decks=_ch2.DECKS,
+    unlocks_always=["Dunbar, the Wrights and the Dayton Tattler"],
+    unlocks_if_won=["Maggie L. Walker's Penny Savings Bank"],
+    decision=dict(text="The family has a little saved. Put it into the church, the house, or a child's schooling?",
+                  options=[dict(key="CHURCH", label="The church",
+                                text="In Chapter 3, gathering at the church takes off 3 Shady instead of 2."),
+                           dict(key="HOUSE", label="The house",
+                                text="In Chapter 3, Housing starts with 1 less Squeeze: a house the family owns outright."),
+                           dict(key="SCHOOL", label="A child's schooling",
+                                text="In Chapter 3, the Student starts with Read 1 everywhere.")]),
+    campaign="LEDGER", era_dollars="1920s dollars",
+)
+CHAPTERS["VOICE"]=dict(
+    number=4, title="Voice", era="1955–1970",
+    intro=("Boycotts in Montgomery, a strike in Memphis, and on the West Side the family is registering voters. "
+           "In 1970 Dayton elects James H. McGee mayor. Somebody keeps offering the organizers a quieter way."),
+    pressure={},
+    twist=("The Organizer's NEGOTIATE clears 3 Squeeze. Once per game, any player can call the March (an action): "
+           "every player gathers at once (Trust +2, Shady −1, covered)."),
+    march=True, organizer_clears=3,
+    owner="The Lobbyist", face="The Council",
+    face_text=("The Council: leans on your strongest unfinished district every round (+1 Squeeze); "
+               "on reveal, it redraws the lines: every woken district loses 1 Clarity."),
+    reveal="all",
+    decks=_ch4.DECKS,
+    unlocks_always=["The Montgomery Bus Boycott", "I AM A MAN"],
+    unlocks_if_won=["Mayor James H. McGee"],
+    decision=dict(text="Run for office, or keep organizing?",
+                  options=[dict(key="RUN", label="Run for office",
+                                text="In Chapter 5, the Owner's hidden hand rests for the first 3 rounds."),
+                           dict(key="ORGANIZE", label="Keep organizing",
+                                text="In Chapter 5, the Organizer starts with 5 Trust.")]),
+    campaign="LEDGER", era_dollars="1960s dollars",
+)
+CHAPTERS["PLANTS_CLOSE"]=dict(
+    number=5, title="The Plants Close", era="1990s–2009",
+    intro=("GM's Moraine plant closes in 2008; NCR leaves in 2009. Before the crash, the brokers came door to door "
+           "with teaser rates and cash-out refinances. Now the temp agency is the only one hiring."),
+    pressure={"LABOR":2}, start_trust=1,
+    twist=("Labor starts at Squeeze 2 and everyone starts with 1 Trust. Before the chapter the family chooses: "
+           "defend what you built (the Machine strikes your Rebuilt districts first) or let one go (remove one Rebuilt sticker)."),
+    defend_choice=True,
+    owner="The Algorithm", face="The Algorithm",
+    face_text="The Algorithm: scoring, automation and risk models. Relentless: the Machine strikes one extra time every round.",
+    decks=_ch5.DECKS,
+    unlocks_always=["The People's Free Medical Clinics"],
+    unlocks_if_won=["Greenwood: Black Wall Street"],
+    decision=dict(text="Sell the house at the bottom of the market, or hold on?",
+                  options=[dict(key="SELL", label="Sell",
+                                text="In Chapter 6, everyone starts with +2 Trust, but Housing loses a Rebuilt sticker."),
+                           dict(key="HOLD", label="Hold on",
+                                text="Housing keeps everything, and starts Chapter 6 with 1 more Squeeze.")]),
+    campaign="LEDGER", era_dollars="2000s dollars",
+)
+CHAPTERS["TODAY"]=dict(
+    number=6, title="Today", era="2018–",
+    intro=("Good Samaritan Hospital has closed. Gem City Market has opened. The family is still here, "
+           "and the trap is still here, wearing new clothes."),
+    pressure={},
+    twist=("Every History card the family unlocked is in play, and the Elder may teach History twice."),
+    history_twice=True,
+    owner="The Ledger Keeper", face="The Ledger Keeper",
+    face_text=("The Ledger Keeper: one hand behind every era. Its hidden hand changes face each round: the store's book "
+               "(collections), the labor agent (Read −1), the appraiser (+1 Squeeze on your strongest work), the algorithm "
+               "(an extra strike). It wore The Planter's Ledger, the Labor Agent, the Appraiser, the Council and the Algorithm."),
+    decks={},
+    unlocks_always=[],
+    unlocks_if_won=[],
+    decision=None,
+    campaign="LEDGER", era_dollars=None,
+)
+
+# ---------------------------------------------------------------------------------------------------
+# Book One (BOOK_ONE.md): four chapters that follow the novel. The Terrell rule is on in chapters 1, 2 and 4
+# (in 3 the stranger's handwriting takes its place): seeing it isn't being safe to confront it. Flags carry between chapters.
+# ---------------------------------------------------------------------------------------------------
+CHAPTERS["B1_CHAIN"]=dict(
+    number=1, title="The Chain", era="Graduation night",
+    intro=("Marcus can see the second number on everything now, and he teaches it as fast as he can: "
+           "to Nia, who teaches the next one, who teaches the next."),
+    mode="party", rules=dict(terrell=True), pressure={},
+    twist=("A Block Party with the Terrell rule. The Chain: when a learner says the second number back, they at once "
+           "teach one more player in that district, for free."),
+    chain=True,
+    owner="No Owner", face="No Owner", face_text="",
+    decks={}, unlocks_always=[], unlocks_if_won=[], decision=None,
+    after=("If anyone was burned by the Terrell rule, the ledger reads Terrell. If you won, the block learns Civic Armor: "
+           "from Chapter 2 on, every Teach comes with cover."),
+    campaign="BOOK_ONE",
+)
+CHAPTERS["B1_NET"]=dict(
+    number=2, title="The Net", era="A county job",
+    intro=("A county job, a desk, a program that sounds like help. The terms keep changing on you."),
+    mode="coop", rules=dict(terrell=True, fine_print=True), pressure={},
+    twist=("Full Block with fine-print dice. The Desk: at the start of round 2 one player may take the Desk. "
+           "At the Desk they gain +1 Trust every round but can't face deals or teach, and every second round its paperwork "
+           "feeds the Machine an extra strike. Leaving it, for good, takes an action."),
+    desk=True,
+    owner="The Algorithm", face="The Net",
+    face_text=("The Net: the program that sounds like help. Relentless: the Machine strikes one extra time every round."),
+    decks={}, unlocks_always=[], unlocks_if_won=[], decision=None,
+    after="If the player at the Desk left it, the ledger reads Quit the desk: in Chapter 3 that player starts with Read 1 everywhere.",
+    campaign="BOOK_ONE",
+)
+CHAPTERS["B1_CROWN"]=dict(
+    number=3, title="The Crown", era="A way up",
+    intro=("Somebody offers Dre a way up out of the life, and it looks just like a blessing."),
+    mode="overlord", rules={}, pressure={},
+    twist=("Overlord mode, with the stranger's handwriting in place of the Terrell rule. The Crown: once per game the Overlord may offer the Crown to one player. A crowned player "
+           "can't Fall, but every other block player loses 1 Trust at the start of each round. Refuse it, and the "
+           "Overlord takes one extra move that round."),
+    crown=True,
+    owner="The Overlord", face="The Overlord", face_text="",
+    decks={}, unlocks_always=[], unlocks_if_won=[], decision=None,
+    after="The ledger records whether anyone wore the Crown.",
+    campaign="BOOK_ONE",
+)
+CHAPTERS["B1_THRONE"]=dict(
+    number=4, title="The Empty Throne", era="No neck for a crown",
+    intro=("No card table to shut down. No leader to arrest. The only way to win is for everybody to read."),
+    mode="coop", rules=dict(terrell=True, endless=True), pressure={},
+    twist=("Full Block with endless deals. No neck for a crown: you can't Expose the Owner until every player has "
+           "taught at least once, and while any one player holds more than half the table's Props."),
+    throne=True,
+    owner="The Algorithm", face="The Empty Throne",
+    face_text=("The Empty Throne: no face at all, just the system. Relentless: the Machine strikes one extra time every round."),
+    decks={}, unlocks_always=[], unlocks_if_won=[], decision=None,
+    after="The book's last scene is on a porch. If you won, read it aloud.",
+    campaign="BOOK_ONE",
+)
+
+CAMPAIGNS = {
+ "LEDGER": dict(title="The Long Ledger",
+                blurb="One West Dayton family across six generations, from Reconstruction to today.",
+                chapters=["FREEDOMS_LEDGER","UP_NORTH","THE_MAP","VOICE","PLANTS_CLOSE","TODAY"]),
+ "BOOK_ONE": dict(title="Book One",
+                  blurb="Four chapters that follow the novel, from graduation night to the empty throne.",
+                  chapters=["B1_CHAIN","B1_NET","B1_CROWN","B1_THRONE"]),
+}
+for _k,_c in CHAPTERS.items():
+    _c["key"]=_k
+    _c.setdefault("mode","coop"); _c.setdefault("rules",{}); _c.setdefault("after","")
+    _c.setdefault("unlocks_if_won", _c.pop("unlocks_if_league_won", []))

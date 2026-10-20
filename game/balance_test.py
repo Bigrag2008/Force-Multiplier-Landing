@@ -76,6 +76,48 @@ def chapter_report(n, chapter="THE_MAP"):
         rows.append((k,a['win']/n,b['win']/n,a['r1']/n))
     return rows
 
+def campaign_report(n):
+    """Every campaign chapter on its own, then whole campaigns played as one family (random Family Decisions):
+    does what carries between chapters snowball (the win rate after a loss vs after a win)?"""
+    import chapters as CH, campaign as CP
+    rows=[]
+    for key,ch in CH.CHAPTERS.items():
+        if key=="THE_MAP": continue
+        w=[]
+        for k in (2,3,4,5):
+            win=0
+            for i in range(n):
+                rng=random.Random(i*7919+k*31+sum(map(ord,key)))
+                g=E.new_game(seed=rng.randrange(10**9),roster=roster_for(k,rng,ch["mode"]=="party"),chapter=key)
+                win+=g.run_auto()=="BLOCK_WIN"
+            w.append(win/n)
+        rows.append((key,ch,w))
+        print(f"  {CH.CAMPAIGNS[ch['campaign']]['title']:<16} {ch['number']}. {ch['title']:<18} ({ch['mode']:<8}) "
+              + "  ".join(f"{k}p {100*x:3.0f}%" for k,x in zip((2,3,4,5),w)))
+    spiral=[]
+    for camp in CH.CAMPAIGNS:
+        for k in (2,3,4,5):
+            after={True:[0,0],False:[0,0]}; ledgers=[]
+            for i in range(max(50,n//4)):
+                rng=random.Random(i*31+k); st=CP.new_state(camp); prev=None
+                while (key:=CP.next_chapter(st)):
+                    ch=CH.CHAPTERS[key]
+                    if ch.get("defend_choice"):
+                        reb=[d for d,x in st["stickers"].items() if x.get("rebuilt")]
+                        st=CP.let_go(st, rng.choice(reb) if reb and rng.random()<0.5 else None)
+                    g=E.new_game(seed=rng.randrange(10**9),roster=roster_for(k,rng,ch["mode"]=="party"),chapter=key,campaign=st)
+                    won=g.run_auto()=="BLOCK_WIN"
+                    if prev is not None: after[prev][0]+=1; after[prev][1]+=won
+                    prev=won
+                    dec=rng.choice([o["key"] for o in ch["decision"]["options"]]) if ch.get("decision") else None
+                    st=CP.advance(st,key,g.chapter_result(),dec)
+                ledgers.append(st["ledger"])
+            aw=after[True][1]/max(1,after[True][0]); al=after[False][1]/max(1,after[False][0])
+            spiral.append((camp,k,aw,al))
+            print(f"  whole {CH.CAMPAIGNS[camp]['title']:<16} {k}p  win after a win {100*aw:3.0f}%  after a loss {100*al:3.0f}%  "
+                  f"final Ledger {sum(ledgers)/len(ledgers):+.1f}")
+    return rows,spiral
+
 def pct(a,b): return f"{100*a/b:5.1f}%" if b else "   -  "
 def wr(st,n): return st["BLOCK_WIN"]/n
 
@@ -144,6 +186,9 @@ if __name__=="__main__":
     print("\n=== CHAPTER 3: THE MAP (careful bot) ===")
     chap=chapter_report(n)
 
+    print("\n=== CAMPAIGNS: THE LONG LEDGER AND BOOK ONE (careful bot) ===")
+    camp_rows,spiral=campaign_report(n)
+
     print("\n--- verdict ---")
     for k,(care,human) in party_ok:
         ok=0.50<=care<=0.85 and 0.50<=human<=0.85
@@ -158,6 +203,16 @@ if __name__=="__main__":
     for k,w,never,r1 in chap:
         ok=0.40<=w<=0.70 and w>never and r1<0.02
         print(f"  Chapter 3 {k}p {'healthy' if ok else 'NEEDS TUNING'}  ({w*100:.0f}% wins; organizing worth {100*(w-never):+.0f} pts)")
+    # a chapter is held to its mode's band: the Block Party's for a Block Party chapter, the full game's otherwise
+    # (3 players run high in the full game with these house rules too, so the top of the band is 80%)
+    for key,ch,w in camp_rows:
+        lo,hi=(0.50,0.85) if ch["mode"]=="party" else (0.40,0.80)
+        ok=all(lo<=x<=hi for x in w)
+        print(f"  {ch['campaign']:<8} {ch['number']}. {ch['title']:<18} {'healthy' if ok else 'NEEDS TUNING'}  "
+              f"({' · '.join(f'{100*x:.0f}%' for x in w)})")
+    for camp,k,aw,al in spiral:
+        ok=abs(aw-al)<=0.12
+        print(f"  {camp:<8} {k}p carry-over {'no spiral' if ok else 'NEEDS TUNING'}  (after a win {100*aw:.0f}% · after a loss {100*al:.0f}%)")
     deep = tot and st['neg_amber']/tot>=0.15
     print(f"  Deep Read   {'matters' if deep else 'NEEDS TUNING'}  (amber = {pct(st['neg_amber'],tot).strip()} of defusals; "
           f"blue/Read 3 is required to trace every winning thread)")

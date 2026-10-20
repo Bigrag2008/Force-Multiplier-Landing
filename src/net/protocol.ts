@@ -42,8 +42,10 @@ export function seatFor(s: Session, m: Move): string | null {
   switch (m.t) {
     case "act": case "end": case "deal": case "teachCard": case "fallen":
       return s.player.name;
-    case "overlord":
+    case "overlord": case "crownOffer":
       return s.g.ov()?.name ?? null;
+    case "crown":
+      return m.to;
     default:
       return null;
   }
@@ -60,5 +62,7 @@ export function mayMove(s: Session, m: Move, mine: ReadonlySet<string>): boolean
 export function waitingOn(s: Session): string | null {
   if (s.phase === "turn" || s.phase === "fallen") return s.player.name;
   if (s.phase === "overlord") return s.g.ov()?.name ?? null;
+  if (s.phase === "crownOffer") return s.g.ov()?.name ?? null;
+  if (s.phase === "crown") return s.crownTo;
   return null;
 }

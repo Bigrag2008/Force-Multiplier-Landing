@@ -186,6 +186,118 @@ def test_chapter_result_writes_the_ledger():
     g.result="MACHINE_WIN"; g.pressure["LABOR"]=3; r=g.chapter_result()
     assert r["ledger"]==-3 and r["rally"] and r["scarred"]==["LABOR"]
 
+# ---- The Long Ledger: the other five chapters, and the family's memory (campaign.py) ----
+import campaign as CP, chapters as CH
+
+def test_era_decks_keep_the_base_shape():
+    for k,ch in CH.CHAPTERS.items():
+        for d,cards in ch["decks"].items():
+            traps=[c for c in cards if c["trap"]]
+            assert len(cards)==15 and sorted(c["lever"] for c in traps)==[1]*5+[2]*4+[3]*3, (k,d)
+            assert all(c.get("dollars") and c.get("basis") for c in cards), (k,d)
+
+def test_freedoms_ledger_nobody_reads_and_the_bank_looks_honest():
+    g=E.new_game(seed=1, chapter="FREEDOMS_LEDGER")
+    assert all(v==0 for p in g.players for v in p.sight.values()) and g.pressure["LENDING"]==2
+    bank=next(c for c in g.deck["LENDING"] if c["front"].startswith("The Freedman's Savings Bank"))
+    p=g.players[0]; p.sight["LENDING"]=2
+    assert not g.looks(p,"LENDING",bank)["trap"]                       # honest-looking below Read 3
+    p.sight["LENDING"]=3; assert g.looks(p,"LENDING",bank)["trap"]
+
+def test_up_north_opens_late_unless_the_family_went_north_early():
+    g=E.new_game(seed=1, chapter="UP_NORTH"); assert "HEALTH" not in g.ds and len(g.ds)==3
+    g.round=3; g.round_start(); assert g.ds==E.DISTRICTS
+    g=E.new_game(seed=1, chapter="UP_NORTH", campaign=dict(decisions={"FREEDOMS_LEDGER":"GO"})); assert g.ds==E.DISTRICTS
+    g=E.new_game(seed=1, chapter="UP_NORTH", campaign=dict(decisions={"FREEDOMS_LEDGER":"STAY"})); assert g.pressure["LENDING"]==1
+
+def test_voice_march_and_organizer():
+    g=E.new_game(seed=1, chapter="VOICE"); a,b=g.players[:2]
+    a.trust=0; b.trust=1; b.corruption=2; g.march(a)
+    assert a.trust==2 and b.trust==3 and b.corruption==1 and g.marched
+    g.march(b); assert b.trust==3                                       # once per game
+    org=next(p for p in g.players if p.role=="Organizer"); org.sight["LABOR"]=3; org.trust=2; g.pressure["LABOR"]=3
+    g.face(org,"LABOR","NEGOTIATE",card(lever=1)); assert g.pressure["LABOR"]==0
+
+def test_the_council_redraws_every_woken_district():
+    g=E.new_game(seed=1, chapter="VOICE"); g.clarity.update(LABOR=3, HEALTH=3, LENDING=2)
+    g.reveal_owner(); assert g.clarity["LABOR"]==2 and g.clarity["HEALTH"]==2 and g.clarity["LENDING"]==2
+
+def test_plants_close_defend_or_let_go():
+    st={**CP.new_state("LEDGER"), "stickers":{"HOUSING":{"rebuilt":1,"scarred":0}}}
+    g=E.new_game(seed=1, chapter="PLANTS_CLOSE", campaign=st)
+    assert g.defend==["HOUSING"] and g.clarity["HOUSING"]==1 and all(p.trust==1 for p in g.players)
+    g=E.new_game(seed=1, chapter="PLANTS_CLOSE", campaign=CP.let_go(st,"HOUSING"))
+    assert g.defend==[] and g.clarity["HOUSING"]==0
+
+def test_today_ledger_keeper_and_two_histories():
+    g=E.new_game(seed=1, chapter="TODAY", campaign={**CP.new_state("LEDGER"),"unlocks":["The Redlining Maps"]})
+    el=next(p for p in g.players if p.role=="Elder")
+    g.history(el,"HOUSING"); assert g.history_card["title"]=="The Redlining Maps"
+    g.history(el,"LABOR"); assert g.clarity["LABOR"]==E.WAKE and el.elder_used
+    g.history(el,"HEALTH"); assert g.clarity["HEALTH"]==0              # only twice
+    g.round=4; g.clarity["LENDING"]=1; before=sum(g.pressure.values()); g.struck=set(); g.auto_machine_phase()
+    assert sum(g.pressure.values())>before                             # the Algorithm's face: an extra strike
+
+def test_stickers_and_rally_carry_in():
+    st={**CP.new_state("LEDGER"), "rally":True, "stickers":{"LABOR":{"rebuilt":2,"scarred":0},"HEALTH":{"rebuilt":0,"scarred":2},
+                                                           "HOUSING":{"rebuilt":1,"scarred":0}}}
+    g=E.new_game(seed=1, chapter="THE_MAP", campaign=st)
+    assert g.clarity["LABOR"]==2 and g.pressure["HEALTH"]==2
+    assert g.pressure["HOUSING"]==1 and g.clarity["HOUSING"]==0        # Rebuilt resists the era's grip first
+    assert all(p.trust==E.START_TRUST+1 for p in g.players)
+
+def test_advance_writes_the_family_record():
+    st=CP.new_state("LEDGER")
+    r=dict(won=True, ledger=4, rebuilt=["LABOR"], scarred=["HEALTH"], falls=1, reaches=0, unlocks=["X"], rally=False,
+           burned=False, quit_desk=None, crown=None)
+    st=CP.advance(st,"FREEDOMS_LEDGER",r,"STAY")
+    assert st["ledger"]==5 and st["stickers"]=={"LABOR":{"rebuilt":1,"scarred":0},"HEALTH":{"rebuilt":0,"scarred":1}}
+    assert st["falls"]==1 and st["decisions"]=={"FREEDOMS_LEDGER":"STAY"} and CP.next_chapter(st)=="UP_NORTH"
+    r=dict(r, rebuilt=["HEALTH"], scarred=[], falls=0, ledger=3, unlocks=["X","Y"])
+    st=CP.advance(st,"UP_NORTH",r,"SCHOOL")
+    assert "HEALTH" not in st["stickers"] and st["falls"]==0 and st["ledger"]==10 and st["unlocks"]==["X","Y"]   # a scar healed; a Fall redeemed (+2)
+
+# ---- Book One ----
+def test_the_chain_teaches_one_more():
+    g=E.new_game(seed=1, chapter="B1_CHAIN", roster=[("A","Neighbor"),("B","Neighbor"),("C","Neighbor")])
+    a,b,c=g.players; assert g.party and g.terrell and g.scenario.startswith("Chapter 1")
+    a.sight["LENDING"]=2; a.trust=2; g.teach(a,b,"LENDING")
+    assert b.sight["LENDING"]==1 and c.sight["LENDING"]==1 and a.trust==1   # the Chain was free
+
+def test_the_desk():
+    g=E.new_game(seed=1, chapter="B1_NET"); p=g.players[0]
+    assert g.fine_print and g.terrell
+    g.take_desk(p); p.trust=1; g.round=3; g.round_start(); assert p.trust==2
+    g.face(p,"LENDING","TAKE",card()); assert p.corruption==0          # can't face at the Desk
+    g.leave_desk(p); assert g.desk is None and g.chapter_result()["quit_desk"]==p.name
+
+def test_the_crown():
+    g=E.new_game(seed=1, chapter="B1_CROWN"); assert g.overlord and g.ov()
+    a,b=g.players[:2]; a.trust=b.trust=2; g.ask_crown=lambda pl: True
+    g.offer_crown(a); assert g.crowned==a.name
+    g.round_start(); assert a.trust==2 and b.trust==1
+    a.corruption=E.FLIP-1; g.face(a,"LENDING","TAKE",card()); assert not a.flipped
+    g=E.new_game(seed=1, chapter="B1_CROWN"); g.ask_crown=lambda pl: False; g.offer_crown(g.players[0])
+    assert g.crown_refused and g.crowned is None
+
+def test_the_empty_throne():
+    g=E.new_game(seed=1, chapter="B1_THRONE", roster=E.ROSTER[:2]); a,b=g.players
+    g.uw_open=True; g.threads={"LENDING","HOUSING","LABOR"}
+    assert not g.can_expose()                                         # nobody has taught yet
+    g.taught={a.name,b.name}; a.legend=5; b.legend=3; assert not g.can_expose()   # a holds more than half
+    b.legend=5; assert g.can_expose()
+
+def test_book_one_flags_carry():
+    st=CP.new_state("BOOK_ONE")
+    r=dict(won=True, ledger=2, rebuilt=[], scarred=[], falls=0, reaches=0, unlocks=[], rally=False, burned=True, quit_desk=None, crown=None)
+    st=CP.advance(st,"B1_CHAIN",r); assert st["flags"]==["CIVIC_ARMOR","TERRELL"]
+    g=E.new_game(seed=1, chapter="B1_NET", campaign=st); a,b=g.players[:2]; a.sight["LABOR"]=2; a.trust=2
+    g.teach(a,b,"LABOR"); assert not b.bare                            # Civic Armor: covered
+    st=CP.advance(st,"B1_NET",dict(r,quit_desk="Nia"))
+    g=E.new_game(seed=1, chapter="B1_CROWN", campaign=st)
+    nia=g.by_name("Nia"); assert all(v>=1 for v in nia.sight.values())
+    assert all(p.trust==E.START_TRUST-1 for p in g.blk())               # Terrell: the block starts a Trust down
+
 def test_clock_is_a_loss():
     g=E.new_game(seed=3); g.run_auto(max_rounds=1)
     assert g.result in ("MACHINE_WIN","BLOCK_WIN")

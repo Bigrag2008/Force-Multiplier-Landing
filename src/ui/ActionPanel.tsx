@@ -226,10 +226,12 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
 
   // ---- the menu ----
   const fallen = g.blk().filter((x) => x.flipped);
+  const atDesk = g.desk === p.name;
+  const throne = g.uwOpen && g.threads.size >= g.threadsNeeded() ? g.throneBlocks() : null;
   const options: { kind: string; icon: IconName; label: string; hint: string; on: () => void; show?: boolean; disabled?: boolean; gold?: boolean }[] = [
     { kind: "study", icon: "sight", label: "Study", hint: "+1 Read in a district" + (p.practice ? " (+2 now)" : ""), on: () => setPending({ k: "pick", for: "study" }) },
-    { kind: "face", icon: "deal", label: "Face a deal", hint: p.shopAround ? "draw 2, face 1" : "read it, then TAKE / WALK / NEGOTIATE", on: () => setPending({ k: "pick", for: "face" }) },
-    { kind: "teach", icon: "teach", label: "Teach", hint: p.role === "Translator" || p.freeTeach ? "free" : "1 Trust", on: () => setPending({ k: "teachWho" }), disabled: !others.length },
+    { kind: "face", icon: "deal", label: "Face a deal", hint: atDesk ? "not while you're at the Desk" : p.shopAround ? "draw 2, face 1" : "read it, then TAKE / WALK / NEGOTIATE", on: () => setPending({ k: "pick", for: "face" }), disabled: atDesk },
+    { kind: "teach", icon: "teach", label: "Teach", hint: atDesk ? "not while you're at the Desk" : p.role === "Translator" || p.freeTeach ? "free" : "1 Trust", on: () => setPending({ k: "teachWho" }), disabled: !others.length || atDesk },
     g.party
       ? { kind: "commons", icon: "commons", label: "Gather", hint: "+2 Trust, −1 Shady", on: () => act({ k: "commons", place: "BARBERSHOP" }) }
       : { kind: "commons", icon: "commons", label: "Commons", hint: `gather on ${g.ed.area}`, on: () => setPending({ k: "commons" }) },
@@ -237,7 +239,10 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
     { kind: "history", icon: "history", label: "Teach the History", hint: "Elder, once: wake a district", on: () => setPending({ k: "pick", for: "history" }), show: p.role === "Elder" && !p.elderUsed },
     { kind: "trace", icon: "clue", label: "Trace a thread", hint: "Read 3 in an awake district", on: () => setPending({ k: "pick", for: "trace" }), show: g.uwOpen, disabled: !g.ds.some((d) => g.canTrace(p, d)) },
     { kind: "league", icon: "league", label: "Sign the League pledge", hint: `${g.league.size}/${g.leagueNeeded()} this round`, on: () => act({ k: "league" }), show: g.hasLeague() && !g.leagueFormed && !g.league.has(p.name) },
+    { kind: "march", icon: "league", label: "Call the March", hint: "once a game: everyone +2 Trust, −1 Shady, covered", on: () => act({ k: "march" }), show: g.canMarch() },
+    { kind: "leave_desk", icon: "door", label: "Quit the Desk", hint: "for good: face deals and teach again", on: () => act({ k: "leave_desk" }), show: atDesk },
     { kind: "expose_uw", icon: "expose", label: "EXPOSE THE UNDERWORLD", hint: "you win", on: () => act({ k: "expose_uw" }), show: g.canExpose(), gold: true },
+    { kind: "throne", icon: "expose", label: "No neck for a crown", hint: `You can't Expose yet: ${throne}.`, on: () => undefined, show: !!throne, disabled: true },
   ];
   return (
     <Panel
@@ -487,6 +492,69 @@ export function MachineReport({ s, play, local }: { s: Session; play: Play; loca
       <button className={primary} onClick={() => play({ t: "next" })}>
         Start round {s.g.round + 1}
       </button>
+    </Panel>
+  );
+}
+
+/** Book One, Chapter 2: at the start of round 2, does anyone take the Desk? */
+export function DeskPanel({ s, play }: { s: Session; play: Play; local: Local }) {
+  const g = s.g;
+  return (
+    <Panel
+      title="A county job: the Desk"
+      sub="One player may take the Desk. At the Desk: +1 Trust every round, but no facing deals and no teaching, and every second round its paperwork feeds the Machine an extra strike. Quitting it, for good, takes an action."
+    >
+      <div className="grid gap-2 sm:grid-cols-2">
+        {g.active().map((p) => (
+          <button key={p.name} className={`${ghost} text-left`} onClick={() => play({ t: "desk", who: p.name })}>
+            🪑 {p.name} takes the Desk
+          </button>
+        ))}
+      </div>
+      <button className={primary} onClick={() => play({ t: "desk", who: null })}>
+        Nobody takes it
+      </button>
+    </Panel>
+  );
+}
+
+/** Book One, Chapter 3, with a person playing the Overlord: offer the Crown? */
+export function CrownOfferPanel({ s, play }: { s: Session; play: Play; local: Local }) {
+  const g = s.g;
+  return (
+    <Panel title="Offer the Crown?" sub="Once a game. If they wear it, they can't Fall and everyone else loses 1 Trust a round. If they refuse, you get one extra move this round.">
+      <div className="grid gap-2 sm:grid-cols-2">
+        {g.active().map((p) => (
+          <button key={p.name} className={`${ghost} text-left`} onClick={() => play({ t: "crownOffer", to: p.name })}>
+            👑 Offer it to {p.name} <span className="block text-xs font-normal text-program/70">Shady {p.corruption} · Trust {p.trust}</span>
+          </button>
+        ))}
+      </div>
+      <button className={primary} onClick={() => play({ t: "crownOffer", to: null })}>
+        Not this round
+      </button>
+    </Panel>
+  );
+}
+
+/** Book One, Chapter 3: the offered player wears the Crown or refuses it */
+export function CrownPanel({ s, play }: { s: Session; play: Play; local: Local }) {
+  const to = s.crownTo!;
+  const p = s.g.byName(to);
+  return (
+    <Panel
+      title={`${to}: the Owner offers you the Crown`}
+      sub="A way up, out of the life. Wear it, and you can't Fall, but every other player loses 1 Trust at the start of every round. Refuse, and the Owner takes one extra move this round."
+    >
+      {p && <p className="text-sm">You carry {p.corruption} Shady (at {K.FLIP} you Fall) and {p.trust} Trust.</p>}
+      <div className="grid gap-2 sm:grid-cols-2">
+        <button className={ghost} onClick={() => play({ t: "crown", to, wear: true })}>
+          👑 Wear it
+        </button>
+        <button className={primary} onClick={() => play({ t: "crown", to, wear: false })}>
+          Refuse it
+        </button>
+      </div>
     </Panel>
   );
 }

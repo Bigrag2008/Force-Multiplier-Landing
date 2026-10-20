@@ -28,7 +28,7 @@ To run the production build instead: `npm run build && npm start`.
 2. **Set the table:** choose a mode, then the number of players (2–5), each player's name and role, and (in co-op) a scenario. Start with *The Audit* or *A Quiet Year*.
    - **Co-op:** the block against the Machine.
    - **Overlord:** one player is the Machine, or the computer is.
-   - **Campaign:** *The Long Ledger*, Chapter 3: *The Map*.
+   - **Campaign:** *The Long Ledger* (one family, six eras) or *Book One* (four chapters that follow the novel). Play the family's next chapter (the site keeps the family on this device: its Ledger, stickers, decisions and flags), or any chapter on its own.
    - **Coach me as we play** is on by default; untick it to play without hints. The 🧑🏾‍🏫 Coach box in the game's header switches it on or off mid-game.
 3. **Plain names.** The stats are **Read** (how well you read a district), **Shady** (what shortcuts leave on you; at 6 you Fall), **Squeeze** (the Machine's grip on a district; 3 captures it) and **Props** (respect for lifting people), on the website, in the rulebook and in the print-and-play kit alike.
 4. **Read the board at a glance.** The **road to victory** across the top shows where the block is (wake the districts, open the Underworld, trace 3 threads, expose the Owner) and what loses the game. Every stat has an icon (👁 Read, ♥ Trust, a purple drop for Shady, ★ Props, a sunrise for Clarity, a red weight for Squeeze), and after each move the numbers it changed float up off the board.
@@ -93,6 +93,6 @@ The Python engine ([`game/sn_engine.py`](game/sn_engine.py)) is the source of tr
 | `game/` | The game itself (see above). |
 
 ## Next steps
-- The commissioned illustrations (see `game/ART_BRIEF.md`), the Spanish edition, and the Book One campaign.
+- The commissioned illustrations (see `game/ART_BRIEF.md`), and printed envelopes for the campaign chapters beyond Chapter 3.
 
 Part of the Individual Democracy / Civic Armor universe.

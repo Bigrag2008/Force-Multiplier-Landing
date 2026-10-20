@@ -6,13 +6,15 @@ A cooperative board game about reading the hidden cost in every deal, and teachi
 |---|---|
 | `RULES.md` | The table rulebook (v4): one word per idea, the Block Party intro, the ladder, and the house rules. Matches the engine rule for rule. |
 | `YOUR_CITY.md` | How to make a Your City edition: your districts, places, history and real help, on the website or as a file, and how to print it (`print_kit/build_print_and_play.py --edition my-city.json`). `editions/west-dayton.json` is the example. |
-| `BOOK_ONE.md` | The novel and the game: how the Sight maps to the lens, a four-chapter *Book One* campaign (prototype), and the School Edition. |
+| `BOOK_ONE.md` | The novel and the game: how the Sight maps to the lens, the four-chapter *Book One* campaign, and the School Edition. |
 | `deal_gen.py` | Deal templates with blanks, for endless deals and the math variant. The website rolls the same templates. |
 | `The_Second_Number_BOARD_GAME.md` | The design brief: vision, soul, roadmap. |
 | `ROADMAP.md` | The West Dayton Edition change list, one commit per item. |
 | `ART_DIRECTION.md` | The look: palette, influences, components, drawing people. |
-| `CAMPAIGN.md` | The Legacy campaign design, *The Long Ledger*. Chapter 3 is built; the rest are designs. |
-| `chapters.py` | Campaign chapter content: Chapter 3, *The Map* (era decks, the League, the Appraiser). |
+| `CAMPAIGN.md` | The Legacy campaign, *The Long Ledger*: six chapters, all built. |
+| `chapters.py` | Every campaign chapter (The Long Ledger and Book One): setup, twist, Owner face, unlocks, Family Decision. |
+| `eras/` | The era decks for Chapters 1, 2, 4 and 5, and [`FACT_CHECK.md`](eras/FACT_CHECK.md), what the historian checks before print. |
+| `campaign.py` | What a family carries between chapters: the Ledger, stickers, decisions, flags. |
 | `The_Long_Ledger_Chapter3_The_Map.pdf` | The printable Chapter 3 envelope: rules, 30 era deals, chapter cards, lineage sheet, stickers. |
 | `print_kit/build_chapter_pack.py` | Rebuilds the Chapter 3 envelope. |
 | *(repo root)* | **The online game:** the Next.js website at the top of this repo. See the main `README.md` to run, play and deploy it. |

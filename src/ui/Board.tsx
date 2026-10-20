@@ -151,6 +151,16 @@ export function Board({ s, highlight, changes = null, impact = null }: { s: Sess
               {g.leagueFormed ? "formed: Housing −1 every 2nd round; Housing & Lending traps beatable at Read 1" : `${g.league.size}/${g.leagueNeeded()} signed this round`}
             </div>
           )}
+          {Object.keys(g.late).length > 0 && (
+            <div>
+              <span className="font-bold text-gold">Not settled yet:</span>{" "}
+              {Object.entries(g.late).map(([d, r]) => `${titleCase(d)} opens in round ${r}`).join(" · ")}
+            </div>
+          )}
+          {g.chapter?.march && <div>✊🏾 The March: {g.marched ? "marched" : "ready (any player, an action)"}</div>}
+          {g.chapter?.desk && <div>🪑 The Desk: {g.desk ? `${g.desk} sits there` : g.deskLeft ? `${g.deskLeft} quit it` : g.deskOffered ? "empty" : "offered in round 2"}</div>}
+          {g.chapter?.crown && <div>👑 The Crown: {g.crowned ? `${g.crowned} wears it` : g.crownOffered ? "refused" : "not offered yet"}</div>}
+          {g.defend.length > 0 && <div>🛡 Defending what you built: the Machine strikes {g.defend.map(titleCase).join(" and ")} first</div>}
         </div>
       </div>}
     </section>

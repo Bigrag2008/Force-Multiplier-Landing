@@ -66,7 +66,12 @@ export interface Place {
   bonus: string;
   flavor: string;
 }
+export interface ChapterDecision {
+  text: string;
+  options: { key: string; label: string; text: string }[];
+}
 export interface Chapter {
+  key: string;
   number: number;
   title: string;
   era: string;
@@ -79,8 +84,34 @@ export interface Chapter {
   decks: Partial<Record<District, Card[]>>;
   league?: { name: string; text: string };
   unlocks_always: string[];
-  unlocks_if_league_won: string[];
-  decision: string;
+  unlocks_if_won: string[];
+  decision: ChapterDecision | null;
+  /** which campaign the chapter belongs to */
+  campaign: "LEDGER" | "BOOK_ONE";
+  /** the game it's played as */
+  mode: "coop" | "party" | "overlord";
+  rules: { terrell?: boolean; fine_print?: boolean; endless?: boolean };
+  /** what the chapter writes into the ledger, said at the end (Book One) */
+  after: string;
+  /** the era its money is counted in */
+  era_dollars?: string | null;
+  no_read?: boolean;
+  late?: Partial<Record<District, number>>;
+  march?: boolean;
+  organizer_clears?: number;
+  reveal?: "all";
+  start_trust?: number | null;
+  defend_choice?: boolean;
+  history_twice?: boolean;
+  chain?: boolean;
+  desk?: boolean;
+  crown?: boolean;
+  throne?: boolean;
+}
+export interface Campaign {
+  title: string;
+  blurb: string;
+  chapters: string[];
 }
 interface Constants {
   WAKE: number;
@@ -126,6 +157,7 @@ interface Content {
   history: Record<District | "ANY", HistoryCard[]>;
   places: Record<PlaceKey, Place>;
   chapters: Record<string, Chapter>;
+  campaigns: Record<string, Campaign>;
   roster: { name: string; role: string }[];
   constants: Constants;
   dealTemplates: Record<District, DealTemplate[]>;

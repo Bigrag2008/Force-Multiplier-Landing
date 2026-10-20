@@ -1411,10 +1411,1582 @@
    "unlocks_always": [
     "The Redlining Maps"
    ],
-   "unlocks_if_league_won": [
+   "decision": {
+    "text": "Stay and fight for the house, or move to where the map says you can?",
+    "options": [
+     {
+      "key": "STAY",
+      "label": "Stay and fight",
+      "text": "Housing keeps its stickers, and the family's Ledger +1: they held the line."
+     },
+     {
+      "key": "MOVE",
+      "label": "Move",
+      "text": "Remove one Scar from Housing, but the Elder stays behind: in Chapter 4 the Elder starts with no Read and no History."
+     }
+    ]
+   },
+   "campaign": "LEDGER",
+   "era_dollars": "1950s dollars",
+   "key": "THE_MAP",
+   "mode": "coop",
+   "rules": {},
+   "after": "",
+   "unlocks_if_won": [
     "The Contract Buyers League"
+   ]
+  },
+  "FREEDOMS_LEDGER": {
+   "number": 1,
+   "title": "Freedom's Ledger",
+   "era": "1865–1877",
+   "intro": "The family is newly free. They save what they can, learn to read by lamplight, raise a church and a school, and sign the only contracts on offer: the crop lien, the store's book, the year-long labor contract.",
+   "pressure": {
+    "LENDING": 2
+   },
+   "twist": "Nobody starts with Read, not even the Elder: the family learns everything at the table. And the crop lien grips from the first day: Lending starts at Squeeze 2.",
+   "no_read": true,
+   "owner": "The Debt Buyer",
+   "face": "The Planter's Ledger",
+   "face_text": "The Planter's Ledger: every shortcut costs +1 extra Shady, and each round the store calls in its book: anyone carrying Shady loses 1 Trust. The Fallen strike twice as hard.",
+   "decks": {
+    "LENDING": [
+     {
+      "front": "Take what you need from the store, and we'll settle up at harvest.",
+      "red": "Everything on credit is priced well above what cash customers pay for the same goods.",
+      "amber": "The bill comes due at settlement, out of your crop, before you see a dollar.",
+      "blue": "The store keeps the only copy of the account.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 100,
+      "basis": "a year of meal, meat and cloth at credit prices above cash (1870s dollars)"
+     },
+     {
+      "front": "No money down: we'll carry you on the books all year.",
+      "red": "Interest goes on the account too, on top of the credit prices.",
+      "amber": "It is figured at settlement, when it's too late to shop anywhere else.",
+      "blue": "You can't check the books, and he knows it.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 30,
+      "basis": "interest charged on a year's store account (1870s dollars)"
+     },
+     {
+      "front": "Sign the crop lien and the merchant will furnish you till harvest.",
+      "red": "The lien gives him first claim on your whole crop, not just what you owe.",
+      "amber": "Sign before planting or go without. At harvest the cotton goes to him first.",
+      "blue": "Lien laws passed after the war put the merchant ahead of the family that grew it.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 150,
+      "basis": "a crop pledged against a year of furnish (1870s dollars)",
+      "rush": true
+     },
+     {
+      "front": "Short this year? Don't worry, we'll carry the balance to next season.",
+      "red": "The balance keeps its interest, and next year's goods go on top of it.",
+      "amber": "The carried debt binds you to the same store and the same land next year.",
+      "blue": "A family that owes can't leave, and he needs hands.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 60,
+      "basis": "a balance carried over with interest into the next year (1870s dollars)"
+     },
+     {
+      "front": "Fertilizer on credit: buy it now, pay at harvest.",
+      "red": "The credit price is far higher than the cash price in town.",
+      "amber": "It goes on the same lien as the rest, due at settlement.",
+      "blue": "The merchant buys it for cash and sells it to you on time.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 25,
+      "basis": "a season of fertilizer at the credit price (1870s dollars)"
+     },
+     {
+      "front": "Bring your cotton here. We'll weigh it and price it for you.",
+      "red": "His scale and his grading pay you less than the cotton would bring in town.",
+      "amber": "Your share is settled on his numbers the same day.",
+      "blue": "The man who weighs your cotton is the man you owe.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 40,
+      "basis": "cotton weighed light and graded low at one settlement (1870s dollars)"
+     },
+     {
+      "front": "A little cash for Christmas, against your share.",
+      "red": "The advance is charged back to your share with interest added.",
+      "amber": "It comes out at next settlement, before anything else.",
+      "blue": "Small advances keep the account from ever coming out even.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 15,
+      "basis": "a holiday advance repaid with interest (1870s dollars)"
+     },
+     {
+      "front": "Put up your mule and your plow, just as security.",
+      "red": "The mortgage covers the tools you need to farm at all.",
+      "amber": "One short year and he can take the mule and the plow.",
+      "blue": "Without a mule, the family has to farm on his terms.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 80,
+      "basis": "a mule and tools held under a chattel mortgage (1870s dollars)"
+     },
+     {
+      "front": "Buy this land from me on time, and pay it off in cotton.",
+      "red": "The price is high, and the payments come out of crops he also sells you credit against.",
+      "amber": "Miss one year's payment and the land goes back, with everything you paid.",
+      "blue": "He keeps the deed until the very last bale.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 300,
+      "basis": "years of land payments lost with one missed year (1870s dollars)"
+     },
+     {
+      "front": "The planter's store is the only one for miles, and he'll handle your account.",
+      "red": "The rent, the store bill and your share are all on one man's books.",
+      "amber": "Settlement day is his to choose, and so is the final figure.",
+      "blue": "The landlord and the merchant are the same man, so every side of the ledger is his.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 120,
+      "basis": "a year's share settled on one man's books (1870s dollars)"
+     },
+     {
+      "front": "A deed to forty acres, cheap. Pay me now before the land is gone.",
+      "red": "The paper costs you your savings, and the land it names isn't for sale.",
+      "amber": "The seller is gone before anyone checks the title.",
+      "blue": "The land promised in 1865 went back to the old owners, and swindlers sold the hope.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 20,
+      "basis": "savings paid for a land title that was worthless (1870s dollars)",
+      "rush": true
+     },
+     {
+      "front": "The Freedman's Savings Bank: a safe place for your savings.",
+      "red": "A passbook, interest on what you save, and you can deposit as little as you have.",
+      "amber": "Take your money out at the branch when you need it. Congress chartered it in 1865.",
+      "blue": "White trustees made risky loans with deposits; it failed in 1874, and savers lost most of what they had.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 50,
+      "basis": "a family's savings in a passbook (1870s dollars)",
+      "counterfeit": true
+     },
+     {
+      "front": "The benevolent society: dues each month, and help when sickness or a burial comes.",
+      "red": "Small dues, set by the members in meeting, written down for all to see.",
+      "amber": "Pay on the meeting day; the help comes when you need it, not at harvest.",
+      "blue": "Members chose their own officers, often through the church, and covered each other.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 30,
+      "basis": "a year of sick and burial help from the society (1870s dollars)"
+     },
+     {
+      "front": "Families pool their savings to buy land together, with a real deed.",
+      "red": "Each family puts in what it can, and the price is the seller's cash price.",
+      "amber": "The deed is recorded at the courthouse, with each family's share written down.",
+      "blue": "Neighbors owning the ground they work, the way many freed families did.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 200,
+      "basis": "a family's share of land bought together (1870s dollars)"
+     },
+     {
+      "front": "Pay cash from the egg and garden money, at the cash price.",
+      "red": "No credit price, no interest, and no lien on the crop.",
+      "amber": "Nothing is due at settlement for what you already paid for.",
+      "blue": "Money the family made itself, kept off the merchant's books.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 40,
+      "basis": "credit markups avoided on a season of goods (1870s dollars)"
+     }
+    ],
+    "LABOR": [
+     {
+      "front": "Work my land on shares: you keep half of everything you raise.",
+      "red": "Your half comes after the furnish, the fines and the store bill are taken out.",
+      "amber": "Nothing is paid until the crop is in and sold.",
+      "blue": "The landlord keeps the books on both halves.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 150,
+      "basis": "a family's half share after charges (1870s dollars)"
+     },
+     {
+      "front": "Paid in store orders, good at the plantation store.",
+      "red": "Orders buy less there than the same pay would buy in cash in town.",
+      "amber": "They're only good at one store, so you shop there all year.",
+      "blue": "The planter profits on the wages and again on the store.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 30,
+      "basis": "a year of wages spent at one store's prices (1870s dollars)"
+     },
+     {
+      "front": "Lost time is just docked from your share. That's only fair.",
+      "red": "Fines for sick days, rain days and talking back come off your pay.",
+      "amber": "The fines are tallied at settlement, when you can't dispute them.",
+      "blue": "Contracts let the employer set the fines and keep the count.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 20,
+      "basis": "fines and docked days over a season (1870s dollars)"
+     },
+     {
+      "front": "Pick for me at harvest, paid by the pound, weighed on my scale.",
+      "red": "A light scale pays you for less cotton than you picked.",
+      "amber": "You're paid at the end of picking, on his tally.",
+      "blue": "The man who owns the scale decides what you picked.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 15,
+      "basis": "a picking season weighed light (1870s dollars)"
+     },
+     {
+      "front": "Just make your mark here. I'll keep the accounts for you.",
+      "red": "His figures say you owe more than your share is worth.",
+      "amber": "The contract you marked runs a full year.",
+      "blue": "Signing what you can't read leaves every number to him.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 60,
+      "basis": "a year's share settled on figures you can't check (1870s dollars)"
+     },
+     {
+      "front": "Sign for the year, and you'll be paid in full at the end of the season.",
+      "red": "Your wages are held all year and paid in one lump, if at all.",
+      "amber": "Leave before the season ends and you can lose the whole year's pay.",
+      "blue": "Holding the pay till harvest kept workers from leaving.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 120,
+      "basis": "a year of farm wages held until settlement (1870s dollars)"
+     },
+     {
+      "front": "Sign a contract by January, or the law calls you a vagrant.",
+      "red": "You sign with whoever is in front of you, on whatever terms, to avoid a fine.",
+      "amber": "The 1865 codes set a January deadline, but by 1867 federal law had set most of them aside.",
+      "blue": "Planter legislatures wrote the codes to force freed people back to the fields.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 100,
+      "basis": "a year bound to a contract signed under threat (1870s dollars)",
+      "rush": true
+     },
+     {
+      "front": "Let us take the children as apprentices: fed, clothed and taught a trade.",
+      "red": "The children work for no pay, often for their former owner.",
+      "amber": "They're bound until they come of age, and leaving means being brought back.",
+      "blue": "The codes let courts bind Black children away from parents who wanted them home.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 60,
+      "basis": "a child's unpaid labor for a year (1870s dollars)"
+     },
+     {
+      "front": "Stay through the settlement and we'll square up when the cotton's sold.",
+      "red": "The cotton sells, but the settlement keeps getting put off.",
+      "amber": "By the time he settles, next year's contract is already due.",
+      "blue": "Late settlement keeps the family on the place another year.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 80,
+      "basis": "a share held back past the end of the year (1870s dollars)"
+     },
+     {
+      "front": "Stay on with me. Nobody else around here will hire you anyway.",
+      "red": "You take lower terms because there seems to be no choice.",
+      "amber": "Leave under contract and you can be brought back.",
+      "blue": "Enticement laws fined any planter who hired a worker away, so they kept wages down together.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 50,
+      "basis": "lower terms with no one allowed to bid for your work (1870s dollars)"
+     },
+     {
+      "front": "Can't pay the vagrancy fine? I'll pay it, and you work it off for me.",
+      "red": "You work for him until he says the fine and costs are paid.",
+      "amber": "There's no set end, and his figures decide when you're free to go.",
+      "blue": "Under the codes, sheriffs could hire out people who couldn't pay; the law and the planter worked as one.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 50,
+      "basis": "unpaid work to pay off a fine and court costs (1870s dollars)"
+     },
+     {
+      "front": "Good wages out west. The agent pays your passage; the train leaves tomorrow.",
+      "red": "The fare is a debt, taken back out of wages that are lower than he said.",
+      "amber": "Leave tomorrow, sign there, and you're bound to a planter you've never met.",
+      "blue": "Labor agents were paid by the head by planters short of hands.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 40,
+      "basis": "fare and fees taken out of a year's wages (1870s dollars)",
+      "rush": true
+     },
+     {
+      "front": "The teacher at the freedmen's school will read the contract with you first.",
+      "red": "No charge. Every term is read aloud before anyone makes a mark.",
+      "amber": "Take a day to think it over; a fair offer will still be there.",
+      "blue": "Freed people built and filled these schools themselves, with churches and northern teachers.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 60,
+      "basis": "a contract you understood before you signed (1870s dollars)"
+     },
+     {
+      "front": "A contract written out fairly and witnessed, with pay set down in plain numbers.",
+      "red": "Wages or shares written in full, with no fines left blank.",
+      "amber": "Paydays are in writing, and a witness holds a copy.",
+      "blue": "A witness, often a Freedmen's Bureau agent, meant the terms could be held to.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 100,
+      "basis": "a year of pay on terms someone else can check (1870s dollars)"
+     },
+     {
+      "front": "The neighbors agree together on what terms they'll take this year.",
+      "red": "No one undercuts anyone, so the whole place bargains as one.",
+      "amber": "Decide before contract time, and hold to it together.",
+      "blue": "Freed families often bargained as groups, and planters short of hands had to listen.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 50,
+      "basis": "better terms bargained for together (1870s dollars)"
+     }
+    ]
+   },
+   "unlocks_always": [
+    "The Freedman's Savings Bank"
    ],
-   "decision": "Stay and fight for the house, or move to where the map says you can? Stay: Housing keeps its sticker, and the Organizer gains +1 Props per League signature in Chapter 4. Move: remove one Scar from Housing, but the Elder role skips a generation."
+   "unlocks_if_won": [
+    "Wilberforce University"
+   ],
+   "decision": {
+    "text": "Go north now, or stay one more season and save?",
+    "options": [
+     {
+      "key": "GO",
+      "label": "Go north now",
+      "text": "Chapter 2 starts with all five districts open from round 1."
+     },
+     {
+      "key": "STAY",
+      "label": "Stay and save",
+      "text": "The family's Ledger +1, but Chapter 2 starts with Lending at Squeeze 1 (the debt follows you)."
+     }
+    ]
+   },
+   "campaign": "LEDGER",
+   "era_dollars": "1870s dollars",
+   "key": "FREEDOMS_LEDGER",
+   "mode": "coop",
+   "rules": {},
+   "after": ""
+  },
+  "UP_NORTH": {
+   "number": 2,
+   "title": "Up North",
+   "era": "1910s–1940s",
+   "intro": "The family steps off the train on Dayton's West Side with a labor agent's ticket and a room they haven't seen. The plants are hiring. The fine print came north too.",
+   "pressure": {},
+   "twist": "Only Lending, Housing and Labor are open at first. Health and Education open in round 3, once the family is settled.",
+   "late": {
+    "HEALTH": 3,
+    "EDUCATION": 3
+   },
+   "owner": "The Lobbyist",
+   "face": "The Labor Agent",
+   "face_text": "The Labor Agent: every round it leans on your strongest unfinished district (+1 Squeeze); on reveal, knocks one woken district back to Clarity 1.",
+   "decks": {
+    "LABOR": [
+     {
+      "front": "Good jobs up north, and I'll get you the ticket, paid back out of your wages.",
+      "red": "The fare comes out of your pay with his fee on top, at whatever price he names.",
+      "amber": "Until it's paid off, he or the company holds your first pay envelopes.",
+      "blue": "The agent gets paid by you and by the company for every worker he delivers.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 60,
+      "basis": "a train fare north plus the agent's fee, taken from wages (1920s dollars)"
+     },
+     {
+      "front": "Two dollars to the employment office and you start Monday, but the line's long, so pay now.",
+      "red": "The fee is gone whether the job lasts a month, a week or not at all.",
+      "amber": "Jobs like this often end in days, and the next placement costs another fee.",
+      "blue": "Some offices split their fees with foremen, who had reason to fire and rehire.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 30,
+      "basis": "placement fees paid over and over for short jobs (1920s dollars)",
+      "rush": true
+     },
+     {
+      "front": "The foundry pays every week, and it's steady work for a strong man.",
+      "red": "It's the hottest, most dangerous job on the floor, at a lower rate than the jobs inside.",
+      "amber": "Burns and bad lungs add up, and a hurt man is the first one let go.",
+      "blue": "The plant fills its worst jobs with Black workers and keeps the better ones closed to them.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 300,
+      "basis": "lower pay for the hottest job, over a year (1920s dollars)"
+     },
+     {
+      "front": "We dock a little for breakage, that's all, everybody pays it.",
+      "red": "Broken tools and spoiled work come out of your pay, and the foreman decides how much.",
+      "amber": "The docking comes every payday, and nobody shows you the count.",
+      "blue": "Nobody checks the foreman's numbers, and fines cost the plant less than fixing machines.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 80,
+      "basis": "pay docked for 'breakage' over a year (1920s dollars)"
+     },
+     {
+      "front": "Be at the gate by six for the shape-up, and the boss picks who works today.",
+      "red": "You wait unpaid for hours, and some bosses want a cut to pick you again.",
+      "amber": "No pick, no pay, and no telling if you'll work tomorrow either.",
+      "blue": "A crowd at the gate every morning keeps the day rate low for everyone.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 200,
+      "basis": "days lost waiting at the gate, over a year (1920s dollars)"
+     },
+     {
+      "front": "You're hired, welcome aboard, the plant is growing fast.",
+      "red": "You start at the bottom rate, with no seniority and no say over your job.",
+      "amber": "When orders drop you're the first laid off, and the last called back.",
+      "blue": "Hiring and layoff rules kept Black workers at the bottom of every list.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 500,
+      "basis": "months laid off in a slow year (1920s dollars)"
+     },
+     {
+      "front": "Between paydays we pay in store orders, good as cash at the company store.",
+      "red": "Store prices run high, and the orders are only good there.",
+      "amber": "By the time payday comes, the store has already taken most of it.",
+      "blue": "The company owns the store and makes money on both ends of your pay.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 150,
+      "basis": "a year of marked-up prices at the company store (1920s dollars)"
+     },
+     {
+      "front": "Work the whole season and we pay you everything in one lump at the end.",
+      "red": "Part of every week's wages is held back, and you live on what's left.",
+      "amber": "Quit early, or get let go a week short, and the held pay is forfeit.",
+      "blue": "The held-back wages are a free loan to the company, and some never get paid.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 250,
+      "basis": "a season's held-back wages lost by leaving early (1920s dollars)"
+     },
+     {
+      "front": "Piece rate: the faster you work, the more you take home!",
+      "red": "You work yourself ragged to earn what the hourly men get.",
+      "amber": "Once enough men hit the number, the rate is cut and the fast pace becomes the floor.",
+      "blue": "Time-study men set the rates to get more work for the same pay.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 200,
+      "basis": "rate cuts after the pace goes up, over a year (1920s dollars)"
+     },
+     {
+      "front": "Steady job, top pay, start right now, no questions asked.",
+      "red": "You'll cross a picket line, and the men on it will remember your face.",
+      "amber": "The day the strike settles, you're let go, and the job was never yours.",
+      "blue": "The company hired you to break a strike, and nobody told you.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 400,
+      "basis": "pay lost when a strikebreaker job ends with the strike (1920s dollars)",
+      "rush": true
+     },
+     {
+      "front": "Join the company club: picnics, a ball team and a little insurance.",
+      "red": "It looks free, but it's meant to cost you a voice at work.",
+      "amber": "The insurance and the bonus only pay if you stay, and stay quiet.",
+      "blue": "The company runs the club to keep workers out of the union.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 100,
+      "basis": "a year of benefits that vanish if you speak up (1920s dollars)"
+     },
+     {
+      "front": "Just sign this promise that you won't join a union, then you start.",
+      "red": "You give up the right to join a union in exchange for the job.",
+      "amber": "Join anyway and you can be fired on the spot, and the courts backed the boss.",
+      "blue": "Employers wrote these 'yellow-dog' contracts so workers couldn't bargain together.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 200,
+      "basis": "raises a union might have won, over a year (1920s dollars)"
+     },
+     {
+      "front": "The colored branch of the Y keeps a job board and a list of clean rooms for newcomers.",
+      "red": "Free to look, with a small membership fee if you stay on.",
+      "amber": "No contract and no fee owed to the job it sends you to.",
+      "blue": "Run by Black Dayton, for the people stepping off the train.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 100,
+      "basis": "agent and placement fees you don't have to pay (1920s dollars)"
+     },
+     {
+      "front": "A union card from the CIO: they're organizing the whole plant, Black and white together.",
+      "red": "Dues of about a dollar a month, and the contract wins it back in raises.",
+      "amber": "Seniority is written down, and the same rules hold for every member.",
+      "blue": "Members vote, and the union's strength is that nobody gets left out.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 300,
+      "basis": "a year of raises and protected seniority (1920s dollars)"
+     },
+     {
+      "front": "The men's club at church passes the word on who's hiring and which agents to avoid.",
+      "red": "Free: you just pass the word on to the next family that comes up.",
+      "amber": "The news is fresh every Sunday, so ask before you sign anything.",
+      "blue": "Neighbors who already learned the hard way, looking out for you.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 100,
+      "basis": "a bad agent's fee and a lost week avoided (1920s dollars)"
+     }
+    ],
+    "HOUSING": [
+     {
+      "front": "A room in my boarding house, meals included, and you pay by the week.",
+      "red": "A shared room by the week costs more than a whole flat across town.",
+      "amber": "Miss one week and your trunk stays locked in the room until you pay.",
+      "blue": "Newcomers have few places to go, and the boarding-house keeper knows it.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 260,
+      "basis": "a year of weekly board for a shared room (1920s dollars)"
+     },
+     {
+      "front": "A kitchenette of your own, cut out of the big house on the corner.",
+      "red": "One room, a hot plate and a bathroom down the hall, at a whole flat's rent.",
+      "amber": "The rent climbs as more families get packed into the house.",
+      "blue": "The owner makes more by cutting one house into many rooms.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 300,
+      "basis": "a year of rent above what the space is worth (1920s dollars)"
+     },
+     {
+      "front": "The rent is what it is, and you won't find better on this side.",
+      "red": "Black tenants pay more than white tenants pay for the same rooms, or better ones.",
+      "amber": "Every year more families arrive, and the rent goes up again.",
+      "blue": "The lines keep you on this side, so the landlord can charge what he likes.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 200,
+      "basis": "a year of rent marked up above what white tenants paid (1920s dollars)"
+     },
+     {
+      "front": "Rent's high, sure, but take in a lodger or two and it covers itself.",
+      "red": "Your family gives up a room and its privacy so the rent can be paid.",
+      "amber": "When the landlord sees the lodgers, the rent goes up to match.",
+      "blue": "The rent was set high counting on families crowding in to pay it.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 150,
+      "basis": "a room's rent passed along to lodgers, over a year (1920s dollars)"
+     },
+     {
+      "front": "Furnish the whole flat for a dollar down, but the sale ends Saturday.",
+      "red": "The weekly payments add up to twice the sticker price or more.",
+      "amber": "Miss one week and they come for all of it, even the pieces you've paid off.",
+      "blue": "The store makes more on the credit than on the furniture.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 150,
+      "basis": "weekly payments that double the price of a houseful of furniture (1920s dollars)",
+      "rush": true
+     },
+     {
+      "front": "No lease needed, you can move in today and pay week to week.",
+      "red": "No lease means no promise about repairs, heat or anything else.",
+      "amber": "The rent can go up any week, and you can be put out on short notice.",
+      "blue": "Week-to-week tenants are easy to squeeze and easy to replace.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 150,
+      "basis": "a year of rent raises with no lease to stop them (1920s dollars)"
+     },
+     {
+      "front": "Pay the key money today and the flat is yours; three families are waiting behind you.",
+      "red": "A cash payment just to get the key, on top of the rent.",
+      "amber": "Move out, or get put out, and the key money is gone.",
+      "blue": "The agent pockets it, and the shortage behind it was made by the lines.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 50,
+      "basis": "key money paid just to get in the door (1920s dollars)",
+      "rush": true
+     },
+     {
+      "front": "I'll fix the roof and the stove next month, so just sign for the year.",
+      "red": "You pay full rent on a place that's falling apart around you.",
+      "amber": "Next month never comes, and you're bound to the place for the year.",
+      "blue": "The owner lives across town, and every repair comes out of his profit.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 100,
+      "basis": "a year of rent on repairs that never happen (1920s dollars)"
+     },
+     {
+      "front": "Heat is included all winter long, so you never have to buy a lump of coal!",
+      "red": "The furnace runs a few hours a day, so you buy your own coal to stay warm.",
+      "amber": "Complain and your lease isn't renewed in the spring.",
+      "blue": "The owner saves on coal, and you pay for it twice.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 60,
+      "basis": "a winter of your own coal on top of 'heat included' (1920s dollars)"
+     },
+     {
+      "front": "A nice house across the river, and the owner says the price is right.",
+      "red": "The deed carries a covenant that bars Black owners from the house.",
+      "amber": "The neighbors can sue to undo the sale, and in these years the courts enforced it.",
+      "blue": "Developers and neighborhood associations wrote those covenants in to hold the line.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 500,
+      "basis": "a deposit lost on a house the covenant won't let you keep (1920s dollars)"
+     },
+     {
+      "front": "The real estate man says the West Side is where you'd be happiest.",
+      "red": "Your choices shrink to the oldest, most crowded blocks in the city.",
+      "amber": "Every year more families are pushed into the same streets, and rents climb.",
+      "blue": "The realtors' own code of ethics told agents to keep Black families out of white blocks.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 300,
+      "basis": "a year of higher rent in a crowded, confined market (1920s dollars)"
+     },
+     {
+      "front": "The rent collector's a friendly fellow from the neighborhood, and he'll work with you.",
+      "red": "Same high rent, same broken stairs: the friendly face doesn't set the price.",
+      "amber": "When you fall behind, the notice comes from the owner's lawyer, not from him.",
+      "blue": "The owner lives across town and never sets foot in the building.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 200,
+      "basis": "a year of rent and late charges to an absentee owner (1920s dollars)"
+     },
+     {
+      "front": "The lodge's sick-and-burial fund helps a member's family make rent in a bad month.",
+      "red": "Monthly dues, and the benefit is paid when you're sick or grieving.",
+      "amber": "No interest, no papers to trap you, just the lodge's rules read out loud.",
+      "blue": "Owned by the members, who are your neighbors.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 100,
+      "basis": "a month or two of rent covered in a crisis (1920s dollars)"
+     },
+     {
+      "front": "A building and loan run by our own people: save a little each week toward a house.",
+      "red": "Weekly payments buy shares, and a fair loan comes when you've saved enough.",
+      "amber": "A clear schedule, and the deed is in your name.",
+      "blue": "The members are the owners, and the money stays on the block.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 1500,
+      "basis": "a fair home loan from savings pooled by members (1920s dollars)"
+     },
+     {
+      "front": "The church keeps a list of decent rooms and fair landlords for families just off the train.",
+      "red": "Free: the church asks only that you come by on Sunday.",
+      "amber": "No lease trick and no rush; they'll tell you which landlords to avoid.",
+      "blue": "The congregation looking after the people who just arrived.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 100,
+      "basis": "overpriced rent and a lost deposit avoided (1920s dollars)"
+     }
+    ]
+   },
+   "unlocks_always": [
+    "Dunbar, the Wrights and the Dayton Tattler"
+   ],
+   "unlocks_if_won": [
+    "Maggie L. Walker's Penny Savings Bank"
+   ],
+   "decision": {
+    "text": "The family has a little saved. Put it into the church, the house, or a child's schooling?",
+    "options": [
+     {
+      "key": "CHURCH",
+      "label": "The church",
+      "text": "In Chapter 3, gathering at the church takes off 3 Shady instead of 2."
+     },
+     {
+      "key": "HOUSE",
+      "label": "The house",
+      "text": "In Chapter 3, Housing starts with 1 less Squeeze: a house the family owns outright."
+     },
+     {
+      "key": "SCHOOL",
+      "label": "A child's schooling",
+      "text": "In Chapter 3, the Student starts with Read 1 everywhere."
+     }
+    ]
+   },
+   "campaign": "LEDGER",
+   "era_dollars": "1920s dollars",
+   "key": "UP_NORTH",
+   "mode": "coop",
+   "rules": {},
+   "after": ""
+  },
+  "VOICE": {
+   "number": 4,
+   "title": "Voice",
+   "era": "1955–1970",
+   "intro": "Boycotts in Montgomery, a strike in Memphis, and on the West Side the family is registering voters. In 1970 Dayton elects James H. McGee mayor. Somebody keeps offering the organizers a quieter way.",
+   "pressure": {},
+   "twist": "The Organizer's NEGOTIATE clears 3 Squeeze. Once per game, any player can call the March (an action): every player gathers at once (Trust +2, Shady −1, covered).",
+   "march": true,
+   "organizer_clears": 3,
+   "owner": "The Lobbyist",
+   "face": "The Council",
+   "face_text": "The Council: leans on your strongest unfinished district every round (+1 Squeeze); on reveal, it redraws the lines: every woken district loses 1 Clarity.",
+   "reveal": "all",
+   "decks": {
+    "LABOR": [
+     {
+      "front": "Plenty of steady work at the foundry for you, out in the hot end.",
+      "red": "The hot, dirty jobs pay the least, and the better-paid departments won't take you.",
+      "amber": "You can work there twenty years and still be in the same job at the same rate.",
+      "blue": "The plant's job ladder was drawn by race: some rungs were never open to you.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 1000,
+      "basis": "a year of the pay gap between the hot end and the better departments (1960s dollars)"
+     },
+     {
+      "front": "The city sanitation crew is hiring: steady pay, start tomorrow.",
+      "red": "The pay is so low that some full-time crews still can't feed their families.",
+      "amber": "Send the crew home for rain and there's no pay for the day.",
+      "blue": "With no union to answer to, the city sets the pay and the conditions alone.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 1200,
+      "basis": "a year of pay below what a family needs (1960s dollars)"
+     },
+     {
+      "front": "Day work at the gate: cash in your hand at the end of every shift.",
+      "red": "The labor contractor takes his cut out of every day's pay before you see it.",
+      "amber": "There's no promise of tomorrow; you're back at the gate at dawn to try again.",
+      "blue": "The plant pays the contractor, so nobody on the books ever owes you anything.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 400,
+      "basis": "the contractor's cut of a year of day pay (1960s dollars)"
+     },
+     {
+      "front": "A good family across town needs help in the house, five days a week.",
+      "red": "No minimum wage and no overtime: the federal wage law left household workers out.",
+      "amber": "Long days, and you can be let go the same afternoon with no notice.",
+      "blue": "The law that protected the plant floor was written to leave this work out.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 800,
+      "basis": "a year of household pay with no minimum wage or overtime (1960s dollars)"
+     },
+     {
+      "front": "The employment agency will place you this week; the fee comes out of your first checks.",
+      "red": "The fee eats weeks of pay, and it's owed even if the job ends early.",
+      "amber": "Lose the job in the first month and you can owe the agency more than you earned.",
+      "blue": "The agency and the employer both get paid from your wages.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 250,
+      "basis": "an agency fee taken from the first weeks of pay (1960s dollars)"
+     },
+     {
+      "front": "You're hired, temporary for now; permanent comes later.",
+      "red": "Same work, same pay as the man beside you, for now.",
+      "amber": "Temporary workers build no seniority and can be let go any day, no reason given.",
+      "blue": "March on a workday or sign a union card, and 'temporary' is how they let you go.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 3000,
+      "basis": "a year of wages lost when temporary workers are let go first (1960s dollars)"
+     },
+     {
+      "front": "Move up to the better department: higher pay, and it's yours on Monday.",
+      "red": "It's a real raise, and the work is cleaner.",
+      "amber": "The transfer wipes out your years of seniority, so you're the first laid off.",
+      "blue": "Separate seniority lists by department kept Black workers in the worst jobs.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 2500,
+      "basis": "a year of pay lost to being laid off first (1960s dollars)"
+     },
+     {
+      "front": "Apprenticeship applications are open this week; bring a letter from a member.",
+      "red": "Applying is free, and a skilled trade pays far more than labor.",
+      "amber": "The window opens and closes in days, and it's posted only inside the hall.",
+      "blue": "The sponsor must be a member, and the members sponsor their own sons and nephews.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 2000,
+      "basis": "a year of the higher pay of a skilled trade (1960s dollars)",
+      "rush": true
+     },
+     {
+      "front": "Register to vote at the board of elections, weekdays during business hours.",
+      "red": "There's no fee, but you lose a day's pay to stand in that line.",
+      "amber": "Registration closes weeks before the election; miss it and wait for the next one.",
+      "blue": "Hours set for people who can leave work are hours set to keep others out.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 25,
+      "basis": "a day's pay lost to register (1960s dollars)"
+     },
+     {
+      "front": "The company wants you as its first Black foreman. Congratulations.",
+      "red": "It's a real raise and a real title, with your name on the door.",
+      "amber": "You start next week, paid every Friday, and they need your answer by tomorrow.",
+      "blue": "It's offered to the man leading the strike committee, the week before the vote.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 1500,
+      "basis": "a foreman's raise, for a year (1960s dollars)",
+      "rush": true
+     },
+     {
+      "front": "The union hall has a staff job for you: good salary, and it's indoors.",
+      "red": "Full salary and benefits, paid by the union, not the company.",
+      "amber": "It starts at once, and you'll be on the road for the international most weeks.",
+      "blue": "It takes the caucus leader off the plant floor before the fight over seniority.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 5000,
+      "basis": "a year's salary on staff (1960s dollars)"
+     },
+     {
+      "front": "A city cleaning contract for your small business, steady work all year.",
+      "red": "Fair pay per building, paid on time every month.",
+      "amber": "A one-year contract, renewed each year if the city is satisfied.",
+      "blue": "It arrives the week you planned to lead the picket, and 'satisfied' means quiet.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 3000,
+      "basis": "a year of a city contract (1960s dollars)"
+     },
+     {
+      "front": "The union local is fighting for one seniority list for the whole plant.",
+      "red": "Dues are a few dollars a month, and the contract they bargain pays far more.",
+      "amber": "Grievances have deadlines, and the steward helps you file on time.",
+      "blue": "The members vote on the contract and elect their stewards in the open.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 2000,
+      "basis": "a year of pay protected by plant-wide seniority (1960s dollars)"
+     },
+     {
+      "front": "File a complaint: under the Civil Rights Act of 1964, hiring by race is illegal.",
+      "red": "It's free to file with the federal or the Ohio civil rights commission.",
+      "amber": "There's a short deadline to file, so write down names and dates now.",
+      "blue": "The law is on your side, and so are the lawyers who helped win it.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 1500,
+      "basis": "back pay a complaint can win (1960s dollars)"
+     },
+     {
+      "front": "The strike fund: the churches and the union feed families while the line holds.",
+      "red": "No cost: groceries, rent help and coal, given by neighbors and members.",
+      "amber": "It lasts as long as the strike does, and people keep giving.",
+      "blue": "The block and the union hall standing behind the people on the line.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 300,
+      "basis": "groceries and rent help through a strike (1960s dollars)"
+     }
+    ],
+    "EDUCATION": [
+     {
+      "front": "Your school's on double sessions: half days, but the same diploma.",
+      "red": "Your child gets half the hours of class the schools across town give.",
+      "amber": "The overcrowding grows every year, and so does the time lost.",
+      "blue": "New schools went up across town while this one was packed past capacity.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 200,
+      "basis": "a year of class time lost to half days (1960s dollars)"
+     },
+     {
+      "front": "Lab fees, band fees and the class trip: all optional, of course.",
+      "red": "The 'optional' fees add up, and kids who can't pay sit out.",
+      "amber": "Each fee is due on its own date, and every child knows who didn't pay.",
+      "blue": "A school that runs on fees makes families pay for what the district won't fund.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 100,
+      "basis": "a year of 'optional' school fees (1960s dollars)"
+     },
+     {
+      "front": "New books for your school: the other high school sent over its old set.",
+      "red": "The books are years out of date, marked up, with pages missing.",
+      "amber": "Your child studies from them until the other school gets new ones again.",
+      "blue": "The budget buys new books across town and passes the old ones down.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 50,
+      "basis": "a year of books your child should have had (1960s dollars)"
+     },
+     {
+      "front": "The business school downtown: typing and shorthand, a career in six months.",
+      "red": "Tuition costs more than a year at a public college, for six months of classes.",
+      "amber": "Enroll by Monday or the price goes up, and the tuition isn't refunded if you quit.",
+      "blue": "The school is paid up front whether or not anyone hires its graduates.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 600,
+      "basis": "private business-school tuition (1960s dollars)",
+      "rush": true
+     },
+     {
+      "front": "Finish your diploma by mail, and pay just a little per lesson.",
+      "red": "The lessons add up to far more than night classes at the high school.",
+      "amber": "Miss a payment and the lessons stop, but the balance is still due.",
+      "blue": "Many employers and colleges won't accept a mail-order diploma.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 300,
+      "basis": "a year of mail-order lessons (1960s dollars)"
+     },
+     {
+      "front": "Freedom of choice: any family can now pick any school in the district.",
+      "red": "Transferring is free; just fill out the form.",
+      "amber": "The form is due by Friday, at the office during work hours, or your child is assigned back.",
+      "blue": "Plans like this kept schools segregated; the Supreme Court struck one down in 1968.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 200,
+      "basis": "a year of the spending gap between schools (1960s dollars)",
+      "rush": true
+     },
+     {
+      "front": "The vocational track: your son will learn a trade and be working at eighteen.",
+      "red": "No fees, and the shop classes are real classes.",
+      "amber": "Once he's on the track he gets no college-prep courses; switching later means starting over.",
+      "blue": "Counselors steered Black students away from college before anyone asked them.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 2000,
+      "basis": "a year of the earnings gap from a closed path to college (1960s dollars)"
+     },
+     {
+      "front": "Cousins down South write: to register, just fill out the clerk's application.",
+      "red": "There is no charge to apply, and the clerk says anyone may try.",
+      "amber": "The clerk grades it on the spot and says when you may try again, months from now.",
+      "blue": "Southern states wrote those tests so the clerk could say no; the Voting Rights Act (1965) ended them.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 25,
+      "basis": "a day's pay lost to the clerk's office (1960s dollars)"
+     },
+     {
+      "front": "A scholarship from the downtown club: full tuition, if you keep your grades up.",
+      "red": "It covers the whole first term, with nothing to pay back.",
+      "amber": "The club renews it term by term, on its own say, and can drop you mid-year.",
+      "blue": "The club decides what counts as 'keeping your grades up,' and can change it.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 400,
+      "basis": "a year's tuition lost mid-year (1960s dollars)"
+     },
+     {
+      "front": "The school board wants a West Side parent on its new advisory committee.",
+      "red": "It costs nothing, and your name is in the paper.",
+      "amber": "It meets once a month, for a two-year term.",
+      "blue": "The committee has no vote, and the seat goes to the parent leading the school boycott.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 100,
+      "basis": "a committee seat with no vote, for a year (1960s dollars)"
+     },
+     {
+      "front": "The district has a principal's job for you, starting in the fall.",
+      "red": "A real salary, a pension, and the respect of the title.",
+      "amber": "A one-year contract to start, renewed each spring.",
+      "blue": "It goes to the teacher who started the freedom school, if the freedom school closes.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 7000,
+      "basis": "a year of a principal's salary (1960s dollars)"
+     },
+     {
+      "front": "A full scholarship for your daughter at a college out of state, all expenses paid.",
+      "red": "Tuition, room and board, and a train ticket home at Christmas.",
+      "amber": "It starts this fall and renews every year she's in good standing.",
+      "blue": "It comes from the people your family is suing, if the family drops the case.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 2000,
+      "basis": "a year of college costs (1960s dollars)"
+     },
+     {
+      "front": "Central State University, near Xenia: low tuition, real aid, and teachers who expect you to finish.",
+      "red": "Public tuition, and a federal student loan at a low rate.",
+      "amber": "Repayment starts after you leave school, and part is forgiven if you teach.",
+      "blue": "A Black public university, built by and for the community it serves.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 1000,
+      "basis": "a year of low tuition and a federal student loan (1960s dollars)"
+     },
+     {
+      "front": "A citizenship class at the church: learn the forms and the ballot, then register together.",
+      "red": "Free, taught by neighbors at night, after work.",
+      "amber": "Classes run until the deadline, and the group goes down to register together.",
+      "blue": "Run by the community, for nobody's profit but the vote's.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 25,
+      "basis": "a day's pay kept: the class meets after work (1960s dollars)"
+     },
+     {
+      "front": "The freedom school at the church: real classes while the boycott goes on.",
+      "red": "Free: volunteer teachers, donated books, lunch for every child.",
+      "amber": "It runs every school day of the boycott, so nobody falls behind.",
+      "blue": "The parents, the churches and the teachers who stand with them.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 100,
+      "basis": "a boycott's worth of free classes and lunches (1960s dollars)"
+     }
+    ]
+   },
+   "unlocks_always": [
+    "The Montgomery Bus Boycott",
+    "I AM A MAN"
+   ],
+   "unlocks_if_won": [
+    "Mayor James H. McGee"
+   ],
+   "decision": {
+    "text": "Run for office, or keep organizing?",
+    "options": [
+     {
+      "key": "RUN",
+      "label": "Run for office",
+      "text": "In Chapter 5, the Owner's hidden hand rests for the first 3 rounds."
+     },
+     {
+      "key": "ORGANIZE",
+      "label": "Keep organizing",
+      "text": "In Chapter 5, the Organizer starts with 5 Trust."
+     }
+    ]
+   },
+   "campaign": "LEDGER",
+   "era_dollars": "1960s dollars",
+   "key": "VOICE",
+   "mode": "coop",
+   "rules": {},
+   "after": ""
+  },
+  "PLANTS_CLOSE": {
+   "number": 5,
+   "title": "The Plants Close",
+   "era": "1990s–2009",
+   "intro": "GM's Moraine plant closes in 2008; NCR leaves in 2009. Before the crash, the brokers came door to door with teaser rates and cash-out refinances. Now the temp agency is the only one hiring.",
+   "pressure": {
+    "LABOR": 2
+   },
+   "start_trust": 1,
+   "twist": "Labor starts at Squeeze 2 and everyone starts with 1 Trust. Before the chapter the family chooses: defend what you built (the Machine strikes your Rebuilt districts first) or let one go (remove one Rebuilt sticker).",
+   "defend_choice": true,
+   "owner": "The Algorithm",
+   "face": "The Algorithm",
+   "face_text": "The Algorithm: scoring, automation and risk models. Relentless: the Machine strikes one extra time every round.",
+   "decks": {
+    "HOUSING": [
+     {
+      "front": "Refinance today and cut your payment way down! (2/28 loan)",
+      "red": "Two years at a teaser rate, then it adjusts every six months, and the payment climbs by hundreds.",
+      "amber": "The reset lands in month 25, and the prepayment penalty is built to outlast your chance to get out.",
+      "blue": "The lender sells the loan upstream within weeks, so whether you can pay is someone else's problem.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 3600,
+      "basis": "a payment about $300 a month higher after the reset, for a year (2000s dollars)",
+      "rush": true
+     },
+     {
+      "front": "Cash out your equity: pay off the cards and fix the kitchen too!",
+      "red": "Card debt becomes debt on your house, with thousands in points and fees rolled into the loan.",
+      "amber": "Fall behind now and it isn't a collection call anymore. It's a foreclosure filing.",
+      "blue": "The broker is paid on the size of the loan, so he always pushes you to borrow more.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 5000,
+      "basis": "points and fees rolled into a cash-out refinance (2000s dollars)"
+     },
+     {
+      "front": "No pay stubs needed. We'll fill in the income for you. (Stated-income loan)",
+      "red": "The broker writes down an income you don't earn, so you get a payment you can't afford.",
+      "amber": "The payment is set to that made-up income from month one, and you're behind within the year.",
+      "blue": "Brokers and lenders were paid more for these loans, and the buyers upstream rarely checked.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 4000,
+      "basis": "a year of a payment set on income you don't earn (2000s dollars)"
+     },
+     {
+      "front": "Rates dropped again! Let's refinance and lower your payment.",
+      "red": "Every refinance charges new points and fees, and each one comes out of your equity.",
+      "amber": "Each new loan restarts the clock, so the house never gets any closer to paid off.",
+      "blue": "Brokers flip the same homeowner over and over, because every loan pays them again.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 4000,
+      "basis": "a new round of points and fees with each refinance (2000s dollars)"
+     },
+     {
+      "front": "Loan protection included, so your family is covered if something happens to you.",
+      "red": "One big premium for credit insurance, thousands of dollars, financed into the loan with interest.",
+      "amber": "It's paid up front for years of coverage; pay the loan off early and little of it comes back.",
+      "blue": "The lender's own insurance company wrote the policy, and the lender kept the commission.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 3000,
+      "basis": "a single-premium credit insurance policy financed into the loan (2000s dollars)"
+     },
+     {
+      "front": "You can always refinance later, once your credit is better.",
+      "red": "Pay the loan off early and owe a prepayment penalty, often about six months of interest.",
+      "amber": "The penalty runs two or three years, right through the date the rate resets.",
+      "blue": "Investors paid more for loans with penalties, so lenders paid brokers more to write them.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 3600,
+      "basis": "six months' interest on a $90,000 loan at 8% (2000s dollars)"
+     },
+     {
+      "front": "Behind on the mortgage? Sign the deed over to us and we'll save your house.",
+      "red": "You hand over the deed and the equity you built, then pay rent to live in your own house.",
+      "amber": "Miss one rent payment and they evict you; the buyback date comes at a price you can't reach.",
+      "blue": "The 'rescuer' reads the foreclosure list at the courthouse and knocks on every door on it.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 25000,
+      "basis": "the equity in a paid-down West Side house, signed away (2000s dollars)",
+      "rush": true
+     },
+     {
+      "front": "We'll get your bank to lower your payment. Just $1,500 up front.",
+      "red": "The fee is gone whether they do anything or not; a HUD-approved counselor does this for free.",
+      "amber": "They tell you to stop paying the bank while they 'negotiate,' and the sale date gets closer.",
+      "blue": "Many of these outfits never called the bank at all; they closed up and opened under a new name.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 1500,
+      "basis": "an upfront fee kept whether anything happens (2000s dollars)"
+     },
+     {
+      "front": "Notice: your lender has bought insurance on your home for you.",
+      "red": "It costs several times a regular policy, and it covers the lender's loan, not your things.",
+      "amber": "The letter gives you a short window to show proof of your own policy; miss it and it's billed to you.",
+      "blue": "The servicer picks the insurer, and the insurer often pays the servicer back in commissions.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 1500,
+      "basis": "a force-placed policy costing several times a regular one, for a year (2000s dollars)"
+     },
+     {
+      "front": "Your broker shops every bank in town to get you the best rate.",
+      "red": "He put you at a higher rate than you qualified for, and he never said so.",
+      "amber": "The higher rate costs you every month for as long as you keep the loan.",
+      "blue": "The lender paid him a bonus for the higher rate. It's called a yield-spread premium.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 1000,
+      "basis": "a rate about one point higher on a $100,000 loan, for a year (2000s dollars)"
+     },
+     {
+      "front": "Loans for folks with credit like yours. We specialize in this neighborhood.",
+      "red": "A subprime rate and fees, even when your credit was good enough for a prime loan.",
+      "amber": "Your rate resets and your penalty runs, while families across town got fixed rates.",
+      "blue": "Lenders steered Black neighborhoods to subprime loans, even borrowers who qualified for prime.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 2400,
+      "basis": "a subprime rate instead of prime on an $80,000 loan, for a year (2000s dollars)"
+     },
+     {
+      "front": "We were just on your street: new furnace today, financing right at the door.",
+      "red": "The 'repair' is a high-rate home-equity loan on your house, for work priced far too high.",
+      "amber": "Payments start whether the work is finished or not, and missing them puts the house at risk.",
+      "blue": "The contractor brings the lender the loan and gets paid out of it, whatever the work looks like.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 6000,
+      "basis": "an overpriced furnace financed at a high rate against the house (2000s dollars)",
+      "rush": true
+     },
+     {
+      "front": "Free housing counseling: a HUD-approved counselor reads the loan with you.",
+      "red": "It costs nothing; the counselor doesn't sell loans and goes through every page with you.",
+      "amber": "Call before you sign, or as soon as you fall behind. Choices shrink as the sale date nears.",
+      "blue": "Paid for by public grants and nonprofits, not by any lender.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 3000,
+      "basis": "fees and back payments a counselor helps you avoid or work out (2000s dollars)"
+     },
+     {
+      "front": "The credit union: refinance into a fixed rate you can actually afford.",
+      "red": "A fair fixed rate, closing costs spelled out on paper, and no prepayment penalty.",
+      "amber": "The payment stays the same for the whole loan, with no reset date hiding in the papers.",
+      "blue": "Member-owned: the profit comes back to the members, not to buyers upstream.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 3600,
+      "basis": "about $300 a month saved against a resetting subprime loan, for a year (2000s dollars)"
+     },
+     {
+      "front": "Legal aid will fight the foreclosure with you, for free.",
+      "red": "No fee if you qualify, and a lawyer checks the loan for every rule it broke.",
+      "amber": "Answer the foreclosure papers in time: in Ohio you get 28 days after you're served.",
+      "blue": "Legal aid is funded to defend families, and a loan that broke the law can be fought.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 25000,
+      "basis": "a house kept, and the equity in it (2000s dollars)"
+     }
+    ],
+    "LABOR": [
+     {
+      "front": "Staffing agency: $9 an hour at the parts plant, start tomorrow.",
+      "red": "The plant pays the agency far more than your $9; the gap is the agency's cut of your work.",
+      "amber": "An assignment ends with one phone call: no notice, no severance, no recall.",
+      "blue": "The plant gets the same work done without the wages, benefits or union contract.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 7000,
+      "basis": "the agency's cut of a few dollars an hour, over a year of full-time work (2000s dollars)"
+     },
+     {
+      "front": "Here's your severance check. Just sign the release first, today.",
+      "red": "Signing gives up your right to sue over the layoff, including age or race discrimination.",
+      "amber": "If you're 40 or older, the law gives you weeks to decide and 7 days to change your mind.",
+      "blue": "The company's lawyers wrote the release to close every claim before anyone looks at it.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 10000,
+      "basis": "a severance check, and any claim worth more than it, signed away (2000s dollars)",
+      "rush": true
+     },
+     {
+      "front": "Retrain for a new career. Your severance covers the tuition!",
+      "red": "Thousands in tuition and loans for a certificate that local employers don't hire from.",
+      "amber": "The loans come due six months after you finish, job or no job.",
+      "blue": "The school recruits at the union hall the week the plant closes, chasing the severance money.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 9000,
+      "basis": "tuition and loans for a certificate that leads nowhere (2000s dollars)"
+     },
+     {
+      "front": "Keep your 401(k) in company stock. Nobody knows this company like you do.",
+      "red": "Your job and your savings ride on one company; when it fails, you lose both at once.",
+      "amber": "The plan can be frozen during changes, just as the stock is falling.",
+      "blue": "Many companies paid the match in their own stock, which cost them no cash.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 20000,
+      "basis": "a 401(k) mostly in company stock when the stock collapses (2000s dollars)"
+     },
+     {
+      "front": "Work from home: stuff envelopes and earn $500 a week!",
+      "red": "You pay for a 'starter kit,' and there's no real work behind it.",
+      "amber": "Once you've paid, the ads change their name and the phone number stops answering.",
+      "blue": "The only money made is the kit fee, collected from thousands of people who need work.",
+      "trap": true,
+      "lever": 1,
+      "dollars": 150,
+      "basis": "a starter kit for work that doesn't exist (2000s dollars)"
+     },
+     {
+      "front": "Temp-to-hire: work hard and they'll bring you on full time!",
+      "red": "Temp pay, no benefits, no seniority, for the same work the full-timers do.",
+      "amber": "The hire date keeps moving, month after month, and it never comes.",
+      "blue": "A rotating temp crew costs less than ever hiring anyone for real.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 12000,
+      "basis": "a year at temp pay with no benefits instead of a real job (2000s dollars)"
+     },
+     {
+      "front": "Take the voluntary buyout now. This offer won't be this good again.",
+      "red": "One check, and you give up your seniority, recall rights and retiree health.",
+      "amber": "The window closes in weeks, before anyone knows if the plant is closing anyway.",
+      "blue": "Every worker who takes it is one less the company owes under the contract.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 15000,
+      "basis": "seniority, recall rights and retiree health given up for one check (2000s dollars)",
+      "rush": true
+     },
+     {
+      "front": "No layoffs are planned. Keep showing up and don't listen to rumors.",
+      "red": "You keep working instead of looking, while the closing may already be planned.",
+      "amber": "The WARN Act requires 60 days' notice of a big layoff; skip it and the company owes back pay.",
+      "blue": "Keeping the news quiet keeps the line running full speed to the last day.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 6000,
+      "basis": "about two months of pay and benefits owed when notice is skipped (2000s dollars)"
+     },
+     {
+      "front": "Your pension is safe for life. Don't worry about the bankruptcy.",
+      "red": "If the plan ends in bankruptcy, the government insurer pays only up to a limit, and checks can shrink.",
+      "amber": "Retirees who organize early can be heard in bankruptcy court; wait, and the deal is done.",
+      "blue": "In bankruptcy, promises to retirees are one more debt the court can cut.",
+      "trap": true,
+      "lever": 2,
+      "dollars": 6000,
+      "basis": "a pension check cut down to the insured limit, for a year (2000s dollars)"
+     },
+     {
+      "front": "The new plant down south is hiring. Move with the company!",
+      "red": "Lower pay, no union, and you pay to move your family away from everyone you know.",
+      "amber": "You have days to decide, and your recall rights here end when you go.",
+      "blue": "The work moved to a non-union plant so the company could pay less; the old wage was the target.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 10000,
+      "basis": "lower pay at a non-union plant, plus the cost of the move (2000s dollars)"
+     },
+     {
+      "front": "Take the concessions and the plant stays open. Sign the new contract.",
+      "red": "Wage and benefit cuts, signed in the hope of saving the plant.",
+      "amber": "The promise to keep the plant open lasts only until the next review.",
+      "blue": "Plants were set against each other to give up the most; the closing list came from the top.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 8000,
+      "basis": "a year of wage and benefit cuts given to 'save' the plant (2000s dollars)"
+     },
+     {
+      "front": "Free retirement seminar for laid-off workers, right here at the hall.",
+      "red": "The 'advice' is to roll your 401(k) into high-fee annuities and funds.",
+      "amber": "Surrender charges lock the money up for years; pull it out early and pay a penalty.",
+      "blue": "The adviser is a salesman paid commissions by the companies whose products he pushes.",
+      "trap": true,
+      "lever": 3,
+      "dollars": 10000,
+      "basis": "surrender charges and fees on a rolled-over 401(k) (2000s dollars)"
+     },
+     {
+      "front": "The union's deal: severance, health coverage, and a job center that places people.",
+      "red": "Severance terms bargained by your union and read by its lawyers before you sign.",
+      "amber": "Sign-up deadlines are real, and the union rep walks you through each one.",
+      "blue": "The union bargained it with the company, and the union answers to you.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 20000,
+      "basis": "severance and health coverage bargained by the union (2000s dollars)"
+     },
+     {
+      "front": "Trade Adjustment Assistance: training and income help if trade cost your job.",
+      "red": "Training paid for, plus weekly income after unemployment runs out, for workers who qualify.",
+      "amber": "Your layoff must be certified and you must start training by a deadline, so sign up fast.",
+      "blue": "A federal program for workers whose jobs went to imports or overseas.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 12000,
+      "basis": "a year of paid training and income support (2000s dollars)"
+     },
+     {
+      "front": "The community college's program, built with a hospital that's hiring.",
+      "red": "Low tuition, often covered by a workforce grant, for a credential the employer asked for.",
+      "amber": "Classes fit around a shift, and the employer interviews graduates as they finish.",
+      "blue": "College, workforce board and employer at one table, answering to the public.",
+      "trap": false,
+      "lever": 0,
+      "dollars": 3000,
+      "basis": "tuition covered by a workforce grant (2000s dollars)"
+     }
+    ]
+   },
+   "unlocks_always": [
+    "The People's Free Medical Clinics"
+   ],
+   "unlocks_if_won": [
+    "Greenwood: Black Wall Street"
+   ],
+   "decision": {
+    "text": "Sell the house at the bottom of the market, or hold on?",
+    "options": [
+     {
+      "key": "SELL",
+      "label": "Sell",
+      "text": "In Chapter 6, everyone starts with +2 Trust, but Housing loses a Rebuilt sticker."
+     },
+     {
+      "key": "HOLD",
+      "label": "Hold on",
+      "text": "Housing keeps everything, and starts Chapter 6 with 1 more Squeeze."
+     }
+    ]
+   },
+   "campaign": "LEDGER",
+   "era_dollars": "2000s dollars",
+   "key": "PLANTS_CLOSE",
+   "mode": "coop",
+   "rules": {},
+   "after": ""
+  },
+  "TODAY": {
+   "number": 6,
+   "title": "Today",
+   "era": "2018–",
+   "intro": "Good Samaritan Hospital has closed. Gem City Market has opened. The family is still here, and the trap is still here, wearing new clothes.",
+   "pressure": {},
+   "twist": "Every History card the family unlocked is in play, and the Elder may teach History twice.",
+   "history_twice": true,
+   "owner": "The Ledger Keeper",
+   "face": "The Ledger Keeper",
+   "face_text": "The Ledger Keeper: one hand behind every era. Its hidden hand changes face each round: the store's book (collections), the labor agent (Read −1), the appraiser (+1 Squeeze on your strongest work), the algorithm (an extra strike). It wore The Planter's Ledger, the Labor Agent, the Appraiser, the Council and the Algorithm.",
+   "decks": {},
+   "unlocks_always": [],
+   "unlocks_if_won": [],
+   "decision": null,
+   "campaign": "LEDGER",
+   "era_dollars": null,
+   "key": "TODAY",
+   "mode": "coop",
+   "rules": {},
+   "after": ""
+  },
+  "B1_CHAIN": {
+   "number": 1,
+   "title": "The Chain",
+   "era": "Graduation night",
+   "intro": "Marcus can see the second number on everything now, and he teaches it as fast as he can: to Nia, who teaches the next one, who teaches the next.",
+   "mode": "party",
+   "rules": {
+    "terrell": true
+   },
+   "pressure": {},
+   "twist": "A Block Party with the Terrell rule. The Chain: when a learner says the second number back, they at once teach one more player in that district, for free.",
+   "chain": true,
+   "owner": "No Owner",
+   "face": "No Owner",
+   "face_text": "",
+   "decks": {},
+   "unlocks_always": [],
+   "unlocks_if_won": [],
+   "decision": null,
+   "after": "If anyone was burned by the Terrell rule, the ledger reads Terrell. If you won, the block learns Civic Armor: from Chapter 2 on, every Teach comes with cover.",
+   "campaign": "BOOK_ONE",
+   "key": "B1_CHAIN"
+  },
+  "B1_NET": {
+   "number": 2,
+   "title": "The Net",
+   "era": "A county job",
+   "intro": "A county job, a desk, a program that sounds like help. The terms keep changing on you.",
+   "mode": "coop",
+   "rules": {
+    "terrell": true,
+    "fine_print": true
+   },
+   "pressure": {},
+   "twist": "Full Block with fine-print dice. The Desk: at the start of round 2 one player may take the Desk. At the Desk they gain +1 Trust every round but can't face deals or teach, and every second round its paperwork feeds the Machine an extra strike. Leaving it, for good, takes an action.",
+   "desk": true,
+   "owner": "The Algorithm",
+   "face": "The Net",
+   "face_text": "The Net: the program that sounds like help. Relentless: the Machine strikes one extra time every round.",
+   "decks": {},
+   "unlocks_always": [],
+   "unlocks_if_won": [],
+   "decision": null,
+   "after": "If the player at the Desk left it, the ledger reads Quit the desk: in Chapter 3 that player starts with Read 1 everywhere.",
+   "campaign": "BOOK_ONE",
+   "key": "B1_NET"
+  },
+  "B1_CROWN": {
+   "number": 3,
+   "title": "The Crown",
+   "era": "A way up",
+   "intro": "Somebody offers Dre a way up out of the life, and it looks just like a blessing.",
+   "mode": "overlord",
+   "rules": {},
+   "pressure": {},
+   "twist": "Overlord mode, with the stranger's handwriting in place of the Terrell rule. The Crown: once per game the Overlord may offer the Crown to one player. A crowned player can't Fall, but every other block player loses 1 Trust at the start of each round. Refuse it, and the Overlord takes one extra move that round.",
+   "crown": true,
+   "owner": "The Overlord",
+   "face": "The Overlord",
+   "face_text": "",
+   "decks": {},
+   "unlocks_always": [],
+   "unlocks_if_won": [],
+   "decision": null,
+   "after": "The ledger records whether anyone wore the Crown.",
+   "campaign": "BOOK_ONE",
+   "key": "B1_CROWN"
+  },
+  "B1_THRONE": {
+   "number": 4,
+   "title": "The Empty Throne",
+   "era": "No neck for a crown",
+   "intro": "No card table to shut down. No leader to arrest. The only way to win is for everybody to read.",
+   "mode": "coop",
+   "rules": {
+    "terrell": true,
+    "endless": true
+   },
+   "pressure": {},
+   "twist": "Full Block with endless deals. No neck for a crown: you can't Expose the Owner until every player has taught at least once, and while any one player holds more than half the table's Props.",
+   "throne": true,
+   "owner": "The Algorithm",
+   "face": "The Empty Throne",
+   "face_text": "The Empty Throne: no face at all, just the system. Relentless: the Machine strikes one extra time every round.",
+   "decks": {},
+   "unlocks_always": [],
+   "unlocks_if_won": [],
+   "decision": null,
+   "after": "The book's last scene is on a porch. If you won, read it aloud.",
+   "campaign": "BOOK_ONE",
+   "key": "B1_THRONE"
+  }
+ },
+ "campaigns": {
+  "LEDGER": {
+   "title": "The Long Ledger",
+   "blurb": "One West Dayton family across six generations, from Reconstruction to today.",
+   "chapters": [
+    "FREEDOMS_LEDGER",
+    "UP_NORTH",
+    "THE_MAP",
+    "VOICE",
+    "PLANTS_CLOSE",
+    "TODAY"
+   ]
+  },
+  "BOOK_ONE": {
+   "title": "Book One",
+   "blurb": "Four chapters that follow the novel, from graduation night to the empty throne.",
+   "chapters": [
+    "B1_CHAIN",
+    "B1_NET",
+    "B1_CROWN",
+    "B1_THRONE"
+   ]
   }
  },
  "roster": [

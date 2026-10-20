@@ -9,8 +9,8 @@ import { Session, type Mode } from "../src/game/session";
 const snap = (g: Game) => JSON.stringify(g, (_k, v) => (v instanceof Set ? [...v].sort() : typeof v === "function" ? undefined : v));
 
 /** play a whole game the way the screens do: draw first, then face or teach with that card */
-function playByMoves(mode: Mode, n: number, seed: number, overlordHuman = false) {
-  const s = new Session({ mode, roster: C.roster.slice(0, n), seed, overlordHuman });
+function playByMoves(mode: Mode, n: number, seed: number, overlordHuman = false, chapter?: string) {
+  const s = new Session({ mode, roster: C.roster.slice(0, n), seed, overlordHuman, ...(chapter ? { chapter } : {}) });
   const go = (m: Move) => expect(s.apply(m)).toBe(true);
   for (let step = 0; step < 6000 && s.phase !== "over"; step++) {
     const g = s.g;
@@ -35,6 +35,9 @@ function playByMoves(mode: Mode, n: number, seed: number, overlordHuman = false)
       case "sousou": go({ t: "sousou", hand: g.sousouAi(), d: "HOUSING" }); break;
       case "overlord": go({ t: "overlord", a: toWire(g, g.machineAiMove(g.struck)) }); break;
       case "machine": go({ t: "next" }); break;
+      case "desk": go({ t: "desk", who: g.deskAi()?.name ?? null }); break;
+      case "crownOffer": go({ t: "crownOffer", to: g.crownTarget()?.name ?? null }); break;
+      case "crown": go({ t: "crown", to: s.crownTo!, wear: step % 2 === 0 }); break;
     }
     if (step === 7) go({ t: "greenbook", on: false });
   }
@@ -42,6 +45,14 @@ function playByMoves(mode: Mode, n: number, seed: number, overlordHuman = false)
 }
 
 describe("Moves", () => {
+  for (const chapter of ["UP_NORTH", "VOICE", "B1_NET", "B1_CROWN", "B1_THRONE"])
+    it(`chapter ${chapter}: replaying the moves rebuilds the same game`, () => {
+      const s = playByMoves("chapter", 3, 91, chapter === "B1_CROWN", chapter);
+      expect(s.phase).toBe("over");
+      const copy = Session.replay(JSON.parse(JSON.stringify(s.config)), JSON.parse(JSON.stringify(s.moves)));
+      expect(snap(copy.g)).toBe(snap(s.g));
+    });
+
   for (const mode of ["coop", "overlord", "chapter"] as Mode[])
     for (const n of [2, 3, 5])
       it(`${mode} ${n}p: replaying the moves rebuilds the same game`, () => {

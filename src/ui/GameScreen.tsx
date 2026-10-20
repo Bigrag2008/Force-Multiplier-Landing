@@ -3,10 +3,11 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import { ImpactLayer, spokenImpact, useImpactSound, useJolt } from "./Impact";
 import { setSoundOn, soundOn } from "./sound";
 import { readImpact } from "./readImpact";
+import { C } from "../engine/content";
 import type { Move } from "../game/moves";
 import type { Session } from "../game/session";
 import { waitingOn } from "../net/protocol";
-import { CookoutPanel, MachinePanel, MachineReport, SousouPanel, TurnPanel } from "./ActionPanel";
+import { CookoutPanel, CrownOfferPanel, CrownPanel, DeskPanel, MachinePanel, MachineReport, SousouPanel, TurnPanel } from "./ActionPanel";
 import { Board } from "./Board";
 import { EndScreen } from "./EndScreen";
 import { EventFeed } from "./EventFeed";
@@ -118,7 +119,7 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
 
       {intro && g.round === 1 && s.phase !== "over" && (
         <aside className="rounded-xl border border-gold/40 bg-black/25 p-3 text-sm">
-          <b className="text-gold">The Long Ledger · Chapter {intro.number}: {intro.title} ({intro.era}).</b> {intro.intro}
+          <b className="text-gold">{C.campaigns[intro.campaign].title} · Chapter {intro.number}: {intro.title} ({intro.era}).</b> {intro.intro}
           <p className="mt-1"><b>The twist:</b> {intro.twist}</p>
           {intro.league && <p className="mt-1"><b>{intro.league.name}:</b> {intro.league.text}</p>}
         </aside>
@@ -138,6 +139,9 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
             {myMove && s.phase === "fallen" && <MachinePanel s={s} play={play} local={local} who="fallen" />}
             {myMove && s.phase === "overlord" && <MachinePanel s={s} play={play} local={local} who="overlord" />}
             {s.phase === "cookout" && <CookoutPanel s={s} play={play} local={local} />}
+            {s.phase === "desk" && <DeskPanel s={s} play={play} local={local} />}
+            {myMove && s.phase === "crownOffer" && <CrownOfferPanel s={s} play={play} local={local} />}
+            {myMove && s.phase === "crown" && <CrownPanel s={s} play={play} local={local} />}
             {s.phase === "sousou" && <SousouPanel s={s} play={play} local={local} />}
             {s.phase === "machine" && <MachineReport s={s} play={play} local={local} />}
             {s.phase === "over" && <EndScreen s={s} onAgain={onQuit} />}
@@ -179,8 +183,10 @@ function WaitingPanel({ s, who }: { s: Session; who: string }) {
   const doing =
     s.phase === "fallen"
       ? "The Machine is moving through them."
-      : s.phase === "overlord"
+      : s.phase === "overlord" || s.phase === "crownOffer"
         ? "The Overlord is choosing where to strike."
+        : s.phase === "crown"
+          ? "The Owner has made them an offer. It's their call."
         : pd?.k === "deal"
           ? `Reading a deal in ${pd.d.charAt(0) + pd.d.slice(1).toLowerCase()}…`
           : pd?.k === "teach"

@@ -19,33 +19,34 @@ The game and the novel *The Second Number* (Book One) are built to the same rule
 | Shady, and the Fall | The crown and the desk: every shortcut that looks like a blessing. |
 | Expose; no single leader to arrest | The Empty Throne: no card table to shut down, no neck to fit a cuff or a crown to. |
 
-## Campaign: *Book One* (four chapters, prototype)
-
-Play these in order with the same table. Each chapter is a normal game with one setup change and one twist; the twists are **table rules for playtesting**, not yet in `sn_engine.py`. Write the result of each chapter on the back of the rulebook, because the next chapter reads it.
+## Campaign: *Book One* (four chapters)
+**Built:** in the rules engine (`chapters.py`, `campaign.py`), balance-tested, and on the website: **Play → Campaign → Book One**. Play them in order with the same table; each chapter writes a flag in the ledger that the next one reads (the website keeps it on the device). The **Terrell rule** is on in Chapters 1, 2 and 4: seeing it isn't the same as being safe to confront it.
 
 ### Chapter 1: *The Chain*
 *Graduation night. Marcus can see the second number, and he teaches it as fast as he can.*
-- **Setup:** Block Party, with the **Terrell rule** on. No Veteran (no one in the book knows how to cover yet).
-- **Twist, the Chain:** when a learner says the second number back (call and response), they may at once teach one more player in that district for free.
-- **After:** if any player was burned by the Terrell rule, write *Terrell* in the ledger. If you won, unlock **Civic Armor**: from Chapter 2 on, every Teach comes with cover.
+- **Setup:** a Block Party with the Terrell rule. No roles (no one in the book knows how to cover yet).
+- **Twist, the Chain:** when a learner says the second number back (call and response), they at once teach one more player in that district, for free.
+- **After:** if anyone was burned by the Terrell rule, the ledger reads *Terrell*. If you won, the block learns **Civic Armor**: from Chapter 2 on, every Teach comes with cover.
 
 ### Chapter 2: *The Net*
 *A county job, a desk, a program that sounds like help.*
-- **Setup:** Full Block, Owner **The Lobbyist**, with **fine-print dice** on (the terms keep changing on you).
-- **Twist, the Desk:** at the start of round 2, one player may take the Desk. While at the Desk they get +1 Trust every round but cannot Face deals. They can leave the Desk on any turn, for good, by spending an action.
-- **After:** if the player at the Desk left it, write *Quit the desk* in the ledger: in Chapter 3 that player starts with Read 1 everywhere.
+- **Setup:** Full Block with **fine-print dice** (the terms keep changing on you). The Owner wears the face of *The Net* and is relentless (an extra strike every round).
+- **Twist, the Desk:** at the start of round 2, one player may take the Desk. At the Desk: +1 Trust every round, but no facing deals and no teaching, and every second round its paperwork feeds the Machine an extra strike. Quitting the Desk, for good, takes an action.
+- **After:** if the player at the Desk quit it, the ledger reads *Quit the desk*: in Chapter 3 that player starts with Read 1 everywhere.
 
 ### Chapter 3: *The Crown*
 *Somebody offers Dre a way up out of the life that looks just like a blessing.*
-- **Setup:** Overlord mode, with *the stranger's handwriting* in play. If *Terrell* is in the ledger, the block starts with 1 less Trust each.
-- **Twist, the Crown:** once per game the Overlord may offer the Crown to one player. A crowned player can't Fall, but every other block player loses 1 Trust at the start of each round. The offered player may refuse; if they do, the Overlord takes one extra move that round.
-- **After:** write down whether anyone wore the Crown.
+- **Setup:** Overlord mode (a person or the computer), with *the stranger's handwriting* in play in place of the Terrell rule. If *Terrell* is in the ledger, the block starts with 1 less Trust each.
+- **Twist, the Crown:** once per game, from round 3, the Overlord may offer the Crown to one player. A crowned player can't Fall, but every other block player loses 1 Trust at the start of each round. Refuse it, and the Overlord takes one extra move that round.
+- **After:** the ledger records whether anyone wore the Crown.
 
 ### Chapter 4: *The Empty Throne*
 *No card table to shut down. No leader to arrest.*
-- **Setup:** Full Block with **endless deals**. If anyone wore the Crown in Chapter 3, the Machine strikes once more in round 1.
-- **Twist, no neck for a crown:** you can't Expose until every player has Taught at least once, and no player may hold more than half of the table's total Props when you do.
+- **Setup:** Full Block with **endless deals**; the Owner is the system itself (an extra strike every round). If anyone wore the Crown in Chapter 3, the Machine strikes once more in round 1.
+- **Twist, no neck for a crown:** you can't Expose until every player has taught at least once, and not while any one player holds more than half of the table's Props.
 - **After:** the book's last scene is on a porch. If you won, read it aloud.
+
+**Balance:** each chapter plays at 50–80% block wins across 2–5 players, close to the mode it's built on (`balance_test.py`, CAMPAIGNS); the flags carried between chapters don't snowball.
 
 ## The School Edition
 

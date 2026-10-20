@@ -70,6 +70,25 @@ THE SECOND NUMBER — balance report (v4)
   4 players  win  50.6%  never-organize  33.0%  League formed 100.0%  REDLINING broken  79.8%  Ledger +0.8  r1-loss   0.0%
   5 players  win  47.2%  never-organize  21.8%  League formed  99.2%  REDLINING broken  60.6%  Ledger +0.3  r1-loss   0.0%
 
+=== CAMPAIGNS: THE LONG LEDGER AND BOOK ONE (careful bot) ===
+  The Long Ledger  1. Freedom's Ledger   (coop    ) 2p  68%  3p  61%  4p  72%  5p  50%
+  The Long Ledger  2. Up North           (coop    ) 2p  63%  3p  62%  4p  62%  5p  53%
+  The Long Ledger  4. Voice              (coop    ) 2p  70%  3p  70%  4p  64%  5p  57%
+  The Long Ledger  5. The Plants Close   (coop    ) 2p  59%  3p  71%  4p  55%  5p  54%
+  The Long Ledger  6. Today              (coop    ) 2p  58%  3p  63%  4p  60%  5p  54%
+  Book One         1. The Chain          (party   ) 2p  59%  3p  75%  4p  72%  5p  78%
+  Book One         2. The Net            (coop    ) 2p  73%  3p  71%  4p  65%  5p  60%
+  Book One         3. The Crown          (overlord) 2p  65%  3p  61%  4p  63%  5p  52%
+  Book One         4. The Empty Throne   (coop    ) 2p  51%  3p  78%  4p  68%  5p  58%
+  whole The Long Ledger  2p  win after a win  60%  after a loss  55%  final Ledger +5.2
+  whole The Long Ledger  3p  win after a win  58%  after a loss  62%  final Ledger +4.6
+  whole The Long Ledger  4p  win after a win  53%  after a loss  53%  final Ledger +3.7
+  whole The Long Ledger  5p  win after a win  48%  after a loss  47%  final Ledger +1.6
+  whole Book One         2p  win after a win  63%  after a loss  68%  final Ledger +5.4
+  whole Book One         3p  win after a win  69%  after a loss  67%  final Ledger +6.4
+  whole Book One         4p  win after a win  67%  after a loss  69%  final Ledger +5.9
+  whole Book One         5p  win after a win  63%  after a loss  54%  final Ledger +4.3
+
 --- verdict ---
   Block Party 2p healthy  (careful 69% · human 77%)
   Block Party 3p healthy  (careful 70% · human 67%)
@@ -95,4 +114,21 @@ THE SECOND NUMBER — balance report (v4)
   Chapter 3 3p healthy  (48% wins; organizing worth +29 pts)
   Chapter 3 4p healthy  (51% wins; organizing worth +18 pts)
   Chapter 3 5p healthy  (47% wins; organizing worth +25 pts)
+  LEDGER   1. Freedom's Ledger   healthy  (68% · 61% · 72% · 50%)
+  LEDGER   2. Up North           healthy  (63% · 62% · 62% · 53%)
+  LEDGER   4. Voice              healthy  (70% · 70% · 64% · 57%)
+  LEDGER   5. The Plants Close   healthy  (59% · 71% · 55% · 54%)
+  LEDGER   6. Today              healthy  (58% · 63% · 60% · 54%)
+  BOOK_ONE 1. The Chain          healthy  (59% · 75% · 72% · 78%)
+  BOOK_ONE 2. The Net            healthy  (73% · 71% · 65% · 60%)
+  BOOK_ONE 3. The Crown          healthy  (65% · 61% · 63% · 52%)
+  BOOK_ONE 4. The Empty Throne   healthy  (51% · 78% · 68% · 58%)
+  LEDGER   2p carry-over no spiral  (after a win 60% · after a loss 55%)
+  LEDGER   3p carry-over no spiral  (after a win 58% · after a loss 62%)
+  LEDGER   4p carry-over no spiral  (after a win 53% · after a loss 53%)
+  LEDGER   5p carry-over no spiral  (after a win 48% · after a loss 47%)
+  BOOK_ONE 2p carry-over no spiral  (after a win 63% · after a loss 68%)
+  BOOK_ONE 3p carry-over no spiral  (after a win 69% · after a loss 67%)
+  BOOK_ONE 4p carry-over no spiral  (after a win 67% · after a loss 69%)
+  BOOK_ONE 5p carry-over no spiral  (after a win 63% · after a loss 54%)
   Deep Read   matters  (amber = 20.3% of defusals; blue/Read 3 is required to trace every winning thread)

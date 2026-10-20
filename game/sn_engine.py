@@ -80,6 +80,7 @@ class Player:
         self.sight = {d:(1 if role=="Elder" else 0) for d in DISTRICTS}
         self.corruption = 0; self.legend = 0; self.flipped = False
         self.shields = 2 if role=="Veteran" else 0; self.elder_used = False
+        self.history_left = 1     # Chapter 6 (Today): the Elder may teach History twice
         self.free_teach = False; self.shop_around = False; self.practice = False   # Commons set-ups, this turn only
         self.bare = set()        # the Terrell rule: districts this player was taught without cover
         self.face = 0            # "Render?": Face tokens (set by new_game when the rule is on)
@@ -87,9 +88,14 @@ class Player:
 
 class Game:
     def __init__(self, overlord=False, scenario=None, owner=None, verbose=False, seed=None, chapter=None,
-                 party=False, fine_print=False, terrell=False, endless=False, partial=False, render=False, carry=None):
+                 party=False, fine_print=False, terrell=False, endless=False, partial=False, render=False, carry=None,
+                 campaign=None):
         if seed is not None: random.seed(seed)
-        self.party=party and not overlord and not chapter          # Block Party: the intro game
+        ch=CH.CHAPTERS[chapter] if chapter else None
+        if ch:                                                      # a chapter sets its own mode and house rules
+            overlord=ch["mode"]=="overlord"; party=ch["mode"]=="party"
+            r=ch["rules"]; fine_print=r.get("fine_print",fine_print); terrell=r.get("terrell",terrell); endless=r.get("endless",endless)
+        self.party=party and not overlord and (not ch or ch["mode"]=="party")   # Block Party: the intro game
         self.fine_print=fine_print; self.terrell=terrell; self.endless=endless
         self.partial=partial; self.render=render                   # house rules: Close reads, "Render?"
         self.carry=carry                                            # a block that remembers (see remember())
@@ -99,7 +105,8 @@ class Game:
         self.signed=[]                                              # every deal decision, with its real money
         self.counterfeits=set(); self.forged=False                  # Overlord: fake honest deals waiting in piles
         self.forgeries=COUNTERFEIT_HAND                             # counterfeit cards left in the Overlord's hand
-        self.chapter=CH.CHAPTERS[chapter] if chapter else None
+        self.chapter=ch
+        self.campaign=campaign or {}                                # what the family carries in (campaign.py)
         self.overlord = overlord; self.verbose = verbose
         self.clarity  = {d:0 for d in DISTRICTS}
         self.pressure = {d:0 for d in DISTRICTS}
@@ -113,20 +120,30 @@ class Game:
         self.use_green_book=lambda d: True     # front-ends can ask the table instead
         self.won=False; self.result=None; self.log=[]; self.patterns_seen=set()
         self.human_overlord=False
-        ch=self.chapter
-        self.scenario = ("Block Party" if self.party else
-                         f"Chapter {ch['number']}: {ch['title']}" if ch else scenario or random.choice(list(SCENARIOS)))
+        self.scenario = (f"Chapter {ch['number']}: {ch['title']}" if ch else
+                         "Block Party" if self.party else scenario or random.choice(list(SCENARIOS)))
         self.deck = {d:(ch["decks"].get(d,D.DECK[d]) if ch else D.DECK[d]) for d in self.ds}
         self.league=set(); self.league_formed=False                 # chapter 3: the Contract Buyers League
+        self.late={}                                                # Chapter 2: districts that open later
+        self.marched=False                                          # Chapter 4: the March, once per game
+        self.defend=[]                                              # Chapter 5: Rebuilt districts the Machine hits first
+        self.taught=set()                                           # Book One 4: who has taught
+        self.desk=None; self.desk_left=None; self.desk_offered=False   # Book One 2: the Desk
+        self.crowned=None; self.crown_offered=False; self.crown_refused=False   # Book One 3: the Crown
+        self.backfires=0                                            # the Terrell rule, for the ledger
         if ch:
             for d,p in ch["pressure"].items(): self.pressure[d]=p
+            if ch.get("late") and self.decided("FREEDOMS_LEDGER")!="GO":
+                self.late=dict(ch["late"]); self.ds=[d for d in self.ds if d not in self.late]
         for d,p in {"The Eviction Wave":{"HOUSING":2},"The Closure":{"EDUCATION":3},
                     "The Plants Close":{"LABOR":2},"The Hospital Closes":{"HEALTH":2}}.get(self.scenario,{}).items():
             self.pressure[d]=p
         self.grace = 1 if self.scenario=="The Audit" else 0
         self.remember()
+        if ch: self.carry_in()
         self.owner = ("The Overlord" if overlord else "No Owner" if self.party else
                       ch["owner"] if ch else owner or random.choice(list(OWNERS)))
+        self.hand_rests=3 if ch and ch["key"]=="PLANTS_CLOSE" and self.decided("VOICE")=="RUN" else 0
         if self.party: self.green_book=False
         self.owner_face = ch["face"] if ch and not overlord else self.owner          # the Owner's era face
         self.players=[]
@@ -148,6 +165,56 @@ class Game:
                                   + (["after last game, the community rallies (everyone +1 Trust)"] if self.carry.get("rally") else []))
                       + ".")
 
+    # ---- the campaign: what a family carries into a chapter (campaign.py, CAMPAIGN.md, BOOK_ONE.md) ----
+    def decided(self, chapter): return (self.campaign.get("decisions") or {}).get(chapter)
+    def flag(self, f): return f in (self.campaign.get("flags") or [])
+
+    def carry_in(self):
+        """Board stickers (Rebuilt: Clarity +1 each, or Squeeze −1 where the era starts it squeezed; Scarred:
+        Squeeze +1 each, never a capture), the rally after a lost chapter, and the last Family Decision.
+        Player effects are applied in new_game."""
+        c=self.campaign; ch=self.chapter
+        if not c or ch["campaign"]!="LEDGER": return
+        st=c.get("stickers") or {}
+        for d in self.ds:
+            s=st.get(d) or {}
+            for _ in range(s.get("rebuilt",0)):           # what the family built resists the era's grip first
+                if self.pressure[d]>0: self.pressure[d]-=1
+                else: self.clarity[d]=min(WAKE-1,self.clarity[d]+1)
+            if s.get("scarred"): self.pressure[d]=min(CAPTURE-1,self.pressure[d]+s["scarred"])
+        if ch["key"]=="UP_NORTH" and self.decided("FREEDOMS_LEDGER")=="STAY":
+            self.pressure["LENDING"]=min(CAPTURE-1,self.pressure["LENDING"]+1)
+        if ch["key"]=="THE_MAP" and self.decided("UP_NORTH")=="HOUSE":
+            self.pressure["HOUSING"]=max(0,self.pressure["HOUSING"]-1)     # a house the family owns outright
+        if ch["key"]=="TODAY" and self.decided("PLANTS_CLOSE")=="HOLD":
+            self.pressure["HOUSING"]=min(CAPTURE-1,self.pressure["HOUSING"]+1)
+        if ch.get("defend_choice") and c.get("defend"):
+            self.defend=[d for d in self.ds if (st.get(d) or {}).get("rebuilt")]
+        kept=[d for d in self.ds if (st.get(d) or {}).get("rebuilt") or (st.get(d) or {}).get("scarred")]
+        if kept: self.emit("🏘 The family's board: " + "; ".join(
+            f"{d}" + (f" Rebuilt ×{st[d]['rebuilt']}" if st[d].get("rebuilt") else "") + (f" Scarred ×{st[d]['scarred']}" if st[d].get("scarred") else "")
+            for d in kept) + ".")
+
+    def round_start(self):
+        """Chapter effects at the start of a round, before anyone acts."""
+        for d,r in list(self.late.items()):
+            if self.round>=r:
+                del self.late[d]; self.ds=[x for x in DISTRICTS if x in self.ds or x==d]
+                self.emit(f"✦ The family is settled: {d} opens.")
+        if self.chapter and self.chapter.get("desk") and self.round==2 and not self.desk_offered:
+            self.desk_offered=True
+            pl=self.ask_desk() if self.ask_desk else self.desk_ai()
+            if pl: self.take_desk(pl)
+        if self.desk:
+            pl=self.by_name(self.desk)
+            if pl and pl.trust<MAX_TRUST: pl.trust+=1; self.emit(f"  {pl.name} draws a county paycheck at the Desk. Trust +1.")
+        if self.crowned:
+            hit=[p for p in self.active() if p.name!=self.crowned and p.trust>0]
+            for p in hit: p.trust-=1
+            if hit: self.emit(f"  👑 {self.crowned} wears the Crown. Everyone else pays for it: {', '.join(p.name for p in hit)} lose 1 Trust.")
+
+    def by_name(self, name): return next((p for p in self.players if p.name==name), None)
+
     # ---- helpers ----
     def emit(self,s):
         self.log.append(s)
@@ -167,11 +234,81 @@ class Game:
     def threads_needed(self): return THREADS_TO_WIN
     def can_trace(self,pl,d):
         return self.uw_open and pl.sight[d]>=3 and self.clarity[d]>=WAKE and d not in self.threads
-    def can_expose(self): return self.uw_open and len(self.threads)>=self.threads_needed()
+    def can_expose(self): return self.uw_open and len(self.threads)>=self.threads_needed() and not self.throne_blocks()
     def lever(self, d, card):
         """The League reads contracts together: Housing and Lending traps beatable at Read 1."""
         if self.league_formed and d in ("HOUSING","LENDING") and card["trap"]: return min(card["lever"],1)
         return card["lever"]
+
+    # ---- the Desk (Book One, Chapter 2) ----
+    desk_teach_blocked=True     # at the Desk you can't face deals or teach: the job takes your time
+    ask_desk=None             # front-ends: a function returning the player who takes the Desk, or None
+
+    def desk_ai(self):
+        """The bot table gives the Desk to whoever reads least: they lose the least by not facing deals."""
+        act=[p for p in self.active()]
+        if len(act)<2: return None
+        return min(act,key=lambda p:sum(p.sight[d] for d in self.ds))
+
+    def take_desk(self, pl):
+        self.desk=pl.name
+        self.emit(f"🪑 {pl.name} takes the Desk: a county job. +1 Trust every round, but no facing deals and no teaching while you sit there.")
+
+    def leave_desk(self, pl):
+        if self.desk!=pl.name: self.emit(f"  {pl.name} isn't at the Desk."); return
+        self.desk=None; self.desk_left=pl.name; pl.legend+=1
+        self.emit(f"{pl.name} quits the Desk, for good. Props +1.")
+
+    # ---- the Crown (Book One, Chapter 3) ----
+    ask_crown=None            # front-ends: a function (player) -> True to wear it
+
+    def offer_crown(self, pl):
+        """The Overlord's one offer. Wear it: you can't Fall, and everyone else loses 1 Trust a round.
+        Refuse: the Overlord takes one extra move this round."""
+        if self.crown_offered or not (self.chapter and self.chapter.get("crown")): return
+        self.crown_offered=True
+        self.emit(f"👑 The Owner offers {pl.name} the Crown: a way up, out of the life.")
+        wear=self.ask_crown(pl) if self.ask_crown else self.crown_ai(pl)
+        if wear:
+            self.crowned=pl.name
+            self.emit(f"  {pl.name} puts it on. They can't Fall now, and the whole block pays for it every round.")
+        else:
+            self.crown_refused=True; pl.legend+=2
+            self.emit(f"  {pl.name} refuses the Crown. Props +2. The Owner takes it out on the block: one extra move this round.")
+
+    def crown_ai(self, pl): return pl.corruption>=FLIP-2       # a bot near the edge takes the safety
+
+    def crown_target(self):
+        """The computer Overlord offers it from round 3, to whoever carries the most Shady."""
+        if self.crown_offered or self.round<3: return None
+        act=self.active()
+        return max(act,key=lambda p:(p.corruption,-p.trust)) if act else None
+
+    # ---- the March (Chapter 4) ----
+    def can_march(self): return bool(self.chapter and self.chapter.get("march") and not self.marched)
+
+    def march(self, pl):
+        if not self.can_march(): self.emit("  The March has already happened."); return
+        self.marched=True; pl.legend+=2
+        self.emit(f"✊🏾 {pl.name} calls the March. The whole family walks together. Props +2.")
+        for p in self.active():
+            p.trust=min(MAX_TRUST,p.trust+2); had=p.corruption; p.corruption=max(0,had-1)
+            self.emit(f"  {p.name}: Trust +2" + (", Shady −1" if had else "") + "." + self.cover(p))
+
+    def march_ai(self):
+        act=self.active()
+        return self.can_march() and self.round>=2 and sum(p.trust for p in act)<=len(act)
+
+    # ---- the Empty Throne (Book One, Chapter 4) ----
+    def throne_blocks(self):
+        """Why you can't Expose yet, or None."""
+        if not (self.chapter and self.chapter.get("throne")): return None
+        act=self.active()
+        idle=[p.name for p in act if p.name not in self.taught]
+        if idle: return f"everyone has to teach first ({', '.join(idle)} hasn't)"
+        tot=sum(p.legend for p in act); top=max(act,key=lambda p:p.legend)
+        if tot and top.legend*2>tot: return f"{top.name} holds more than half the table's Props: no neck for a crown"
+        return None
 
     # ---- the League (Chapter 3): sign the pledge to withhold together ----
     def has_league(self): return bool(self.chapter and self.chapter.get("league"))
@@ -267,6 +404,8 @@ class Game:
 
     def face(self, pl, d, choice, card=None, by=None):
         """Face a live deal. choice in TAKE/WALK/NEGOTIATE. by: the teammate rendering it for you ("Render?")."""
+        if self.desk==pl.name:
+            self.emit(f"  {pl.name} is at the Desk and can't face deals. Quit the Desk first (an action)."); return
         card=card or self.draw(d); trap=card["trap"]; lever=self.lever(d,card); see=pl.sight[d]
         self.emit(f"{pl.name} faces a deal in {d}: \"{card['front']}\"  → {choice}")
         if self.can_render(pl,by,d):
@@ -309,7 +448,7 @@ class Game:
             # (no Trust spent, no confrontation: the Terrell rule doesn't bite)
             pl.trust-=cost
             if trap and see>=lever:
-                amt=2 if pl.role=="Organizer" else 1; out="defused"
+                amt=((self.chapter or {}).get("organizer_clears",2) if pl.role=="Organizer" else 1); out="defused"
                 self.pressure[d]=max(0,self.pressure[d]-amt); self.clarity[d]=min(WAKE,self.clarity[d]+1)
                 pl.legend+=2
                 self.emit(f"  NEGOTIATE on the {LEVER_NAME[lever]} lever (Read {see}): defused. "
@@ -334,7 +473,7 @@ class Game:
         self.signed.append(dict(who=pl.name, d=d, out=out, front=card["front"],
                                 dollars=card.get("dollars",0), basis=card.get("basis","")))
         if bare:                                   # the Terrell rule: seeing it isn't covering it
-            pl.bare.discard(d)
+            pl.bare.discard(d); self.backfires+=1
             if self.pressure[d]<CAPTURE:
                 self.pressure[d]+=1
                 self.emit(f"  ⚠ It backfires: {pl.name} read it but nobody had their back. Squeeze +1 in {d} ({self.pressure[d]}/{CAPTURE}).")
@@ -343,34 +482,45 @@ class Game:
             if pl.corruption>=BP_SIT_OUT:
                 pl.corruption=0; pl.benched=True
                 self.emit(f"  ⚠ {pl.name} has {BP_SIT_OUT} Shady chips: hand them back and sit out your next turn.")
+        elif pl.corruption>=FLIP and not pl.flipped and pl.name==self.crowned:
+            self.emit(f"  👑 {pl.name} has {pl.corruption} Shady, and the Crown keeps them standing.")
         elif pl.corruption>=FLIP and not pl.flipped:
             pl.flipped=True
             self.emit(f"  ⚠⚠ {pl.name} HAS FALLEN. The Machine now moves through them.")
 
-    def teach(self, pl, t, d, response=True):
+    def teach(self, pl, t, d, response=True, chained=False):
         """response: did the learner say the second number back? (call and response)"""
+        if self.desk==pl.name and self.desk_teach_blocked:
+            self.emit(f"  {pl.name} is at the Desk: no time to teach. Quit the Desk first (an action)."); return
         free=(pl.role=="Translator") or pl.free_teach
         if pl.sight[d]<=t.sight[d]: self.emit(f"  {pl.name} can't teach {t.name} {d} — you can only teach what you read better."); return
         if not free and pl.trust<1: self.emit(f"  {pl.name} lacks Trust to teach."); return
         g=2 if t.role=="Student" else 1; old=t.sight[d]; t.sight[d]=min(pl.sight[d],t.sight[d]+g)
         if not free: pl.trust-=1
         elif pl.role!="Translator": pl.free_teach=False
-        pl.legend+=2
+        pl.legend+=2; self.taught.add(pl.name)
         self.emit(f"{pl.name} teaches {t.name} to read {d}. Read {old}→{t.sight[d]}{' (free)' if free else ''}. Props +2.")
         if self.terrell:
             if pl.role=="Veteran": self.emit(f"  The Veteran teaches the cover with it: {t.name} is covered in {d}.")
+            elif self.flag("CIVIC_ARMOR"): self.emit(f"  Civic Armor: the cover comes with the lesson. {t.name} is covered in {d}.")
             else:
                 t.bare.add(d)
                 self.emit(f"  No cover yet: if {t.name} confronts a trap in {d} before the block has their back, it backfires.")
         if response:
             pl.legend+=1; t.legend+=1
             self.emit(f"  Call and response: {t.name} says the second number back. Props +1 each.")
+            if self.chapter and self.chapter.get("chain") and not chained:
+                nxt=min((p for p in self.active() if p is not pl and p is not t and p.sight[d]<t.sight[d]),
+                        key=lambda p:p.sight[d], default=None)
+                if nxt:
+                    self.emit(f"  ⛓ The Chain: {t.name} turns and teaches {nxt.name}, right there, for free.")
+                    had=t.free_teach; t.free_teach=True; self.teach(t,nxt,d,True,chained=True); t.free_teach=had
 
     def commons(self, pl, place="BARBERSHOP"):
         """+2 Trust, −1 Shady, plus the place's bonus."""
         if place=="KITCHEN" and self.kitchen_used: place="BARBERSHOP"
         pl.trust=min(MAX_TRUST,pl.trust+2)
-        drop=2 if place=="CHURCH" else 1; had=pl.corruption; pl.corruption=max(0,pl.corruption-drop)
+        drop=(3 if self.decided("UP_NORTH")=="CHURCH" and self.chapter and self.chapter["key"]=="THE_MAP" else 2) if place=="CHURCH" else 1; had=pl.corruption; pl.corruption=max(0,pl.corruption-drop)
         covered=self.cover(pl)
         if self.party:
             self.emit(f"{pl.name} gathers with the block. Trust +2" + (f", Shady −{had-pl.corruption}" if had else "") + "."
@@ -454,8 +604,10 @@ class Game:
 
     def history(self, pl, d):
         if pl.role!="Elder" or pl.elder_used: self.emit("  No History to teach."); return
-        pl.elder_used=True; self.clarity[d]=WAKE; pl.legend+=2
-        h=self.history_card=random.choice(HISTORY[d]+HISTORY["ANY"])
+        pl.history_left-=1; pl.elder_used=pl.history_left<=0; self.clarity[d]=WAKE; pl.legend+=2
+        pool=HISTORY[d]+HISTORY["ANY"]
+        mine=[h for h in pool if h["title"] in (self.campaign.get("unlocks") or [])]   # Today: the family's own History
+        h=self.history_card=random.choice(mine or pool)
         self.emit(f"{pl.name} teaches the History of {d}: {h['title']} ({h['year']}, {h['place']}).")
         self.emit(f"  {h['story']}")
         self.emit(f"  \"{h['lesson']}\"  {d} AWAKE. Props +2.")
@@ -545,8 +697,10 @@ class Game:
 
     def owner_passive(self):
         """Owner acts from round 1 (hidden). Skipped in Overlord mode."""
-        if self.overlord: return
+        if self.overlord or self.round<=self.hand_rests: return
         o=self.owner
+        if o=="The Ledger Keeper":                    # one hand, every era's face in turn
+            o={1:"The Debt Buyer",2:"The Recruiter",3:"The Lobbyist"}.get(self.round%4)
         if o=="The Lobbyist":
             best=[d for d in self.ds if 0<self.clarity[d]<WAKE and self.pressure[d]<CAPTURE and d not in self.struck]
             if best:
@@ -588,7 +742,12 @@ class Game:
 
     def auto_machine_phase(self):
         hits=self.strikes()
-        if self.owner=="The Algorithm": hits+=1     # the relentless one: an extra strike
+        if self.owner=="The Algorithm" and self.round>self.hand_rests: hits+=1     # the relentless one: an extra strike
+        if self.owner=="The Ledger Keeper" and self.round%4==0: hits+=1            # wearing the Algorithm's face
+        if self.desk and self.round%2==0:
+            hits+=1; self.emit(f"  ✖ The Desk's paperwork feeds the Machine: an extra strike while {self.desk} sits there.")
+        if self.round==1 and self.chapter and self.chapter.get("throne") and self.flag("CROWN_WORN"):
+            hits+=1; self.emit("  ✖ Somebody wore the Crown last chapter. The Machine remembers: an extra strike.")
         if self.owner_shown: hits+=1                # the Owner fights in the open
         struck=self.struck
         if (self.scenario=="Payday Season" and self.round%2==0 and "LENDING" not in struck
@@ -600,7 +759,7 @@ class Game:
             if not vuln: break
             # contest the block's progress: pressure the district closest to waking.
             # One strike per district per phase — the Machine spreads, it doesn't snipe.
-            d=max(vuln,key=lambda x:(self.clarity[x],-self.pressure[x])); struck.add(d); self.hit(d)
+            d=max(vuln,key=lambda x:(x in self.defend,self.clarity[x],-self.pressure[x])); struck.add(d); self.hit(d)
         # erode the block's best unfinished work, so clarity isn't a one-way ratchet
         building=[d for d in self.ds if 0<self.clarity[d]<WAKE and d not in struck]
         if building:
@@ -625,7 +784,11 @@ class Game:
         text=self.chapter["face_text"] if self.chapter else f"{self.owner} — {OWNERS[self.owner]}"
         self.emit(f"⚑ THE UNDERWORLD CRACKS OPEN. The Owner is {text}")
         self.emit(f"  Trace {self.threads_needed()} threads (Read 3 in a woken district) and expose it before it buries you.")
-        if self.owner=="The Lobbyist":
+        if self.owner=="The Lobbyist" and (self.chapter or {}).get("reveal")=="all":
+            awake=[d for d in self.ds if self.clarity[d]>=WAKE]       # the Council redraws the lines
+            for d in awake: self.clarity[d]-=1
+            if awake: self.emit(f"  ✖ {self.owner_face} redraws the lines: {', '.join(awake)} lose{'s' if len(awake)==1 else ''} 1 Clarity.")
+        elif self.owner=="The Lobbyist":
             awake=[d for d in self.ds if self.clarity[d]>=WAKE]
             if awake: d=random.choice(awake); self.clarity[d]=1; self.emit(f"  ✖ {self.owner_face} re-captures {d}.")
 
@@ -683,6 +846,8 @@ class Game:
         elif k=="trace":    self.trace(pl,a[1])
         elif k=="expose_uw":self.expose_uw(pl)
         elif k=="league":   self.sign_league(pl)
+        elif k=="march":    self.march(pl)
+        elif k=="leave_desk": self.leave_desk(pl)
         elif k=="m_extract":self.m_extract(pl.name,a[2])
         elif k=="m_obscure":self.m_obscure(pl.name,a[2])
         elif k=="m_tempt":  self.m_tempt(pl.name,a[1])
@@ -748,6 +913,25 @@ class Game:
         return ("MARKET",)
 
     def block_ai(self, pl, style="careful"):
+        """The chapter twists around the base bot: the Desk, the March, everyone teaches for the Empty Throne."""
+        if self.desk==pl.name:
+            hot=any(self.pressure[d]>=CAPTURE-1 and pl.sight[d]>=2 for d in self.ds)
+            if self.round>=6 or hot: return ("leave_desk",None,None)
+        if self.march_ai(): return ("march",None,None)
+        if (self.chapter and self.chapter.get("throne") and pl.name not in self.taught and pl.trust>=1):
+            for d in self.ds:
+                t=next((p for p in self.active() if p is not pl and p.sight[d]<pl.sight[d]),None)
+                if t: return ("teach",t,d)
+        if self.uw_open and len(self.threads)>=self.threads_needed() and self.throne_blocks():
+            act=self.active(); top=max(act,key=lambda p:p.legend)
+            if pl is top: return ("commons",)+self.bot_place(pl)     # the leader steps back
+        a=self.base_block_ai(pl,style)
+        if a[0] in ("face","teach") and self.desk==pl.name:      # at the Desk: study instead
+            d=a[1] if a[0]=="face" else a[2]
+            return ("study",d,None) if pl.sight[d]<3 else ("commons",)+self.bot_place(pl)
+        return a
+
+    def base_block_ai(self, pl, style="careful"):
         if style=="human": style="greedy" if random.random()<0.2 else "careful"
         if self.can_expose(): return ("expose_uw",None,None)
         for d in self.ds:
@@ -802,6 +986,10 @@ class Game:
         self.league_round()
         if self.overlord and self.ov():
             m=OVERLORD_MOVES[self.n()]; moves=int(m*self.round)-int(m*(self.round-1))   # carry the remainder
+            if self.chapter and self.chapter.get("crown") and not self.human_overlord:
+                t=self.crown_target()
+                if t: self.offer_crown(t)
+            if self.crown_refused: moves+=1; self.crown_refused=False
             for _ in range(moves):
                 self.do(self.ov(), overlord_move() if overlord_move else self.overlord_ai_move(self.struck))
             self.tighten()
@@ -817,6 +1005,7 @@ class Game:
         max_rounds=max_rounds or (BP_ROUNDS if self.party else MAX_ROUNDS)   # read at call time so tuning works
         while self.round<max_rounds and not self.won:
             self.round+=1; self.struck=set(); self.covered=False; self.forged=False
+            self.round_start()
             feast=self.cookout_ai()
             if feast: self.cookout()
             for pl in self.players:
@@ -864,14 +1053,42 @@ class Game:
         unlocks=[]
         if self.chapter:
             unlocks+=self.chapter["unlocks_always"]
-            if self.league_formed and won: unlocks+=self.chapter["unlocks_if_league_won"]
+            if won and (self.league_formed or not self.has_league()): unlocks+=self.chapter["unlocks_if_won"]
         return dict(won=won, ledger=ledger, rebuilt=awake, scarred=captured, falls=falls, reaches=reaches,
                     league=self.league_formed, redlining_broken=not redlining, unlocks=unlocks,
-                    rally=not won)                      # the community rallies after a loss
+                    rally=not won,                      # the community rallies after a loss
+                    burned=self.backfires>0, quit_desk=self.desk_left, crown=self.crowned)
 
     def time_up(self):
         self.won=True; self.result="MACHINE_WIN"
         self.emit("⏳ The clock ran out. The Machine doesn't need to win — it only needs you to run out of time.")
+
+def carry_players(g):
+    """A chapter's (and the family's) effects on the players, at setup."""
+    ch=g.chapter
+    for p in g.players:
+        if ch.get("no_read"): p.sight={d:0 for d in DISTRICTS}
+        if ch.get("start_trust") is not None: p.trust=ch["start_trust"]
+        if ch.get("history_twice"): p.history_left=2
+    if ch["key"]=="THE_MAP" and g.decided("UP_NORTH")=="SCHOOL":
+        for p in g.players:
+            if p.role=="Student": p.sight={d:max(1,v) for d,v in p.sight.items()}
+    if ch["key"]=="VOICE" and g.decided("THE_MAP")=="MOVE":
+        for p in g.players:
+            if p.role=="Elder": p.sight={d:0 for d in DISTRICTS}; p.elder_used=True; p.history_left=0
+    if ch["key"]=="PLANTS_CLOSE" and g.decided("VOICE")=="ORGANIZE":
+        for p in g.players:
+            if p.role=="Organizer": p.trust=MAX_TRUST
+    if ch["key"]=="TODAY" and g.decided("PLANTS_CLOSE")=="SELL":
+        for p in g.players: p.trust=min(MAX_TRUST,p.trust+2)
+    if ch["key"]=="B1_CROWN":
+        if g.flag("TERRELL"):
+            for p in g.players: p.trust=max(0,p.trust-1)
+        q=(g.campaign.get("quit_desk") or "")
+        for p in g.players:
+            if p.name==q: p.sight={d:max(1,v) for d,v in p.sight.items()}
+    if g.campaign.get("rally") and ch["campaign"]=="LEDGER":
+        for p in g.players: p.trust=min(MAX_TRUST,p.trust+1)
 
 ROSTER=[("Marcus","Translator"),("Nia","Student"),("Simone","Elder"),("Zay","Veteran"),("Dre","Organizer")]
 
@@ -881,8 +1098,9 @@ def new_game(overlord=False, scenario=None, owner=None, verbose=False, seed=None
     g.players=[Player(n,r) for n,r in (roster or ROSTER)]
     if g.scenario=="The Plants Close":
         for p in g.players: p.trust=1
+    if g.chapter: carry_players(g)
     for p in g.players: p.face=FACE_TOKENS if g.render else 0
     if g.carry and g.carry.get("rally") and not g.overlord and not g.chapter and not g.party:
         for p in g.players: p.trust=min(MAX_TRUST,p.trust+1)
-    if overlord: g.players.append(Player("The Owner","Overlord"))
+    if g.overlord: g.players.append(Player("The Owner","Overlord"))
     return g

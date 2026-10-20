@@ -36,7 +36,8 @@ export function MoneyCount({ s }: { s: Session }) {
   const m = g.money();
   const ck = s.clock;
   if (!g.signed.length) return null;
-  const era = g.chapter ? " (in 1950s dollars)" : "";
+  // era cards count in their own era's dollars; the rest of the deck in today's
+  const era = g.chapter?.era_dollars ? ` (era cards in ${g.chapter.era_dollars})` : "";
   const kept = m.defused + m.dodged;
   return (
     <div className="mt-5 rounded-xl border border-white/20 bg-black/30 p-4" aria-label="The second number, this game">

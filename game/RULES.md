@@ -251,7 +251,7 @@ Every deal card carries the real money behind it: what signing that trap typical
 - the honest help it **walked away from**,
 - what it **stayed out of** by reading and walking, and who **got played**.
 
-Win or lose, the points turn back into money. The website does the count for you. Chapter 3 figures are in 1950s dollars.
+Win or lose, the points turn back into money. The website does the count for you. Era cards in the campaign count in their era's dollars.
 
 ## Read your own deal
 After the game, take out a real offer: a phone plan, a car loan, a rent-to-own receipt. The website's **Read your own deal** page works out its second number and the yearly rate it really charges, and shows it on a deal card. Nothing you type leaves your device.
@@ -274,12 +274,21 @@ Turn any of these on. Each is in the website's setup, and in `sn_engine.py` as a
 ## A block that remembers (the website)
 Play on as the same block. After each full co-op game, your block keeps what happened, one block per Your City edition: districts you **woke** start the next game a step ahead (**Clarity +1**), districts that were **captured** carry a **scar** (**Squeeze +1**), and after a **loss** the community rallies (everyone **+1 Trust**). Wake a scarred district to heal it. Tested over runs of 8 games: no losing spiral (2 players win 43% after a loss and 42% after a win; 4 players 50% and 55%). Block Party always starts fresh. At the table: write the woken and captured districts on the back of the rulebook and set them up next time.
 
-## Campaign: *The Long Ledger* (prototype)
-The base game is also the first chapter you can play of a six-chapter Legacy campaign following one West Dayton family (see `CAMPAIGN.md`). **Chapter 3, *The Map* (1930s–1960s), is built and playable now**, with its own printed envelope:
+## Campaigns
+Two campaigns string games together, each chapter one game with its own setup and twist. Play any chapter on its own, or play them in order as one family: what you win or lose carries forward. On the website: **Play → Campaign**; the website keeps the family on the device.
+
+**The Long Ledger** (see `CAMPAIGN.md`): one West Dayton family across six eras. **1** *Freedom's Ledger* (1865–1877), **2** *Up North* (1910s–1940s), **3** *The Map* (1930s–1960s), **4** *Voice* (1955–1970), **5** *The Plants Close* (1990s–2009), **6** *Today* (2018–). Two districts in Chapters 1–5 use an era deck. Between chapters:
+- **The Family Ledger** (−10 to +10): a win is +2 and +1 per woken district; a loss is −2 and −1 per captured district; −1 per Fall, +1 per Reach.
+- **Stickers:** a district woken at the end heals a Scar, or is **Rebuilt**; a captured one is **Scarred** (2 per district at most). Rebuilt takes 1 Squeeze off a district the era starts squeezed, or else adds Clarity 1; Scarred adds Squeeze 1.
+- **The community rallies:** after a lost chapter, everyone starts the next with +1 Trust.
+- **The Family Decision:** one choice after each chapter that changes the next one's setup.
+
+**Chapter 3, The Map**, with its own printed envelope:
 - **Setup:** swap in the era Housing and Lending decks; start both at Squeeze 2 (REDLINING is active); the Owner is *The Appraiser*.
 - **The twist:** from round 2, while REDLINING is active, it tightens a second time every round.
 - **The League:** an action to sign. If every player signs in the same round, it forms: Housing −2 at once, Housing −1 every second round after, and Housing and Lending traps are beatable at Read 1. If anyone hasn't signed by the Machine phase, the pledges fall apart.
-- **After the game:** fill in the Family Ledger and make the Family Decision.
+
+**Book One** (see `BOOK_ONE.md`): four chapters that follow the novel. **1** *The Chain* (a Block Party where every lesson passes on), **2** *The Net* (the Desk), **3** *The Crown* (Overlord mode, and the Crown that keeps you from Falling while the block pays for it), **4** *The Empty Throne* (no one can Expose until everyone has taught, and nobody holds more than half the Props).
 
 ## Scoring
 Win or lose, the player with the most **Props** is the one who lifted the most people. Props come only from studying, teaching, defusing, reaching and tracing, never from taking.
