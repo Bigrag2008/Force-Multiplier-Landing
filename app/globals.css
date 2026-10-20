@@ -45,9 +45,70 @@ body {
   30% { box-shadow: 0 0 0 5px var(--glow, #F2B632); }
   100% { box-shadow: 0 0 0 0 transparent; }
 }
-.float-up { animation: float-up 2.6s ease-out forwards; }
-.glow-out { animation: glow-out 1.8s ease-out; }
+.float-up { animation: float-up 2.6s ease-out both; animation-delay: var(--delay, 0s); }
+.glow-out { animation: glow-out 1.8s ease-out both; animation-delay: var(--delay, 0s); }
+
+/* ---- impact: making a decision land (src/ui/Impact.tsx) ---- */
+/* the verdict stamp: slams onto the screen like a rubber stamp on a contract */
+@keyframes stamp-in {
+  0% { opacity: 0; transform: translateX(-50%) scale(2.4) rotate(-16deg); }
+  10% { opacity: 1; transform: translateX(-50%) scale(0.94) rotate(-5deg); }
+  14% { transform: translateX(-50%) scale(1.03) rotate(-6deg); }
+  18%, 82% { opacity: 1; transform: translateX(-50%) scale(1) rotate(-6deg); }
+  100% { opacity: 0; transform: translateX(-50%) scale(1) rotate(-6deg); }
+}
+.stamp-in { animation: stamp-in 2.2s cubic-bezier(.2,.9,.3,1.2) both; }
+/* a banner for the big moments, one after another */
+@keyframes banner {
+  0% { opacity: 0; transform: translate(-50%, -14px); }
+  10%, 86% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -6px); }
+}
+.banner { animation: banner 3s ease-out both; }
+/* the whole screen flashes the moment's color */
+@keyframes flash { 0% { opacity: 0; } 14% { opacity: 1; } 100% { opacity: 0; } }
+.flash { animation: flash 1.5s ease-out both; }
+/* a district takes a strike: it jolts and flashes red, one district after another */
+@keyframes hit {
+  0% { transform: translateX(0); box-shadow: 0 0 0 0 #E63946; }
+  12% { transform: translateX(-7px) rotate(-1deg); box-shadow: 0 0 0 6px #E63946; }
+  24% { transform: translateX(6px) rotate(1deg); }
+  36% { transform: translateX(-4px); }
+  48% { transform: translateX(3px); }
+  60% { transform: translateX(0); box-shadow: 0 0 0 3px #E63946; }
+  100% { transform: translateX(0); box-shadow: 0 0 0 0 transparent; }
+}
+.hit { animation: hit 0.75s ease-out both; animation-delay: var(--delay, 0s); }
+/* the Machine muddies a district: it goes dim, then comes back a little grayer */
+@keyframes mud { 0% { filter: none; } 30% { filter: brightness(0.55) sepia(0.6); } 100% { filter: none; } }
+.mud { animation: mud 1.2s ease-in-out both; animation-delay: var(--delay, 0s); }
+/* a district wakes: the porch lights come on */
+@keyframes wake-burst {
+  0% { box-shadow: 0 0 0 0 rgba(242,182,50,0); }
+  35% { box-shadow: 0 0 46px 16px rgba(242,182,50,0.95); }
+  100% { box-shadow: 0 0 18px 3px rgba(242,182,50,0.55); }
+}
+.wake-burst { animation: wake-burst 1.8s ease-out both; }
+.lights-on { box-shadow: 0 0 18px 3px rgba(242,182,50,0.55); }
+/* a captured district gets stamped */
+@keyframes slam { 0% { opacity: 0; transform: scale(2.2) rotate(-14deg); } 60% { opacity: 1; transform: scale(0.95) rotate(-12deg); } 100% { opacity: 1; transform: scale(1) rotate(-12deg); } }
+.slam { animation: slam 0.55s cubic-bezier(.2,.9,.3,1.2) both; animation-delay: var(--delay, 0s); }
+/* Shady: ink spreads across your card */
+@keyframes ink {
+  0% { opacity: 0; transform: scale(0.2); }
+  25% { opacity: 0.85; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.3); }
+}
+.ink { animation: ink 2.2s ease-out both; }
+/* close to the edge: the card's border breathes purple */
+@keyframes edge { 0%, 100% { box-shadow: 0 0 0 0 rgba(176,124,255,0); } 50% { box-shadow: 0 0 0 4px rgba(176,124,255,0.75); } }
+.edge-pulse { animation: edge 1.6s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   .float-up { animation: none; opacity: 1; }
   .glow-out { animation: none; }
+  /* still say what happened, just without the movement */
+  .stamp-in, .banner { animation: flash 3s linear both; transform: translateX(-50%) rotate(-6deg); }
+  .banner { transform: translateX(-50%); }
+  .hit, .mud, .slam, .ink, .edge-pulse, .wake-burst, .flash { animation: none; }
 }

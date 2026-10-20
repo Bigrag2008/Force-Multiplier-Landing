@@ -20,8 +20,26 @@ export function Players({ s, changes = null }: { s: Session; changes?: Changes }
             </div>
           );
         const ch = changes?.delta.players[p.name];
+        // Shady you can see: ink spreads when it goes up, and the card breathes purple near the edge
+        const limit = g.party ? K.BP_SIT_OUT : K.FLIP;
+        const edge = !p.flipped && p.corruption > 0 && p.corruption >= limit - (g.party ? 1 : 2);
         return (
-          <div key={p.name} className={`relative rounded-xl border p-3 ${current ? "border-gold bg-gold/10" : "border-white/15 bg-white/5"}`}>
+          <div
+            key={p.name}
+            className={`relative overflow-visible rounded-xl border p-3 transition-[filter,background-color] duration-700 ${
+              p.flipped ? "border-[#7b3fd1] bg-[#2a1446]" : edge ? "edge-pulse border-[#b07cff] bg-[#b07cff]/10" : current ? "border-gold bg-gold/10" : "border-white/15 bg-white/5"
+            }`}
+            // a Fallen player's card drains of color: the Machine is moving through them
+            style={p.flipped ? { filter: "saturate(0.35)" } : undefined}
+          >
+            {(ch?.corruption ?? 0) > 0 && (
+              <span
+                key={changes!.id}
+                aria-hidden
+                className="ink pointer-events-none absolute inset-0 rounded-xl"
+                style={{ background: "radial-gradient(circle at 70% 40%, rgba(123,63,209,0.75), rgba(123,63,209,0.25) 45%, transparent 70%)" }}
+              />
+            )}
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-center gap-2">
                 <RolePortrait role={p.role} size={40} title={`${p.name}, the ${p.role}`} />

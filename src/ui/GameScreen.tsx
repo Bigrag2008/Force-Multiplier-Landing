@@ -1,5 +1,7 @@
 "use client";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { ImpactLayer, useJolt } from "./Impact";
+import { readImpact } from "./readImpact";
 import { C } from "../engine/content";
 import type { Move } from "../game/moves";
 import type { Session } from "../game/session";
@@ -65,6 +67,10 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
   const closeHistory = () => setHistoryRead(g.historyCard);
   const panelKey = `${s.phase}-${s.seat}-${g.round}-${s.actionsLeft}-${s.movesLeft}`;
   const intro = g.chapter ?? null;
+  // what the last move meant: a verdict on the decision, banners for the big moments, strikes one by one
+  const impact = useMemo(() => (changes ? readImpact(g, changes.lines, changes.delta) : null), [changes, g]);
+  const root = useRef<HTMLDivElement>(null);
+  useJolt(root, impact, changes?.id ?? 0);
 
   return (
     <div className="mx-auto max-w-7xl space-y-4 px-4 py-4">
@@ -107,8 +113,8 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
       )}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_420px]">
-        <div className="space-y-4">
-          <Board s={s} changes={changes} />
+        <div ref={root} className="space-y-4">
+          <Board s={s} changes={changes} impact={impact} />
           <Players s={s} changes={changes} />
         </div>
         {/* on phones the actions come first; on wide screens they sit beside the board */}
@@ -127,6 +133,8 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
           <EventFeed s={s} version={version} />
         </div>
       </div>
+
+      <ImpactLayer impact={impact} id={changes?.id ?? 0} />
 
       {showIntro && <IntroComic onDone={closeIntro} />}
 

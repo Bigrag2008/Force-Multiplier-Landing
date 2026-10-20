@@ -5,9 +5,11 @@ import type { Session } from "../game/session";
 import { DistrictArt } from "./art/DistrictArt";
 import { signed, type Delta } from "./changes";
 import { Icon, Pips, type IconName } from "./icons";
+import { STRIKE_GAP, timeline } from "./Impact";
+import type { Impact } from "./readImpact";
 import { DISTRICT_COLOR, titleCase } from "./theme";
 
-export type Changes = { id: number; delta: Delta } | null;
+export type Changes = { id: number; delta: Delta; lines: string[] } | null;
 
 /** a number that floats up off whatever it changed, then fades */
 export function Float({ id, n, icon, className = "" }: { id: number; n: number; icon: IconName; className?: string }) {
@@ -48,18 +50,39 @@ function Track({ value, max, color, label, name, end }: { value: number; max: nu
   );
 }
 
-function DistrictBlock({ s, d, highlight, changes }: { s: Session; d: District; highlight?: boolean; changes: Changes }) {
+function DistrictBlock({ s, d, highlight, changes, impact }: { s: Session; d: District; highlight?: boolean; changes: Changes; impact: Impact | null }) {
   const g = s.g;
   const c = g.clarity[d];
   const p = g.pressure[d];
   const status =
     p >= K.CAPTURE ? { t: "CAPTURED", c: "#E63946" } : c >= K.WAKE ? { t: "AWAKE", c: "#F2B632" } : p >= K.GRIP ? { t: "gripped", c: "#E63946" } : null;
   const ch = changes?.delta.districts[d];
+  // the moment: struck (in turn), muddied, just woken, just captured
+  const hitAt = impact?.strikes.indexOf(d) ?? -1;
+  const mudAt = impact?.muddied.indexOf(d) ?? -1;
+  const woke = !!impact?.woke.includes(d);
+  const justCaptured = !!impact?.moments.some((m) => m.kind === "captured" && m.d === d);
+  const motion = hitAt >= 0 ? "hit" : mudAt >= 0 ? "mud" : woke ? "wake-burst" : c >= K.WAKE || g.result === "BLOCK_WIN" ? "lights-on" : "";
+  const t0 = timeline(impact).strikeStart;
+  // a struck district's glow and numbers wait for its strike; the player's own changes show at once
+  const delay = hitAt >= 0 || mudAt >= 0 ? `${t0 + (hitAt >= 0 ? hitAt : mudAt) * STRIKE_GAP}s` : "0s";
   return (
     <div
-      className={`relative rounded-xl border-2 bg-white text-ink shadow ${highlight ? "ring-4 ring-gold" : ""}`}
-      style={{ borderColor: DISTRICT_COLOR[d] }}
+      key={motion && motion !== "lights-on" ? `${d}-${changes?.id}` : d}
+      className={`relative rounded-xl border-2 bg-white text-ink shadow ${highlight ? "ring-4 ring-gold" : ""} ${motion}`}
+      style={{ borderColor: DISTRICT_COLOR[d], ["--delay" as string]: delay }}
     >
+      {p >= K.CAPTURE && (
+        <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-black/45">
+          <span
+            key={justCaptured ? changes?.id : "held"}
+            className={`rounded-md border-4 border-[#E63946] bg-white/90 px-3 py-1 text-xl font-black tracking-widest text-[#c1121f] ${justCaptured ? "slam" : ""}`}
+            style={{ transform: "rotate(-12deg)", ["--delay" as string]: `${t0 + Math.max(0, hitAt) * STRIKE_GAP + 0.3}s` }}
+          >
+            CAPTURED
+          </span>
+        </div>
+      )}
       {ch && (
         <div key={changes!.id} className="glow-out pointer-events-none absolute inset-0 z-10 rounded-xl" style={{ ["--glow" as string]: (ch.pressure ?? 0) > 0 || (ch.clarity ?? 0) < 0 ? "#E63946" : "#3FA34D" }}>
           <div className="absolute -top-2 right-1 flex flex-col items-end gap-0.5">
@@ -88,15 +111,19 @@ function DistrictBlock({ s, d, highlight, changes }: { s: Session; d: District; 
   );
 }
 
-export function Board({ s, highlight, changes = null }: { s: Session; highlight?: District | null; changes?: Changes }) {
+export function Board({ s, highlight, changes = null, impact = null }: { s: Session; highlight?: District | null; changes?: Changes; impact?: Impact | null }) {
   const g = s.g;
   const patterns = g.activePatterns();
   return (
     <section aria-label="The West Dayton board" className="space-y-3">
       <GoalTrack s={s} changes={changes} />
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+      {/* the ending: every porch light on, or the lights go out across the block */}
+      <div
+        className={`grid grid-cols-2 gap-2 transition-[filter] delay-1000 duration-[2500ms] sm:grid-cols-3 lg:grid-cols-5`}
+        style={g.result === "MACHINE_WIN" ? { filter: "brightness(0.5) saturate(0.4)" } : undefined}
+      >
         {g.ds.map((d) => (
-          <DistrictBlock key={d} s={s} d={d} highlight={highlight === d} changes={changes} />
+          <DistrictBlock key={d} s={s} d={d} highlight={highlight === d} changes={changes} impact={impact} />
         ))}
       </div>
       {patterns.length > 0 && (
