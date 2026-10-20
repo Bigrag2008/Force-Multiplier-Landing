@@ -1,16 +1,40 @@
-# THE SECOND NUMBER — Rulebook (v3, West Dayton Edition)
+# THE SECOND NUMBER — Rulebook (v4, West Dayton Edition)
 
-*A cooperative game for 2–5 players, ages 12+, about 45–60 minutes.*
+*A cooperative game for 2–5 players, ages 12+. The Block Party intro takes about 25 minutes; the full game, 45–60.*
 *Read the machine. Wake the block. Crack the Underworld. Don't become it.*
 
 These rules match `sn_engine.py` exactly. If you change one, change the other, then re-run `python3 balance_test.py` and `python3 test_rules.py`.
+
+**New to the game? Play the [Block Party](#block-party-the-25-minute-intro) first.** It teaches the six words below in about 25 minutes, then each step up the ladder adds one layer.
+
+### One word for each idea
+Every rule, card, board and screen uses these words and no others.
+
+| Word | What it means | Not called |
+|---|---|---|
+| **Read** (0–3 per district) | How deep you can read a deal there: red, then amber, then blue. The power is called the Sight in the novel. | sight, lens level |
+| **Trust** (0–5) | What you spend to negotiate and teach. | — |
+| **Shady** | What shortcuts put on you. Too much and you Fall. | corruption |
+| **Squeeze** (0–3 per district) | The Machine's grip. Squeeze 3 captures a district. Kept on the **Squeeze track**. | pressure, Machine track |
+| **Clarity** (0–3 per district) | How awake a district is. Clarity 3 wakes it. | — |
+| **Props** | What you earn for lifting people. Most Props at the end is the table's MVP. | legend, Legendary |
+| **Strike** | Any Machine move that adds Squeeze, whoever makes it: the Machine, the Overlord, a Fallen player, a Scenario or an Owner. | extract, hit |
+| **Muddy** | Any Machine move that takes away Clarity. | obscure, bury |
+| **Tempt** | A Machine move that takes away Trust. | — |
+
+### The ladder
+1. **Block Party** (25 min): Read, Trust, Squeeze, Clarity, the lens and the shortcut. 3 districts, no roles.
+2. **Full Block** (45 min): all 5 districts, Roles, a Scenario, the hidden Owner, the Commons and its places, Patterns, the Underworld.
+3. **Unlocks**, one at a time, as the table likes: the Cookout, the Sou-Sou, the Green Book.
+4. **House rules** for tables that know the deck: fine-print dice, the Terrell rule, endless deals, the math variant.
+5. **Overlord** (one player is the Machine), then the campaign.
 
 ---
 
 ## What's in the box
 - **76 Deal cards**: 12 real traps per district (Lending, Housing, Labor, Health, Education), plus 3 honest deals each and a 4th in Health (Gem City Market).
 - **5 Role cards**, **4 Owner cards** (one is shuffled face-down under the board), **7 Scenario cards**, **12 Pattern cards**, **12 History cards**.
-- **The board:** five districts. Each has a Clarity track (0–3) and a Machine track (0–3).
+- **The board:** five districts. Each has a Clarity track (0–3) and a Squeeze track (0–3). Round track 1–12, with the Block Party's strikes printed on rounds 1–8.
 - Player boards with Trust (0–5), Shady (0–6) and Read (0–3 per district) tracks.
 - **A red decoder lens.** The deluxe edition adds amber and blue lenses.
 - About 40 small tokens (coins, beans or beads) for the tracks.
@@ -38,10 +62,12 @@ These rules match `sn_engine.py` exactly. If you change one, change the other, t
 
 | Players | Actions per turn | Machine strikes per round | Overlord moves per round |
 |---|---|---|---|
-| 2 | 3 | 1 | 2 |
+| 2 | 3 | 1, or 2 on even rounds | 2 |
 | 3 | 3 | 3 | 4 |
 | 4 | 2 | 1, or 2 on even rounds | 2, or 3 on even rounds |
 | 5 | 2 | 2, or 3 on even rounds | 3, or 4 on even rounds |
+
+You don't need to remember it: the strikes for each player count are printed on the **round track**, under every round. (We tested replacing the table with one rule, "one strike for every 4 actions the block takes." It fits 2 and 5 players, but 3 players won about 73% of games under it and 4 players dropped to about 45%, so the table stays and the board carries it. 2 players went from 1 strike to 1½, because their games ran long and soft.)
 
 ---
 
@@ -98,7 +124,7 @@ TAKE on a trap really is the fastest way to save a district one strike from capt
 **Name the price.** Whenever you face a trap and *could* take it, say the deal out loud before you choose: *"TAKE costs no Trust and drops Housing's Squeeze by 2. The catch: +2 Shady on me, and I'm at 4."* Then the table weighs in, and you decide. (The website's Coach does this for you, with a ⚡ on the TAKE button.) While the Owner is hidden, say "+2 or more": the Debt Buyer charges extra.
 
 But at **Shady 6 you Fall**:
-- You stay at the table, and **the Machine moves through you**. On your turn you take Machine moves (Extract, Obscure, Tempt) instead of block actions.
+- You stay at the table, and **the Machine moves through you**. On your turn you take Machine moves instead of block actions: **strike** (+1 Squeeze), **muddy** (−1 Clarity) or **tempt** (−1 Trust).
 - Your crew can **Reach** you back.
 - If the Machine wins with you Fallen, you "won the board" and earned **0 Props**. You don't win by becoming the thing you fight.
 
@@ -123,7 +149,7 @@ Call it at the start of any round, unless a district is one strike from capture.
 The Fallen don't come; the Machine still moves through them, and the Machine phase happens as usual. Call it when what one of you knows needs to become what all of you know.
 
 ## The Green Book: one safe route
-The block holds one copy of the Green Book, after the guide Black travelers used for decades to find the places that would serve them safely. **Once per game**, when a Machine strike (a strike, an Extract, or a scenario hit) would **capture** a district, you may open it: that strike takes a safe route and lands nowhere. It still counts as the Machine's move on that district this round.
+The block holds one copy of the Green Book, after the guide Black travelers used for decades to find the places that would serve them safely. **Once per game**, when any strike (the Machine's, a Fallen player's, or a Scenario's) would **capture** a district, you may open it: that strike takes a safe route and lands nowhere. It still counts as the Machine's move on that district this round.
 
 ## The Sou-Sou: the honest payday loan
 A rotating savings circle, the way families and church members have long pooled money (also called a susu, "the hand," or "the club"). At the end of the block's turns, the table may **throw a hand**:
@@ -185,7 +211,38 @@ When every district in a combination is at Squeeze 2 or more, flip that Pattern 
 | **Organizer** | A successful NEGOTIATE drops Squeeze by 2. |
 
 ## Overlord mode (optional, 1 vs. many)
-One player *is* the Machine. There is no hidden Owner and no automatic Machine phase. Each round the Overlord takes the moves on the setup table (Extract +1 Squeeze, Obscure −1 Clarity, Tempt −1 Trust), obeying the spread rule. After the Underworld opens, the Overlord may Obscure one woken, untraced district per round. Everything else is the same.
+One player *is* the Machine. There is no hidden Owner and no automatic Machine phase. Each round the Overlord takes the moves on the setup table (strike +1 Squeeze, muddy −1 Clarity, tempt −1 Trust), obeying the spread rule. After the Underworld opens, the Overlord may muddy one woken, untraced district per round.
+
+**The stranger's handwriting.** A Reader can tell when another Reader is close: their writing shows up on the paperwork, slanted and pressed too hard. Once per game, any block player may ask the Overlord *"Is that your handwriting?"* about the last deal faced. The Overlord must answer truthfully whether they struck, muddied or tempted in that deal's district this round. It costs the asker 1 Trust. (A table rule for a person playing the Overlord; the engine has no hidden information to ask about.) Everything else is the same.
+
+## Block Party: the 25-minute intro
+Learn the game in one sitting. Everything not listed here is left in the box.
+- **Districts:** Lending, Housing and Education only. **No** Roles, Owner, Scenario, Patterns or Underworld. No Cookout, Sou-Sou or Green Book.
+- **Each turn:** 2 actions (3 if you play solo): **Study**, **Face a deal**, **Teach**, or **Gather** (+2 Trust, −1 Shady; there are no places yet).
+- **Win:** wake **2 of the 3** districts (Clarity 3). You win the moment the second one wakes.
+- **Lose:** 2 districts captured (Squeeze 3), or round **8** ends.
+- **The shortcut:** TAKE a trap and it patches Squeeze −2 now, or +1 Clarity where there's no Squeeze. It costs **2 Shady chips**. At **3 chips**, hand them back and **sit out your next turn**. Nobody Falls in Block Party.
+- **The Machine:** after everyone's turns it strikes the district closest to waking: **+1 Squeeze and −1 Clarity**. It may strike the same district more than once. Strikes per round, printed on the round track:
+
+| Players | Rounds 1–8 |
+|---|---|
+| 2 | 0, 1, 1, 1, 0, 1, 1, 1 |
+| 3 | 1, 2, 2, 2, 1, 2, 2, 2 |
+| 4 | 3 every round |
+| 5 | 4 every round |
+
+Block Party plays at about 58–77% wins (`balance_test.py`), and careful play beats grabbing shortcuts. When you've won one, play the Full Block.
+
+## House rules (for tables that know the deck)
+Turn any of these on. Each is in the website's setup, and in `sn_engine.py` as an option.
+
+**Fine-print dice.** Ignore the lever printed on a trap. When you draw it, roll a d6 in the open: **1–3 red, 4–5 amber, 6 blue.** The cost, clock and connection on the card stay true; only where the leverage sits changes, so the deck can't be learned by heart. (4 players: 57% wins against 51% without it, a little easier.)
+
+**The Terrell rule.** *Seeing it isn't the same as being safe to confront it.* When you're taught a district, you get the Read but not the cover. Until the block has your back, if you **TAKE or NEGOTIATE** a trap there, it backfires: **+1 Squeeze** in that district (then you've learned it the hard way, and you're covered). **WALK** is always safe. You get covered by gathering at any **Commons** or at the **Cookout**; the **Veteran** teaches the cover with the lesson. (4 players: 56% wins, if the table gets covered before it confronts; covering also refills Trust. Confront bare and it's far harder.)
+
+**Endless deals.** Deal cards with blanks: *"Rent-to-own: a ___ for $___ a week, ___ weeks."* Roll or pick the numbers, then work out the second number. The 25 templates (5 per district) are in `deal_gen.py`; the website rolls a fresh one every draw, and the **Endless deals** page deals them one at a time for practice. (4 players: 59% wins. The templates are a little friendlier than the printed deck, which suits a classroom.)
+
+**The math variant.** With endless deals, at Read 1 you work out the second number yourself before you look under the red glasses ("$20 a week × 78 weeks = ?"). Good for classrooms: it's the School Edition's default.
 
 ## Campaign: *The Long Ledger* (prototype)
 The base game is also the first chapter you can play of a six-chapter Legacy campaign following one West Dayton family (see `CAMPAIGN.md`). **Chapter 3, *The Map* (1930s–1960s), is built and playable now**, with its own printed envelope:
@@ -195,6 +252,6 @@ The base game is also the first chapter you can play of a six-chapter Legacy cam
 - **After the game:** fill in the Family Ledger and make the Family Decision.
 
 ## Scoring
-Win or lose, the most **Legendary** player is the one who lifted the most people. Props come only from studying, teaching, defusing, reaching and tracing, never from taking.
+Win or lose, the player with the most **Props** is the one who lifted the most people. Props come only from studying, teaching, defusing, reaching and tracing, never from taking.
 
 > *How high did you climb before you turned into the thing you were fighting?*

@@ -190,6 +190,59 @@ def test_clock_is_a_loss():
     g=E.new_game(seed=3); g.run_auto(max_rounds=1)
     assert g.result in ("MACHINE_WIN","BLOCK_WIN")
 
+def test_strikes_carry_the_remainder():
+    g=E.new_game(seed=1, roster=E.ROSTER[:2])                      # 2 players: 1.5 a round
+    seq=[]
+    for r in range(1,5): g.round=r; seq.append(g.strikes())
+    assert seq==[1,2,1,2]
+    for k,expect in ((3,3),(4,1)):
+        g=E.new_game(seed=1, roster=E.ROSTER[:k]); g.round=1; assert g.strikes()==expect
+
+def test_block_party_setup():
+    g=E.new_game(seed=1, roster=[("A","Neighbor"),("B","Neighbor")], party=True)
+    assert g.ds==list(E.BP_DISTRICTS) and g.owner=="No Owner" and g.scenario=="Block Party"
+    assert not g.green_book and g.max_rounds==8 and g.actions()==2
+    g.round=1; assert g.strikes()==0                                # 2 players: 0,1,1,1,…
+    g.round=2; assert g.strikes()==1
+
+def test_block_party_win_and_sit_out():
+    g=E.new_game(seed=1, roster=[("A","Neighbor"),("B","Neighbor")], party=True); p=g.players[0]
+    g.clarity["LENDING"]=3; g.clarity["HOUSING"]=2
+    g.do(p,("face","HOUSING","TAKE",card(trap=False,lever=0)))
+    assert g.result=="BLOCK_WIN"                                     # 2 of 3 awake wins on the spot
+    g=E.new_game(seed=1, roster=[("A","Neighbor"),("B","Neighbor")], party=True); p=g.players[0]
+    g.face(p,"HOUSING","TAKE",card()); assert p.corruption==2 and g.clarity["HOUSING"]==1   # the smaller shortcut
+    g.face(p,"HOUSING","TAKE",card()); assert p.corruption==0 and p.benched and not p.flipped
+
+def test_block_party_machine_strikes_and_muddies():
+    g=E.new_game(seed=1, roster=[("A","Neighbor")]*4, party=True); g.round=1
+    g.clarity["EDUCATION"]=2
+    g.party_machine_phase()                                          # 4 players: 3 strikes, repeats allowed
+    assert g.pressure["EDUCATION"]>=1 and sum(g.pressure.values())==3
+
+def test_fine_print_die_sets_the_lever():
+    g,p=game(fine_print=True)
+    for _ in range(30):
+        c=g.draw("LENDING")
+        if c["trap"]: assert c["lever"]==E.FINE_PRINT_DIE[c["die"]]
+        else: assert "die" not in c
+
+def test_terrell_rule():
+    g,t=game(terrell=True); teacher=g.players[1]
+    teacher.sight["HOUSING"]=2; teacher.trust=3; t.trust=3; t.role="Neighbor"
+    g.teach(teacher,t,"HOUSING"); assert "HOUSING" in t.bare
+    g.face(t,"HOUSING","WALK",card()); assert g.pressure["HOUSING"]==0 and "HOUSING" in t.bare   # walking is safe
+    g.face(t,"HOUSING","NEGOTIATE",card(lever=1))
+    assert g.pressure["HOUSING"]==1 and "HOUSING" not in t.bare     # defused, then backfired: +1
+    g.teach(teacher,t,"HOUSING"); g.commons(t); assert not t.bare   # the block covers you
+    vet=next(p for p in g.players if p.role=="Veteran"); vet.sight["LABOR"]=2; vet.trust=3
+    g.teach(vet,t,"LABOR"); assert "LABOR" not in t.bare            # the Veteran teaches the cover
+
+def test_endless_deals():
+    g,p=game(endless=True)
+    c=g.draw("HOUSING"); assert c["gen"] and c["answer"]>0 and "{" not in c["red"]+c["ask"]
+    assert c is g.dealt[-1]
+
 if __name__=="__main__":
     tests=[(n,f) for n,f in sorted(globals().items()) if n.startswith("test_")]
     for n,f in tests: f(); print(f"  ✓ {n[5:].replace('_',' ')}")

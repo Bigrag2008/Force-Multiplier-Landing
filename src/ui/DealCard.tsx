@@ -43,6 +43,29 @@ export interface DealCardProps {
   sight: number;
   effectiveLever?: number;
   formId?: string;
+  /** the math variant: work out an endless deal's second number before the red layer opens */
+  math?: boolean;
+}
+
+/** The math variant: the red layer stays shut until you've worked out the second number. */
+function WorkItOut({ card, onDone }: { card: Card; onDone: (guess: string) => void }) {
+  const [guess, setGuess] = useState("");
+  return (
+    <form
+      className="rounded-sm border-2 border-dashed border-[#ED2633] bg-[#FFEDED] p-2 text-[12px]"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onDone(guess);
+      }}
+    >
+      <p className="font-extrabold">Work out the second number</p>
+      <p className="mt-0.5">{card.ask}</p>
+      <div className="mt-1 flex gap-2">
+        <input aria-label="Your answer" inputMode="numeric" className="w-28 rounded border border-black/30 px-2 py-0.5" value={guess} onChange={(e) => setGuess(e.target.value)} />
+        <button type="submit" className="rounded bg-ink px-2 py-0.5 font-bold text-program">Check</button>
+      </div>
+    </form>
+  );
 }
 
 /**
@@ -50,7 +73,10 @@ export interface DealCardProps {
  * locked layers carry no text at all. Drag Grandma's reading glasses over the card
  * (or put them on with the button) to read the second number.
  */
-export function DealCard({ card, district, sight, effectiveLever, formId }: DealCardProps) {
+export function DealCard({ card, district, sight, effectiveLever, formId, math }: DealCardProps) {
+  // the math variant: which card's second number has been worked out, and what the guess was
+  const [worked, setWorked] = useState<{ card: Card; guess: string } | null>(null);
+  const needsMath = !!math && card.answer !== undefined && sight >= 1 && worked?.card !== card;
   const [lensY, setLensY] = useState(110);
   const [glassesOn, setGlassesOn] = useState(false);
   const [explain, setExplain] = useState(false);
@@ -90,6 +116,9 @@ export function DealCard({ card, district, sight, effectiveLever, formId }: Deal
           <span className="text-sm font-black tracking-wide">{district}</span>
           <span className="text-[10px] opacity-90">FORM {formId ?? "—"}</span>
         </header>
+        {card.die !== undefined && (
+          <p className="bg-black/5 px-3 py-1 text-[11px] font-bold">🎲 The fine print rolled {card.die}: this trap&apos;s lever is in {LEVER_WORD[card.lever]}.</p>
+        )}
         <div className="border-b border-dashed border-black/20 px-3 pb-2 pt-2">
           <div className="flex justify-between text-[9px] font-bold uppercase text-black/50">
             <span>What you see</span>
@@ -104,8 +133,16 @@ export function DealCard({ card, district, sight, effectiveLever, formId }: Deal
                 <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: LAYER_COLOR[n] }} />
                 Read {n} · {LAYER_LABEL[n]}
               </h4>
-              {sight >= n ? (
+              {n === 1 && needsMath ? (
+                <WorkItOut card={card} onDone={(guess) => setWorked({ card, guess })} />
+              ) : sight >= n ? (
                 <>
+                  {n === 1 && worked?.card === card && card.answer !== undefined && (
+                    <p className="mb-1 text-[11px] font-bold">
+                      {Number(worked.guess.replace(/[^0-9.-]/g, "")) === card.answer ? "✓ You got it: " : `You said ${worked.guess || "nothing"}. The second number: `}
+                      {card.answer.toLocaleString("en-US")}
+                    </p>
+                  )}
                   <DecoderZone text={text} seed={card.front + n} />
                   {glassesOn && <span className="sr-only">{text}</span>}
                 </>

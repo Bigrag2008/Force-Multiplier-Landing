@@ -1,6 +1,6 @@
 "use client";
 import type { ReactNode } from "react";
-import { C, DISTRICTS, K, type District } from "../engine/content";
+import { C, K, type District } from "../engine/content";
 import type { Session } from "../game/session";
 import { DistrictArt } from "./art/DistrictArt";
 import { signed, type Delta } from "./changes";
@@ -95,7 +95,7 @@ export function Board({ s, highlight, changes = null }: { s: Session; highlight?
     <section aria-label="The West Dayton board" className="space-y-3">
       <GoalTrack s={s} changes={changes} />
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
-        {DISTRICTS.map((d) => (
+        {g.ds.map((d) => (
           <DistrictBlock key={d} s={s} d={d} highlight={highlight === d} changes={changes} />
         ))}
       </div>
@@ -108,7 +108,7 @@ export function Board({ s, highlight, changes = null }: { s: Session; highlight?
           ))}
         </div>
       )}
-      <div className="grid gap-2 rounded-xl border border-gold/40 bg-black/25 p-3 text-sm sm:grid-cols-2">
+      {!g.party && <div className="grid gap-2 rounded-xl border border-gold/40 bg-black/25 p-3 text-sm sm:grid-cols-2">
         <div>
           <div className="font-black text-gold">The Owner</div>
           <p className="text-program/80">
@@ -127,7 +127,7 @@ export function Board({ s, highlight, changes = null }: { s: Session; highlight?
             </div>
           )}
         </div>
-      </div>
+      </div>}
     </section>
   );
 }
@@ -141,7 +141,19 @@ function GoalTrack({ s, changes }: { s: Session; changes: Changes }) {
   const threads = g.threads.size;
   const need = g.threadsNeeded();
   const won = g.result === "BLOCK_WIN";
-  const stops: Stop[] = [
+  const stops: Stop[] = g.party ? [
+    {
+      icon: "clarity",
+      title: `Wake ${K.BP_WAKE_TO_WIN} of ${g.ds.length}`,
+      state: won ? "done" : "now",
+      body: (
+        <>
+          <Pips value={g.awake()} max={K.BP_WAKE_TO_WIN} color="#F2B632" /> <span className="ml-1">Clarity 3 wakes a district, and you win on the spot</span>
+        </>
+      ),
+    },
+    { icon: "pressure", title: "This round", state: "now", body: <>The Machine strikes <b>{g.strikes()}</b> time{g.strikes() === 1 ? "" : "s"}: +1 Squeeze and −1 Clarity on the district closest to waking</> },
+  ] : [
     {
       icon: "clarity",
       title: "Wake the block",
@@ -177,10 +189,10 @@ function GoalTrack({ s, changes }: { s: Session; changes: Changes }) {
   ];
   const captured = g.captured();
   const fallen = g.blk().filter((p) => p.flipped).length;
-  const roundsLeft = K.MAX_ROUNDS - g.round;
+  const roundsLeft = g.maxRounds - g.round;
   return (
     <div className="rounded-xl border border-gold/40 bg-black/25 p-2.5" aria-label="The road to victory">
-      <ol className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <ol className={`grid grid-cols-2 gap-2 ${g.party ? "" : "sm:grid-cols-4"}`}>
         {stops.map((st, i) => (
           <li
             key={st.title}
@@ -204,11 +216,18 @@ function GoalTrack({ s, changes }: { s: Session; changes: Changes }) {
           <Icon name="pressure" size={12} /> {K.LOSE_CAPTURED} districts captured <Pips value={captured} max={K.LOSE_CAPTURED} color="#E63946" />
         </span>
         <span className="inline-flex items-center gap-1">
-          <Icon name="clock" size={12} color="#ff8a8a" /> round {K.MAX_ROUNDS} ends ({roundsLeft} left)
+          <Icon name="clock" size={12} color="#ff8a8a" /> round {g.maxRounds} ends ({roundsLeft} left)
         </span>
-        <span className="inline-flex items-center gap-1">
-          <Icon name="corruption" size={12} /> everyone Falls ({fallen}/{g.blk().length})
-        </span>
+        {!g.party && g.round > 0 && (
+          <span className="inline-flex items-center gap-1 text-program/75">
+            <Icon name="pressure" size={12} /> the Machine strikes {g.strikes()} this round{g.owner === "The Algorithm" && g.ownerShown ? ", +1 for the Algorithm" : ""}{g.ownerShown ? ", +1 in the open" : ""}
+          </span>
+        )}
+        {!g.party && (
+          <span className="inline-flex items-center gap-1">
+            <Icon name="corruption" size={12} /> everyone Falls ({fallen}/{g.blk().length})
+          </span>
+        )}
       </p>
     </div>
   );

@@ -4,7 +4,16 @@ import { C, K } from "@/engine/content";
 export const metadata = { title: "How to play — The Second Number" };
 
 const sections: [string, string[]][] = [
-  ["The goal", [
+  ["Start with the Block Party", [
+    "Three districts (Lending, Housing, Education), " + K.BP_ROUNDS + " rounds, about 25 minutes, no roles and no hidden Owner. Wake " + K.BP_WAKE_TO_WIN + " of the 3 to win; lose 2 to the Machine, or run out of rounds, and you lose.",
+    "Taking a trap costs " + K.BP_TAKE + " Shady chips; at " + K.BP_SIT_OUT + " you sit out a turn. The Machine strikes the district closest to waking: +1 Squeeze and −1 Clarity.",
+    "Then climb the ladder: the Full Block (all five districts, roles, the Owner, the Commons), then the Cookout, Sou-Sou and Green Book, then the house rules, then Overlord.",
+  ]],
+  ["The words", [
+    "Read: how deep you can read a district's deals (0–3). Trust: what you spend. Shady: what shortcuts put on you. Squeeze: the Machine's grip (3 captures). Clarity: how awake a district is (3 wakes it). Props: what you earn for lifting people.",
+    "Every Machine move is a strike (+1 Squeeze), a muddy (−1 Clarity) or a tempt (−1 Trust), whoever makes it.",
+  ]],
+  ["The full game: the goal", [
     "Wake districts by reading their deals. When total Clarity reaches " + K.UNDERWORLD_AT + ", the Underworld cracks open and the hidden Owner is revealed.",
     "Trace " + K.THREADS_TO_WIN + " blue threads (Read 3 in an awake district), then Expose the Owner to win.",
     "You lose if 2 districts are captured, everyone Falls, or round " + K.MAX_ROUNDS + " ends.",
@@ -30,6 +39,12 @@ const sections: [string, string[]][] = [
   ["The Machine", [
     "After the block's turns the Machine strikes the districts closest to waking, at most once per district per round, then muddies your best unfinished work. Machine Patterns (like Redlining) tighten on their own.",
     "A hidden Owner bends the rules from round 1. Watch the board and work out who it is.",
+    "How many strikes a round depends on how many of you there are: it is printed on the round track (and shown on the board here).",
+  ]],
+  ["House rules", [
+    "Fine-print dice: roll a d6 when a trap is drawn to set its lever (1–3 red, 4–5 amber, 6 blue), so nobody can learn the deck by heart.",
+    "The Terrell rule: teaching gives Read, not cover. Confront a trap in a district you were taught before the block has your back (any Commons, or the Veteran's lesson) and it backfires: +1 Squeeze.",
+    "Endless deals: deals are rolled from templates with new numbers every time. With the math variant, you work out the second number before the red layer opens. Try them on the Endless deals page.",
   ]],
 ];
 

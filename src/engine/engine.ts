@@ -6,6 +6,7 @@
  * (tests/parity.test.ts). Change both together, then run `npm run golden && npm test`.
  */
 import { C, DISTRICTS, K, type Card, type Chapter, type Choice, type District, type HistoryCard, type PlaceKey } from "./content";
+import { makeDeal } from "./dealgen";
 import { Rng } from "./rng";
 
 export const LAYERS: [number, "red" | "amber" | "blue", string][] = [
@@ -65,6 +66,10 @@ export class Player {
   freeTeach = false;
   shopAround = false;
   practice = false;
+  /** the Terrell rule: districts this player was taught without cover */
+  bare = new Set<District>();
+  /** Block Party: sits out their next turn */
+  benched = false;
   constructor(public name: string, public role: string) {
     this.sight = perDistrict(() => (role === "Elder" ? 1 : 0));
     this.shields = role === "Veteran" ? 2 : 0;
@@ -77,6 +82,14 @@ export interface GameOptions {
   owner?: string;
   seed?: number;
   chapter?: string;
+  /** Block Party: the 25-minute intro (3 districts, 8 rounds, no Owner) */
+  party?: boolean;
+  /** the fine-print die sets each trap's lever */
+  finePrint?: boolean;
+  /** the Terrell rule: a lesson without cover can backfire */
+  terrell?: boolean;
+  /** deals rolled from templates instead of the printed deck */
+  endless?: boolean;
 }
 
 export interface ChapterResult {
@@ -123,14 +136,29 @@ export class Game {
   ownerFace: string;
   players: Player[] = [];
   historyCard: HistoryCard | null = null;
+  party: boolean;
+  finePrint: boolean;
+  terrell: boolean;
+  endless: boolean;
+  /** the districts in play (Block Party uses three) */
+  ds: District[];
+  maxRounds: number;
+  /** every card drawn, in order (endless and fine-print cards aren't in the deck) */
+  dealt: Card[] = [];
 
   constructor(o: GameOptions = {}) {
     this.rng = new Rng(o.seed ?? Math.floor(Math.random() * 2 ** 31));
+    this.party = !!o.party && !o.overlord && !o.chapter;
+    this.finePrint = !!o.finePrint;
+    this.terrell = !!o.terrell;
+    this.endless = !!o.endless;
+    this.ds = this.party ? [...K.BP_DISTRICTS] : [...DISTRICTS];
+    this.maxRounds = this.party ? K.BP_ROUNDS : K.MAX_ROUNDS;
     this.chapter = o.chapter ? C.chapters[o.chapter] : null;
     this.overlord = !!o.overlord;
     this.ownerShown = this.overlord;
     const ch = this.chapter;
-    this.scenario = ch ? `Chapter ${ch.number}: ${ch.title}` : o.scenario || this.rng.choice(Object.keys(C.scenarios));
+    this.scenario = this.party ? "Block Party" : ch ? `Chapter ${ch.number}: ${ch.title}` : o.scenario || this.rng.choice(Object.keys(C.scenarios));
     this.deck = Object.fromEntries(DISTRICTS.map((d) => [d, (ch && ch.decks[d]) || C.deck[d]])) as Record<District, Card[]>;
     if (ch) for (const [d, p] of Object.entries(ch.pressure)) this.pressure[d as District] = p as number;
     const start: Record<string, Partial<Record<District, number>>> = {
@@ -141,7 +169,8 @@ export class Game {
     };
     for (const [d, p] of Object.entries(start[this.scenario] || {})) this.pressure[d as District] = p as number;
     this.grace = this.scenario === "The Audit" ? 1 : 0;
-    this.owner = this.overlord ? "The Overlord" : ch ? ch.owner : o.owner || this.rng.choice(Object.keys(C.owners));
+    this.owner = this.overlord ? "The Overlord" : this.party ? "No Owner" : ch ? ch.owner : o.owner || this.rng.choice(Object.keys(C.owners));
+    if (this.party) this.greenBook = false;
     this.ownerFace = ch && !this.overlord ? ch.face : this.owner;
   }
 
@@ -162,16 +191,16 @@ export class Game {
     return Math.max(1, Math.min(5, this.blk().length));
   }
   actions() {
-    return K.ACTIONS[this.n()];
+    return (this.party ? K.BP_ACTIONS : K.ACTIONS)[this.n()];
   }
   totalClarity() {
-    return DISTRICTS.reduce((s, d) => s + this.clarity[d], 0);
+    return this.ds.reduce((s, d) => s + this.clarity[d], 0);
   }
   awake() {
-    return DISTRICTS.filter((d) => this.clarity[d] >= K.WAKE).length;
+    return this.ds.filter((d) => this.clarity[d] >= K.WAKE).length;
   }
   captured() {
-    return DISTRICTS.filter((d) => this.pressure[d] >= K.CAPTURE).length;
+    return this.ds.filter((d) => this.pressure[d] >= K.CAPTURE).length;
   }
   gripped(d: District) {
     return this.pressure[d] >= K.GRIP;
@@ -248,6 +277,7 @@ export class Game {
     return K.NEG_COST + (this.scenario === "The Hospital Closes" && d === "HEALTH" ? 1 : 0);
   }
   takeCost() {
+    if (this.party) return K.BP_TAKE;
     return K.TAKE_CORRUPT + (this.owner === "The Debt Buyer" ? 1 : 0);
   }
   visible(pl: Player, d: District, card: Card): [number, string, string | null][] {
@@ -270,7 +300,16 @@ export class Game {
     );
   }
   draw(d: District) {
-    return this.rng.choice(this.deck[d]);
+    return this.dress(this.endless ? makeDeal(d, this.rng) : this.rng.choice(this.deck[d]));
+  }
+  /** the fine-print die: roll which layer holds a trap's lever, so the deck can't be learned by heart */
+  dress(card: Card) {
+    if (this.finePrint && card.trap) {
+      const die = Math.floor(this.rng.random() * 6) + 1;
+      card = { ...card, lever: K.FINE_PRINT_DIE[die], die };
+    }
+    this.dealt.push(card);
+    return card;
   }
   startTurn(pl: Player) {
     pl.freeTeach = false;
@@ -280,7 +319,8 @@ export class Game {
   dealsFor(pl: Player, d: District) {
     if (pl.shopAround) {
       pl.shopAround = false;
-      return this.rng.sample(this.deck[d], 2);
+      if (this.endless) return [this.draw(d), this.draw(d)];
+      return this.rng.sample(this.deck[d], 2).map((c) => this.dress(c));
     }
     return [this.draw(d)];
   }
@@ -290,6 +330,8 @@ export class Game {
     const lever = this.lever(d, card);
     const see = pl.sight[d];
     this.emit(`${pl.name} faces a deal in ${d}: "${card.front}"  → ${choice}`);
+    if (card.die !== undefined) this.emit(`  (The fine print: rolled ${card.die}, so the lever sits in ${LEVER_NAME[card.lever]}.)`);
+    const bare = this.terrell && trap && pl.bare.has(d) && choice !== "WALK";
     if (choice === "TAKE") {
       if (!trap) {
         pl.trust += 2;
@@ -303,8 +345,9 @@ export class Game {
           this.pressure[d] = Math.max(0, this.pressure[d] - 2);
           this.emit(`  TAKE the trap to patch ${d} NOW: Squeeze −2… Shady +${cost} on you. (Props +0)`);
         } else {
-          this.clarity[d] = Math.min(K.WAKE, this.clarity[d] + 2);
-          this.emit(`  TAKE the trap for fast power: ${d} clarity +2… Shady +${cost} on you. (Props +0)`);
+          const rush = this.party ? 1 : 2;
+          this.clarity[d] = Math.min(K.WAKE, this.clarity[d] + rush);
+          this.emit(`  TAKE the trap for fast power: ${d} clarity +${rush}… Shady +${cost} on you. (Props +0)`);
         }
       }
     } else if (choice === "WALK") {
@@ -341,7 +384,21 @@ export class Game {
       }
     }
     pl.trust = Math.min(pl.trust, K.MAX_TRUST);
-    if (pl.corruption >= K.FLIP && !pl.flipped) {
+    if (bare) {
+      pl.bare.delete(d);
+      if (this.pressure[d] < K.CAPTURE) {
+        this.pressure[d] += 1;
+        this.emit(`  ⚠ It backfires: ${pl.name} read it but nobody had their back. Squeeze +1 in ${d} (${this.pressure[d]}/${K.CAPTURE}).`);
+        if (this.pressure[d] >= K.CAPTURE) this.emit(`  ✖ ${d} CAPTURED.`);
+      }
+    }
+    if (this.party) {
+      if (pl.corruption >= K.BP_SIT_OUT) {
+        pl.corruption = 0;
+        pl.benched = true;
+        this.emit(`  ⚠ ${pl.name} has ${K.BP_SIT_OUT} Shady chips: hand them back and sit out your next turn.`);
+      }
+    } else if (pl.corruption >= K.FLIP && !pl.flipped) {
       pl.flipped = true;
       this.emit(`  ⚠⚠ ${pl.name} HAS FALLEN. The Machine now moves through them.`);
     }
@@ -363,6 +420,13 @@ export class Game {
     else if (pl.role !== "Translator") pl.freeTeach = false;
     pl.legend += 2;
     this.emit(`${pl.name} teaches ${t.name} to read ${d}. Read ${old}→${t.sight[d]}${free ? " (free)" : ""}. Props +2.`);
+    if (this.terrell) {
+      if (pl.role === "Veteran") this.emit(`  The Veteran teaches the cover with it: ${t.name} is covered in ${d}.`);
+      else {
+        t.bare.add(d);
+        this.emit(`  No cover yet: if ${t.name} confronts a trap in ${d} before the block has their back, it backfires.`);
+      }
+    }
     if (response) {
       pl.legend += 1;
       t.legend += 1;
@@ -375,9 +439,14 @@ export class Game {
     const drop = place === "CHURCH" ? 2 : 1;
     const had = pl.corruption;
     pl.corruption = Math.max(0, pl.corruption - drop);
+    const covered = this.cover(pl);
+    if (this.party) {
+      this.emit(`${pl.name} gathers with the block. Trust +2` + (had ? `, Shady −${had - pl.corruption}` : "") + "." + covered);
+      return;
+    }
     const P = C.places[place];
     this.emit(
-      `${pl.name} gathers at ${P.name} (${P.where}). Trust +2` + (had ? `, Shady −${had - pl.corruption}` : "") + ".",
+      `${pl.name} gathers at ${P.name} (${P.where}). Trust +2` + (had ? `, Shady −${had - pl.corruption}` : "") + "." + covered,
     );
     if (place === "BARBERSHOP") {
       pl.freeTeach = true;
@@ -395,6 +464,13 @@ export class Game {
     }
   }
 
+  /** the Terrell rule: gathering with the block covers what you were taught */
+  cover(pl: Player) {
+    if (!pl.bare.size) return "";
+    pl.bare = new Set();
+    return " The block has their back now: covered.";
+  }
+
   // ---- the Sou-Sou ----
   nextHand() {
     const act = this.active();
@@ -409,7 +485,7 @@ export class Game {
     const pl = this.nextHand()!;
     this.circle += 1;
     this.pot -= K.SOUSOU_HAND;
-    const d = (pick ? pick(pl) : null) || maxBy(DISTRICTS, (x) => this.pressure[x]);
+    const d = (pick ? pick(pl) : null) || maxBy(this.ds, (x) => this.pressure[x]);
     const before = this.pressure[d];
     this.pressure[d] = Math.max(0, before - 2);
     pl.legend += 1;
@@ -425,7 +501,7 @@ export class Game {
   }
   cookoutGain(pl: Player): [District, number] {
     const best = this.best();
-    const d = maxBy(DISTRICTS, (x) => [best[x] - pl.sight[x], b(this.clarity[x] >= K.WAKE)]);
+    const d = maxBy(this.ds, (x) => [best[x] - pl.sight[x], b(this.clarity[x] >= K.WAKE)]);
     return [d, best[d] - pl.sight[d]];
   }
   cookout(picks?: Record<string, District>) {
@@ -439,17 +515,18 @@ export class Game {
       const d = (picks && picks[pl.name]) || this.cookoutGain(pl)[0];
       const old = pl.sight[d];
       pl.sight[d] = Math.max(old, best[d]);
-      this.emit(`  ${pl.name}: Trust +2, Shady −1, Props +1` + (pl.sight[d] > old ? `, Read in ${d} ${old}→${pl.sight[d]}.` : "."));
+      this.emit(`  ${pl.name}: Trust +2, Shady −1, Props +1` + (pl.sight[d] > old ? `, Read in ${d} ${old}→${pl.sight[d]}.` : ".") + this.cover(pl));
     }
   }
   cookoutAi() {
-    if (this.cookoutUsed || Math.max(...DISTRICTS.map((d) => this.pressure[d])) >= K.CAPTURE - 1) return false;
+    if (this.party || this.cookoutUsed || Math.max(...this.ds.map((d) => this.pressure[d])) >= K.CAPTURE - 1) return false;
     const act = this.active();
     const gain = act.reduce((s, p) => s + this.cookoutGain(p)[1], 0);
     return gain >= act.length * this.actions() * 0.75;
   }
   sousouAi() {
-    return DISTRICTS.some((d) => 0 < this.pressure[d]) && this.active().every((p) => p.trust >= 2);
+    if (this.party) return false;
+    return this.ds.some((d) => 0 < this.pressure[d]) && this.active().every((p) => p.trust >= 2);
   }
   reach(pl: Player, t: Player) {
     if (pl.trust < 2) {
@@ -515,7 +592,7 @@ export class Game {
     if (this.safeRoute(d)) return;
     if (this.pressure[d] < K.CAPTURE) {
       this.pressure[d] += 1;
-      this.emit(`[${who}] feeds the Machine in ${d}. Squeeze ${this.pressure[d]}/${K.CAPTURE}.`);
+      this.emit(`[${who}] strikes ${d} for the Machine. Squeeze ${this.pressure[d]}/${K.CAPTURE}.`);
       if (this.pressure[d] >= K.CAPTURE) this.emit(`  ✖ ${d} CAPTURED.`);
     }
   }
@@ -526,7 +603,7 @@ export class Game {
     }
     if (this.clarity[d] >= K.WAKE) {
       if (!this.uwOpen || this.covered || this.threads.has(d)) {
-        this.emit(`[${who}] can't bury ${d} — the block is awake there.`);
+        this.emit(`[${who}] can't muddy ${d} — the block is awake there.`);
         return;
       }
       this.covered = true;
@@ -534,17 +611,17 @@ export class Game {
     if (this.clarity[d] > 0) {
       this.struck.add(d);
       this.clarity[d] -= 1;
-      this.emit(`[${who}] buries the second number in ${d}. Clarity −1.`);
+      this.emit(`[${who}] muddies ${d}: the second number gets buried. Clarity −1.`);
     }
   }
   mTempt(who: string, t: Player | null) {
     if (t && t.trust > 0) {
       t.trust -= 1;
-      this.emit(`[${who}] whispers a sweeter deal to ${t.name}. Trust −1.`);
+      this.emit(`[${who}] tempts ${t.name} with a sweeter deal. Trust −1.`);
     }
   }
   machineAiMove(struck: Set<District> = new Set()): Action {
-    let free = DISTRICTS.filter((d) => !struck.has(d));
+    let free = this.ds.filter((d) => !struck.has(d));
     const near = free.filter((d) => this.pressure[d] === K.CAPTURE - 1);
     if (near.length) return { k: "m_extract", d: near[0] };
     if (this.uwOpen && !this.covered) {
@@ -566,7 +643,7 @@ export class Game {
     if (this.overlord) return;
     const o = this.owner;
     if (o === "The Lobbyist") {
-      const best = DISTRICTS.filter(
+      const best = this.ds.filter(
         (d) => 0 < this.clarity[d] && this.clarity[d] < K.WAKE && this.pressure[d] < K.CAPTURE && !this.struck.has(d),
       );
       if (best.length) {
@@ -578,7 +655,7 @@ export class Game {
       }
     } else if (o === "The Recruiter") {
       const pool: [Player, District][] = [];
-      for (const p of this.active()) for (const d of DISTRICTS) if (p.sight[d] > 0) pool.push([p, d]);
+      for (const p of this.active()) for (const d of this.ds) if (p.sight[d] > 0) pool.push([p, d]);
       if (pool.length) {
         const [p, d] = this.rng.choice(pool);
         p.sight[d] -= 1;
@@ -599,12 +676,30 @@ export class Game {
     }
     if (this.safeRoute(d)) return;
     this.pressure[d] += 1;
-    this.emit(`  ✖ The Machine extracts from ${d}. Squeeze ${this.pressure[d]}/${K.CAPTURE}.`);
+    this.emit(`  ✖ The Machine strikes ${d}. Squeeze ${this.pressure[d]}/${K.CAPTURE}.`);
     if (this.pressure[d] >= K.CAPTURE) this.emit(`  ✖ ${d} CAPTURED.`);
   }
+  /** Block Party: the Machine hits the districts closest to waking, +1 Squeeze and −1 Clarity each */
+  partyMachinePhase() {
+    for (let i = 0; i < this.strikes(); i++) {
+      const vuln = this.ds.filter((d) => this.clarity[d] < K.WAKE && this.pressure[d] < K.CAPTURE);
+      if (!vuln.length) break;
+      const d = maxBy(vuln, (x) => [this.clarity[x], -this.pressure[x]]);
+      this.struck.add(d);
+      this.pressure[d] += 1;
+      const had = this.clarity[d];
+      this.clarity[d] = Math.max(0, had - 1);
+      this.emit(`  ✖ The Machine strikes ${d}. Squeeze ${this.pressure[d]}/${K.CAPTURE}` + (had ? ", Clarity −1." : "."));
+      if (this.pressure[d] >= K.CAPTURE) this.emit(`  ✖ ${d} CAPTURED.`);
+    }
+  }
+  /** this round's strikes, carrying the remainder: 1.5 = 1, 2, 1, 2… */
+  strikes() {
+    const h = (this.party ? K.BP_HITS : K.MACHINE_HITS)[this.n()];
+    return Math.floor(h * this.round) - Math.floor(h * (this.round - 1));
+  }
   autoMachinePhase() {
-    const h = K.MACHINE_HITS[this.n()];
-    let hits = Math.floor(h) + (h % 1 && this.round % 2 === 0 ? 1 : 0);
+    let hits = this.strikes();
     if (this.owner === "The Algorithm") hits += 1;
     if (this.ownerShown) hits += 1;
     const struck = this.struck;
@@ -614,13 +709,13 @@ export class Game {
       this.hit("LENDING");
     }
     for (let i = 0; i < Math.max(0, hits); i++) {
-      const vuln = DISTRICTS.filter((d) => this.clarity[d] < K.WAKE && this.pressure[d] < K.CAPTURE && !struck.has(d));
+      const vuln = this.ds.filter((d) => this.clarity[d] < K.WAKE && this.pressure[d] < K.CAPTURE && !struck.has(d));
       if (!vuln.length) break;
       const d = maxBy(vuln, (x) => [this.clarity[x], -this.pressure[x]]);
       struck.add(d);
       this.hit(d);
     }
-    const building = DISTRICTS.filter((d) => 0 < this.clarity[d] && this.clarity[d] < K.WAKE && !struck.has(d));
+    const building = this.ds.filter((d) => 0 < this.clarity[d] && this.clarity[d] < K.WAKE && !struck.has(d));
     if (building.length) {
       const d = maxBy(building, (x) => this.clarity[x]);
       this.clarity[d] -= 1;
@@ -628,7 +723,7 @@ export class Game {
       this.emit(`  ✖ The Machine muddies ${d}. Clarity −1.`);
     }
     if (this.ownerShown) {
-      const exp = DISTRICTS.filter((d) => this.clarity[d] >= K.WAKE && !this.threads.has(d) && !struck.has(d));
+      const exp = this.ds.filter((d) => this.clarity[d] >= K.WAKE && !this.threads.has(d) && !struck.has(d));
       if (exp.length && !this.covered) {
         const d = this.rng.choice(exp);
         this.clarity[d] -= 1;
@@ -649,7 +744,7 @@ export class Game {
     this.emit(`⚑ THE UNDERWORLD CRACKS OPEN. The Owner is ${text}`);
     this.emit(`  Trace ${this.threadsNeeded()} threads (Read 3 in a woken district) and expose it before it buries you.`);
     if (this.owner === "The Lobbyist") {
-      const awake = DISTRICTS.filter((d) => this.clarity[d] >= K.WAKE);
+      const awake = this.ds.filter((d) => this.clarity[d] >= K.WAKE);
       if (awake.length) {
         const d = this.rng.choice(awake);
         this.clarity[d] = 1;
@@ -686,6 +781,7 @@ export class Game {
     }
   }
   checkPatterns() {
+    if (this.party) return;
     const aps = this.activePatterns();
     const active = new Set(aps.map((p) => p.name));
     for (const p of aps) {
@@ -718,19 +814,28 @@ export class Game {
   // ================= DISPATCH =================
   do(pl: Player, a: Action) {
     switch (a.k) {
-      case "study": return this.study(pl, a.d);
-      case "face": return this.face(pl, a.d, a.choice, a.card);
-      case "teach": return this.teach(pl, a.t, a.d, a.response ?? true);
-      case "commons": return this.commons(pl, a.place || "BARBERSHOP");
-      case "reach": return this.reach(pl, a.t);
-      case "history": return this.history(pl, a.d);
-      case "trace": return this.trace(pl, a.d);
-      case "expose_uw": return this.exposeUw(pl);
-      case "league": return this.signLeague(pl);
-      case "m_extract": return this.mExtract(pl.name, a.d);
-      case "m_obscure": return this.mObscure(pl.name, a.d);
-      case "m_tempt": return this.mTempt(pl.name, a.t);
-      case "pass": return;
+      case "study": this.study(pl, a.d); break;
+      case "face": this.face(pl, a.d, a.choice, a.card); break;
+      case "teach": this.teach(pl, a.t, a.d, a.response ?? true); break;
+      case "commons": this.commons(pl, a.place || "BARBERSHOP"); break;
+      case "reach": this.reach(pl, a.t); break;
+      case "history": this.history(pl, a.d); break;
+      case "trace": this.trace(pl, a.d); break;
+      case "expose_uw": this.exposeUw(pl); break;
+      case "league": this.signLeague(pl); break;
+      case "m_extract": this.mExtract(pl.name, a.d); break;
+      case "m_obscure": this.mObscure(pl.name, a.d); break;
+      case "m_tempt": this.mTempt(pl.name, a.t); break;
+      case "pass": break;
+    }
+    this.checkPartyWin();
+  }
+  /** Block Party: wake 2 of the 3 districts and the block wins on the spot */
+  checkPartyWin() {
+    if (this.party && !this.won && this.awake() >= K.BP_WAKE_TO_WIN) {
+      this.won = true;
+      this.result = "BLOCK_WIN";
+      this.emit(`✦ ${this.awake()} of ${this.ds.length} districts awake. The block party goes all night: you win.`);
     }
   }
 
@@ -741,6 +846,7 @@ export class Game {
     const urgent = this.pressure[d] >= K.CAPTURE - 1;
     if (see >= 1) {
       if (!card.trap) return "TAKE";
+      if (this.terrell && pl.bare.has(d) && !urgent) return "WALK";
       if (see >= card.lever && pl.trust >= this.negCost(d)) return "NEGOTIATE";
       if (style === "greedy" && pl.corruption + this.takeCost() < K.FLIP + 2) return "TAKE";
       if (style === "careful" && urgent && safe) return "TAKE";
@@ -758,22 +864,23 @@ export class Game {
     const act = this.active();
     if (pl.corruption >= 2) return "CHURCH";
     if (!this.kitchenUsed && act.reduce((s, p) => s + p.trust, 0) <= act.length) return "KITCHEN";
-    if (this.uwOpen && DISTRICTS.some((x) => pl.sight[x] < 3 && this.clarity[x] >= K.WAKE && !this.threads.has(x)))
+    if (this.uwOpen && this.ds.some((x) => pl.sight[x] < 3 && this.clarity[x] >= K.WAKE && !this.threads.has(x)))
       return "ADVENTURE";
-    if (act.some((p) => p !== pl && DISTRICTS.some((x) => p.sight[x] < pl.sight[x]))) return "BARBERSHOP";
-    if (DISTRICTS.some((x) => pl.sight[x] === 0 && this.clarity[x] < K.WAKE)) return "ADVENTURE";
+    if (act.some((p) => p !== pl && this.ds.some((x) => p.sight[x] < pl.sight[x]))) return "BARBERSHOP";
+    if (this.ds.some((x) => pl.sight[x] === 0 && this.clarity[x] < K.WAKE)) return "ADVENTURE";
     return "MARKET";
   }
   blockAi(pl: Player, style: Style = "careful"): Action {
     if (style === "human") style = this.rng.random() < 0.2 ? "greedy" : "careful";
     if (this.canExpose()) return { k: "expose_uw" };
-    for (const d of DISTRICTS) if (this.canTrace(pl, d)) return { k: "trace", d };
+    for (const d of this.ds) if (this.canTrace(pl, d)) return { k: "trace", d };
     const fallen = this.blk().filter((p) => p.flipped);
-    if (fallen.length && pl.trust >= 2 && Math.max(...DISTRICTS.map((d) => this.pressure[d])) < K.CAPTURE - 1)
+    if (fallen.length && pl.trust >= 2 && Math.max(...this.ds.map((d) => this.pressure[d])) < K.CAPTURE - 1)
       return { k: "reach", t: fallen[0] };
     if (pl.corruption >= K.FLIP - 2 && style !== "greedy") return { k: "commons", place: this.botPlace(pl) };
     if (pl.trust < K.NEG_COST) return { k: "commons", place: this.botPlace(pl) };
-    const hot = DISTRICTS.filter((d) => this.pressure[d] >= K.CAPTURE - 1 && this.clarity[d] < K.WAKE).sort(
+    if (this.terrell && pl.bare.size && pl.trust < K.MAX_TRUST) return { k: "commons", place: this.botPlace(pl) };
+    const hot = this.ds.filter((d) => this.pressure[d] >= K.CAPTURE - 1 && this.clarity[d] < K.WAKE).sort(
       (x, y) => -this.pressure[x] - -this.pressure[y],
     );
     if (hot.length) {
@@ -785,7 +892,7 @@ export class Game {
     if (this.hasLeague() && !this.leagueFormed && !this.league.has(pl.name) && Math.max(this.pressure.HOUSING, this.pressure.LENDING) >= 1)
       return { k: "league" };
     if (this.uwOpen) {
-      const openD = DISTRICTS.filter((d) => this.clarity[d] >= K.WAKE && !this.threads.has(d));
+      const openD = this.ds.filter((d) => this.clarity[d] >= K.WAKE && !this.threads.has(d));
       if (openD.length) {
         const d = maxBy(openD, (x) => pl.sight[x]);
         const learner = this.active().find((p) => p !== pl && p.sight[d] < pl.sight[d]);
@@ -793,7 +900,7 @@ export class Game {
         return { k: "study", d };
       }
     }
-    const building = DISTRICTS.filter((d) => this.clarity[d] < K.WAKE);
+    const building = this.ds.filter((d) => this.clarity[d] < K.WAKE);
     if (!building.length) return { k: "commons", place: this.botPlace(pl) };
     const tgt = minBy(building, (d) => [this.clarity[d], -pl.sight[d]]);
     if (pl.sight[tgt] >= 1) {
@@ -810,7 +917,7 @@ export class Game {
   // ================= ROUND FLOW =================
   endOfBlockTurns() {
     this.checkPatterns();
-    if (!this.uwOpen && this.totalClarity() >= K.UNDERWORLD_AT) this.openUnderworld();
+    if (!this.uwOpen && !this.party && this.totalClarity() >= K.UNDERWORLD_AT) this.openUnderworld();
   }
   machinePhase(overlordMove?: () => Action): string | null {
     this.leagueRound();
@@ -822,7 +929,8 @@ export class Game {
     } else if (this.grace > 0) {
       this.grace -= 1;
       this.emit("  (The Machine is distracted — grace round.)");
-    } else {
+    } else if (this.party) this.partyMachinePhase();
+    else {
       this.autoMachinePhase();
       this.tighten();
     }
@@ -846,7 +954,7 @@ export class Game {
     this.covered = false;
   }
   runAuto(maxRounds?: number, style: Style = "careful") {
-    maxRounds = maxRounds || K.MAX_ROUNDS;
+    maxRounds = maxRounds || this.maxRounds;
     while (this.round < maxRounds && !this.won) {
       this.beginRound();
       const feast = this.cookoutAi();
@@ -855,7 +963,10 @@ export class Game {
         if (pl.role === "Overlord") continue;
         if (pl.flipped) this.fallenTurn(pl, this.actions());
         else if (feast) continue;
-        else {
+        else if (pl.benched) {
+          pl.benched = false;
+          this.emit(`${pl.name} sits this turn out.`);
+        } else {
           this.startTurn(pl);
           for (let i = 0; i < this.actions(); i++) {
             this.do(pl, this.blockAi(pl, style));
@@ -874,8 +985,8 @@ export class Game {
   }
   chapterResult(): ChapterResult {
     const won = this.result === "BLOCK_WIN";
-    const awake = DISTRICTS.filter((d) => this.clarity[d] >= K.WAKE);
-    const captured = DISTRICTS.filter((d) => this.pressure[d] >= K.CAPTURE);
+    const awake = this.ds.filter((d) => this.clarity[d] >= K.WAKE);
+    const captured = this.ds.filter((d) => this.pressure[d] >= K.CAPTURE);
     const falls = this.log.filter((l) => l.includes("HAS FALLEN")).length;
     const reaches = this.log.filter((l) => l.includes("pulls them home")).length;
     let ledger = won ? 2 + awake.length : -2 - captured.length;

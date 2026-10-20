@@ -3,11 +3,19 @@
  * its config plus its list of moves: that's what a save holds, and what online play sends between
  * phones. Players travel by name and cards by their place in the district's deck.
  */
-import type { Choice, District, PlaceKey } from "../engine/content";
+import type { Card, Choice, District, PlaceKey } from "../engine/content";
 import type { Action, Game } from "../engine/engine";
 
-/** a card, as its index in g.deck[d] */
-export type WireCard = { d: District; i: number };
+/** a card, as its index in g.deck[d], or (rolled or dressed by the fine-print die) as x, its index in g.dealt */
+export type WireCard = { d: District; i: number } | { d: District; x: number };
+
+export function cardToWire(g: Game, d: District, card: Card): WireCard {
+  const i = g.deck[d].indexOf(card);
+  return i >= 0 ? { d, i } : { d, x: g.dealt.indexOf(card) };
+}
+export function cardFromWire(g: Game, w: WireCard): Card {
+  return "x" in w ? g.dealt[w.x] : g.deck[w.d][w.i];
+}
 
 export type WireAction =
   | { k: "study" | "history" | "trace"; d: District }
@@ -37,7 +45,7 @@ export type Move =
 export function toWire(g: Game, a: Action): WireAction {
   switch (a.k) {
     case "face":
-      return { k: "face", d: a.d, choice: a.choice, ...(a.card ? { card: { d: a.d, i: g.deck[a.d].indexOf(a.card) } } : {}) };
+      return { k: "face", d: a.d, choice: a.choice, ...(a.card ? { card: cardToWire(g, a.d, a.card) } : {}) };
     case "teach":
       return { k: "teach", t: a.t.name, d: a.d, ...(a.response === undefined ? {} : { response: a.response }) };
     case "reach":
@@ -57,7 +65,7 @@ export function fromWire(g: Game, w: WireAction): Action {
   };
   switch (w.k) {
     case "face":
-      return { k: "face", d: w.d, choice: w.choice, card: w.card ? g.deck[w.card.d][w.card.i] : undefined };
+      return { k: "face", d: w.d, choice: w.choice, card: w.card ? cardFromWire(g, w.card) : undefined };
     case "teach":
       return { k: "teach", t: who(w.t), d: w.d, response: w.response };
     case "reach":

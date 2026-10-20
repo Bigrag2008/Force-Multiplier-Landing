@@ -46,7 +46,7 @@ Cooperative, 2–5 players. Each picks a **role** with a unique gift — because
 *(The five roles as built. There is no separate "Builder" — the Commons is an action any player can take, not a role.)*
 
 ## THE OPPONENT: THE MACHINE
-A central engine/tower that grows each round and plays **Extraction cards** on the five districts — **Housing, Lending, Labor, Health, Education.** It runs semi-automatically (like the virus in Pandemic), so everyone's playing *against the board, together.*
+A central engine/tower that grows each round and strikes the five districts — **Housing, Lending, Labor, Health, Education.** It runs semi-automatically (like the virus in Pandemic), so everyone's playing *against the board, together.*
 
 ## YOUR TURN: EXIT · VOICE · LOYALTY
 Every deal is the old choice in miniature — **Exit** (WALK), **Voice** (NEGOTIATE), **Loyalty** (TAKE). On your turn you take 2–3 actions (Study, Face a deal, Teach, gather at the Commons, Reach a Fallen friend, and in the endgame Trace the Underworld). You don't spend money — you spend **Time** (your actions) and **Trust**, and you earn **Clarity**. **Trust is the real currency:** every negotiation and every lesson costs one, it caps at 5, and the Commons is where you earn it back.
@@ -60,8 +60,8 @@ A board game you can win by selling out — where winning that way is secretly t
 
 ## THE FALLEN — the corruption path, fully playable (the most electric moment in the game)
 Flipping isn't a quiet exit anymore. When a player corrupts out, they **don't leave the table — they stay in the turn order and the Machine starts moving through them.** The Fallen gets real enemy actions:
-- **Extract** — feed the Machine, push a district's pressure toward capture.
-- **Obscure** — bury the second number again: pull Read back out of a district the block woke up.
+- **Strike** — feed the Machine: +1 Squeeze on a district, toward capture.
+- **Muddy** — bury the second number again: −1 Clarity on a district the block is waking.
 - **Tempt** — whisper a sweeter deal to a teammate and drain their Trust.
 
 Now the betrayal is *live.* The person who was carrying the crew turns and starts tearing down the exact districts they helped wake. It's the table's biggest gut-punch — and it's genuinely fun to *be* the one who turned.
@@ -71,7 +71,7 @@ Now the betrayal is *live.* The person who was carrying the crew turns and start
 **The guardrail that protects the whole thesis:** the Fallen can **win the board** — if they drag the block down to two captured districts, the Machine wins the game. **But they can never win the Props.** The scoreboard that actually crowns a winner only counts people lifted, districts woken, souls reached. When the Fallen "wins," the game says it plainly: *"You won the board as the Machine — and earned 0 Props. The Owner just wore your face. You win nothing by becoming it."* The fall is thrilling, real, and playable — but it is still a fall. **You don't win by becoming the thing you fight.** That's the philosophy, enforced by the rules.
 
 ## OPTIONAL: OVERLORD MODE — one player IS the Machine (1-vs-many)
-For groups who want the full competitive, head-to-head version, there's an optional way to play: **one player takes the Machine from the start, openly — The Overlord.** No hidden Owner, no slow corruption; it's the block versus a live human adversary. The Overlord takes Machine actions every round (extract, obscure, tempt), choosing targets with a mind instead of a deck. The block still wins by dragging the Underworld into the light; the Overlord wins by capturing two districts. It's a different, nastier game on the same board — and it's **optional, so it never limits the co-op experience either way.** Toggle it on when the table wants a villain with a face.
+For groups who want the full competitive, head-to-head version, there's an optional way to play: **one player takes the Machine from the start, openly — The Overlord.** No hidden Owner, no slow corruption; it's the block versus a live human adversary. The Overlord takes Machine actions every round (strike, muddy, tempt), choosing targets with a mind instead of a deck. The block still wins by dragging the Underworld into the light; the Overlord wins by capturing two districts. It's a different, nastier game on the same board — and it's **optional, so it never limits the co-op experience either way.** Toggle it on when the table wants a villain with a face.
 
 *(Both are live in the prototype: the Fallen plays as the Machine on their turn with redemption as the counter-pull — `python3 second_number_play.py --auto` — and Overlord mode runs with `--overlord`. Overlord moves obey the same spread rule as the Machine — one move per district per round — so no one can snipe a district in a single round.)*
 

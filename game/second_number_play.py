@@ -55,7 +55,7 @@ class Table:
     # ---- output ----
     def flush(self):
         for s in self.g.log[self.seen:]:
-            col = (RED if any(k in s for k in ("✖","⚠","played","FALLEN","clock ran out","buries","feeds","whispers","peels","collections","creeps","covers"))
+            col = (RED if any(k in s for k in ("✖","⚠","played","FALLEN","clock ran out","buries","feeds","whispers","strikes","muddies","tempts","backfires","peels","collections","creeps","covers"))
                    else GOLD if "⚑" in s or "UNDERWORLD" in s
                    else GREEN if any(k in s for k in ("✦","defused","HONEST","pulls them home","⛨","traces","AWAKE"))
                    else CREAM)
@@ -178,7 +178,7 @@ class Table:
     def machine_menu(self, who):
         g=self.g
         print(f"\n  {RED}{B}▶ {who.name} — move the Machine{R}  {DIM}(one move per district per round){R}")
-        print(f"   {RED}1{R})Extract (+Squeeze)   {RED}2{R})Obscure (−Clarity)   {RED}3{R})Tempt (−Trust)   {DIM}0)Pass{R}")
+        print(f"   {RED}1{R})Strike (+Squeeze)   {RED}2{R})Muddy (−Clarity)   {RED}3{R})Tempt (−Trust)   {DIM}0)Pass{R}")
         k=ask("   choose: ")
         if k=="1": d=self.pick_district(); return ("m_extract",None,d) if d else ("pass",None,None)
         if k=="2": d=self.pick_district(); return ("m_obscure",None,d) if d else ("pass",None,None)
@@ -261,7 +261,7 @@ class Table:
             w=[p for p in g.blk() if not p.flipped]
             if w:
                 m=max(w,key=lambda p:p.legend)
-                print(f"  {GOLDB}MOST LEGENDARY: {m.name} ({m.role}) — {m.legend} Props, earned by lifting people.{R}")
+                print(f"  {GOLDB}MOST PROPS: {m.name} ({m.role}) — {m.legend} Props, earned by lifting people.{R}")
             print(GOLD+"★"*72+R)
         else:
             print("\n"+RED+"✖"*72+R); print(f"  {RED}{B}{g.check_end() or 'The clock ran out. The Machine holds the block.'}{R}")

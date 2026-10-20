@@ -1,58 +1,94 @@
-THE SECOND NUMBER — balance report (v3)
-1500 computer-played games per row. Rosters are random role subsets.
+THE SECOND NUMBER — balance report (v4)
+500 computer-played games per row. Rosters are random role subsets.
 
 === CO-OP — by player count (careful bot) ===
-  2 players  win  61.9%  rounds 10.5 (wins avg 10.6)  r1-loss   0.0%  clock-outs  22.1%  UW opened  99.3%  Fall-games   0.0%  reaches/game 0.00
-  3 players  win  67.5%  rounds  6.8 (wins avg  7.6)  r1-loss   0.0%  clock-outs   0.0%  UW opened  97.5%  Fall-games   0.0%  reaches/game 0.00
-  4 players  win  61.1%  rounds  9.6 (wins avg 10.3)  r1-loss   0.0%  clock-outs   6.2%  UW opened  98.4%  Fall-games   0.0%  reaches/game 0.00
-  5 players  win  54.5%  rounds  7.7 (wins avg  8.7)  r1-loss   0.0%  clock-outs   0.0%  UW opened  98.7%  Fall-games   0.0%  reaches/game 0.00
+  2 players  win  52.8%  rounds 10.1 (wins avg 10.5)  r1-loss   0.0%  clock-outs  17.2%  UW opened  99.0%  Fall-games   0.0%  reaches/game 0.00
+  3 players  win  66.0%  rounds  6.8 (wins avg  7.6)  r1-loss   0.0%  clock-outs   0.0%  UW opened  98.0%  Fall-games   0.0%  reaches/game 0.00
+  4 players  win  61.4%  rounds  9.5 (wins avg 10.3)  r1-loss   0.0%  clock-outs   5.2%  UW opened  97.4%  Fall-games   0.0%  reaches/game 0.00
+  5 players  win  53.4%  rounds  7.7 (wins avg  8.8)  r1-loss   0.0%  clock-outs   0.0%  UW opened  98.6%  Fall-games   0.0%  reaches/game 0.00
 
 === OVERLORD — by player count (careful bot) ===
-  2 players  win  58.9%  rounds 10.4 (wins avg 11.0)  r1-loss   0.0%  clock-outs  30.4%  UW opened  90.3%  Fall-games   0.0%  reaches/game 0.00
-  3 players  win  55.3%  rounds  9.0 (wins avg 10.4)  r1-loss   0.0%  clock-outs  20.6%  UW opened  86.4%  Fall-games   0.0%  reaches/game 0.00
-  4 players  win  46.2%  rounds 10.2 (wins avg 11.3)  r1-loss   0.0%  clock-outs  37.3%  UW opened  86.6%  Fall-games   0.0%  reaches/game 0.00
-  5 players  win  54.7%  rounds  9.5 (wins avg 11.0)  r1-loss   0.0%  clock-outs  21.3%  UW opened  88.5%  Fall-games   0.0%  reaches/game 0.00
+  2 players  win  59.8%  rounds 10.4 (wins avg 11.0)  r1-loss   0.0%  clock-outs  29.4%  UW opened  90.6%  Fall-games   0.0%  reaches/game 0.00
+  3 players  win  56.2%  rounds  8.8 (wins avg 10.5)  r1-loss   0.0%  clock-outs  18.0%  UW opened  85.0%  Fall-games   0.0%  reaches/game 0.00
+  4 players  win  46.4%  rounds 10.2 (wins avg 11.3)  r1-loss   0.0%  clock-outs  36.8%  UW opened  86.8%  Fall-games   0.0%  reaches/game 0.00
+  5 players  win  55.6%  rounds  9.6 (wins avg 11.0)  r1-loss   0.0%  clock-outs  22.0%  UW opened  88.0%  Fall-games   0.0%  reaches/game 0.00
+
+=== BLOCK PARTY: the 25-minute intro (3 districts, 8 rounds) ===
+  2p careful win  69.2%  rounds  7.5 (wins avg  7.2)  r1-loss   0.0%  clock-outs  30.8%  UW opened   0.0%  Fall-games   0.0%  reaches/game 0.00
+  2p human   win  77.2%  rounds  7.2 (wins avg  6.9)  r1-loss   0.0%  clock-outs  22.8%  UW opened   0.0%  Fall-games   0.0%  reaches/game 0.00
+  3p careful win  70.0%  rounds  7.4 (wins avg  7.2)  r1-loss   0.0%  clock-outs  30.0%  UW opened   0.0%  Fall-games   0.0%  reaches/game 0.00
+  3p human   win  66.8%  rounds  7.4 (wins avg  7.1)  r1-loss   0.0%  clock-outs  33.2%  UW opened   0.0%  Fall-games   0.0%  reaches/game 0.00
+  4p careful win  65.6%  rounds  7.3 (wins avg  6.9)  r1-loss   0.0%  clock-outs  34.4%  UW opened   0.0%  Fall-games   0.0%  reaches/game 0.00
+  4p human   win  58.2%  rounds  7.4 (wins avg  7.0)  r1-loss   0.0%  clock-outs  41.8%  UW opened   0.0%  Fall-games   0.0%  reaches/game 0.00
+  5p careful win  65.0%  rounds  6.9 (wins avg  6.7)  r1-loss   0.0%  clock-outs  27.4%  UW opened   0.0%  Fall-games   0.0%  reaches/game 0.00
+  5p human   win  65.4%  rounds  7.0 (wins avg  6.7)  r1-loss   0.0%  clock-outs  30.0%  UW opened   0.0%  Fall-games   0.0%  reaches/game 0.00
+
+=== HOUSE RULES (co-op, 4 players, human-like bot) ===
+  none       win  50.6%  rounds  8.7 (wins avg  9.9)  r1-loss   0.0%  clock-outs   3.6%  UW opened  98.8%  Fall-games  22.4%  reaches/game 0.22
+  fine-print dice win  57.4%  rounds  8.6 (wins avg  9.6)  r1-loss   0.0%  clock-outs   2.2%  UW opened  99.0%  Fall-games  18.4%  reaches/game 0.18
+  Terrell rule win  55.6%  rounds  9.9 (wins avg 10.5)  r1-loss   0.0%  clock-outs  11.6%  UW opened  99.4%  Fall-games  17.0%  reaches/game 0.17
+  endless deals win  58.8%  rounds  8.8 (wins avg  9.7)  r1-loss   0.0%  clock-outs   3.2%  UW opened  99.2%  Fall-games  25.6%  reaches/game 0.26
+  all three  win  60.0%  rounds  9.9 (wins avg 10.4)  r1-loss   0.0%  clock-outs  11.0%  UW opened  99.4%  Fall-games  11.0%  reaches/game 0.11
 
 === IS THE SHORTCUT TEMPTING? (co-op, 4 players) ===
-  never      win  34.7%  rounds  8.3 (wins avg 10.0)  r1-loss   0.0%  clock-outs   2.0%  UW opened  94.7%  Fall-games   0.0%  reaches/game 0.00  TAKEs/game 0.0
-  careful    win  61.1%  rounds  9.6 (wins avg 10.3)  r1-loss   0.0%  clock-outs   6.2%  UW opened  98.4%  Fall-games   0.0%  reaches/game 0.00  TAKEs/game 2.8
-  human      win  54.5%  rounds  8.9 (wins avg  9.9)  r1-loss   0.0%  clock-outs   4.0%  UW opened  99.4%  Fall-games  25.2%  reaches/game 0.25  TAKEs/game 6.1
-  greedy     win  23.0%  rounds  7.8 (wins avg  9.2)  r1-loss   0.3%  clock-outs   9.9%  UW opened 100.0%  Fall-games  96.1%  reaches/game 3.24  TAKEs/game 13.1
+  never      win  37.2%  rounds  8.3 (wins avg 10.1)  r1-loss   0.0%  clock-outs   1.0%  UW opened  95.2%  Fall-games   0.0%  reaches/game 0.00  TAKEs/game 0.0
+  careful    win  61.4%  rounds  9.5 (wins avg 10.3)  r1-loss   0.0%  clock-outs   5.2%  UW opened  97.4%  Fall-games   0.0%  reaches/game 0.00  TAKEs/game 2.8
+  human      win  50.6%  rounds  8.7 (wins avg  9.9)  r1-loss   0.0%  clock-outs   3.6%  UW opened  98.8%  Fall-games  22.4%  reaches/game 0.22  TAKEs/game 5.9
+  greedy     win  23.8%  rounds  7.8 (wins avg  9.1)  r1-loss   0.2%  clock-outs   8.6%  UW opened 100.0%  Fall-games  96.4%  reaches/game 3.17  TAKEs/game 13.1
 
-=== DOES DEEPER SIGHT MATTER? (co-op, 4 players, human-like bot) ===
-  successful NEGOTIATEs by lever:  red  79.3%  amber  20.2%  blue   0.5%
-  Underworld threads traced (needs Read 3 / blue): 2.33 per game · every win needs 3
+=== DOES DEEPER READ MATTER? (co-op, 4 players, human-like bot) ===
+  successful NEGOTIATEs by lever:  red  79.2%  amber  20.3%  blue   0.5%
+  Underworld threads traced (needs Read 3 / blue): 2.31 per game · every win needs 3
 
 === OWNERS (co-op, 4 players, human-like bot) ===
-  The Algorithm    46.9%
-  The Debt Buyer   60.2%
-  The Lobbyist     56.3%
-  The Recruiter    58.1%
+  The Algorithm    47.0%
+  The Debt Buyer   54.9%
+  The Lobbyist     60.6%
+  The Recruiter    56.1%
 
 === SCENARIOS (co-op, 4 players, human-like bot) ===
-  The Audit          61.3%
-  The Plants Close   58.8%
-  The Eviction Wave  58.3%
-  A Quiet Year       57.2%
-  The Hospital Closes 55.5%
-  The Closure        55.3%
-  Payday Season      40.2%
+  The Eviction Wave  62.1%
+  The Closure        60.2%
+  The Audit          59.3%
+  The Plants Close   55.9%
+  A Quiet Year       55.6%
+  The Hospital Closes 53.2%
+  Payday Season      36.0%
 
 === ROLES — block win rate when the role is at the table (co-op, 4 players, human-like bot) ===
-  Elder        54.4%
-  Organizer    55.8%
-  Student      54.9%
-  Translator   55.9%
-  Veteran      55.9%
+  Elder        54.6%
+  Organizer    54.9%
+  Student      53.9%
+  Translator   55.6%
+  Veteran      55.1%
+
+=== CHAPTER 3: THE MAP (careful bot) ===
+  2 players  win  47.0%  never-organize  37.2%  League formed 100.0%  REDLINING broken  80.8%  Ledger +0.7  r1-loss   0.0%
+  3 players  win  48.0%  never-organize  19.0%  League formed 100.0%  REDLINING broken  58.2%  Ledger +0.4  r1-loss   0.0%
+  4 players  win  50.6%  never-organize  33.0%  League formed 100.0%  REDLINING broken  79.8%  Ledger +0.8  r1-loss   0.0%
+  5 players  win  47.2%  never-organize  21.8%  League formed  99.2%  REDLINING broken  60.6%  Ledger +0.3  r1-loss   0.0%
 
 --- verdict ---
-  CO-OP 2p     healthy  (62% block wins)
-  CO-OP 3p     healthy  (68% block wins)
+  Block Party 2p healthy  (careful 69% · human 77%)
+  Block Party 3p healthy  (careful 70% · human 67%)
+  Block Party 4p healthy  (careful 66% · human 58%)
+  Block Party 5p healthy  (careful 65% · human 65%)
+  House rules: none             healthy  (51% block wins)
+  House rules: fine-print dice  healthy  (57% block wins)
+  House rules: Terrell rule     healthy  (56% block wins)
+  House rules: endless deals    healthy  (59% block wins)
+  House rules: all three        healthy  (60% block wins)
+  CO-OP 2p     healthy  (53% block wins)
+  CO-OP 3p     healthy  (66% block wins)
   CO-OP 4p     healthy  (61% block wins)
-  CO-OP 5p     healthy  (54% block wins)
-  OVERLORD 2p  healthy  (59% block wins)
-  OVERLORD 3p  healthy  (55% block wins)
+  CO-OP 5p     healthy  (53% block wins)
+  OVERLORD 2p  healthy  (60% block wins)
+  OVERLORD 3p  healthy  (56% block wins)
   OVERLORD 4p  healthy  (46% block wins)
-  OVERLORD 5p  healthy  (55% block wins)
-  Shortcut     tempting AND dangerous  (never 35% · careful 61% · greedy 23%)
-  Deep Read   matters  (amber = 20.2% of defusals; blue/Read 3 is required to trace every winning thread)
+  OVERLORD 5p  healthy  (56% block wins)
+  Shortcut     tempting AND dangerous  (never 37% · careful 61% · greedy 24%)
+  Chapter 3 2p healthy  (47% wins; organizing worth +10 pts)
+  Chapter 3 3p healthy  (48% wins; organizing worth +29 pts)
+  Chapter 3 4p healthy  (51% wins; organizing worth +18 pts)
+  Chapter 3 5p healthy  (47% wins; organizing worth +25 pts)
+  Deep Read   matters  (amber = 20.3% of defusals; blue/Read 3 is required to trace every winning thread)

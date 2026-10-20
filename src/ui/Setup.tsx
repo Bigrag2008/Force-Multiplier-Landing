@@ -16,8 +16,11 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
   const [overlordHuman, setOverlordHuman] = useState(false);
   const [coach, setCoach] = useState(true);
   const [online, setOnline] = useState(false);
+  const [rules, setRules] = useState({ finePrint: false, terrell: false, endless: false, math: false });
+  const party = mode === "party";
+  const rule = (k: keyof typeof rules) => (e: { target: { checked: boolean } }) => setRules({ ...rules, [k]: e.target.checked });
   const field = "rounded-lg border border-white/20 bg-white/10 px-3 py-2";
-  const dupRoles = new Set(roles.slice(0, count)).size < count;
+  const dupRoles = !party && new Set(roles.slice(0, count)).size < count;
   const finalNames = names.slice(0, count).map((n, i) => n.trim() || DEFAULT_NAMES[i]);
   // seats are known by name (online, a phone claims a name), and "The Owner" is the Overlord's
   const dupNames = new Set(finalNames.map((n) => n.toLowerCase())).size < count || finalNames.some((n) => n.toLowerCase() === "the owner");
@@ -30,19 +33,24 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
         if (dupRoles || dupNames) return;
         onStart({
           mode,
-          roster: Array.from({ length: count }, (_, i) => ({ name: names[i].trim() || DEFAULT_NAMES[i], role: roles[i] })),
+          roster: Array.from({ length: count }, (_, i) => ({ name: names[i].trim() || DEFAULT_NAMES[i], role: party ? "Neighbor" : roles[i] })),
           scenario: mode === "coop" ? (scenario === "random" ? undefined : scenario) : undefined,
           overlordHuman: mode === "overlord" && overlordHuman,
           coach,
+          finePrint: !party && rules.finePrint,
+          terrell: !party && rules.terrell,
+          endless: rules.endless,
+          math: rules.endless && rules.math,
         }, online);
       }}
     >
       <fieldset>
         <legend className="text-lg font-black text-gold">How are you playing?</legend>
-        <div className="mt-2 grid gap-2 sm:grid-cols-3">
+        <div className="mt-2 grid gap-2 sm:grid-cols-2">
           {(
             [
-              ["coop", "Co-op", "The block against the Machine."],
+              ["party", "Block Party", "Start here: 3 districts, 8 rounds, about 25 minutes. No roles, no Owner."],
+              ["coop", "Co-op", "The full game: the block against the Machine."],
               ["overlord", "Overlord", "One player is the Machine (or the computer is)."],
               ["chapter", "Campaign", "The Long Ledger, Chapter 3: The Map (1930s–1960s)."],
             ] as [Mode, string, string][]
@@ -68,14 +76,14 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
       <fieldset className="space-y-2">
         <legend className="font-bold">The crew</legend>
         {Array.from({ length: count }, (_, i) => (
-          <div key={i} className="grid grid-cols-[auto_1fr_1fr] items-center gap-2">
-            <RolePortrait role={roles[i]} size={34} />
+          <div key={i} className={`grid items-center gap-2 ${party ? "grid-cols-1" : "grid-cols-[auto_1fr_1fr]"}`}>
+            {!party && <RolePortrait role={roles[i]} size={34} />}
             <input aria-label={`Player ${i + 1} name`} className={field} value={names[i]} onChange={(e) => setNames(names.map((n, j) => (j === i ? e.target.value : n)))} />
-            <select aria-label={`Player ${i + 1} role`} className={field} value={roles[i]} onChange={(e) => setRoles(roles.map((r, j) => (j === i ? e.target.value : r)))}>
+            {!party && <select aria-label={`Player ${i + 1} role`} className={field} value={roles[i]} onChange={(e) => setRoles(roles.map((r, j) => (j === i ? e.target.value : r)))}>
               {ROLES.map((r) => (
                 <option key={r} value={r} className="text-ink">The {r}</option>
               ))}
-            </select>
+            </select>}
           </div>
         ))}
         {dupRoles && <p className="text-sm text-[#ff9b9b]">Each player needs a different role.</p>}
@@ -100,6 +108,32 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
           A person plays the Overlord (otherwise the computer does)
         </label>
       )}
+
+      <fieldset className="space-y-2 rounded-xl border border-white/15 p-3">
+        <legend className="px-1 font-bold">House rules {party ? "" : "(for tables that know the game)"}</legend>
+        {!party && (
+          <>
+            <label className="flex items-start gap-2">
+              <input type="checkbox" className="mt-1" checked={rules.finePrint} onChange={rule("finePrint")} />
+              <span><b>🎲 Fine-print dice</b><span className="block text-xs text-program/70">Each trap&apos;s lever is rolled when it&apos;s drawn (1–3 red, 4–5 amber, 6 blue), so nobody can learn the deck by heart.</span></span>
+            </label>
+            <label className="flex items-start gap-2">
+              <input type="checkbox" className="mt-1" checked={rules.terrell} onChange={rule("terrell")} />
+              <span><b>The Terrell rule</b><span className="block text-xs text-program/70">Teaching gives Read, not cover. Confront a trap in a district you were taught before the block has your back (any Commons, or the Veteran&apos;s lesson) and it backfires: +1 Squeeze.</span></span>
+            </label>
+          </>
+        )}
+        <label className="flex items-start gap-2">
+          <input type="checkbox" className="mt-1" checked={rules.endless} onChange={rule("endless")} />
+          <span><b>♾ Endless deals</b><span className="block text-xs text-program/70">Deals are rolled fresh from templates: the numbers change every draw.</span></span>
+        </label>
+        {rules.endless && (
+          <label className="ml-6 flex items-start gap-2">
+            <input type="checkbox" className="mt-1" checked={rules.math} onChange={rule("math")} />
+            <span><b>✏️ Work it out</b><span className="block text-xs text-program/70">The math variant: at Read 1 you work out the second number yourself before the red layer opens. Good for classrooms.</span></span>
+          </label>
+        )}
+      </fieldset>
 
       <label className="flex items-start gap-2">
         <input type="checkbox" className="mt-1" checked={coach} onChange={(e) => setCoach(e.target.checked)} />

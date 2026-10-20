@@ -18,7 +18,7 @@ export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
       </p>
       {legend && (
         <p className="mt-3 text-gold">
-          Most Legendary: <b>{legend.name}</b> ({legend.role}) with {legend.legend} Props, earned by lifting people.
+          Most Props: <b>{legend.name}</b> ({legend.role}) with {legend.legend} Props, earned by lifting people.
         </p>
       )}
       {!won && fallen.length > 0 && (

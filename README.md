@@ -22,7 +22,7 @@ npm run dev        # then open http://localhost:3000
 To run the production build instead: `npm run build && npm start`.
 
 ## How to play
-**First time?** Choose **Learn to play** on the home page. A four-panel comic tells the story in about 30 seconds (the block, the deals, the Machine, your mission); it opens before every guided game, the first time you play on a device, and any time from **Story** in the game's header. It starts a guided three-player game with the Coach: on every decision, the Coach glows on the move it would make and says why, and each rule is explained the first time it comes up. You can always choose your own move.
+**First time?** Choose **Learn to play** on the home page. A four-panel comic tells the story in about 30 seconds (the block, the deals, the Machine, your mission); it opens before every guided game, the first time you play on a device, and any time from **Story** in the game's header. It starts a guided three-player **Block Party** (the 25-minute intro: 3 districts, 8 rounds, no roles) with the Coach: on every decision, the Coach glows on the move it would make and says why, and each rule is explained the first time it comes up. You can always choose your own move.
 
 1. Open the site and choose **Play now**.
 2. **Set the table:** choose a mode, then the number of players (2–5), each player's name and role, and (in co-op) a scenario. Start with *The Audit* or *A Quiet Year*.
@@ -38,7 +38,7 @@ To run the production build instead: `npm run build && npm start`.
 8. **Stop any time.** The game saves itself in this browser after every move. Close the tab, and **Continue your game** on the home page (or **Play now**) picks up exactly where you left off, deal card and all. One saved game per device; it clears when the game ends.
 9. **The Green Book** opens automatically when a strike would capture a district. Untick the box at the top if you'd rather save it.
 
-**How to play** on the home page has the short rules; [`game/RULES.md`](game/RULES.md) has the full rulebook. Prefer paper? Print [`game/The_Second_Number_PRINT_AND_PLAY.pdf`](game/The_Second_Number_PRINT_AND_PLAY.pdf).
+**How to play** on the home page has the short rules; [`game/RULES.md`](game/RULES.md) has the full rulebook. Prefer paper? Print [`game/The_Second_Number_PRINT_AND_PLAY.pdf`](game/The_Second_Number_PRINT_AND_PLAY.pdf). **Endless deals** on the home page rolls a fresh deal every press, for practice and classrooms; [`game/BOOK_ONE.md`](game/BOOK_ONE.md) ties the game to the novel and describes the School Edition.
 
 ## Play on everyone's phones
 1. On the device that will be the table (a laptop or TV is best), choose **Play now**, set up the game and tick **📱 Play on everyone's phones**. A room opens with a four-letter code.

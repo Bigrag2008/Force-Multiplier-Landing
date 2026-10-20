@@ -33,11 +33,14 @@ export default function Home() {
         <Link href="/how-to-play" className="rounded-xl border border-gold/60 px-6 py-3 text-lg font-bold text-gold hover:bg-gold/10">
           How to play
         </Link>
+        <Link href="/deals" className="rounded-xl border border-white/30 px-6 py-3 text-lg font-bold hover:bg-white/10">
+          ♾ Endless deals
+        </Link>
       </div>
       <ul className="mt-12 grid gap-4 sm:grid-cols-3">
         {[
           ["2–5 players", "On one device, passed around the table: the cookout, the classroom, the kitchen table."],
-          ["45–60 minutes", "Co-op, Overlord (one player is the Machine), or Chapter 3 of the campaign."],
+          ["25 to 60 minutes", "Start with the Block Party (25 minutes), then the full game: co-op, Overlord, or Chapter 3 of the campaign."],
           ["Real traps", "Every deal card is a real, documented trap, with honest deals mixed in."],
         ].map(([t, d]) => (
           <li key={t} className="rounded-xl border border-white/15 bg-white/5 p-4">

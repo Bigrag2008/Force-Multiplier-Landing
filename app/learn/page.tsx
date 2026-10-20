@@ -5,8 +5,8 @@ import { C } from "@/engine/content";
 import type { SessionConfig } from "@/game/session";
 import { GameScreen } from "@/ui/GameScreen";
 
-/** A first game with the Coach: the Translator, the Student and the Elder, a head-start scenario, every rule explained as it comes up. */
-const LEARN: SessionConfig = { mode: "coop", roster: C.roster.slice(0, 3), scenario: "The Audit", coach: true };
+/** A first game with the Coach: a three-player Block Party (3 districts, 8 rounds, no roles), every rule explained as it comes up. */
+const LEARN: SessionConfig = { mode: "party", roster: C.roster.slice(0, 3).map((r) => ({ name: r.name, role: "Neighbor" })), coach: true };
 
 export default function LearnPage() {
   const router = useRouter();

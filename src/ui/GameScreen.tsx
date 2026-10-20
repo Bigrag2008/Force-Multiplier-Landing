@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
-import { C, K } from "../engine/content";
+import { C } from "../engine/content";
 import type { Move } from "../game/moves";
 import type { Session } from "../game/session";
 import { waitingOn } from "../net/protocol";
@@ -72,7 +72,7 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
         <div>
           <h1 className="text-2xl font-black text-gold">The Second Number</h1>
           <p className="text-xs text-program/70">
-            {C.edition} · {g.overlord ? "Overlord mode" : g.scenario} · round {g.round}/{K.MAX_ROUNDS}
+            {C.edition} · {g.overlord ? "Overlord mode" : g.scenario} · round {g.round}/{g.maxRounds}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 text-sm">
@@ -80,10 +80,12 @@ export function GameScreen({ start, onQuit, story = "first-time", net }: { start
             <input type="checkbox" checked={s.coach} onChange={(e) => local((x) => (x.coach = e.target.checked))} />
             🧑🏾‍🏫 Coach
           </label>
-          <label className="flex items-center gap-2" title="When a Machine strike would capture a district, open the Green Book automatically (once per game).">
-            <input type="checkbox" checked={s.autoGreenBook} onChange={(e) => play({ t: "greenbook", on: e.target.checked })} />
-            📗 Open the Green Book when a capture is coming
-          </label>
+          {!g.party && (
+            <label className="flex items-center gap-2" title="When a Machine strike would capture a district, open the Green Book automatically (once per game).">
+              <input type="checkbox" checked={s.autoGreenBook} onChange={(e) => play({ t: "greenbook", on: e.target.checked })} />
+              📗 Open the Green Book when a capture is coming
+            </label>
+          )}
           <button className="rounded-md border border-white/25 px-2 py-1 hover:bg-white/10" onClick={() => setShowIntro(true)}>
             Story
           </button>

@@ -25,7 +25,8 @@ def snapshot(g):
                 uwOpen=g.uw_open, greenBook=g.green_book, cookoutUsed=g.cookout_used, kitchenUsed=g.kitchen_used,
                 leagueFormed=g.league_formed,
                 players=[dict(name=p.name, role=p.role, trust=p.trust, corruption=p.corruption, legend=p.legend,
-                              flipped=p.flipped, shields=p.shields, sight=p.sight) for p in g.players])
+                              flipped=p.flipped, shields=p.shields, sight=p.sight,
+                              bare=sorted(p.bare), benched=p.benched) for p in g.players])
 
 configs=[]
 for k in (2,3,4,5):
@@ -41,10 +42,23 @@ for sc in E.SCENARIOS:                      # every scenario at least once
 for ow in E.OWNERS:                         # every Owner at least once
     configs.append(dict(mode="coop", players=3, style="careful", seed=77, rot=1, owner=ow, scenario="A Quiet Year"))
 
+# Block Party, and the house rules (fine-print dice, the Terrell rule, endless deals), alone and together
+PY={"party":"party","finePrint":"fine_print","terrell":"terrell","endless":"endless"}
+for k in (2,3,4,5):
+    for seed in (1,2,3):
+        configs.append(dict(mode="coop", players=k, style=("careful","human","greedy")[seed-1], seed=seed*31+k, rot=seed,
+                            rules=dict(party=True)))
+for i,rules in enumerate(({"finePrint":True},{"terrell":True},{"endless":True},
+                          {"finePrint":True,"terrell":True,"endless":True},{"party":True,"endless":True,"finePrint":True})):
+    for k in (2,4,5):
+        for style in ("careful","human"):
+            configs.append(dict(mode="coop", players=k, style=style, seed=500+i*10+k, rot=i, rules=rules))
+
 games=[]
 for cfg in configs:
     g=E.new_game(overlord=cfg["mode"]=="overlord", seed=cfg["seed"], roster=[tuple(x) for x in roster(cfg["players"],cfg["rot"])],
-                 chapter="THE_MAP" if cfg["mode"]=="chapter" else None, scenario=cfg.get("scenario"), owner=cfg.get("owner"))
+                 chapter="THE_MAP" if cfg["mode"]=="chapter" else None, scenario=cfg.get("scenario"), owner=cfg.get("owner"),
+                 **{PY[k]:v for k,v in cfg.get("rules",{}).items()})
     g.run_auto(style=cfg["style"])
     games.append(dict(config=dict(cfg, roster=roster(cfg["players"],cfg["rot"])), final=snapshot(g), log=g.log,
                       chapterResult=g.chapter_result() if g.chapter else None))

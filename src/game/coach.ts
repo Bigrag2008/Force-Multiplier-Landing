@@ -5,7 +5,7 @@
  * and never touches the random number generator. Deal advice uses only the layers
  * the player can already read, so the Coach teaches reading instead of cheating.
  */
-import { C, DISTRICTS, K, type Card, type Choice, type District, type PlaceKey } from "../engine/content";
+import { C, K, type Card, type Choice, type District, type PlaceKey } from "../engine/content";
 import { maxBy, minBy, type Game, type Player } from "../engine/engine";
 import type { Session } from "./session";
 
@@ -13,8 +13,10 @@ import type { Session } from "./session";
  * What a shortcut costs, as far as the table can know. A hidden Owner can make it cost more
  * (the Debt Buyer does), and the Coach mustn't give that clue away before the Owner is revealed.
  */
-const takeCost = (g: Game) => (g.ownerShown ? g.takeCost() : K.TAKE_CORRUPT);
-const costWord = (g: Game) => `+${takeCost(g)}${g.ownerShown ? "" : " or more"}`;
+const takeCost = (g: Game) => (g.ownerShown || g.party ? g.takeCost() : K.TAKE_CORRUPT);
+const costWord = (g: Game) => `+${takeCost(g)}${g.ownerShown || g.party ? "" : " or more"}`;
+/** the Shady that ends you: the Fall, or (Block Party) sitting out a turn */
+const limit = (g: Game) => (g.party ? K.BP_SIT_OUT : K.FLIP);
 
 const T = (d: District) => d.charAt(0) + d.slice(1).toLowerCase();
 const LEVER = ["", "red", "amber", "blue"];
@@ -38,39 +40,40 @@ export interface Advice<P> {
 export function adviseTurn(g: Game, p: Player, actionsLeft: number): Advice<TurnPick> {
   const act = g.active();
   const placeWhy = (place: PlaceKey) => `${C.places[place].name}: ${C.places[place].bonus}`;
-  const commons = (place: PlaceKey, why: string): Advice<TurnPick> => ({
-    pick: { k: "commons", place },
-    title: `Gather at ${C.places[place].name}`,
-    why: `${why} ${placeWhy(place)}`,
-  });
+  const commons = (place: PlaceKey, why: string): Advice<TurnPick> =>
+    g.party
+      ? { pick: { k: "commons", place: "BARBERSHOP" }, title: "Gather with the block", why: `${why} Gathering gives +2 Trust and −1 Shady.` }
+      : { pick: { k: "commons", place }, title: `Gather at ${C.places[place].name}`, why: `${why} ${placeWhy(place)}` };
 
   if (g.canExpose())
     return { pick: { k: "expose_uw" }, title: "Expose the Underworld — win the game", why: `You've traced ${g.threads.size} threads. Drag the one machine into the light.` };
-  for (const d of DISTRICTS)
+  for (const d of g.ds)
     if (g.canTrace(p, d))
       return { pick: { k: "trace", d }, title: `Trace the thread under ${T(d)}`, why: `${T(d)} is awake and your Read there is 3 (blue). Each thread brings you closer to exposing the Owner: ${g.threads.size}/${g.threadsNeeded()} so far.` };
 
   const fallen = g.blk().filter((x) => x.flipped);
-  const emergency = Math.max(...DISTRICTS.map((d) => g.pressure[d])) >= K.CAPTURE - 1;
+  const emergency = Math.max(...g.ds.map((d) => g.pressure[d])) >= K.CAPTURE - 1;
   if (fallen.length && p.trust >= 2 && !emergency)
     return { pick: { k: "reach", t: fallen[0].name }, title: `Reach ${fallen[0].name}`, why: `${fallen[0].name} has Fallen and the Machine is moving through them. Spend 2 Trust to bring them home; it's the most legendary thing you can do (+3 Props).` };
-  if (p.corruption >= K.FLIP - 2)
+  if (!g.party && p.corruption >= K.FLIP - 2)
     return commons("CHURCH", `Your Shady is ${p.corruption}/${K.FLIP}. One more shortcut and you Fall. Step back from the edge.`);
   if (p.trust < K.NEG_COST)
     return commons(g.botPlace(p), "You're out of Trust, and Trust pays for negotiating and teaching.");
+  if (g.terrell && p.bare.size && p.trust < K.MAX_TRUST)
+    return commons(g.botPlace(p), `You were taught ${[...p.bare].map(T).join(" and ")} without cover. Seeing a trap isn't the same as being safe to confront it: gather with the block first, and they'll have your back.`);
 
   // set-ups from the Commons this turn
   if (p.practice) {
-    const d = minBy(DISTRICTS.filter((x) => p.sight[x] < 3), (x) => [g.clarity[x] >= K.WAKE ? 1 : 0, p.sight[x]]);
+    const d = minBy(g.ds.filter((x) => p.sight[x] < 3), (x) => [g.clarity[x] >= K.WAKE ? 1 : 0, p.sight[x]]);
     if (d) return { pick: { k: "study", d }, title: `Study ${T(d)} (+2 Read)`, why: "You practiced at Adventure Central, so this Study gives +2 Read. Use it now; it ends with your turn." };
   }
   if (p.shopAround) {
-    const d = maxBy(DISTRICTS, (x) => [p.sight[x], g.pressure[x]]);
+    const d = maxBy(g.ds, (x) => [p.sight[x], g.pressure[x]]);
     return { pick: { k: "face", d }, title: `Face a deal in ${T(d)} (draw 2)`, why: "You shopped around at Gem City Market: draw two deals and face the one you can beat." };
   }
 
   // emergency: a district one strike from capture
-  const hot = DISTRICTS.filter((d) => g.pressure[d] >= K.CAPTURE - 1 && g.clarity[d] < K.WAKE).sort((x, y) => g.pressure[y] - g.pressure[x]);
+  const hot = g.ds.filter((d) => g.pressure[d] >= K.CAPTURE - 1 && g.clarity[d] < K.WAKE).sort((x, y) => g.pressure[y] - g.pressure[x]);
   if (hot.length) {
     const d = hot[0];
     const state = g.pressure[d] >= K.CAPTURE ? "is captured" : "is one strike from capture";
@@ -78,7 +81,7 @@ export function adviseTurn(g: Game, p: Player, actionsLeft: number): Advice<Turn
       return { pick: { k: "history", d }, title: `Teach the History of ${T(d)}`, why: `${T(d)} ${state}. Your History wakes it at once, and an awake district is out of the Machine's reach. Two captured districts lose the game.` };
     if (p.sight[d] >= 1)
       return { pick: { k: "face", d }, title: `Face a deal in ${T(d)}`, why: `${T(d)} ${state}. You can read its red layer, so you'll know trap from honest. If your Read reaches the lever, NEGOTIATE drops the Squeeze.` };
-    if (p.corruption + takeCost(g) < K.FLIP)
+    if (g.party || p.corruption + takeCost(g) < K.FLIP)
       return { pick: { k: "face", d }, title: `Face a deal in ${T(d)}`, why: `${T(d)} ${state} and you can't read it yet. A deal here still gives you the shortcut: TAKE a trap patches Squeeze −2 right now, at the cost of Shady. That's the hard choice this game is about.` };
     return { pick: { k: "study", d }, title: `Study ${T(d)}`, why: `${T(d)} ${state}, but you're too close to Falling to take a shortcut. Learn to read it.` };
   }
@@ -89,7 +92,7 @@ export function adviseTurn(g: Game, p: Player, actionsLeft: number): Advice<Turn
 
   // final act: get someone to Read 3 in an awake district
   if (g.uwOpen) {
-    const open = DISTRICTS.filter((d) => g.clarity[d] >= K.WAKE && !g.threads.has(d));
+    const open = g.ds.filter((d) => g.clarity[d] >= K.WAKE && !g.threads.has(d));
     if (open.length) {
       const d = maxBy(open, (x) => p.sight[x]);
       const learner = act.find((x) => x !== p && x.sight[d] < p.sight[d]);
@@ -102,7 +105,7 @@ export function adviseTurn(g: Game, p: Player, actionsLeft: number): Advice<Turn
   }
 
   // build clarity toward the Underworld
-  const building = DISTRICTS.filter((d) => g.clarity[d] < K.WAKE);
+  const building = g.ds.filter((d) => g.clarity[d] < K.WAKE);
   if (!building.length) return commons(g.botPlace(p), "Every district is awake. Rebuild your Trust while the Underworld opens.");
   const tgt = minBy(building, (d) => [g.clarity[d], -p.sight[d]]);
   if (p.sight[tgt] >= 1) {
@@ -111,7 +114,7 @@ export function adviseTurn(g: Game, p: Player, actionsLeft: number): Advice<Turn
       return { pick: { k: "teach", d: tgt, t: learner.name }, title: `Teach ${learner.name} to read ${T(tgt)}`, why: `You read ${T(tgt)} better than ${learner.name}. Getting everyone reading is how the block wins${p.role === "Translator" || p.freeTeach ? ", and this Teach is free" : ""}. Read a second number aloud and have them say it back.` };
     return { pick: { k: "face", d: tgt }, title: `Face a deal in ${T(tgt)}`, why: `${T(tgt)} has the least Clarity, and you can read its red layer. Defusing a trap or taking honest help raises Clarity toward waking it.` };
   }
-  if (actionsLeft >= 2 && !p.practice)
+  if (!g.party && actionsLeft >= 2 && !p.practice)
     return commons("ADVENTURE", `You can't read ${T(tgt)} yet. Practice at the park first, then Study it.`);
   return { pick: { k: "study", d: tgt }, title: `Study ${T(tgt)}`, why: `You can't read ${T(tgt)} yet (Read 0). Read 1 unlocks the red layer: the cost, and whether a deal is a trap at all.` };
 }
@@ -120,18 +123,20 @@ export function adviseTurn(g: Game, p: Player, actionsLeft: number): Advice<Turn
 function shortcut(g: Game, p: Player, d: District, blind: boolean): NonNullable<Advice<Choice>["alt"]> {
   const cost = takeCost(g);
   const after = p.corruption + cost;
-  const falls = after >= K.FLIP;
-  const gain = g.pressure[d] > 0 ? `${T(d)}'s Squeeze drops by 2 right now (negotiating only drops 1)` : `${T(d)} jumps +2 Clarity right now (defusing only gives +1)`;
-  const warning = falls
-    ? `That's ${K.FLIP}: you'd Fall, and the Machine would play through you.`
-    : after >= K.FLIP - 2
-      ? "One more shortcut after this and you Fall. That's how it starts."
-      : `Shortcuts add up: at ${K.FLIP} you Fall.`;
+  const falls = !g.party && after >= K.FLIP;
+  const gain = g.pressure[d] > 0 ? `${T(d)}'s Squeeze drops by 2 right now (negotiating only drops 1)` : g.party ? `${T(d)} gets +1 Clarity right now` : `${T(d)} jumps +2 Clarity right now (defusing only gives +1)`;
+  const warning = g.party
+    ? after >= K.BP_SIT_OUT ? `That's ${K.BP_SIT_OUT}: you'd sit out your next turn.` : `At ${K.BP_SIT_OUT} chips you sit out a turn.`
+    : falls
+      ? `That's ${K.FLIP}: you'd Fall, and the Machine would play through you.`
+      : after >= K.FLIP - 2
+        ? "One more shortcut after this and you Fall. That's how it starts."
+        : `Shortcuts add up: at ${K.FLIP} you Fall.`;
   return {
     pick: "TAKE",
     falls,
     title: falls ? "The shortcut would make you Fall" : "The shortcut: TAKE it",
-    why: `${blind ? "If it's a trap (most are), " : ""}TAKE costs no Trust, and ${gain}. The catch: ${costWord(g)} Shady on you (${p.corruption} → ${after}${g.ownerShown ? "" : "+"} of ${K.FLIP}). ${warning}`,
+    why: `${blind ? "If it's a trap (most are), " : ""}TAKE costs no Trust, and ${gain}. The catch: ${costWord(g)} Shady on you (${p.corruption} → ${after}${g.ownerShown || g.party ? "" : "+"} of ${limit(g)}). ${warning}`,
   };
 }
 
@@ -146,9 +151,9 @@ export function adviseDeal(g: Game, p: Player, d: District, card: Card): Advice<
 function pickDeal(g: Game, p: Player, d: District, card: Card): Advice<Choice> {
   const see = p.sight[d];
   const urgent = g.pressure[d] >= K.CAPTURE - 1;
-  const safe = p.corruption + takeCost(g) < K.FLIP;
+  const safe = g.party || p.corruption + takeCost(g) < K.FLIP;
   const cost = g.negCost(d);
-  const shortcut = `${T(d)} is about to fall, so the shortcut is worth it: TAKE patches Squeeze −2 now. You'll carry ${costWord(g)} Shady (you're at ${p.corruption}/${K.FLIP}).`;
+  const shortcut = `${T(d)} is about to fall, so the shortcut is worth it: TAKE patches Squeeze −2 now. You'll carry ${costWord(g)} Shady (you're at ${p.corruption}/${limit(g)}).`;
   if (see < 1) {
     if (urgent && safe) return { pick: "TAKE", title: "TAKE it (the shortcut)", why: `You can only see the pitch. ${shortcut}` };
     return { pick: "WALK", title: "WALK away", why: `You can only see the pitch, and most deals are traps. Walking is safe. Study ${T(d)} to read the red layer next time.` };
@@ -156,6 +161,8 @@ function pickDeal(g: Game, p: Player, d: District, card: Card): Advice<Choice> {
   if (!card.trap)
     return { pick: "TAKE", title: "TAKE it: it's honest", why: "The red layer says HONEST DEAL. Take the real help: +2 Trust, +1 Clarity. Walking away from honest help costs you Trust." };
   const lever = g.lever(d, card);
+  if (g.terrell && p.bare.has(d) && !urgent)
+    return { pick: "WALK", title: "WALK away (no cover yet)", why: `It's a trap, and you can see it. But you were taught ${T(d)} without cover: confront it now and it backfires (+1 Squeeze). Walk, gather with the block, then come back covered.` };
   if (see >= lever && p.trust >= cost)
     return { pick: "NEGOTIATE", title: "NEGOTIATE: you can beat it", why: `It's a trap, its lever is ${LEVER[lever]}, and your Read in ${T(d)} is ${see}. That's enough. Negotiating defuses it: Squeeze down, Clarity up, +2 Props.` };
   if (see >= lever)
@@ -177,7 +184,7 @@ export function adviseCookout(g: Game): Advice<boolean> {
 
 export function adviseSousou(s: Session): Advice<boolean> {
   const g = s.g;
-  const debt = DISTRICTS.some((d) => g.pressure[d] > 0);
+  const debt = g.ds.some((d) => g.pressure[d] > 0);
   if (!debt) return { pick: false, title: "Not this round", why: "No district has any Squeeze to pay off yet. Keep your Trust." };
   if (s.sousouWouldPay()) return { pick: true, title: "Throw a hand", why: `This throw fills the can: ${g.nextHand()?.name}'s hand pays off 2 Squeeze with no Shady. Pick the district closest to falling.` };
   if (g.active().every((p) => p.trust >= 2)) return { pick: true, title: "Throw a hand", why: "Everyone can spare 1 Trust. The pot carries over, and when it fills, the hand pays off 2 Squeeze clean." };
@@ -196,7 +203,8 @@ const L = (id: string, title: string, body: string): Lesson => ({ id, title, bod
 export function lessonsDue(s: Session, view: "board" | "deal" = "board", sight = 0): Lesson[] {
   const g = s.g;
   const out: Lesson[] = [];
-  out.push(L("welcome", "Welcome to the block", `Every deal on the West Side has a second number: the real cost hidden under the pitch. Together you'll learn to read it, teach each other, and wake the five districts. Wake enough of them (total Clarity ${K.UNDERWORLD_AT}) and the Underworld opens; trace ${K.THREADS_TO_WIN} threads and expose the one machine behind it all. Lose two districts to the Machine, or run out of rounds (${K.MAX_ROUNDS}), and the block falls.`));
+  if (g.party) out.push(L("welcome", "Welcome to the Block Party", `Every deal on the West Side has a second number: the real cost hidden under the pitch. Three districts, ${K.BP_ROUNDS} rounds. Learn to read the deals, teach each other, and wake ${K.BP_WAKE_TO_WIN} of the 3 districts (Clarity 3) to win. Lose two districts to the Machine (Squeeze 3), or run out of rounds, and the block falls. Taking a trap is a shortcut: it costs ${K.BP_TAKE} Shady chips, and at ${K.BP_SIT_OUT} you sit out a turn.`));
+  else out.push(L("welcome", "Welcome to the block", `Every deal on the West Side has a second number: the real cost hidden under the pitch. Together you'll learn to read it, teach each other, and wake the five districts. Wake enough of them (total Clarity ${K.UNDERWORLD_AT}) and the Underworld opens; trace ${K.THREADS_TO_WIN} threads and expose the one machine behind it all. Lose two districts to the Machine, or run out of rounds (${K.MAX_ROUNDS}), and the block falls.`));
   if (s.phase === "turn") {
     const p = s.player;
     out.push(L("turn", "Your turn", `${p.name}, you have ${g.actions()} actions. Your Read in each district is on your player card: at Read 0 you can't read anything; Read 1 shows the red layer (the cost), 2 the amber (the clock), 3 the blue (the connection). Trust pays for negotiating and teaching. The glowing button is my pick, with the reason. You can always choose your own.`));
@@ -207,16 +215,20 @@ export function lessonsDue(s: Session, view: "board" | "deal" = "board", sight =
     out.push(sight >= 1
       ? L("glasses", "Put your glasses on", "The hidden layers are printed in decoder ink. Drag the red reading glasses down over the card to read them, or press Put glasses on. The red layer tells you whether it's a trap, and which layer holds the lever to beat it.")
       : L("blind", "Reading blind", "Your Read here is 0, so every layer is locked: all you have is the pitch, like signing a lease you can't read. Most deals are traps. Walking is safe; Study raises your Read."));
-    out.push(L("choices", "TAKE · WALK · NEGOTIATE", "TAKE accepts the deal: honest help gives Trust and Clarity, but a trap is a shortcut that costs you Shady (at 6 you Fall). WALK is always safe on a trap. NEGOTIATE costs Trust and beats a trap only if your Read reaches its lever; otherwise you get played."));
+    out.push(L("choices", "TAKE · WALK · NEGOTIATE", `TAKE accepts the deal: honest help gives Trust and Clarity, but a trap is a shortcut that costs you Shady (${g.party ? `at ${K.BP_SIT_OUT} you sit out a turn` : "at 6 you Fall"}). WALK is always safe on a trap. NEGOTIATE costs Trust and beats a trap only if your Read reaches its lever; otherwise you get played.`));
   }
-  if (s.phase === "machine") out.push(L("machine", "The Machine moves", "After every turn, the Machine strikes the districts you're closest to waking, at most once per district per round, and muddies your best work. Squeeze 3 captures a district. A hidden Owner bends the rules too: watch what happens and work out who it is."));
-  if (DISTRICTS.some((d) => g.pressure[d] >= K.GRIP)) out.push(L("gripped", "Gripped districts", "A district at Squeeze 2 is gripped: one more strike captures it. Defuse traps there, or use the Elder's History, the Sou-Sou or the Green Book to hold the line."));
+  if (s.phase === "machine" && g.party) out.push(L("machine", "The Machine moves", "After every round, the Machine strikes the district you're closest to waking: +1 Squeeze and −1 Clarity. Squeeze 3 captures a district."));
+  else if (s.phase === "machine") out.push(L("machine", "The Machine moves", "After every turn, the Machine strikes the districts you're closest to waking, at most once per district per round, and muddies your best work. Squeeze 3 captures a district. A hidden Owner bends the rules too: watch what happens and work out who it is."));
+  if (g.ds.some((d) => g.pressure[d] >= K.GRIP)) out.push(L("gripped", "Gripped districts", `A district at Squeeze 2 is gripped: one more strike captures it. ${g.party ? "Defuse traps there to push it back." : "Defuse traps there, or use the Elder's History, the Sou-Sou or the Green Book to hold the line."}`));
   if (g.activePatterns().length) out.push(L("pattern", "A Machine Pattern formed", `When the Machine grips districts together, the harm has a name: ${g.activePatterns()[0].name}. A Pattern tightens on its own every round. Break it by pulling any one of its districts below Squeeze 2.`));
   if (s.phase === "sousou") out.push(L("sousou", "The Sou-Sou", `A savings circle, the honest payday loan. Everyone with Trust drops 1 in the can; at ${K.SOUSOU_HAND}, the next player's hand pays off 2 Squeeze with no Shady.`));
   if (s.phase === "cookout") out.push(L("cookout", "The Cookout", "Once per game, the whole block can spend a round together instead of taking actions. Everyone catches up to the best reader at the table in one district, gets Trust back and sheds Shady."));
   if (g.uwOpen) out.push(L("underworld", "The Underworld is open", `The Owner is revealed and fights in the open: an extra strike, and a cover-up each round. Get players to Read 3 (blue) in awake districts and trace ${K.THREADS_TO_WIN} threads, then expose it.`));
   if (g.blk().some((p) => p.flipped)) out.push(L("fallen", "Someone has Fallen", "Too many shortcuts, and a player Falls: the Machine moves through them on their turn. They're never gone. Spend 2 Trust to Reach them and bring them home."));
   if (!g.greenBook) out.push(L("greenbook", "The Green Book was opened", "A strike that would have captured a district took a safe route instead. That was your one Green Book for the game."));
+  if (g.terrell && g.active().some((p) => p.bare.size)) out.push(L("terrell", "The Terrell rule", "Teaching gives Read, but not cover. A player taught a district without cover who confronts a trap there (TAKE or NEGOTIATE) gets burned: +1 Squeeze. Any Commons, or the Cookout, covers them; the Veteran teaches the cover with the lesson. Walking is always safe."));
+  if (view === "deal" && g.finePrint) out.push(L("fineprint", "The fine-print die", "Each trap's lever is rolled when it's drawn: 1–3 red, 4–5 amber, 6 blue. You can't memorize the deck. Read deep enough to reach whatever the die says."));
+  if (view === "deal" && g.endless) out.push(L("endless", "Endless deals", "These deals are rolled fresh from templates, so the numbers change every time. Work out the second number: the math is on the red layer."));
   if (g.hasLeague()) out.push(L("league", "The League", "Chapter 3: Housing and Lending start gripped, so REDLINING is active from round 1, and the map compounds it every round. Organize: every family signs the League pledge in the same round, and the League pushes back from then on."));
   return out;
 }

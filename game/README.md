@@ -4,7 +4,9 @@ A cooperative board game about reading the hidden cost in every deal, and teachi
 
 | File | What it is |
 |---|---|
-| `RULES.md` | The table rulebook (v3). Matches the engine rule for rule. |
+| `RULES.md` | The table rulebook (v4): one word per idea, the Block Party intro, the ladder, and the house rules. Matches the engine rule for rule. |
+| `BOOK_ONE.md` | The novel and the game: how the Sight maps to the lens, a four-chapter *Book One* campaign (prototype), and the School Edition. |
+| `deal_gen.py` | Deal templates with blanks, for endless deals and the math variant. The website rolls the same templates. |
 | `The_Second_Number_BOARD_GAME.md` | The design brief: vision, soul, roadmap. |
 | `ROADMAP.md` | The West Dayton Edition change list, one commit per item. |
 | `ART_DIRECTION.md` | The look: palette, influences, components, drawing people. |
@@ -19,7 +21,7 @@ A cooperative board game about reading the hidden cost in every deal, and teachi
 | `second_number_play.py` | Playable, colorized terminal edition (hotseat, 2–5 players, co-op or Overlord). |
 | `balance_test.py` | Plays thousands of computer games and reports whether the game is solved. |
 | `test_rules.py` | One check per rule, pinning `RULES.md` to the code. |
-| `balance_report.txt` | The latest balance run (1,500 games per row). |
+| `balance_report.txt` | The latest balance run (500 games per row), with Block Party and the house rules. |
 | `The_Second_Number_PRINT_AND_PLAY.pdf` | The 36-page West Dayton print-and-play kit. |
 | `print_kit/build_print_and_play.py` | Rebuilds the kit from `deck_cards.py` and `RULES.md`. Re-run after any card or rule change. |
 

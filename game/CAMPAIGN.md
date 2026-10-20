@@ -21,7 +21,7 @@ What you win or lose carries forward: districts are rebuilt or scarred, the fami
 | **The History deck** | Cards are unlocked as the family lives them (below). A card unlocked in play is kept for every later game. |
 | **Sealed envelopes** | Each chapter's deals, twist and Owner are in a sealed envelope. Open it only when the chapter begins. |
 | **Family Decisions** | Between chapters, the family makes one permanent choice from that chapter's envelope (below). Each choice changes the next chapter's setup and is written on the lineage sheet. This is where the table argues. |
-| **The Fallen, across generations** | If a family member Falls (even if they're Reached back), mark them on the lineage sheet. In a later chapter, a descendant who wins Most Legendary **redeems the line**: +2 on the Ledger and the mark is crossed out. |
+| **The Fallen, across generations** | If a family member Falls (even if they're Reached back), mark them on the lineage sheet. In a later chapter, a descendant who earns the most Props **redeems the line**: +2 on the Ledger and the mark is crossed out. |
 
 ## Where to start
 Tables can start at **Chapter 2** and play Chapter 1 later as a "go back" chapter. Chapter 1 is the most emotionally heavy era, and it is a better second game than a first one.

@@ -7,7 +7,10 @@ import golden from "./golden.json";
 import { newGame, type Game, type Style } from "../src/engine/engine";
 
 interface GoldenGame {
-  config: { mode: string; players: number; style: Style; seed: number; roster: string[][]; scenario?: string; owner?: string };
+  config: {
+    mode: string; players: number; style: Style; seed: number; roster: string[][]; scenario?: string; owner?: string;
+    rules?: { party?: boolean; finePrint?: boolean; terrell?: boolean; endless?: boolean };
+  };
   final: Record<string, unknown>;
   log: string[];
   chapterResult: Record<string, unknown> | null;
@@ -21,7 +24,7 @@ function snapshot(g: Game) {
     leagueFormed: g.leagueFormed,
     players: g.players.map((p) => ({
       name: p.name, role: p.role, trust: p.trust, corruption: p.corruption, legend: p.legend,
-      flipped: p.flipped, shields: p.shields, sight: p.sight,
+      flipped: p.flipped, shields: p.shields, sight: p.sight, bare: [...p.bare].sort(), benched: p.benched,
     })),
   };
 }
@@ -29,11 +32,11 @@ function snapshot(g: Game) {
 describe("TypeScript engine replays the Python engine's golden games", () => {
   for (const [i, gg] of (golden as unknown as GoldenGame[]).entries()) {
     const c = gg.config;
-    const label = `#${i} ${c.mode} ${c.players}p ${c.style} seed ${c.seed}${c.scenario ? " " + c.scenario : ""}${c.owner ? " " + c.owner : ""}`;
+    const label = `#${i} ${c.mode} ${c.players}p ${c.style} seed ${c.seed}${c.scenario ? " " + c.scenario : ""}${c.owner ? " " + c.owner : ""}${c.rules ? " " + Object.keys(c.rules).join("+") : ""}`;
     it(label, () => {
       const g = newGame({
         overlord: c.mode === "overlord", seed: c.seed, chapter: c.mode === "chapter" ? "THE_MAP" : undefined,
-        scenario: c.scenario, owner: c.owner, roster: c.roster.map(([name, role]) => ({ name, role })),
+        scenario: c.scenario, owner: c.owner, ...c.rules, roster: c.roster.map(([name, role]) => ({ name, role })),
       });
       g.runAuto(undefined, c.style);
       // compare logs first so a mismatch points at the first line that differs

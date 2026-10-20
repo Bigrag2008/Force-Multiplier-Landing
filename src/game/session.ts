@@ -5,9 +5,9 @@
  */
 import { K, type Card, type District } from "../engine/content";
 import { newGame, type Action, type Game, type Player } from "../engine/engine";
-import { fromWire, type Move } from "./moves";
+import { cardFromWire, fromWire, type Move } from "./moves";
 
-export type Mode = "coop" | "overlord" | "chapter";
+export type Mode = "coop" | "overlord" | "chapter" | "party";
 export type Phase =
   | "cookout" // round start: call the Cookout?
   | "turn" // a block player's actions
@@ -25,6 +25,12 @@ export interface SessionConfig {
   seed?: number;
   /** the Coach recommends moves and teaches the rules as they come up */
   coach?: boolean;
+  /** house rules: the fine-print die, the Terrell rule, endless deals */
+  finePrint?: boolean;
+  terrell?: boolean;
+  endless?: boolean;
+  /** the math variant: at Read 1, work out an endless deal's second number before you see it */
+  math?: boolean;
 }
 
 /** a card drawn and waiting on the current player: kept in the session, so a reload can't redraw it */
@@ -61,6 +67,10 @@ export class Session {
       scenario: config.mode === "coop" ? config.scenario || undefined : undefined,
       roster: config.roster,
       seed: config.seed,
+      party: config.mode === "party",
+      finePrint: !!config.finePrint,
+      terrell: !!config.terrell,
+      endless: !!config.endless,
     });
     this.overlordHuman = !!config.overlordHuman;
     this.coach = !!config.coach;
@@ -85,7 +95,7 @@ export class Session {
         const pd = this.pending;
         if (!pd) return true;
         // with a card drawn, the only move is the one that card is for
-        if (pd.k === "deal") return m.a.k === "face" && m.a.d === pd.d && !!m.a.card && pd.cards.includes(this.g.deck[m.a.card.d][m.a.card.i]);
+        if (pd.k === "deal") return m.a.k === "face" && m.a.d === pd.d && !!m.a.card && pd.cards.includes(cardFromWire(this.g, m.a.card));
         return m.a.k === "teach" && m.a.t === pd.to && m.a.d === pd.d;
       }
       case "deal": return this.phase === "turn" && this.pending === null;
@@ -125,11 +135,11 @@ export class Session {
   // ---------- round start ----------
   cookoutAvailable() {
     const g = this.g;
-    return !g.cookoutUsed && g.active().length > 0 && Math.max(...Object.values(g.pressure)) < K.CAPTURE - 1;
+    return !g.party && !g.cookoutUsed && g.active().length > 0 && Math.max(...Object.values(g.pressure)) < K.CAPTURE - 1;
   }
   private startRound() {
     const g = this.g;
-    if (g.round >= K.MAX_ROUNDS) {
+    if (g.round >= g.maxRounds) {
       g.timeUp();
       return this.finish("The clock ran out. The Machine holds the block.");
     }
@@ -163,6 +173,11 @@ export class Session {
         return;
       }
       if (this.feast) continue;
+      if (p.benched) {
+        p.benched = false;
+        g.emit(`${p.name} sits this turn out.`);
+        continue;
+      }
       this.seat = i;
       this.phase = "turn";
       this.actionsLeft = g.actions();
@@ -199,7 +214,7 @@ export class Session {
   // ---------- after the block's turns ----------
   private afterTurns() {
     this.stepStart = this.g.log.length;
-    if (this.g.active().some((p) => p.trust >= 1)) this.phase = "sousou";
+    if (!this.g.party && this.g.active().some((p) => p.trust >= 1)) this.phase = "sousou";
     else this.toMachine();
   }
   /** will throwing a hand now pay out? (then the UI asks which district) */

@@ -16,6 +16,7 @@ HERE=os.path.dirname(os.path.abspath(__file__)); ROOT=os.path.dirname(HERE)
 sys.path.insert(0,ROOT)
 import deck_cards as Dk
 import sn_engine as E
+import deal_gen as G
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.lib.units import inch
@@ -253,7 +254,7 @@ def build_other_cards(c):
             cards.append((hx("5a3d1e"),"HISTORY",("any district" if d=="ANY" else d.lower()),h["title"],
                           f"{h['year']} · {h['place']}. {h['story']}",f"“{h['lesson']}”",7))
     cards.append((hx("2f7a4a"),"THE GREEN BOOK","once per game","A Safe Route",
-                  "When a Machine strike, Extract or scenario hit would capture a district, open the Green Book: "
+                  "When any Machine strike would capture a district, open the Green Book: "
                   "that strike lands nowhere. It still counts as the Machine's move there this round.",
                   "After The Negro Motorist Green Book (1936–1966), the guide Black travelers used to find the places that would serve them safely."))
     pages=[cards[k:k+9] for k in range(0,len(cards),9)]
@@ -480,7 +481,10 @@ def build_board(c):
         bx=W-5.4*inch+(r-1)*0.4*inch
         stroke(c,GOLD); fill(c,NAVY); c.rect(bx,H-0.62*inch,0.34*inch,0.34*inch,stroke=1,fill=1)
         fill(c,GOLD if r<12 else LAYER_COL[1]); c.setFont("DVB",9); c.drawCentredString(bx+0.17*inch,H-0.5*inch,str(r))
-    fill(c,CREAM); c.setFont("DV",6.5); c.drawRightString(W-0.5*inch,H-0.72*inch,"end of round 12 = the Machine wins")
+    fill(c,CREAM); c.setFont("DV",6.2)
+    def seq(h): return ",".join(str(int(h*r)-int(h*(r-1))) for r in (1,2,3,4))+"…"
+    c.drawRightString(W-0.5*inch,H-0.72*inch,"strikes a round · " + " · ".join(f"{k}p: {seq(E.MACHINE_HITS[k])}" for k in (2,3,4,5))
+                      + " · end of round 12 = the Machine wins")
     # districts as quilt blocks
     SCENE=0.62*inch      # the district's scene, under its header
     colw=(W-inch)/5; top=H-0.9*inch; ch=3.2*inch+SCENE
@@ -553,6 +557,81 @@ def build_board(c):
         fill(c,GOLD); c.setFont("DVB",6.5); c.drawCentredString(x0+0.4*inch,uy+0.85*inch,t)
         fill(c,CREAM); c.setFont("DV",5.4); c.drawCentredString(x0+0.4*inch,uy+0.72*inch,sub)
     c.showPage(); c.setPageSize(letter)
+
+def build_block_party(c):
+    """The Block Party board: three districts, eight rounds, the strikes printed on the round track."""
+    W,H=landscape(letter); c.setPageSize((W,H))
+    fill(c,CREAM); c.rect(0,0,W,H,stroke=0,fill=1)
+    fill(c,NAVY); c.rect(0,H-0.75*inch,W,0.75*inch,stroke=0,fill=1)
+    fill(c,GOLD); c.setFont("DVB",20); c.drawString(0.5*inch,H-0.45*inch,"BLOCK PARTY")
+    fill(c,CREAM); c.setFont("DVI",8.5); c.drawString(0.5*inch,H-0.64*inch,"the 25-minute intro · wake 2 of 3 districts in 8 rounds")
+    # the round track, with the strikes for each player count under every round
+    tx=W-6.0*inch; c.setFont("DVB",7); fill(c,CREAM); c.drawString(tx-0.55*inch,H-0.3*inch,"ROUND")
+    for r in range(1,E.BP_ROUNDS+1):
+        bx=tx+(r-1)*0.62*inch
+        stroke(c,GOLD); fill(c,NAVY); c.rect(bx,H-0.42*inch,0.56*inch,0.3*inch,stroke=1,fill=1)
+        fill(c,GOLD if r<E.BP_ROUNDS else LAYER_COL[1]); c.setFont("DVB",9); c.drawCentredString(bx+0.28*inch,H-0.33*inch,str(r))
+    fill(c,NAVY); c.setFont("DVB",6.5); c.drawRightString(tx-0.08*inch,H-0.9*inch,"STRIKES")
+    c.setFont("DV",7)
+    for j,k in enumerate((2,3,4,5)):
+        h=E.BP_HITS[k]; yy=H-0.9*inch-(j+1)*0.13*inch
+        fill(c,INK); c.drawRightString(tx-0.08*inch,yy,f"{k} players")
+        for r in range(1,E.BP_ROUNDS+1):
+            c.drawCentredString(tx+(r-1)*0.62*inch+0.28*inch,yy,str(int(h*r)-int(h*(r-1))))
+    colw=(W-inch)/3; top=H-1.55*inch; ch=3.3*inch
+    for k,d in enumerate(E.BP_DISTRICTS):
+        x=0.5*inch+k*colw; rgb=DCOL[d]
+        fill(c,(1,1,1)); stroke(c,rgb); c.setLineWidth(2); c.roundRect(x+6,top-ch,colw-12,ch,8,stroke=1,fill=1)
+        fill(c,rgb); c.roundRect(x+6,top-0.5*inch,colw-12,0.5*inch,8,stroke=0,fill=1)
+        fill(c,(1,1,1)); c.setFont("DVB",14); c.drawCentredString(x+colw/2,top-0.3*inch,d)
+        c.setFont("DVI",7); c.drawCentredString(x+colw/2,top-0.44*inch,Dk.DAYTON[d]["sub"])
+        for label,yy,col,last in (("CLARITY",top-1.3*inch,rgb,"3 = AWAKE"),("SQUEEZE",top-2.1*inch,LAYER_COL[1],"3 = CAPTURED")):
+            fill(c,INK); c.setFont("DVB",8); c.drawString(x+18,yy+0.4*inch,label)
+            fill(c,col); c.setFont("DVB",7); c.drawRightString(x+colw-18,yy+0.4*inch,last)
+            for n in range(4):
+                bw=(colw-48)/4; bx=x+18+n*(bw+4)
+                stroke(c,col); c.setLineWidth(1.2); fill(c,(1,1,1) if n<3 else col); c.rect(bx,yy,bw,0.34*inch,stroke=1,fill=1)
+                fill(c,col if n<3 else (1,1,1)); c.setFont("DVB",10); c.drawCentredString(bx+bw/2,yy+0.12*inch,str(n))
+        stroke(c,rgb); c.setDash(3,3); c.roundRect(x+colw/2-0.45*inch,top-ch+0.15*inch,0.9*inch,0.95*inch,5,stroke=1,fill=0); c.setDash()
+        fill(c,rgb); c.setFont("DVB",7); c.drawCentredString(x+colw/2,top-ch+0.6*inch,"deal pile")
+    # the rules, on the board
+    ry=top-ch-0.2*inch
+    rules=[("Your turn","2 actions: STUDY (+1 Read here) · FACE A DEAL · TEACH (1 Trust: a teammate +1 Read where you read better) · GATHER (+2 Trust, −1 Shady)."),
+           ("A deal","Read 1 shows the red layer: the cost, and trap or honest. TAKE honest help (+2 Trust, +1 Clarity). WALK from a trap: safe. "
+                     "NEGOTIATE (1 Trust): if your Read reaches the lever, Squeeze −1 and Clarity +1; if not, you get played: Squeeze +1."),
+           ("The shortcut",f"TAKE a trap: Squeeze −2 now (or Clarity +1 where there's no Squeeze), and {E.BP_TAKE} Shady chips on you. At {E.BP_SIT_OUT} chips, hand them back and sit out your next turn."),
+           ("The Machine","After everyone's turns, it strikes the district closest to waking: +1 Squeeze and −1 Clarity. Strikes per round are printed under the round track; it may strike the same district twice."),
+           ("Win · lose",f"Win the moment {E.BP_WAKE_TO_WIN} districts are awake (Clarity 3). Lose if 2 are captured (Squeeze 3), or round {E.BP_ROUNDS} ends.")]
+    for t,b in rules:
+        fill(c,NAVY); c.setFont("DVB",8); c.drawString(0.6*inch,ry,t)
+        fill(c,INK); c.setFont("DV",7.6)
+        for ln in simpleSplit(b,"DV",7.6,W-2.2*inch): c.drawString(1.6*inch,ry,ln); ry-=9.6
+        ry-=3
+    c.showPage(); c.setPageSize(letter)
+
+def templates_story():
+    """Endless deals on paper: every template with its blanks, to roll or pick."""
+    s=[PageBreak(),Paragraph("Endless deals: the templates",ST["h1"]),
+       Paragraph("For tables that have learned the printed deck. Draw a template for the district, then fill each blank: "
+                 "roll a d6 and count down the list (wrap around), or just pick. Read the pitch aloud; at Read 1 the reader works out "
+                 "the second number (the math variant) before checking the red line. The website rolls these for you, endlessly.",ST["p"])]
+    def blank(t): return re.sub(r"\{(\w+)\}",lambda m:"____" if m.group(1) in G.SLOT_ORDER else "(work it out)",t)
+    for d,ts in G.TEMPLATES.items():
+        s.append(Paragraph(f'<font color="{Dk.DISTRICT_COLORS[d]}">{d}</font>',ST["h2"]))
+        data=[[Paragraph(x,ST["kb"]) for x in ("Pitch","Fill the blanks from","Work it out","Lever")]]
+        for t in ts:
+            slots="; ".join(f"{k}: "+", ".join(f"{v:,}" if isinstance(v,int) else str(v) for v in t[k]) for k in G.SLOT_ORDER if k in t)
+            lev="HONEST" if not t.get("trap",True) else LEVER_WORD[t.get("lever",1)]
+            data.append([Paragraph(inline(blank(t["front"])),ST["kb"]),Paragraph(inline(slots),ST["k"]),
+                         Paragraph(inline(blank(t["ask"])),ST["k"]),Paragraph(lev,ST["kb"])])
+        w=PAGE_W-1.5*inch
+        tb=Table(data,repeatRows=1,colWidths=[w*0.36,w*0.24,w*0.28,w*0.12])
+        tb.setStyle(TableStyle([("GRID",(0,0),(-1,-1),0.3,colors.Color(*LGREY)),("VALIGN",(0,0),(-1,-1),"TOP"),
+            ("BACKGROUND",(0,0),(-1,0),colors.Color(*DCOL[d])),("TEXTCOLOR",(0,0),(-1,0),colors.white)]))
+        s.append(tb)
+    s.append(Paragraph("The blanks fill in front-to-back as written: in the pitch, a blank is the first number you roll for it, and the same "
+                       "number every time that blank comes back. The answer key on the website (and in deal_gen.py) shows every line filled in.",ST["p"]))
+    return s
 
 # ================= player boards =================
 def player_board(c,y0,role,gift):
@@ -694,7 +773,7 @@ def reference_story():
           ["Owner in the open","+1 strike; once per round −1 Clarity on a woken district without a thread."],
           ["Lose","2 districts captured · everyone Fallen · round 12 ends."],
           ["Win","3 threads traced (Read 3 in woken districts) → Expose."],
-          ["Fallen","On your turn the Machine moves through you (Extract · Obscure · Tempt). Your crew can Reach you."]]
+          ["Fallen","On your turn the Machine moves through you (Strike · Muddy · Tempt). Your crew can Reach you."]]
     data=[[Paragraph(f"<b>{a}</b>",ST["td"]),Paragraph(inline(b),ST["td"])] for a,b in rows]
     t=Table(data,colWidths=[1.3*inch,PAGE_W-1.5*inch-1.3*inch])
     t.setStyle(TableStyle([("GRID",(0,0),(-1,-1),0.4,colors.Color(*LGREY)),("VALIGN",(0,0),(-1,-1),"TOP"),
@@ -728,7 +807,7 @@ def log_story():
     s=[PageBreak(),Paragraph("Playtest log",ST["h1"]),
        Paragraph("The hard 80% of a board game is playtesting. Fill in a row after every game, and ask the table the questions below. "
                  "Then run <font name=\"DVM\">python3 balance_test.py</font> after any rule change.",ST["p"])]
-    hdr=["Date","Players / roles","Scenario","Owner","Result","Round","Who Fell?","Most Legendary"]
+    hdr=["Date","Players / roles","Scenario","Owner","Result","Round","Who Fell?","Most Props"]
     data=[[Paragraph(h,ST["th"]) for h in hdr]]+[[""]*8 for _ in range(14)]
     t=Table(data,colWidths=[0.65*inch,1.45*inch,0.95*inch,0.85*inch,0.7*inch,0.5*inch,0.9*inch,1.0*inch],rowHeights=[None]+[0.3*inch]*14)
     t.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,0),colors.Color(*NAVY)),("GRID",(0,0),(-1,-1),0.4,colors.Color(*GREY))]))
@@ -757,8 +836,9 @@ def canvas_pdf(*builders):
 def main():
     parts=[canvas_pdf(build_cover,build_lens_page,build_glasses),
            platypus_pdf(rules_story()+reference_story(),"Rulebook"),
-           canvas_pdf(build_board,build_player_boards,build_fans_and_pieces,build_tokens,build_deal_pages,build_other_cards),
+           canvas_pdf(build_block_party,build_board,build_player_boards,build_fans_and_pieces,build_tokens,build_deal_pages,build_other_cards),
            platypus_pdf(key_story()[1:],"Answer key"),
+           platypus_pdf(templates_story()[1:],"Endless deals"),
            platypus_pdf(log_story()[1:],"Playtest log")]
     w=PdfWriter()
     for p in parts:

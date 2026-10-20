@@ -1,10 +1,12 @@
 /** The browser flow must carry whole games to an end, in every mode, without getting stuck. */
 import { describe, expect, it } from "vitest";
 import { C } from "../src/engine/content";
-import { Session, type Mode } from "../src/game/session";
+import { adviseDeal, adviseTurn } from "../src/game/coach";
+import { toWire, type WireAction } from "../src/game/moves";
+import { Session, type Mode, type SessionConfig } from "../src/game/session";
 
-function playOut(mode: Mode, players: number, seed: number, overlordHuman = false) {
-  const s = new Session({ mode, roster: C.roster.slice(0, players), seed, overlordHuman });
+function playOut(mode: Mode, players: number, seed: number, overlordHuman = false, extra: Partial<SessionConfig> = {}) {
+  const s = new Session({ mode, roster: C.roster.slice(0, players), seed, overlordHuman, ...extra });
   for (let step = 0; step < 5000 && s.phase !== "over"; step++) {
     const g = s.g;
     switch (s.phase) {
@@ -29,6 +31,40 @@ describe("Session flow", () => {
           expect(s.g.result).not.toBeNull();
           expect(s.g.round).toBeLessThanOrEqual(12);
         });
+
+  for (const n of [2, 3, 4, 5])
+    for (const seed of [1, 2, 3])
+      it(`Block Party ${n}p seed ${seed} ends within 8 rounds, on 3 districts`, () => {
+        const s = playOut("party", n, seed * 17 + n, false, { roster: C.roster.slice(0, n).map((r) => ({ name: r.name, role: "Neighbor" })) });
+        expect(s.phase).toBe("over");
+        expect(s.g.round).toBeLessThanOrEqual(8);
+        expect(s.g.ds).toHaveLength(3);
+        expect(s.g.log.some((l) => /Sou-Sou|COOKOUT|UNDERWORLD|PATTERN/.test(l))).toBe(false);
+      });
+
+  it("a game with endless, fine-print deals saves as moves and replays exactly", () => {
+    const config: SessionConfig = { mode: "coop", roster: C.roster.slice(0, 3), seed: 41, endless: true, finePrint: true, terrell: true };
+    const s = new Session(config);
+    for (let step = 0; step < 4000 && s.phase !== "over"; step++) {
+      const g = s.g;
+      if (s.phase === "cookout") s.apply({ t: "cookout", call: false });
+      else if (s.phase === "turn") {
+        // the Coach picks (it never draws), the deal is drawn through the session, as in the UI
+        const a = adviseTurn(g, s.player, s.actionsLeft).pick;
+        if (a.k === "face") {
+          s.apply({ t: "deal", d: a.d });
+          const card = s.pending!.k === "deal" ? s.pending!.cards[0] : undefined;
+          expect(s.apply({ t: "act", a: toWire(g, { k: "face", d: a.d, choice: adviseDeal(g, s.player, a.d, card!).pick, card }) })).toBe(true);
+        } else s.apply({ t: "act", a: a as WireAction });
+      } else if (s.phase === "fallen") s.apply({ t: "fallen", a: toWire(g, g.machineAiMove(g.struck)) });
+      else if (s.phase === "sousou") s.apply({ t: "sousou", hand: false });
+      else if (s.phase === "machine") s.apply({ t: "next" });
+    }
+    expect(s.phase).toBe("over");
+    expect(s.g.dealt.some((c) => c.gen)).toBe(true);
+    const r = Session.replay(config, s.moves);
+    expect(r.g.log).toEqual(s.g.log);
+  });
 
   it("asks before the Cookout and lets the table decline", () => {
     const s = new Session({ mode: "coop", roster: C.roster.slice(0, 3), scenario: "A Quiet Year", seed: 5 });

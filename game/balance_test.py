@@ -22,16 +22,17 @@ import sn_engine as E
 
 ROLES=[r for _,r in E.ROSTER]; NAMES=dict((r,n) for n,r in E.ROSTER)
 
-def roster_for(k, rng):
+def roster_for(k, rng, party=False):
+    if party: return [(f"Neighbor {i+1}","Neighbor") for i in range(k)]     # Block Party: no roles
     return [(NAMES[r],r) for r in rng.sample(ROLES,k)]
 
-def run_batch(n, k, overlord=False, style="careful", seed0=0):
+def run_batch(n, k, overlord=False, style="careful", seed0=0, **rules):
     st=collections.defaultdict(int); rounds=[]
     by=lambda: collections.defaultdict(lambda:[0,0])
     owner,scen,role=by(),by(),by()
     for i in range(n):
         rng=random.Random(seed0+i*7919+k*31+(1 if overlord else 0))
-        g=E.new_game(overlord=overlord, seed=rng.randrange(10**9), roster=roster_for(k,rng))
+        g=E.new_game(overlord=overlord, seed=rng.randrange(10**9), roster=roster_for(k,rng,rules.get("party",False)), **rules)
         out=g.run_auto(style=style); win=out=="BLOCK_WIN"
         st[out]+=1; rounds.append(g.round)
         if out=="MACHINE_WIN" and g.round==1: st["r1_loss"]+=1
@@ -86,7 +87,7 @@ def line(label, n, st, rounds):
 
 if __name__=="__main__":
     n=int(sys.argv[1]) if len(sys.argv)>1 and sys.argv[1].isdigit() else 1000
-    print("THE SECOND NUMBER — balance report (v3)")
+    print("THE SECOND NUMBER — balance report (v4)")
     print(f"{n} computer-played games per row. Rosters are random role subsets.\n")
     verdict=[]
     for mode,ov in (("CO-OP",False),("OVERLORD",True)):
@@ -97,6 +98,26 @@ if __name__=="__main__":
             w=wr(st,n); ok=0.40<=w<=0.70 and st["r1_loss"]/n<0.02
             verdict.append((f"{mode} {k}p",w,ok))
         print()
+
+    print("=== BLOCK PARTY: the 25-minute intro (3 districts, 8 rounds) ===")
+    party_ok=[]
+    for k in (2,3,4,5):
+        row=[]
+        for style in ("careful","human"):
+            st,rounds,*_=run_batch(n,k,style=style,party=True); row.append(wr(st,n))
+            print(line(f"{k}p {style}",n,st,rounds))
+        party_ok.append((k,row))
+    print()
+
+    print("=== HOUSE RULES (co-op, 4 players, human-like bot) ===")
+    base,_r,*_=run_batch(n,4,style="human")
+    house=[]
+    for name,rules in (("none",{}),("fine-print dice",dict(fine_print=True)),("Terrell rule",dict(terrell=True)),
+                       ("endless deals",dict(endless=True)),("all three",dict(fine_print=True,terrell=True,endless=True))):
+        st,rounds,*_=run_batch(n,4,style="human",**rules) if rules else (base,_r)
+        house.append((name,wr(st,n)))
+        print(line(name,n,st,rounds))
+    print()
 
     print("=== IS THE SHORTCUT TEMPTING? (co-op, 4 players) ===")
     style_wr={}
@@ -123,6 +144,11 @@ if __name__=="__main__":
     chap=chapter_report(n)
 
     print("\n--- verdict ---")
+    for k,(care,human) in party_ok:
+        ok=0.50<=care<=0.85 and 0.50<=human<=0.85
+        print(f"  Block Party {k}p {'healthy' if ok else 'NEEDS TUNING'}  (careful {care*100:.0f}% · human {human*100:.0f}%)")
+    for name,w in house:
+        print(f"  House rules: {name:<16} {'healthy' if 0.40<=w<=0.70 else 'NEEDS TUNING'}  ({w*100:.0f}% block wins)")
     for name,w,ok in verdict:
         print(f"  {name:<12} {'healthy' if ok else 'NEEDS TUNING'}  ({w*100:.0f}% block wins)")
     tempt = style_wr["careful"]>style_wr["never"] and style_wr["greedy"]<style_wr["careful"]

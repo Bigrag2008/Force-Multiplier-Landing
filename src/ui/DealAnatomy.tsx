@@ -67,7 +67,7 @@ export function StatKey() {
   const rows: [Parameters<typeof Icon>[0]["name"], string, string][] = [
     ["sight", "Read", "how well you read a district (0–3)"],
     ["trust", "Trust", "spend it to negotiate and teach"],
-    ["corruption", "Shady", `shortcuts add it; at ${K.FLIP} you Fall`],
+    ["corruption", "Shady", `shortcuts add it; at ${K.FLIP} you Fall (Block Party: at ${K.BP_SIT_OUT} you sit out a turn)`],
     ["legend", "Props", "earned by lifting people up"],
     ["clarity", "Clarity", `a district wakes at ${K.WAKE}`],
     ["pressure", "Squeeze", `the Machine's grip; ${K.CAPTURE} = captured`],

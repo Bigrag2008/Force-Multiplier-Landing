@@ -1,6 +1,6 @@
 "use client";
 import { useState, type ReactNode } from "react";
-import { C, DISTRICTS, K, type Card, type Choice, type District, type PlaceKey } from "../engine/content";
+import { C, K, type Card, type Choice, type District, type PlaceKey } from "../engine/content";
 import { maxBy, type Action, type Player } from "../engine/engine";
 import { adviseCookout, adviseDeal, adviseSousou, adviseTurn } from "../game/coach";
 import { toWire } from "../game/moves";
@@ -34,10 +34,10 @@ function Panel({ title, children, sub }: { title: ReactNode; sub?: ReactNode; ch
   );
 }
 
-function DistrictButtons({ onPick, disabled, note, best }: { onPick: (d: District) => void; disabled?: (d: District) => boolean; note?: (d: District) => string; best?: District }) {
+function DistrictButtons({ ds, onPick, disabled, note, best }: { ds: District[]; onPick: (d: District) => void; disabled?: (d: District) => boolean; note?: (d: District) => string; best?: District }) {
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-      {DISTRICTS.map((d) => (
+      {ds.map((d) => (
         <button key={d} className={`${btn} text-white${picked(d === best)}`} style={{ background: DISTRICT_COLOR[d] }} disabled={disabled?.(d)} onClick={() => onPick(d)}>
           <span>{titleCase(d)}</span>
           {note && <span className="block text-[10px] font-normal opacity-90">{note(d)}</span>}
@@ -48,7 +48,8 @@ function DistrictButtons({ onPick, disabled, note, best }: { onPick: (d: Distric
   );
 }
 
-const formId = (s: Session, d: District, card: Card) => `${d.slice(0, 3)}-${String(s.g.deck[d].indexOf(card) + 1).padStart(2, "0")}`;
+const formId = (s: Session, d: District, card: Card) =>
+  s.g.deck[d].includes(card) ? `${d.slice(0, 3)}-${String(s.g.deck[d].indexOf(card) + 1).padStart(2, "0")}` : `${d.slice(0, 3)}-NEW`;
 
 /** The current player's turn. Keyed by the parent per action, so its local state resets. */
 export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: Local }) {
@@ -67,7 +68,14 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
   const run = local;
   const tip = s.coach ? safe(() => adviseTurn(g, p, s.actionsLeft)) : null;
   const pick = tip?.pick;
-  const dealTip = (d: District, card: Card) => (s.coach ? safe(() => adviseDeal(g, p, d, card)) : null);
+  const dealTip = (d: District, card: Card) => {
+    if (!s.coach) return null;
+    const tip = safe(() => adviseDeal(g, p, d, card));
+    // the math variant: don't give away the second number before the table has worked it out
+    if (tip && s.config.math && card.answer !== undefined && p.sight[d] >= 1)
+      return { ...tip, title: "Work it out first", why: "Work out the second number on the card and check it. Then read the red layer: it tells you whether this is a trap. My pick is lit up if you want it." };
+    return tip;
+  };
 
   const pd = s.pending;
   const dealCard = pd?.k === "deal" ? (pd.cards.length === 1 ? pd.cards[0] : chosen) : null;
@@ -81,7 +89,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
         <div className="grid gap-4 md:grid-cols-2">
           {pd.cards.map((card, i) => (
             <div key={i} className="space-y-2">
-              <DealCard card={card} district={pd.d} sight={p.sight[pd.d]} effectiveLever={g.lever(pd.d, card)} formId={formId(s, pd.d, card)} />
+              <DealCard card={card} district={pd.d} sight={p.sight[pd.d]} effectiveLever={g.lever(pd.d, card)} formId={formId(s, pd.d, card)} math={s.config.math} />
               <button className={primary + picked(card === best)} onClick={() => setChosen(card)}>
                 <span>Face this deal</span>
                 {card === best && <CoachBadge />}
@@ -109,7 +117,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
     return (
       <Panel key="face" title={`${p.name} faces a deal in ${titleCase(d)}`} sub="Read what you can, then decide.">
         <CoachBox s={s} run={run} view="deal" sight={p.sight[d]} advice={deal} />
-        <DealCard card={card} district={d} sight={p.sight[d]} effectiveLever={g.lever(d, card)} formId={formId(s, d, card)} />
+        <DealCard card={card} district={d} sight={p.sight[d]} effectiveLever={g.lever(d, card)} formId={formId(s, d, card)} math={s.config.math} />
         <div className="grid gap-2 sm:grid-cols-3">
           {choice("TAKE", "accept it")}
           {choice("WALK", "refuse it")}
@@ -149,7 +157,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
     return (
       <Panel key={pending.k} title={title}>
         <CoachBox s={s} run={run} advice={pick?.k === f ? tip : null} />
-        <DistrictButtons
+        <DistrictButtons ds={g.ds}
           best={pick?.k === f ? pick.d : undefined}
           disabled={(d) => (f === "study" ? p.sight[d] >= 3 : f === "trace" ? !g.canTrace(p, d) : false)}
           note={(d) => (f === "history" ? `wakes ${titleCase(d)}` : `your Read ${p.sight[d]}`)}
@@ -171,7 +179,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
         <CoachBox s={s} run={run} advice={pick?.k === "teach" ? tip : null} />
         <div className="grid gap-2 sm:grid-cols-2">
           {others.map((t) => (
-            <button key={t.name} className={ghost + picked(pick?.k === "teach" && pick.t === t.name)} disabled={!DISTRICTS.some((d) => p.sight[d] > t.sight[d])} onClick={() => setPending({ k: "teachWhere", t })}>
+            <button key={t.name} className={ghost + picked(pick?.k === "teach" && pick.t === t.name)} disabled={!g.ds.some((d) => p.sight[d] > t.sight[d])} onClick={() => setPending({ k: "teachWhere", t })}>
               <span>{t.name} </span>
               <span className="text-xs font-normal">the {t.role}</span>
               {pick?.k === "teach" && pick.t === t.name && <CoachBadge />}
@@ -186,7 +194,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
     const t = pending.t;
     return (
       <Panel key={pending.k} title={`Teach ${t.name} which district?`} sub={p.role === "Translator" || p.freeTeach ? "This Teach is free." : "Costs 1 Trust."}>
-        <DistrictButtons
+        <DistrictButtons ds={g.ds}
           best={pick?.k === "teach" && pick.t === t.name ? pick.d : undefined}
           disabled={(d) => p.sight[d] <= t.sight[d]}
           note={(d) => `you ${p.sight[d]} · ${t.name} ${t.sight[d]}`}
@@ -239,10 +247,12 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
     { kind: "study", icon: "sight", label: "Study", hint: "+1 Read in a district" + (p.practice ? " (+2 now)" : ""), on: () => setPending({ k: "pick", for: "study" }) },
     { kind: "face", icon: "deal", label: "Face a deal", hint: p.shopAround ? "draw 2, face 1" : "read it, then TAKE / WALK / NEGOTIATE", on: () => setPending({ k: "pick", for: "face" }) },
     { kind: "teach", icon: "teach", label: "Teach", hint: p.role === "Translator" || p.freeTeach ? "free" : "1 Trust", on: () => setPending({ k: "teachWho" }), disabled: !others.length },
-    { kind: "commons", icon: "commons", label: "Commons", hint: "gather on the West Side", on: () => setPending({ k: "commons" }) },
+    g.party
+      ? { kind: "commons", icon: "commons", label: "Gather", hint: "+2 Trust, −1 Shady", on: () => act({ k: "commons", place: "BARBERSHOP" }) }
+      : { kind: "commons", icon: "commons", label: "Commons", hint: "gather on the West Side", on: () => setPending({ k: "commons" }) },
     { kind: "reach", icon: "reach", label: "Reach", hint: "2 Trust: bring a Fallen friend home", on: () => setPending({ k: "reach" }), show: fallen.length > 0, disabled: p.trust < 2 },
     { kind: "history", icon: "history", label: "Teach the History", hint: "Elder, once: wake a district", on: () => setPending({ k: "pick", for: "history" }), show: p.role === "Elder" && !p.elderUsed },
-    { kind: "trace", icon: "clue", label: "Trace a thread", hint: "Read 3 in an awake district", on: () => setPending({ k: "pick", for: "trace" }), show: g.uwOpen, disabled: !DISTRICTS.some((d) => g.canTrace(p, d)) },
+    { kind: "trace", icon: "clue", label: "Trace a thread", hint: "Read 3 in an awake district", on: () => setPending({ k: "pick", for: "trace" }), show: g.uwOpen, disabled: !g.ds.some((d) => g.canTrace(p, d)) },
     { kind: "league", icon: "league", label: "Sign the League pledge", hint: `${g.league.size}/${g.leagueNeeded()} this round`, on: () => act({ k: "league" }), show: g.hasLeague() && !g.leagueFormed && !g.league.has(p.name) },
     { kind: "expose_uw", icon: "expose", label: "EXPOSE THE UNDERWORLD", hint: "you win", on: () => act({ k: "expose_uw" }), show: g.canExpose(), gold: true },
   ];
@@ -252,7 +262,7 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
       title={`${p.name}'s turn`}
       sub={
         <>
-          The {p.role}: {C.roles[p.role]} · <b>{s.actionsLeft}</b> action{s.actionsLeft === 1 ? "" : "s"} left
+          The {p.role}: {C.roles[p.role] ?? "a neighbor on the block"} · <b>{s.actionsLeft}</b> action{s.actionsLeft === 1 ? "" : "s"} left
         </>
       }
     >
@@ -292,14 +302,14 @@ export function MachinePanel({ s, play, local, who }: { s: Session; play: Play; 
       {who === "fallen" && <CoachBox s={s} run={local} />}
       {mode === null && (
         <div key="menu" className="grid gap-2 sm:grid-cols-2">
-          <button className={ghost} onClick={() => setMode("m_extract")}>Extract <span className="block text-xs font-normal">+1 Squeeze</span></button>
-          <button className={ghost} onClick={() => setMode("m_obscure")}>Obscure <span className="block text-xs font-normal">−1 Clarity</span></button>
+          <button className={ghost} onClick={() => setMode("m_extract")}>Strike <span className="block text-xs font-normal">+1 Squeeze</span></button>
+          <button className={ghost} onClick={() => setMode("m_obscure")}>Muddy <span className="block text-xs font-normal">−1 Clarity</span></button>
           <button className={ghost} onClick={() => setMode("m_tempt")}>Tempt <span className="block text-xs font-normal">−1 Trust</span></button>
           <button className={ghost} onClick={() => go(g.machineAiMove(g.struck))}>Let the Machine choose</button>
         </div>
       )}
       {(mode === "m_extract" || mode === "m_obscure") && (
-        <DistrictButtons disabled={(d) => g.struck.has(d)} note={(d) => (g.struck.has(d) ? "already moved here" : `P ${g.pressure[d]} · C ${g.clarity[d]}`)} onPick={(d) => (setMode(null), go({ k: mode, d }))} />
+        <DistrictButtons ds={g.ds} disabled={(d) => g.struck.has(d)} note={(d) => (g.struck.has(d) ? "already moved here" : `Squeeze ${g.pressure[d]} · Clarity ${g.clarity[d]}`)} onPick={(d) => (setMode(null), go({ k: mode, d }))} />
       )}
       {mode === "m_tempt" && (
         <div className="grid gap-2 sm:grid-cols-2">
@@ -331,7 +341,7 @@ export function CookoutPanel({ s, play, local }: { s: Session; play: Play; local
           <label key={p.name} className="flex items-center justify-between gap-2 text-sm">
             <span>{p.name} catches up in</span>
             <select className="rounded bg-white/10 px-2 py-1" value={picks[p.name]} onChange={(e) => setPicks({ ...picks, [p.name]: e.target.value as District })}>
-              {DISTRICTS.map((d) => (
+              {g.ds.map((d) => (
                 <option key={d} value={d} className="text-ink">
                   {titleCase(d)} ({p.sight[d]}→{Math.max(...g.active().map((q) => q.sight[d]))})
                 </option>
@@ -358,7 +368,7 @@ export function SousouPanel({ s, play, local }: { s: Session; play: Play; local:
   const g = s.g;
   const payers = g.active().filter((p) => p.trust >= 1).length;
   const pays = s.sousouWouldPay();
-  const [d, setD] = useState<District>(() => DISTRICTS.reduce((a, x) => (g.pressure[x] > g.pressure[a] ? x : a), DISTRICTS[0]));
+  const [d, setD] = useState<District>(() => g.ds.reduce((a, x) => (g.pressure[x] > g.pressure[a] ? x : a), g.ds[0]));
   const tip = s.coach ? safe(() => adviseSousou(s)) : null;
   return (
     <Panel title="The Sou-Sou" sub={`Everyone with Trust puts 1 in the can (${payers} would). At ${K.SOUSOU_HAND}, the next player's hand clears 2 Squeeze: no Shady.`}>
@@ -371,7 +381,7 @@ export function SousouPanel({ s, play, local }: { s: Session; play: Play; local:
         <label className="flex items-center justify-between gap-2 text-sm">
           <span>{g.nextHand()?.name} pays off the debt in</span>
           <select className="rounded bg-white/10 px-2 py-1" value={d} onChange={(e) => setD(e.target.value as District)}>
-            {DISTRICTS.map((x) => (
+            {g.ds.map((x) => (
               <option key={x} value={x} className="text-ink">
                 {titleCase(x)} (Squeeze {g.pressure[x]})
               </option>
