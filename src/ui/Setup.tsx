@@ -5,6 +5,7 @@ import { C, type District } from "../engine/content";
 import { checkEdition, LAST_EDITION, loadEditions, WEST_DAYTON, type Edition } from "../engine/edition";
 import { describeCarry, forgetBlock, loadBlock, type BlockMemory } from "../game/block";
 import { describeStickers, FLAG_WORDS, forgetFamily, loadFamily, type CampaignKey, type Family } from "../game/family";
+import { FamilyCode } from "./FamilyCode";
 import type { Mode, SessionConfig } from "../game/session";
 import { t, useLang } from "../i18n";
 import { titleCase } from "./theme";
@@ -175,6 +176,7 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
                   {t("Start a new family")}
                 </button>
               )}
+              <FamilyCode family={family} onAdopt={(f) => { setCamp(f.state.campaign); setFamily(f); setAsFamily(true); }} />
             </div>
           )}
           {chap && (

@@ -282,4 +282,14 @@ export const setup: Record<string, string> = {
   "1 (solo: just me)": "1 (solo: yo nomás)",
   "Teach a neighbor to read {d}": "Enséñale a un vecino a leer {d}",
   "Playing alone, the block is the neighbors who aren't at the table. Teaching one costs 1 Trust and makes {d} clearer (+1 Clarity), and it's how one reader wakes a whole district.": "Si juegas solo, la cuadra son los vecinos que no están en la mesa. Enseñarle a uno cuesta 1 de Confianza y aclara {d} (+1 Claridad): así es como una sola persona que lee despierta un distrito entero.",
+  // the family code
+  "Copy the family code:": "Copia el código de la familia:",
+  "Family code copied ✓": "Código de la familia copiado ✓",
+  "📋 Copy the family code (to play on another device)": "📋 Copiar el código de la familia (para jugar en otro dispositivo)",
+  "That isn't a family code. It starts with SNF1.": "Eso no es un código de familia. Empieza con SNF1.",
+  "Bring in this {title} family ({n} chapters played)? It takes the place of the family on this device.": "¿Traer esta familia de {title} ({n} capítulos jugados)? Reemplaza a la familia de este dispositivo.",
+  "The family is here. Continue it below.": "La familia ya está aquí. Continúala abajo.",
+  "Bring a family from another device": "Traer una familia de otro dispositivo",
+  "Paste the family code (it starts with SNF1.)": "Pega el código de la familia (empieza con SNF1.)",
+  "Bring it in": "Traerla",
 };

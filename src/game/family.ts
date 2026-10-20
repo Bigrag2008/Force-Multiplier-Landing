@@ -4,7 +4,7 @@
  * the last game it wrote down.
  */
 import { advance, newState } from "../engine/campaign";
-import type { District } from "../engine/content";
+import { C, DISTRICTS, type District } from "../engine/content";
 import type { CampaignState, ChapterResult } from "../engine/engine";
 import { t, tDistrictTitle } from "../i18n";
 
@@ -49,6 +49,67 @@ export function recordChapter(c: CampaignKey, gameId: string, chapter: string, r
   m[c] = next;
   save(m);
   return next;
+}
+
+// ---- moving a family to another device: a code to copy and paste ----
+const PREFIX = "SNF1.";
+
+/** the family as a code anyone can paste on another device (a classroom switching laptops) */
+export function encodeFamily(f: Family): string {
+  const bytes = new TextEncoder().encode(JSON.stringify({ v: 1, state: f.state }));
+  let bin = "";
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return PREFIX + btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+/** a family from a pasted code, or null if it isn't one (checked field by field: a code is outside data) */
+export function readFamily(text: string): Family | null {
+  try {
+    const raw = text.trim().replace(/\s+/g, "");
+    if (!raw.startsWith(PREFIX)) return null;
+    const b64 = raw.slice(PREFIX.length).replace(/-/g, "+").replace(/_/g, "/");
+    const bin = atob(b64 + "=".repeat((4 - (b64.length % 4)) % 4));
+    const o = JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))));
+    const st = o?.state;
+    if (o?.v !== 1 || !st || (st.campaign !== "LEDGER" && st.campaign !== "BOOK_ONE")) return null;
+    const chapters = new Set(C.campaigns[st.campaign].chapters);
+    const num = (x: unknown, lo: number, hi: number) => (typeof x === "number" && Number.isFinite(x) ? Math.max(lo, Math.min(hi, Math.round(x))) : 0);
+    const strs = (x: unknown) => (Array.isArray(x) ? x.filter((y): y is string => typeof y === "string").slice(0, 50) : []);
+    const played = (Array.isArray(st.played) ? st.played : [])
+      .filter((p: { chapter?: unknown }) => typeof p?.chapter === "string" && chapters.has(p.chapter))
+      .map((p: { chapter: string; won?: unknown; ledger?: unknown; decision?: unknown }) => ({
+        chapter: p.chapter, won: !!p.won, ledger: num(p.ledger, -20, 20), decision: typeof p.decision === "string" ? p.decision : null,
+      }));
+    const stickers = Object.fromEntries(
+      DISTRICTS.flatMap((d) => {
+        const x = st.stickers?.[d];
+        const r = num(x?.rebuilt, 0, 2);
+        const sc = num(x?.scarred, 0, 2);
+        return r || sc ? [[d, { rebuilt: r, scarred: sc }]] : [];
+      }),
+    );
+    const decisions = Object.fromEntries(
+      Object.entries(st.decisions ?? {}).filter(
+        ([k, v]) => chapters.has(k) && typeof v === "string" && C.chapters[k].decision?.options.some((o) => o.key === v),
+      ),
+    ) as Record<string, string>;
+    const state: CampaignState = {
+      campaign: st.campaign, played, ledger: num(st.ledger, -10, 10), stickers, decisions,
+      flags: strs(st.flags).filter((f) => f in FLAG_WORDS), unlocks: strs(st.unlocks), rally: !!st.rally,
+      falls: num(st.falls, 0, 99), defend: st.defend !== false, quit_desk: typeof st.quit_desk === "string" ? st.quit_desk.slice(0, 40) : null,
+    };
+    return { state, lastId: null };
+  } catch {
+    return null;
+  }
+}
+
+/** keep a pasted family on this device, in place of its campaign's family here */
+export function adoptFamily(f: Family): Family {
+  const m = all();
+  m[f.state.campaign] = f;
+  save(m);
+  return f;
 }
 
 /** "Housing Rebuilt ×1, Labor Scarred ×1" */

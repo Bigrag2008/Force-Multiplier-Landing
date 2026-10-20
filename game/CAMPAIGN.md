@@ -12,7 +12,7 @@ You don't play five strangers. You play **one West Dayton family across six gene
 What you win or lose carries forward: districts are rebuilt or scarred, the family's ledger grows or shrinks, and the young people of one chapter become the Elders of the next. In the final chapter the table learns what the base game only hints at: **the trap never went away; it changed clothes.**
 
 ## What carries between chapters
-The website keeps the family on the device (one family per campaign); at the table, write it on the lineage sheet. The rules are in `campaign.py` (and its twin, `src/engine/campaign.ts`).
+The website keeps the family on the device (one family per campaign). To move it (a classroom switching laptops), **Copy the family code** in Campaign setup or at the end of a chapter, and on the other device choose **Bring a family from another device** and paste it. At the table, write it on the lineage sheet. The rules are in `campaign.py` (and its twin, `src/engine/campaign.ts`).
 
 | Carries forward | How |
 |---|---|

@@ -5,6 +5,7 @@ import { describeCarry, rememberGame, type BlockMemory } from "../game/block";
 import { C } from "../engine/content";
 import { nextChapter } from "../engine/campaign";
 import { describeStickers, FLAG_WORDS, recordChapter, type CampaignKey, type Family } from "../game/family";
+import { CopyFamilyCode } from "./FamilyCode";
 import { MoneyCount } from "./MoneyCount";
 import { ResultCode } from "./ResultCode";
 import { t, useLang } from "../i18n";
@@ -160,6 +161,7 @@ function FamilyLedger({ s }: { s: Session }) {
           )}
         </p>
       )}
+      {fam && <CopyFamilyCode family={fam} />}
       {fam && !next && camp === "LEDGER" && (
         <p className="mt-2 text-sm">
           {t("Read the Family Ledger aloud ({n}), then the lineage sheet, name by name.", { n: signed(fam.state.ledger) })}
