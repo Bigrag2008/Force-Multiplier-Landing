@@ -233,6 +233,20 @@ Learn the game in one sitting. Everything not listed here is left in the box.
 
 Block Party plays at about 58–77% wins (`balance_test.py`), and careful play beats grabbing shortcuts. When you've won one, play the Full Block.
 
+## Sign-now clocks (on by default)
+Some traps push a deadline: *"Move in today," "Enroll now," "Approved!"* They're marked ⏱ (`deck_cards.RUSH`). When you draw one, the table counts down from 15 out loud while you decide. **The deadline is always fake:** if the count runs out, nothing happens. The offer is still there. If your Read in that district is 2 or more (amber, the clock), you see that from the start, so no one counts. On the website the clock runs on screen, the TAKE button becomes **SIGN NOW**, and the end of the game says how many decisions you made with the clock running.
+
+## The dollar count (the end of every game)
+Every deal card carries the real money behind it: what signing that trap typically costs one household over about a year, or what an honest deal is worth (the answer key's last column; `deck_cards.DOLLARS`). At the end of the game, add up and say out loud:
+- the traps the table **signed** (its shortcuts), and the most expensive one,
+- the honest help it **walked away from**,
+- what it **stayed out of** by reading and walking, and who **got played**.
+
+Win or lose, the points turn back into money. The website does the count for you. Chapter 3 figures are in 1950s dollars.
+
+## Read your own deal
+After the game, take out a real offer: a phone plan, a car loan, a rent-to-own receipt. The website's **Read your own deal** page works out its second number and the yearly rate it really charges, and shows it on a deal card. Nothing you type leaves your device.
+
 ## House rules (for tables that know the deck)
 Turn any of these on. Each is in the website's setup, and in `sn_engine.py` as an option.
 

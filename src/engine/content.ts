@@ -21,6 +21,11 @@ export interface Card {
   ask?: string;
   answer?: number;
   gen?: boolean;
+  /** the real money: what a trap costs you, or what honest help is worth (deck_cards.DOLLARS) */
+  dollars?: number;
+  basis?: string;
+  /** a "sign now" pitch: its deadline is fake (deck_cards.RUSH) */
+  rush?: boolean;
 }
 /** a deal with blanks (game/deal_gen.py): rolled into a fresh Card for endless deals */
 export interface DealTemplate {
@@ -33,6 +38,10 @@ export interface DealTemplate {
   trap?: boolean;
   lever?: number;
   mul?: [string, string];
+  /** which rolled number is a trap's real cost; an honest template's worth */
+  usd?: string;
+  worth?: number;
+  rush?: boolean;
   [slot: string]: unknown;
 }
 export interface Pattern {

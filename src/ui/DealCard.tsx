@@ -45,6 +45,10 @@ export interface DealCardProps {
   formId?: string;
   /** the math variant: work out an endless deal's second number before the red layer opens */
   math?: boolean;
+  /** a real deal (Bring your own deal): no game lever on the red layer */
+  plain?: boolean;
+  /** the label in the header, instead of the district */
+  heading?: string;
 }
 
 /** The math variant: the red layer stays shut until you've worked out the second number. */
@@ -73,7 +77,7 @@ function WorkItOut({ card, onDone }: { card: Card; onDone: (guess: string) => vo
  * locked layers carry no text at all. Drag Grandma's reading glasses over the card
  * (or put them on with the button) to read the second number.
  */
-export function DealCard({ card, district, sight, effectiveLever, formId, math }: DealCardProps) {
+export function DealCard({ card, district, sight, effectiveLever, formId, math, plain, heading }: DealCardProps) {
   // the math variant: which card's second number has been worked out, and what the guess was
   const [worked, setWorked] = useState<{ card: Card; guess: string } | null>(null);
   const needsMath = !!math && card.answer !== undefined && sight >= 1 && worked?.card !== card;
@@ -86,7 +90,7 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math }
   const lever = effectiveLever ?? card.lever;
 
   const layers = [
-    { n: 1, text: card.red + (card.trap ? `   ▸ LEVER: ${LEVER_WORD[lever]}${lever < card.lever ? " (the League reads it together)" : ""}` : "   ▸ HONEST DEAL — no trap, no lever.") },
+    { n: 1, text: plain ? card.red : card.red + (card.trap ? `   ▸ LEVER: ${LEVER_WORD[lever]}${lever < card.lever ? " (the League reads it together)" : ""}` : "   ▸ HONEST DEAL — no trap, no lever.") },
     { n: 2, text: card.amber },
     { n: 3, text: card.blue },
   ];
@@ -113,7 +117,7 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math }
     <div className="w-full max-w-sm">
       <article className="relative isolate overflow-hidden rounded-xl border border-black/40 bg-program text-ink shadow-xl" aria-label={`Deal in ${titleCase(district)}`}>
         <header className="flex items-center justify-between px-3 py-1.5 text-white" style={{ background: color }}>
-          <span className="text-sm font-black tracking-wide">{district}</span>
+          <span className="text-sm font-black tracking-wide">{heading ?? district}</span>
           <span className="text-[10px] opacity-90">FORM {formId ?? "—"}</span>
         </header>
         {card.die !== undefined && (
@@ -122,7 +126,7 @@ export function DealCard({ card, district, sight, effectiveLever, formId, math }
         <div className="border-b border-dashed border-black/20 px-3 pb-2 pt-2">
           <div className="flex justify-between text-[9px] font-bold uppercase text-black/50">
             <span>What you see</span>
-            <span className="italic normal-case">{C.dayton[district].sub}</span>
+            <span className="italic normal-case">{plain ? "your real deal" : C.dayton[district].sub}</span>
           </div>
           <p className="mt-0.5 text-[15px] font-extrabold leading-tight">{card.front}</p>
         </div>

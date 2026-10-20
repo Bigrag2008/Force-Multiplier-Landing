@@ -537,3 +537,112 @@ for _d in DECK:
     for _c in HONEST[_d]:
         _c["trap"] = False; _c["lever"]=0
     DECK[_d].extend(HONEST[_d])
+
+# DOLLARS — the real money behind each card, for the end-of-game count ("the block signed $14,300
+# of traps"). Deck order, honest deals last. A trap's figure is what signing it typically costs you
+# beyond what it looks like; an honest deal's is what the real help is worth to you. These are rough,
+# typical amounts for one household over about a year, not quotes: each has its basis.
+DOLLARS = {
+ "LENDING": [
+  (448, "a $56 fee rolled over 8 times, like the typical payday borrower"),
+  (1200, "about 300% a year on $1,000 over a few months"),
+  (150, "120%+ a year on a pawn, or the item gone"),
+  (70, "late fees across a few overdue plans"),
+  (175, "five $35 overdraft fees in a month"),
+  (112, "a $14 tip-and-fee, eight times a year"),
+  (60, "advance and filing fees on a refund that was coming anyway"),
+  (1900, "about 100% a year on $2,000 over 18 months"),
+  (180, "a year of fees for a loan you can't touch"),
+  (2000, "a longer term and more interest on a typical balance"),
+  (2500, "re-signed at a worse rate after the 'financing fell through'"),
+  (400, "about 2% of every paycheck, for a year"),
+  (600, "what a fair rate saves over a high-cost loan"),
+  (120, "no interest and no fees"),
+  (250, "a typical tax-prep fee, kept"),
+ ],
+ "HOUSING": [
+  (900, "$25 a week for a year, for a couch that sells for about $400"),
+  (1200, "a big deposit and a 'risk' markup in the first year"),
+  (15000, "years of payments on a house you never own, gone with one late payment"),
+  (1200, "$100 a month in junk fees, for a year"),
+  (1500, "a deposit kept for invented move-out charges"),
+  (250, "five $50 applications"),
+  (120, "a marked-up policy, for a year"),
+  (2400, "a 20% renewal hike on $1,000 rent, for a year"),
+  (6000, "a reset rate that doubles the payment, for a year"),
+  (600, "a flat 'utility' charge above real usage, for a year"),
+  (500, "attorney fees added to one late rent"),
+  (1500, "the 'free' month paid back, plus a penalty"),
+  (1500, "a deposit you actually get back"),
+  (6000, "a year of rent above your capped share"),
+  (8000, "equity built in the first years"),
+ ],
+ "LABOR": [
+  (1500, "a wage claim you signed away"),
+  (5000, "a year kept out of better pay in your field"),
+  (3500, "the employer's half of payroll tax, overtime and benefits, on $35,000"),
+  (1500, "skimmed tips and unpaid off-clock work, over a year"),
+  (4000, "paying back 'free' training after quitting early"),
+  (120, "a day of unpaid work"),
+  (2000, "called-off shifts over a year"),
+  (250, "card fees over a year"),
+  (600, "wages spent back at marked-up prices"),
+  (3000, "car costs and falling per-job pay, over a year"),
+  (8000, "unpaid overtime on 60-hour weeks, for a year"),
+  (300, "off-clock meetings over a year"),
+  (5000, "overtime, benefits and the employer's tax share"),
+  (6000, "paid training and the raises that come with it"),
+  (1200, "back wages recovered"),
+ ],
+ "HEALTH": [
+  (2000, "an out-of-network surprise bill"),
+  (5000, "paying the opening price instead of the charity or cash rate"),
+  (600, "deferred interest backdated on a $2,500 bill"),
+  (300, "a facility fee on top of the visit"),
+  (2000, "paying a bill charity care would have cut"),
+  (3000, "a denied claim after a year of premiums"),
+  (800, "a payment plan sent to collections"),
+  (30, "a copay above the cash price"),
+  (1200, "an out-of-network ambulance bill"),
+  (400, "errors and duplicate charges"),
+  (800, "deferred interest on dental financing"),
+  (1000, "what's left after the No Surprises Act covers most of it"),
+  (3000, "a hospital bill cut by charity care"),
+  (300, "fresh food close to home, and a share in the store"),
+  (400, "a visit priced to your income"),
+  (4000, "a year of premium subsidy"),
+ ],
+ "EDUCATION": [
+  (15000, "for-profit tuition for a credential that doesn't lead to the career"),
+  (6000, "extra interest over a federal loan"),
+  (10000, "income-share payments above a normal loan, if you do well"),
+  (5000, "a cosigned loan that defaults"),
+  (2000, "interest added to the loan while it was deferred"),
+  (3000, "fees for a credential employers don't recognize"),
+  (4000, "paying to retake credits that didn't transfer"),
+  (1500, "lab, tech and book fees on 'all-inclusive' tuition"),
+  (8000, "a commissioned sale into the wrong program"),
+  (1000, "fees for free federal programs"),
+  (8000, "income-share payments on low pay"),
+  (200, "auto-renewal price hikes"),
+  (8000, "federal protections over a private loan"),
+  (3000, "a free certification"),
+  (10000, "two years at community-college prices that transfer"),
+ ],
+}
+for _d in DECK:
+    assert len(DOLLARS[_d])==len(DECK[_d]), _d
+    for _c,(_usd,_why) in zip(DECK[_d],DOLLARS[_d]):
+        _c["dollars"]=_usd; _c["basis"]=_why
+
+# RUSH — "sign now" deals: the pitch pushes a deadline that isn't real. On the website a clock
+# counts down while you decide; Read 2 (amber, the clock) shows you the deadline is fake.
+# At the table: count to 15 out loud, unless the reader has Read 2 there. (RULES.md: Sign-now clocks)
+RUSH = ("Quick Cash", "Refund Advance", "Online Installment Loan", "Credit Builder", "Drive It Home Today",
+        "No-Credit-Check Lease", "$50 to apply", "Standard lease, just sign here", "First month FREE",
+        "Sign here to start Monday", "Please pay your balance today", "Get the dental work done now",
+        "Enroll now", "Approved! A private loan", "Pay $0 now", "A counselor will help you apply today")
+for _d in DECK:
+    for _c in DECK[_d]:
+        if _c["trap"] and _c["front"].startswith(RUSH): _c["rush"]=True
+assert sum(c.get("rush",False) for v in DECK.values() for c in v)==len(RUSH)

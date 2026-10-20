@@ -16,7 +16,7 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
   const [overlordHuman, setOverlordHuman] = useState(false);
   const [coach, setCoach] = useState(true);
   const [online, setOnline] = useState(false);
-  const [rules, setRules] = useState({ finePrint: false, terrell: false, endless: false, math: false });
+  const [rules, setRules] = useState({ finePrint: false, terrell: false, endless: false, math: false, clocks: true });
   const party = mode === "party";
   const rule = (k: keyof typeof rules) => (e: { target: { checked: boolean } }) => setRules({ ...rules, [k]: e.target.checked });
   const field = "rounded-lg border border-white/20 bg-white/10 px-3 py-2";
@@ -41,6 +41,7 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
           terrell: !party && rules.terrell,
           endless: rules.endless,
           math: rules.endless && rules.math,
+          clocks: rules.clocks,
         }, online);
       }}
     >
@@ -123,6 +124,10 @@ export function Setup({ onStart }: { onStart: (c: SessionConfig, online: boolean
             </label>
           </>
         )}
+        <label className="flex items-start gap-2">
+          <input type="checkbox" className="mt-1" checked={rules.clocks} onChange={rule("clocks")} />
+          <span><b>⏱ Sign-now clocks</b><span className="block text-xs text-program/70">Some deals push you to sign before you can think: a clock counts down while you decide. The deadline is always fake, and Read 2 shows you that. On by default.</span></span>
+        </label>
         <label className="flex items-start gap-2">
           <input type="checkbox" className="mt-1" checked={rules.endless} onChange={rule("endless")} />
           <span><b>♾ Endless deals</b><span className="block text-xs text-program/70">Deals are rolled fresh from templates: the numbers change every draw.</span></span>

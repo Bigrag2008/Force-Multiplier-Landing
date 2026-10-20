@@ -3,11 +3,12 @@ import { useState, type ReactNode } from "react";
 import { C, K, type Card, type Choice, type District, type PlaceKey } from "../engine/content";
 import { maxBy, type Action, type Player } from "../engine/engine";
 import { adviseCookout, adviseDeal, adviseSousou, adviseTurn } from "../game/coach";
-import { toWire } from "../game/moves";
+import { toWire, type WireAction } from "../game/moves";
 import type { Session } from "../game/session";
 import { CoachBadge, CoachBox, picked, safe, ShortcutBadge } from "./Coach";
 import { Icon, type IconName } from "./icons";
 import { DealCard } from "./DealCard";
+import { clockTag, SignNowClock, useSignNow } from "./SignNowClock";
 import { DISTRICT_COLOR, titleCase } from "./theme";
 import type { Local, Play } from "./useSession";
 
@@ -101,31 +102,8 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
     );
   }
 
-  if (pd?.k === "deal" && dealCard) {
-    const d = pd.d;
-    const card = dealCard;
-    const cost = g.negCost(d);
-    const deal = dealTip(d, card);
-    const choice = (c: Choice, label: string) => (
-      <button className={primary + picked(deal?.pick === c)} disabled={c === "NEGOTIATE" && p.trust < cost} onClick={() => act({ k: "face", d, choice: c, card })}>
-        <span>{c}</span>
-        <span className="block text-[11px] font-normal">{label}</span>
-        {deal?.pick === c && <CoachBadge />}
-        {deal?.alt?.pick === c && <ShortcutBadge falls={deal.alt.falls} />}
-      </button>
-    );
-    return (
-      <Panel key="face" title={`${p.name} faces a deal in ${titleCase(d)}`} sub="Read what you can, then decide.">
-        <CoachBox s={s} run={run} view="deal" sight={p.sight[d]} advice={deal} />
-        <DealCard card={card} district={d} sight={p.sight[d]} effectiveLever={g.lever(d, card)} formId={formId(s, d, card)} math={s.config.math} />
-        <div className="grid gap-2 sm:grid-cols-3">
-          {choice("TAKE", "accept it")}
-          {choice("WALK", "refuse it")}
-          {choice("NEGOTIATE", `${cost} Trust · beats a trap if Read ≥ lever`)}
-        </div>
-      </Panel>
-    );
-  }
+  if (pd?.k === "deal" && dealCard)
+    return <FaceDeal key={g.dealt.indexOf(dealCard)} s={s} play={play} run={run} d={pd.d} card={dealCard} deal={dealTip(pd.d, dealCard)} />;
 
   if (pd?.k === "teach") {
     const t = g.players.find((x) => x.name === pd.to)!;
@@ -284,6 +262,42 @@ export function TurnPanel({ s, play, local }: { s: Session; play: Play; local: L
       <button className={`${ghost} w-full`} onClick={() => play({ t: "end" })}>
         End turn (pass the device)
       </button>
+    </Panel>
+  );
+}
+
+/** Facing one deal: read it, then TAKE / WALK / NEGOTIATE. A "sign now" deal counts down while you decide. */
+function FaceDeal({ s, play, run, d, card, deal }: { s: Session; play: Play; run: Local; d: District; card: Card; deal: ReturnType<typeof adviseDeal> | null }) {
+  const g = s.g;
+  const p = s.player;
+  const cost = g.negCost(d);
+  const [clock, left] = useSignNow(!!card.rush, p.sight[d], s.config.clocks !== false);
+  const decide = (c: Choice) => {
+    const tag = clockTag(clock);
+    play({ t: "act", a: { ...toWire(g, { k: "face", d, choice: c, card }), ...(tag ? { clock: tag } : {}) } as WireAction });
+  };
+  const choice = (c: Choice, label: string) => (
+    <button
+      className={primary + picked(deal?.pick === c) + (c === "TAKE" && clock === "running" ? " urge ring-2 ring-[#E63946]" : "")}
+      disabled={c === "NEGOTIATE" && p.trust < cost}
+      onClick={() => decide(c)}
+    >
+      <span>{c === "TAKE" && clock === "running" ? "SIGN NOW" : c}</span>
+      <span className="block text-[11px] font-normal">{label}</span>
+      {deal?.pick === c && <CoachBadge />}
+      {deal?.alt?.pick === c && <ShortcutBadge falls={deal.alt.falls} />}
+    </button>
+  );
+  return (
+    <Panel key="face" title={`${p.name} faces a deal in ${titleCase(d)}`} sub="Read what you can, then decide.">
+      <CoachBox s={s} run={run} view="deal" sight={p.sight[d]} advice={deal} />
+      <SignNowClock state={clock} left={left} />
+      <DealCard card={card} district={d} sight={p.sight[d]} effectiveLever={g.lever(d, card)} formId={formId(s, d, card)} math={s.config.math} />
+      <div className="grid gap-2 sm:grid-cols-3">
+        {choice("TAKE", "accept it")}
+        {choice("WALK", "refuse it")}
+        {choice("NEGOTIATE", `${cost} Trust · beats a trap if Read ≥ lever`)}
+      </div>
     </Panel>
   );
 }

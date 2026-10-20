@@ -26,5 +26,8 @@ export function makeDeal(d: District, rng: Rng): Card {
   return {
     front: fill(t.front, v), red: fill(t.red, v), amber: fill(t.amber, v), blue: fill(t.blue, v),
     trap, lever: trap ? (t.lever ?? 1) : 0, ask: fill(t.ask, v), answer: n("total"), gen: true,
+    dollars: trap ? n(t.usd ?? ("over" in v ? "over" : "total")) : (t.worth as number),
+    basis: trap ? "the numbers on this deal" : "what the real help is worth",
+    rush: !!t.rush,
   };
 }

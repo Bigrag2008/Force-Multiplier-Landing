@@ -123,6 +123,51 @@ THE_MAP_LENDING += [
          "Neighbors covering neighbors, the way the block always has."),
 ]
 
+# the real money behind each era card, in 1950s dollars (see deck_cards.DOLLARS)
+ERA_DOLLARS = {
+ "HOUSING": [
+  (300, "weekly payments adding up to two or three times the price"),
+  (4000, "years of payments on a contract house, lost with one late payment"),
+  (150, "a deposit kept for invented charges"),
+  (100, "a flat utility charge above real usage, for a year"),
+  (100, "fees added to one late rent"),
+  (3000, "a house marked up by half after panic selling"),
+  (200, "a year of an overpriced 'special' policy"),
+  (400, "a year of rent above what bigger houses cost across town"),
+  (3000, "a buyout below what any allowed house costs"),
+  (500, "a deposit lost on a house the covenant won't let you keep"),
+  (1500, "a repair loan secured by the house, at a crushing rate"),
+  (2500, "the value a low appraisal takes off your home"),
+  (3000, "a fair mortgage with a small down payment"),
+  (1000, "a home you're no longer steered away from"),
+  (800, "a down payment with no interest"),
+ ],
+ "LENDING": [
+  (50, "high interest on a pawn, or the item gone"),
+  (100, "a fee on every check, for a year"),
+  (400, "more interest over a longer term"),
+  (300, "3% a month on a small loan, for a year"),
+  (200, "savings that fund loans everywhere but your street"),
+  (200, "weekly furniture payments that double the price"),
+  (150, "years of dimes on a policy that lapses"),
+  (300, "pay taken straight from your employer"),
+  (100, "credit markups plus interest"),
+  (600, "more interest, and the balloon still at the end"),
+  (50, "a week's pay sold at a discount"),
+  (1500, "every dollar of a car loan you cosigned"),
+  (2000, "a fair mortgage on your own street"),
+  (150, "a small loan at a capped rate"),
+  (100, "a loan from the club, with no interest"),
+ ],
+}
+# the era's own "sign now" pitches (base cards keep their deck_cards.RUSH mark)
+for _c in THE_MAP_HOUSING+THE_MAP_LENDING:
+    if _c["front"].startswith(("Home repair: we'll fix your roof today","Sell your next paycheck","Refinance your contract")): _c["rush"]=True
+for _d,_deck in (("HOUSING",THE_MAP_HOUSING),("LENDING",THE_MAP_LENDING)):
+    assert len(ERA_DOLLARS[_d])==len(_deck), _d
+    for _c,(_usd,_why) in zip(_deck,ERA_DOLLARS[_d]):
+        _c["dollars"]=_usd; _c["basis"]=_why+" (1950s dollars)"
+
 CHAPTERS = {
  "THE_MAP": dict(
     number=3, title="The Map", era="1930s–1960s",

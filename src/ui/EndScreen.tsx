@@ -1,5 +1,6 @@
 "use client";
 import type { Session } from "../game/session";
+import { MoneyCount } from "./MoneyCount";
 
 export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
   const g = s.g;
@@ -21,6 +22,7 @@ export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
           Most Props: <b>{legend.name}</b> ({legend.role}) with {legend.legend} Props, earned by lifting people.
         </p>
       )}
+      <MoneyCount s={s} />
       {!won && fallen.length > 0 && (
         <p className="mt-3 text-[#ff9b9b]">{fallen[0].name} won the board as the Machine, and earned 0 Props. You win nothing by becoming it.</p>
       )}

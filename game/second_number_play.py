@@ -270,6 +270,15 @@ class Table:
                 print(RED+wrap(f"{fallen[0].name} won the board as the Machine — and earned 0 Props. "
                                "The Owner just wore their face. You win nothing by becoming it.")+R)
             print(RED+"✖"*72+R)
+        m=g.money()
+        if g.signed:
+            era=" (1950s dollars)" if g.chapter else ""
+            print(f"\n  {GOLD}{B}THE SECOND NUMBER, THIS GAME{era}{R}")
+            print(wrap(f"The block signed ${m['taken']:,} of traps" + (f" and walked away from ${m['refused']:,} of real help." if m['refused'] else ".")))
+            print(f"  Stayed out of ${m['defused']+m['dodged']:,} · real help taken ${m['help']:,} · got played on ${m['played']:,}")
+            if m["worst"]:
+                w=m["worst"]; print(RED+wrap(f"The most expensive shortcut: {w['who']} signed \"{w['front']}\": ${w['dollars']:,}, {w['basis']}.")+R)
+            if m["playedMost"]: print(wrap(f"{m['playedMost']['who']} got played {m['playedMost']['times']} time(s)."))
         if g.chapter: self.ledger()
         print(f"\n  {DIM}How high did you climb before you turned into the thing you were fighting?{R}")
 

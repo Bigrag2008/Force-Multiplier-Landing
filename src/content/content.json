@@ -44,7 +44,10 @@
     "amber": "Due in full in 14 days. Can't pay? You 'reroll' and owe $56 again.",
     "blue": "The storefront and the debt buyer that hounds you later share one owner.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 448,
+    "basis": "a $56 fee rolled over 8 times, like the typical payday borrower",
+    "rush": true
    },
    {
     "front": "Title Loan: borrow $1,000 on your car title, keep driving.",
@@ -52,7 +55,9 @@
     "amber": "One missed payment = repossession, often with no grace period.",
     "blue": "The lender holds a stake in the repo lot that resells your car.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 1200,
+    "basis": "about 300% a year on $1,000 over a few months"
    },
    {
     "front": "Pawn: cash now for your item, buy it back anytime.",
@@ -60,7 +65,9 @@
     "amber": "The redemption window is short — miss it and it's sold.",
     "blue": "Resale profit flows to the same chain that wrote the loan.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 150,
+    "basis": "120%+ a year on a pawn, or the item gone"
    },
    {
     "front": "Buy Now, Pay Later: 4 easy payments, 0% interest!",
@@ -68,7 +75,9 @@
     "amber": "Autopay hits whether the money's there or not → overdraft.",
     "blue": "The BNPL firm sells your payment data and routes late fees up.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 70,
+    "basis": "late fees across a few overdue plans"
    },
    {
     "front": "Overdraft Protection: we'll cover your card if you're short.",
@@ -76,7 +85,9 @@
     "amber": "Charges reordered largest-first to trigger the most fees.",
     "blue": "Overdraft fees are a top profit line for the bank behind it.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 175,
+    "basis": "five $35 overdraft fees in a month"
    },
    {
     "front": "Cash Advance App: get $100 early. No interest — just tip!",
@@ -84,7 +95,9 @@
     "amber": "Auto-debits on payday; bad timing sets off an overdraft cascade.",
     "blue": "The 'tip' dodges lending law; the app sells your bank data.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 112,
+    "basis": "a $14 tip-and-fee, eight times a year"
    },
    {
     "front": "Refund Advance: your tax refund NOW, don't wait weeks.",
@@ -92,7 +105,10 @@
     "amber": "Due when the IRS pays — any delay becomes your problem.",
     "blue": "The preparer, the bank, and the loan are one packaged product.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 60,
+    "basis": "advance and filing fees on a refund that was coming anyway",
+    "rush": true
    },
    {
     "front": "Online Installment Loan: need $2,000? Easy approval.",
@@ -100,7 +116,10 @@
     "amber": "Balloon structure — early payments barely touch the principal.",
     "blue": "A fintech fronts it; a far-off bank lends its charter for a cut.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 1900,
+    "basis": "about 100% a year on $2,000 over 18 months",
+    "rush": true
    },
    {
     "front": "Credit Builder: build your credit — guaranteed approval!",
@@ -108,7 +127,10 @@
     "amber": "Cancel late and you eat months of fees for nothing.",
     "blue": "The fees are the business; your 'credit building' is the bait.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 180,
+    "basis": "a year of fees for a loan you can't touch",
+    "rush": true
    },
    {
     "front": "Debt Consolidation: one low monthly payment, be debt-free!",
@@ -116,7 +138,9 @@
     "amber": "Stop paying creditors as told and your credit craters first.",
     "blue": "The 'nonprofit' is funded by fees from the lenders it deals with.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 2000,
+    "basis": "a longer term and more interest on a typical balance"
    },
    {
     "front": "Drive It Home Today — financing approved!",
@@ -124,7 +148,10 @@
     "amber": "They hold your trade-in and down payment hostage to force the redo.",
     "blue": "The dealer and the finance arm split the markup on your rate.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 2500,
+    "basis": "re-signed at a worse rate after the 'financing fell through'",
+    "rush": true
    },
    {
     "front": "Check Cashing: cash your check instantly, no bank needed.",
@@ -132,7 +159,9 @@
     "amber": "Every payday, every time. It never stops.",
     "blue": "The chain also sells the payday loans you'll 'need' next.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 400,
+    "basis": "about 2% of every paycheck, for a year"
    },
    {
     "front": "Credit-union personal loan: fixed low rate.",
@@ -140,7 +169,9 @@
     "amber": "No prepayment penalty; pay it early and save.",
     "blue": "Member-owned nonprofit; the profit returns to members like you.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 600,
+    "basis": "what a fair rate saves over a high-cost loan"
    },
    {
     "front": "Layaway: pay it off first, then take it home.",
@@ -148,7 +179,9 @@
     "amber": "Miss payments and you just get your money back, minus a small fee.",
     "blue": "Old-school model with nobody profiting off your debt.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 120,
+    "basis": "no interest and no fees"
    },
    {
     "front": "Free tax prep (VITA) + your refund by direct deposit.",
@@ -156,7 +189,9 @@
     "amber": "E-file with direct deposit and it usually lands in about 3 weeks.",
     "blue": "An IRS-backed volunteer program; nobody earns a cut of your refund.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 250,
+    "basis": "a typical tax-prep fee, kept"
    }
   ],
   "HOUSING": [
@@ -166,7 +201,9 @@
     "amber": "Miss one week late in the term and they take it — you keep nothing.",
     "blue": "The store and the lease company are one holding company.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 900,
+    "basis": "$25 a week for a year, for a couch that sells for about $400"
    },
    {
     "front": "No-Credit-Check Lease: bad credit? Move in today.",
@@ -174,7 +211,10 @@
     "amber": "A 60-day move-out notice is buried inside — miss it, it auto-renews.",
     "blue": "The 'management co.' is a shell of the same landlord group.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 1200,
+    "basis": "a big deposit and a 'risk' markup in the first year",
+    "rush": true
    },
    {
     "front": "Own Your Home — no bank, no mortgage! (Contract-for-Deed)",
@@ -182,7 +222,9 @@
     "amber": "One default — even near the end — forfeits everything you paid.",
     "blue": "The seller reclaims and resells the same house again and again.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 15000,
+    "basis": "years of payments on a house you never own, gone with one late payment"
    },
    {
     "front": "Rent is only $950!",
@@ -190,7 +232,9 @@
     "amber": "Fees climb at renewal while the base rent stays 'the same'.",
     "blue": "A third-party fee processor splits the take with the landlord.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 1200,
+    "basis": "$100 a month in junk fees, for a year"
    },
    {
     "front": "Just first month + deposit to move in.",
@@ -198,7 +242,9 @@
     "amber": "The dispute window is tight — miss it and it's gone.",
     "blue": "A 'turnover' vendor profits from every withheld deposit.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 1500,
+    "basis": "a deposit kept for invented move-out charges"
    },
    {
     "front": "$50 to apply — refundable if you're not approved!",
@@ -206,7 +252,10 @@
     "amber": "Your decision stays 'pending' past the refund window.",
     "blue": "The screening company and the landlord share the fee pool.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 250,
+    "basis": "five $50 applications",
+    "rush": true
    },
    {
     "front": "Renters insurance included for your protection.",
@@ -214,7 +263,9 @@
     "amber": "Auto-added monthly; opting out is hidden and time-boxed.",
     "blue": "The landlord earns a commission on every policy.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 120,
+    "basis": "a marked-up policy, for a year"
    },
    {
     "front": "Welcome! Great intro rent.",
@@ -222,7 +273,9 @@
     "amber": "Your notice to leave is due before you even learn the new rate.",
     "blue": "Rent-setting software coordinates the hike across the whole area.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 2400,
+    "basis": "a 20% renewal hike on $1,000 rent, for a year"
    },
    {
     "front": "Low payment to get you in the door! (ARM mortgage)",
@@ -230,7 +283,9 @@
     "amber": "The reset date was set on day one; the clock always ran.",
     "blue": "The loan is sold upstream; the servicer profits when you struggle.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 6000,
+    "basis": "a reset rate that doubles the payment, for a year"
    },
    {
     "front": "All utilities included — simple!",
@@ -238,7 +293,9 @@
     "amber": "The rate adjusts up yearly with no itemized proof.",
     "blue": "A submetering vendor splits the overcharge with ownership.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 600,
+    "basis": "a flat 'utility' charge above real usage, for a year"
    },
    {
     "front": "Standard lease, just sign here.",
@@ -246,7 +303,10 @@
     "amber": "Late by a day → filing starts and fees attach immediately.",
     "blue": "A high-volume eviction law firm is paid per filing by the group.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 500,
+    "basis": "attorney fees added to one late rent",
+    "rush": true
    },
    {
     "front": "First month FREE!",
@@ -254,7 +314,10 @@
     "amber": "The clawback triggers on any break before month 13.",
     "blue": "Concessions are booked as debt you owe the property fund.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 1500,
+    "basis": "the 'free' month paid back, plus a penalty",
+    "rush": true
    },
    {
     "front": "A fair lease: normal deposit, clear terms.",
@@ -262,7 +325,9 @@
     "amber": "Standard notice period, plainly stated. No buried clause.",
     "blue": "A small local landlord, not a shell of a national fund.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 1500,
+    "basis": "a deposit you actually get back"
    },
    {
     "front": "Housing voucher (Section 8): inspected unit, capped rent.",
@@ -270,7 +335,9 @@
     "amber": "Annual recertification, clearly scheduled.",
     "blue": "A public program built to keep you housed, not to extract.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 6000,
+    "basis": "a year of rent above your capped share"
    },
    {
     "front": "Community land trust home: buy at a price you can afford.",
@@ -278,7 +345,9 @@
     "amber": "Resale is capped, and that's spelled out on day one.",
     "blue": "The trust holds the land so the next family can afford it too.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 8000,
+    "basis": "equity built in the first years"
    }
   ],
   "LABOR": [
@@ -288,7 +357,10 @@
     "amber": "The 30-day opt-out is buried on page 9 — the clock starts now.",
     "blue": "The arbitration firm is chosen and paid by the employer.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 1500,
+    "basis": "a wage claim you signed away",
+    "rush": true
    },
    {
     "front": "Standard new-hire paperwork. (Non-compete)",
@@ -296,7 +368,9 @@
     "amber": "Signed at hire; enforced exactly when you try to leave.",
     "blue": "Used to hold wages down across an entire local industry.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 5000,
+    "basis": "a year kept out of better pay in your field"
    },
    {
     "front": "You're an independent contractor — be your own boss!",
@@ -304,7 +378,9 @@
     "amber": "Back-pay and benefit claims expire if you don't file in time.",
     "blue": "The staffing agency pockets what your protections would've cost.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 3500,
+    "basis": "the employer's half of payroll tax, overtime and benefits, on $35,000"
    },
    {
     "front": "Tips pooled and shared fairly, trust us.",
@@ -312,7 +388,9 @@
     "amber": "Wage claims have a filing deadline, and proof fades fast.",
     "blue": "Skimmed wages become the owner's margin.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 1500,
+    "basis": "skimmed tips and unpaid off-clock work, over a year"
    },
    {
     "front": "Free training to start your career!",
@@ -320,7 +398,9 @@
     "amber": "The debt clock starts day one and follows you out the door.",
     "blue": "The 'debt' is sold to a collector the moment you leave.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 4000,
+    "basis": "paying back 'free' training after quitting early"
    },
    {
     "front": "Come do a working interview!",
@@ -328,7 +408,9 @@
     "amber": "'We'll decide later' — payday never comes.",
     "blue": "Serial trial shifts quietly staff the floor for free.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 120,
+    "basis": "a day of unpaid work"
    },
    {
     "front": "Flexible hours — we'll text you!",
@@ -336,7 +418,9 @@
     "amber": "Hours cut just below the benefits threshold on purpose.",
     "blue": "Scheduling software optimizes you to part-time, no benefits.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 2000,
+    "basis": "called-off shifts over a year"
    },
    {
     "front": "Get paid on a convenient card!",
@@ -344,7 +428,9 @@
     "amber": "Inactivity fees drain it if you don't cash out fast.",
     "blue": "The card issuer and employer split the fee revenue.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 250,
+    "basis": "card fees over a year"
    },
    {
     "front": "Shop at our store with your staff discount!",
@@ -352,7 +438,9 @@
     "amber": "Advances against pay keep you one cycle behind, always.",
     "blue": "The modern company town — you owe your soul to the store.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 600,
+    "basis": "wages spent back at marked-up prices"
    },
    {
     "front": "Set your own schedule, earn per job!",
@@ -360,7 +448,9 @@
     "amber": "Incentives expire; the 'bonus' always moves out of reach.",
     "blue": "The platform tunes your pay to the lowest you'll still accept.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 3000,
+    "basis": "car costs and falling per-job pay, over a year"
    },
    {
     "front": "Congrats, you're salaried now — a manager!",
@@ -368,7 +458,9 @@
     "amber": "Your duties never match the title; claims expire quietly.",
     "blue": "Your unpaid overtime is pure profit upstream.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 8000,
+    "basis": "unpaid overtime on 60-hour weeks, for a year"
    },
    {
     "front": "Quick team meeting after your shift.",
@@ -376,7 +468,9 @@
     "amber": "Attendance is tracked; refusing is quietly punished.",
     "blue": "Union-avoidance consultants are paid to keep you quiet.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 300,
+    "basis": "off-clock meetings over a year"
    },
    {
     "front": "A real W-2 job: overtime, benefits, clear pay.",
@@ -384,7 +478,9 @@
     "amber": "Pay schedule and raises are written and predictable.",
     "blue": "Classified correctly — your protections are intact.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 5000,
+    "basis": "overtime, benefits and the employer's tax share"
    },
    {
     "front": "Union apprenticeship: paid training, raises you keep.",
@@ -392,7 +488,9 @@
     "amber": "A clear schedule of raises as you hit milestones.",
     "blue": "Collective bargaining puts the leverage on your side.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 6000,
+    "basis": "paid training and the raises that come with it"
    },
    {
     "front": "File a wage claim with the state labor office.",
@@ -400,7 +498,9 @@
     "amber": "The deadline is long, but file soon while the records are fresh.",
     "blue": "The public enforcer works for you, not the employer.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 1200,
+    "basis": "back wages recovered"
    }
   ],
   "HEALTH": [
@@ -410,7 +510,9 @@
     "amber": "Since 2022 the No Surprises Act bans this for ER/emergency care — dispute it.",
     "blue": "Staffing firms place out-of-network docs in in-network ERs on purpose.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 2000,
+    "basis": "an out-of-network surprise bill"
    },
    {
     "front": "Amount due: $8,400. FINAL.",
@@ -418,7 +520,9 @@
     "amber": "Negotiate before it hits collections or the number hardens.",
     "blue": "Hospital, biller, and collector are one revenue chain.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 5000,
+    "basis": "paying the opening price instead of the charity or cash rate"
    },
    {
     "front": "Medical card: 0% interest if paid in 12 months!",
@@ -426,7 +530,9 @@
     "amber": "The 0% clock ends quietly on a date you'll forget.",
     "blue": "The clinic earns a cut for every patient it signs up.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 600,
+    "basis": "deferred interest backdated on a $2,500 bill"
    },
    {
     "front": "Just a routine clinic visit.",
@@ -434,7 +540,9 @@
     "amber": "It shows up weeks later as a second, surprise bill.",
     "blue": "Hospitals buy up clinics just to attach facility fees.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 300,
+    "basis": "a facility fee on top of the visit"
    },
    {
     "front": "Please pay your balance today.",
@@ -442,7 +550,10 @@
     "amber": "Eligibility windows close while they push you to pay.",
     "blue": "Nonprofits owe charity care but profit by collecting instead.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 2000,
+    "basis": "paying a bill charity care would have cut",
+    "rush": true
    },
    {
     "front": "Health coverage for just $99/mo! (Short-term plan)",
@@ -450,7 +561,9 @@
     "amber": "Claims denied after care, and appeal windows are short.",
     "blue": "The broker earns a fat commission on junk plans.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 3000,
+    "basis": "a denied claim after a year of premiums"
    },
    {
     "front": "We can set up a payment plan.",
@@ -458,7 +571,9 @@
     "amber": "Statute-of-limitations tricks restart the debt clock.",
     "blue": "The debt is sold for pennies; the collector profits on the spread.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 800,
+    "basis": "a payment plan sent to collections"
    },
    {
     "front": "Your copay is $60.",
@@ -466,7 +581,9 @@
     "amber": "'Gag clauses' once barred pharmacists from telling you.",
     "blue": "Pharmacy middlemen pocket the spread between list and real price.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 30,
+    "basis": "a copay above the cash price"
    },
    {
     "front": "We'll get you to the hospital. (Ambulance)",
@@ -474,7 +591,9 @@
     "amber": "The bill arrives later; you had no way to choose in the moment.",
     "blue": "Private-equity-owned ambulance firms balance-bill on purpose.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 1200,
+    "basis": "an out-of-network ambulance bill"
    },
    {
     "front": "Here's your total, pay at the desk.",
@@ -482,7 +601,9 @@
     "amber": "Request the itemized bill fast — before it's marked 'final'.",
     "blue": "Upcoding inflates the bill; the chain keeps the overcharge.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 400,
+    "basis": "errors and duplicate charges"
    },
    {
     "front": "Get the dental work done now — finance it!",
@@ -490,7 +611,10 @@
     "amber": "The promo ends mid-treatment and the rate jumps.",
     "blue": "The provider is paid upfront; you're left owing the lender.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 800,
+    "basis": "deferred interest on dental financing",
+    "rush": true
    },
    {
     "front": "We'll airlift you — don't worry about the cost.",
@@ -498,7 +622,9 @@
     "amber": "You still can't consent to the price mid-emergency, so know your protection.",
     "blue": "PE-owned air fleets long relied on balance billing as the business model.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 1000,
+    "basis": "what's left after the No Surprises Act covers most of it"
    },
    {
     "front": "Charity-care application at a nonprofit hospital.",
@@ -506,7 +632,9 @@
     "amber": "Apply within the window and the balance can be wiped.",
     "blue": "Nonprofit hospitals are required to offer this; it's your right.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 3000,
+    "basis": "a hospital bill cut by charity care"
    },
    {
     "front": "Join Gem City Market: a grocery the neighborhood owns.",
@@ -514,7 +642,9 @@
     "amber": "No teaser price, no auto-renew trap. The rules are the co-op's bylaws, in the open.",
     "blue": "Member-owned: the store answers to the people it feeds.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 300,
+    "basis": "fresh food close to home, and a share in the store"
    },
    {
     "front": "Community clinic, sliding-scale fee.",
@@ -522,7 +652,9 @@
     "amber": "Set your fee up front; no bill ambush later.",
     "blue": "Federally supported care designed to reach everyone.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 400,
+    "basis": "a visit priced to your income"
    },
    {
     "front": "Marketplace plan with an income-based subsidy.",
@@ -530,7 +662,9 @@
     "amber": "Sign up in open enrollment, or within 60 days of a life change.",
     "blue": "A public program with real rules; the plan can't deny you for being sick.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 4000,
+    "basis": "a year of premium subsidy"
    }
   ],
   "EDUCATION": [
@@ -540,7 +674,10 @@
     "amber": "The enrollment deadline pushes you past the refund date.",
     "blue": "The school and the loan servicer are one owner.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 15000,
+    "basis": "for-profit tuition for a credential that doesn't lead to the career",
+    "rush": true
    },
    {
     "front": "Approved! A private loan to cover your whole tuition.",
@@ -548,7 +685,10 @@
     "amber": "The rate resets on a schedule you don't control.",
     "blue": "The servicer profits the longer you stay in debt.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 6000,
+    "basis": "extra interest over a federal loan",
+    "rush": true
    },
    {
     "front": "Pay $0 now — just a % of your future income! (ISA)",
@@ -556,7 +696,10 @@
     "amber": "The percentage and term lock in before you know your salary.",
     "blue": "Investors bought a slice of your future paycheck.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 10000,
+    "basis": "income-share payments above a normal loan, if you do well",
+    "rush": true
    },
    {
     "front": "Just have a family member cosign.",
@@ -564,7 +707,9 @@
     "amber": "The 'release' option has conditions almost no one ever meets.",
     "blue": "Binding family debt is a feature, not a bug, for the lender.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 5000,
+    "basis": "a cosigned loan that defaults"
    },
    {
     "front": "Can't pay? Just defer — no worries!",
@@ -572,7 +717,9 @@
     "amber": "Capitalization hits on a date buried in the terms.",
     "blue": "A bigger balance means more servicer profit.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 2000,
+    "basis": "interest added to the loan while it was deferred"
    },
    {
     "front": "6 weeks to a high-paying certification!",
@@ -580,7 +727,9 @@
     "amber": "No refund once the first module 'starts'.",
     "blue": "The 'accreditor' is paid by the schools it blesses.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 3000,
+    "basis": "fees for a credential employers don't recognize"
    },
    {
     "front": "Start here, transfer anywhere later!",
@@ -588,7 +737,9 @@
     "amber": "You find out only after you've enrolled and paid.",
     "blue": "Non-transferable credits lock you into one paying school.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 4000,
+    "basis": "paying to retake credits that didn't transfer"
    },
    {
     "front": "Tuition is all-inclusive!",
@@ -596,7 +747,9 @@
     "amber": "Fees are billed per term and rise each year.",
     "blue": "A captive bookstore/vendor shares in the markup.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 1500,
+    "basis": "lab, tech and book fees on 'all-inclusive' tuition"
    },
    {
     "front": "A counselor will help you apply today!",
@@ -604,7 +757,10 @@
     "amber": "High pressure: 'enroll today or lose your spot.'",
     "blue": "Recruiters are paid per signed enrollment, not per graduate.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 8000,
+    "basis": "a commissioned sale into the wrong program",
+    "rush": true
    },
    {
     "front": "We'll erase your student loans — for a fee!",
@@ -612,7 +768,9 @@
     "amber": "Pay upfront, then 'processing' drags past your real options.",
     "blue": "A fee-mill resells your info to the next scam in line.",
     "trap": true,
-    "lever": 1
+    "lever": 1,
+    "dollars": 1000,
+    "basis": "fees for free federal programs"
    },
    {
     "front": "No cost until you're hired at $70k+! (Bootcamp ISA)",
@@ -620,7 +778,9 @@
     "amber": "The clock and salary floor are written to favor the school.",
     "blue": "Financiers bundle and securitize cohorts of students like bonds.",
     "trap": true,
-    "lever": 3
+    "lever": 3,
+    "dollars": 8000,
+    "basis": "income-share payments on low pay"
    },
    {
     "front": "Keep your license current — easy subscription.",
@@ -628,7 +788,9 @@
     "amber": "The cancel window is tiny and lands right before renewal.",
     "blue": "A captive provider holds a monopoly on the required credits.",
     "trap": true,
-    "lever": 2
+    "lever": 2,
+    "dollars": 200,
+    "basis": "auto-renewal price hikes"
    },
    {
     "front": "Federal student aid (FAFSA): fixed rate, protections.",
@@ -636,7 +798,9 @@
     "amber": "Clear, federal timelines; deferment won't quietly capitalize the same way.",
     "blue": "Public aid built for you, not an investor's return.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 8000,
+    "basis": "federal protections over a private loan"
    },
    {
     "front": "Public library / free certification program.",
@@ -644,7 +808,9 @@
     "amber": "Go at your own pace; no refund deadline to beat.",
     "blue": "A public good with nobody profiting off your enrollment.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 3000,
+    "basis": "a free certification"
    },
    {
     "front": "Community college with a guaranteed-transfer agreement.",
@@ -652,7 +818,9 @@
     "amber": "Follow the transfer map from semester one.",
     "blue": "A public partnership — the schools are built to pass you along, not trap you.",
     "trap": false,
-    "lever": 0
+    "lever": 0,
+    "dollars": 10000,
+    "basis": "two years at community-college prices that transfer"
    }
   ]
  },
@@ -934,7 +1102,9 @@
       "amber": "Miss one week late in the term and they take it — you keep nothing.",
       "blue": "The store and the lease company are one holding company.",
       "trap": true,
-      "lever": 1
+      "lever": 1,
+      "dollars": 300,
+      "basis": "weekly payments adding up to two or three times the price (1950s dollars)"
      },
      {
       "front": "Own Your Home — no bank, no mortgage! (Contract-for-Deed)",
@@ -942,7 +1112,9 @@
       "amber": "One default — even near the end — forfeits everything you paid.",
       "blue": "The seller reclaims and resells the same house again and again.",
       "trap": true,
-      "lever": 3
+      "lever": 3,
+      "dollars": 4000,
+      "basis": "years of payments on a contract house, lost with one late payment (1950s dollars)"
      },
      {
       "front": "Just first month + deposit to move in.",
@@ -950,7 +1122,9 @@
       "amber": "The dispute window is tight — miss it and it's gone.",
       "blue": "A 'turnover' vendor profits from every withheld deposit.",
       "trap": true,
-      "lever": 2
+      "lever": 2,
+      "dollars": 150,
+      "basis": "a deposit kept for invented charges (1950s dollars)"
      },
      {
       "front": "All utilities included — simple!",
@@ -958,7 +1132,9 @@
       "amber": "The rate adjusts up yearly with no itemized proof.",
       "blue": "A submetering vendor splits the overcharge with ownership.",
       "trap": true,
-      "lever": 1
+      "lever": 1,
+      "dollars": 100,
+      "basis": "a flat utility charge above real usage, for a year (1950s dollars)"
      },
      {
       "front": "Standard lease, just sign here.",
@@ -966,7 +1142,10 @@
       "amber": "Late by a day → filing starts and fees attach immediately.",
       "blue": "A high-volume eviction law firm is paid per filing by the group.",
       "trap": true,
-      "lever": 1
+      "lever": 1,
+      "dollars": 100,
+      "basis": "fees added to one late rent (1950s dollars)",
+      "rush": true
      },
      {
       "front": "A house on the next street, and they're finally selling to us!",
@@ -974,7 +1153,9 @@
       "amber": "Sold on contract: you won't hold the deed until the very last payment.",
       "blue": "The same speculator scared the sellers into selling and now sells to you. That's blockbusting.",
       "trap": true,
-      "lever": 3
+      "lever": 3,
+      "dollars": 3000,
+      "basis": "a house marked up by half after panic selling (1950s dollars)"
      },
      {
       "front": "Fire insurance: our special policy for your area.",
@@ -982,7 +1163,9 @@
       "amber": "One claim and the policy is cancelled at renewal.",
       "blue": "Insurers drew the same red lines the lenders did.",
       "trap": true,
-      "lever": 2
+      "lever": 2,
+      "dollars": 200,
+      "basis": "a year of an overpriced 'special' policy (1950s dollars)"
      },
      {
       "front": "A room in a converted house: cheap, and close to the plant.",
@@ -990,7 +1173,9 @@
       "amber": "The rent climbs as more families are packed into the building.",
       "blue": "An absentee owner splits big houses into many units; the more crowded, the more profit.",
       "trap": true,
-      "lever": 1
+      "lever": 1,
+      "dollars": 400,
+      "basis": "a year of rent above what bigger houses cost across town (1950s dollars)"
      },
      {
       "front": "Urban renewal: the city will buy your home. Progress is coming!",
@@ -998,7 +1183,9 @@
       "amber": "Refuse, and eminent domain takes the house anyway, on their schedule.",
       "blue": "The highways and the 'renewal' land went where the red lines were drawn.",
       "trap": true,
-      "lever": 2
+      "lever": 2,
+      "dollars": 3000,
+      "basis": "a buyout below what any allowed house costs (1950s dollars)"
      },
      {
       "front": "A nice house across town. The realtor says you'd love it there.",
@@ -1006,7 +1193,9 @@
       "amber": "Since Shelley v. Kraemer (1948) courts can't enforce it, but the realtor won't tell you that.",
       "blue": "Developers, realtors and lenders wrote those covenants in together.",
       "trap": true,
-      "lever": 2
+      "lever": 2,
+      "dollars": 500,
+      "basis": "a deposit lost on a house the covenant won't let you keep (1950s dollars)"
      },
      {
       "front": "Home repair: we'll fix your roof today. Just sign here.",
@@ -1014,7 +1203,10 @@
       "amber": "Miss payments and the lender can take the house over a roof.",
       "blue": "The contractor and the lender split the loan.",
       "trap": true,
-      "lever": 1
+      "lever": 1,
+      "rush": true,
+      "dollars": 1500,
+      "basis": "a repair loan secured by the house, at a crushing rate (1950s dollars)"
      },
      {
       "front": "The bank's appraiser: sorry, this block appraises low.",
@@ -1022,7 +1214,9 @@
       "amber": "The low appraisal blocks the refinance you needed this year.",
       "blue": "For decades the appraisal manuals graded Black neighborhoods down by rule.",
       "trap": true,
-      "lever": 3
+      "lever": 3,
+      "dollars": 2500,
+      "basis": "the value a low appraisal takes off your home (1950s dollars)"
      },
      {
       "front": "A GI Bill home loan, and this veteran actually got one.",
@@ -1030,7 +1224,9 @@
       "amber": "Fixed payments and a clear schedule. Many Black veterans were denied; this one wasn't.",
       "blue": "A public benefit, earned in service.",
       "trap": false,
-      "lever": 0
+      "lever": 0,
+      "dollars": 3000,
+      "basis": "a fair mortgage with a small down payment (1950s dollars)"
      },
      {
       "front": "File a fair-housing complaint about the realtor who steered you away.",
@@ -1038,7 +1234,9 @@
       "amber": "There's a deadline, so write down names and dates now.",
       "blue": "The law is on your side, and so is the agency that enforces it.",
       "trap": false,
-      "lever": 0
+      "lever": 0,
+      "dollars": 1000,
+      "basis": "a home you're no longer steered away from (1950s dollars)"
      },
      {
       "front": "The church's building fund helps a family make a fair down payment.",
@@ -1046,7 +1244,9 @@
       "amber": "Pay it back on a schedule the trustees agree with you, in the open.",
       "blue": "The block financing the block.",
       "trap": false,
-      "lever": 0
+      "lever": 0,
+      "dollars": 800,
+      "basis": "a down payment with no interest (1950s dollars)"
      }
     ],
     "LENDING": [
@@ -1056,7 +1256,9 @@
       "amber": "The redemption window is short — miss it and it's sold.",
       "blue": "Resale profit flows to the same chain that wrote the loan.",
       "trap": true,
-      "lever": 2
+      "lever": 2,
+      "dollars": 50,
+      "basis": "high interest on a pawn, or the item gone (1950s dollars)"
      },
      {
       "front": "Check Cashing: cash your check instantly, no bank needed.",
@@ -1064,7 +1266,9 @@
       "amber": "Every payday, every time. It never stops.",
       "blue": "The chain also sells the payday loans you'll 'need' next.",
       "trap": true,
-      "lever": 1
+      "lever": 1,
+      "dollars": 100,
+      "basis": "a fee on every check, for a year (1950s dollars)"
      },
      {
       "front": "Debt Consolidation: one low monthly payment, be debt-free!",
@@ -1072,7 +1276,9 @@
       "amber": "Stop paying creditors as told and your credit craters first.",
       "blue": "The 'nonprofit' is funded by fees from the lenders it deals with.",
       "trap": true,
-      "lever": 3
+      "lever": 3,
+      "dollars": 400,
+      "basis": "more interest over a longer term (1950s dollars)"
      },
      {
       "front": "The small-loan company: easy terms for working people.",
@@ -1080,7 +1286,9 @@
       "amber": "Late fees stack on top, and the loan renews before it's paid down.",
       "blue": "Small-loan laws set the ceiling high, and the lenders helped write them.",
       "trap": true,
-      "lever": 1
+      "lever": 1,
+      "dollars": 300,
+      "basis": "3% a month on a small loan, for a year (1950s dollars)"
      },
      {
       "front": "The downtown bank: open a savings account with us!",
@@ -1088,7 +1296,9 @@
       "amber": "Your deposits fund mortgages across the line, year after year.",
       "blue": "The red line on the federal map decides who gets to borrow.",
       "trap": true,
-      "lever": 3
+      "lever": 3,
+      "dollars": 200,
+      "basis": "savings that fund loans everywhere but your street (1950s dollars)"
      },
      {
       "front": "Furniture on time: a little each week.",
@@ -1096,7 +1306,9 @@
       "amber": "Miss a week and they come for the whole set, paid-off pieces included.",
       "blue": "The store makes more on the credit than on the furniture.",
       "trap": true,
-      "lever": 1
+      "lever": 1,
+      "dollars": 200,
+      "basis": "weekly furniture payments that double the price (1950s dollars)"
      },
      {
       "front": "A burial policy from the insurance man: just a dime a week.",
@@ -1104,7 +1316,9 @@
       "amber": "Miss a few weeks and the policy lapses. Everything you paid stays with them.",
       "blue": "Lapsed policies are the company's profit.",
       "trap": true,
-      "lever": 2
+      "lever": 2,
+      "dollars": 150,
+      "basis": "years of dimes on a policy that lapses (1950s dollars)"
      },
      {
       "front": "Borrow against your next paychecks: sign the wage assignment.",
@@ -1112,7 +1326,9 @@
       "amber": "One late payment and your boss gets the notice, and may let you go.",
       "blue": "Lenders and employers both profit from the hold it gives them over workers.",
       "trap": true,
-      "lever": 2
+      "lever": 2,
+      "dollars": 300,
+      "basis": "pay taken straight from your employer (1950s dollars)"
      },
      {
       "front": "Easy credit at the clothing store: no money down!",
@@ -1120,7 +1336,9 @@
       "amber": "The balance never seems to shrink before the next purchase.",
       "blue": "The store sells the debt to a collector.",
       "trap": true,
-      "lever": 1
+      "lever": 1,
+      "dollars": 100,
+      "basis": "credit markups plus interest (1950s dollars)"
      },
      {
       "front": "Refinance your contract: a lower payment now!",
@@ -1128,7 +1346,10 @@
       "amber": "Signing resets the clock on everything you've paid in.",
       "blue": "The seller gets paid again, and you still don't hold the deed.",
       "trap": true,
-      "lever": 3
+      "lever": 3,
+      "rush": true,
+      "dollars": 600,
+      "basis": "more interest, and the balloon still at the end (1950s dollars)"
      },
      {
       "front": "Sell your next paycheck at a discount: cash today.",
@@ -1136,7 +1357,10 @@
       "amber": "Every payday it's due again, and it never stops.",
       "blue": "Salary buyers worked the plant gates every payday.",
       "trap": true,
-      "lever": 1
+      "lever": 1,
+      "rush": true,
+      "dollars": 50,
+      "basis": "a week's pay sold at a discount (1950s dollars)"
      },
      {
       "front": "Co-sign for your cousin's car. It's family.",
@@ -1144,7 +1368,9 @@
       "amber": "Their missed payment shows up on your name the same month.",
       "blue": "Lenders count on family ties to collect.",
       "trap": true,
-      "lever": 2
+      "lever": 2,
+      "dollars": 1500,
+      "basis": "every dollar of a car loan you cosigned (1950s dollars)"
      },
      {
       "front": "A Black-owned savings and loan: a fair mortgage, on your street.",
@@ -1152,7 +1378,9 @@
       "amber": "Clear terms, and you hold the deed from day one.",
       "blue": "Owned by the community it lends to.",
       "trap": false,
-      "lever": 0
+      "lever": 0,
+      "dollars": 2000,
+      "basis": "a fair mortgage on your own street (1950s dollars)"
      },
      {
       "front": "The credit union at the plant: a small loan at a fair rate.",
@@ -1160,7 +1388,9 @@
       "amber": "Payments come out of pay you agreed to, and stop when it's paid.",
       "blue": "Member-owned: the profit comes back to the workers.",
       "trap": false,
-      "lever": 0
+      "lever": 0,
+      "dollars": 150,
+      "basis": "a small loan at a capped rate (1950s dollars)"
      },
      {
       "front": "The mutual-aid society: a loan from the club when you need it.",
@@ -1168,7 +1398,9 @@
       "amber": "Pay it back as you can; the club knows your name.",
       "blue": "Neighbors covering neighbors, the way the block always has.",
       "trap": false,
-      "lever": 0
+      "lever": 0,
+      "dollars": 100,
+      "basis": "a loan from the club, with no interest (1950s dollars)"
      }
     ]
    },
@@ -1281,6 +1513,7 @@
   "LENDING": [
    {
     "front": "Tax refund advance: get your ${a} today, no waiting!",
+    "rush": true,
     "a": [
      500,
      750,
@@ -1299,10 +1532,12 @@
     "amber": "The refund lands in their account first. You wait for them.",
     "blue": "The tax shop and the bank behind the advance split the fee.",
     "ask": "${a} refund − ${c} in fees = ?",
-    "lever": 1
+    "lever": 1,
+    "usd": "c"
    },
    {
     "front": "Quick Cash: borrow ${a} today. One flat fee: just ${c}.",
+    "rush": true,
     "a": [
      200,
      300,
@@ -1319,6 +1554,7 @@
      14
     ],
     "calc": "apr",
+    "usd": "c",
     "red": "A ${c} fee on ${a} for {b} days is a {total}% yearly rate. The fee is the product.",
     "amber": "Due in full in {b} days. Can't pay? Roll it over and owe ${c} again.",
     "blue": "The storefront and the debt buyer that calls you later share one owner.",
@@ -1387,12 +1623,14 @@
     "red": "${a} × {b} = ${total} in all, at a low fixed rate with no fees. This one's honest.",
     "amber": "No rollover, no balloon payment, and paying early costs nothing.",
     "blue": "Owned by its members, the people on the block who save there.",
-    "ask": "${a} a month × {b} months = ?"
+    "ask": "${a} a month × {b} months = ?",
+    "worth": 300
    }
   ],
   "HOUSING": [
    {
     "front": "First month free! Then just ${a} a month, {b}-month lease.",
+    "rush": true,
     "a": [
      750,
      850,
@@ -1470,6 +1708,7 @@
    },
    {
     "front": "Apartments on Salem Avenue: apply today, just ${a} an application!",
+    "rush": true,
     "a": [
      35,
      50,
@@ -1503,7 +1742,8 @@
     "red": "${a} × {b} = ${total}, and every dollar of it builds equity. This one's honest.",
     "amber": "A missed month gets a counselor's call, not an eviction.",
     "blue": "A neighborhood land trust, run by the people who live here.",
-    "ask": "${a} a month × {b} months = ?"
+    "ask": "${a} a month × {b} months = ?",
+    "worth": 8000
    }
   ],
   "LABOR": [
@@ -1528,10 +1768,12 @@
     "amber": "The pay per trip can change any week, without notice.",
     "blue": "The app counts you as a contractor so it pays nothing toward your car or your health.",
     "ask": "{b} trips × ${a}, minus ${c} for gas = ?",
-    "lever": 1
+    "lever": 1,
+    "usd": "c"
    },
    {
     "front": "Warehouse work through the agency: ${a} an hour, start Monday!",
+    "rush": true,
     "a": [
      14,
      15,
@@ -1551,7 +1793,8 @@
     "amber": "The agency can end the job any day, and the 90-day hire-on keeps moving.",
     "blue": "The plant pays the agency almost twice what reaches you.",
     "ask": "{b} hours × ${a}, minus ${c} = ?",
-    "lever": 1
+    "lever": 1,
+    "usd": "c"
    },
    {
     "front": "Sign-on bonus: ${s} cash when you start!",
@@ -1574,7 +1817,8 @@
     "amber": "The {b}-month clock restarts if they move you to another shift.",
     "blue": "The same staffing firm writes the payback loan and sues to collect it.",
     "ask": "${s} back + ${c} in training = ?",
-    "lever": 2
+    "lever": 2,
+    "usd": "c"
    },
    {
     "front": "Security job, ${a} an hour, uniform included!",
@@ -1625,7 +1869,8 @@
     "mul": [
      "c",
      "a"
-    ]
+    ],
+    "worth": 6000
    }
   ],
   "HEALTH": [
@@ -1648,6 +1893,7 @@
    },
    {
     "front": "Get the dental work today: 0% interest for {b} months on the clinic card!",
+    "rush": true,
     "s": [
      1200,
      1800,
@@ -1667,10 +1913,12 @@
     "amber": "The 0% clock runs {b} months. One late payment ends it early.",
     "blue": "The card company pays the clinic to sign patients up in the chair.",
     "ask": "${s} bill + ${c} in deferred interest = ?",
-    "lever": 2
+    "lever": 2,
+    "usd": "c"
    },
    {
     "front": "Health plan: just ${a} a month!",
+    "rush": true,
     "a": [
      89,
      119,
@@ -1728,7 +1976,8 @@
     "red": "{b} visits × ${a} = ${total} for the year. No surprise bill. This one's honest.",
     "amber": "No deadline: they see you whether or not you can pay today.",
     "blue": "Run by a board that's mostly patients, the way the law requires.",
-    "ask": "${a} a visit × {b} visits = ?"
+    "ask": "${a} a visit × {b} visits = ?",
+    "worth": 400
    }
   ],
   "EDUCATION": [
@@ -1754,6 +2003,7 @@
    },
    {
     "front": "Career college: certified in {b} months, just ${a} a month!",
+    "rush": true,
     "a": [
      450,
      550,
@@ -1829,7 +2079,8 @@
     "red": "It costs ${total}. Grants don't get paid back. This one's honest.",
     "amber": "The state deadline is real: go early.",
     "blue": "Run by the school and Central State volunteers.",
-    "ask": "What does filling out the FAFSA cost? ${a} × {b} = ?"
+    "ask": "What does filling out the FAFSA cost? ${a} × {b} = ?",
+    "worth": 6000
    }
   ]
  },

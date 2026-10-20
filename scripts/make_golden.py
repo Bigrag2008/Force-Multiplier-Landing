@@ -23,7 +23,7 @@ def snapshot(g):
     return dict(result=g.result, round=g.round, scenario=g.scenario, owner=g.owner, ownerFace=g.owner_face,
                 pressure=g.pressure, clarity=g.clarity, threads=sorted(g.threads), pot=g.pot, circle=g.circle,
                 uwOpen=g.uw_open, greenBook=g.green_book, cookoutUsed=g.cookout_used, kitchenUsed=g.kitchen_used,
-                leagueFormed=g.league_formed,
+                leagueFormed=g.league_formed, money=g.money(),
                 players=[dict(name=p.name, role=p.role, trust=p.trust, corruption=p.corruption, legend=p.legend,
                               flipped=p.flipped, shields=p.shields, sight=p.sight,
                               bare=sorted(p.bare), benched=p.benched) for p in g.players])

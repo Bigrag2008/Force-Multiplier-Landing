@@ -56,6 +56,9 @@ export default function DealsPage() {
         </button>
         <span className="text-program/60">{count} dealt</span>
       </div>
+      <p className="mt-2 text-sm text-program/80">
+        Have a real one? <Link href="/my-deal" className="font-bold text-gold underline">Read your own deal</Link>.
+      </p>
       <div className="mt-6">{card && <DealCard key={count} card={card} district={d} sight={sight} formId={`${d.slice(0, 3)}-NEW`} math={math} />}</div>
     </main>
   );

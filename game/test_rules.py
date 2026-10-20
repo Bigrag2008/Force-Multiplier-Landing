@@ -243,6 +243,21 @@ def test_endless_deals():
     c=g.draw("HOUSING"); assert c["gen"] and c["answer"]>0 and "{" not in c["red"]+c["ask"]
     assert c is g.dealt[-1]
 
+def test_money_counts_every_decision():
+    g,p=game(); p.sight["LENDING"]=3; p.trust=5
+    usd=lambda trap,lever,dollars: dict(card(trap,lever), dollars=dollars, basis="b")
+    g.face(p,"LENDING","TAKE",usd(True,1,500))           # a shortcut: signed
+    g.face(p,"LENDING","TAKE",usd(True,1,900))           # the most expensive one
+    g.face(p,"LENDING","NEGOTIATE",usd(True,1,300))      # defused
+    g.face(p,"LENDING","WALK",usd(True,1,200))           # dodged
+    g.face(p,"LENDING","WALK",usd(False,0,1000))         # walked away from real help
+    g.face(p,"LENDING","TAKE",usd(False,0,40))           # real help taken
+    p.sight["LENDING"]=0; g.face(p,"LENDING","NEGOTIATE",usd(True,2,70))   # played
+    m=g.money()
+    assert (m["taken"],m["defused"],m["dodged"],m["refused"],m["help"],m["played"])==(1400,300,200,1000,40,70)
+    assert m["worst"]["dollars"]==900 and m["shortcuts"]==2 and m["playedMost"]=={"who":p.name,"times":1}
+    assert all(c["dollars"]>=0 and c["basis"] for v in Dk.DECK.values() for c in v)
+
 if __name__=="__main__":
     tests=[(n,f) for n,f in sorted(globals().items()) if n.startswith("test_")]
     for n,f in tests: f(); print(f"  ✓ {n[5:].replace('_',' ')}")

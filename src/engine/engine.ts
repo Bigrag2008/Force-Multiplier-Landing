@@ -92,6 +92,33 @@ export interface GameOptions {
   endless?: boolean;
 }
 
+/** one deal decision, and its real money */
+export interface Signed {
+  who: string;
+  d: District;
+  out: "help" | "taken" | "dodged" | "refused" | "defused" | "played" | "wasted";
+  front: string;
+  dollars: number;
+  basis: string;
+}
+export interface Money {
+  /** traps signed (the shortcuts) */
+  taken: number;
+  /** traps negotiated without the Read to beat them */
+  played: number;
+  /** honest help walked away from, or haggled away */
+  refused: number;
+  /** traps walked away from */
+  dodged: number;
+  /** traps read and beaten */
+  defused: number;
+  /** honest help taken */
+  help: number;
+  shortcuts: number;
+  worst: Signed | null;
+  playedMost: { who: string; times: number } | null;
+}
+
 export interface ChapterResult {
   won: boolean;
   ledger: number;
@@ -145,6 +172,8 @@ export class Game {
   maxRounds: number;
   /** every card drawn, in order (endless and fine-print cards aren't in the deck) */
   dealt: Card[] = [];
+  /** every deal decision, with its real money (see money()) */
+  signed: Signed[] = [];
 
   constructor(o: GameOptions = {}) {
     this.rng = new Rng(o.seed ?? Math.floor(Math.random() * 2 ** 31));
@@ -206,6 +235,7 @@ export class Game {
     return this.pressure[d] >= K.GRIP;
   }
   activePatterns() {
+    if (this.party) return []; // no Patterns in Block Party
     return C.patterns.filter((p) => p.combo.every((d) => this.gripped(d)));
   }
   threadsNeeded() {
@@ -332,15 +362,18 @@ export class Game {
     this.emit(`${pl.name} faces a deal in ${d}: "${card.front}"  → ${choice}`);
     if (card.die !== undefined) this.emit(`  (The fine print: rolled ${card.die}, so the lever sits in ${LEVER_NAME[card.lever]}.)`);
     const bare = this.terrell && trap && pl.bare.has(d) && choice !== "WALK";
+    let out: Signed["out"] | null = null;
     if (choice === "TAKE") {
       if (!trap) {
         pl.trust += 2;
         this.clarity[d] = Math.min(K.WAKE, this.clarity[d] + 1);
         pl.legend += 1;
+        out = "help";
         this.emit(`  It was an HONEST deal — real help. Trust +2, ${d} clarity +1, Props +1.`);
       } else {
         const cost = this.takeCost();
         pl.corruption += cost;
+        out = "taken";
         if (this.pressure[d] > 0) {
           this.pressure[d] = Math.max(0, this.pressure[d] - 2);
           this.emit(`  TAKE the trap to patch ${d} NOW: Squeeze −2… Shady +${cost} on you. (Props +0)`);
@@ -351,6 +384,7 @@ export class Game {
         }
       }
     } else if (choice === "WALK") {
+      out = trap ? "dodged" : "refused";
       if (trap) this.emit(`  WALK: you dodged a trap. Safe, nothing gained.`);
       else {
         pl.trust = Math.max(0, pl.trust - 1);
@@ -365,6 +399,7 @@ export class Game {
       pl.trust -= cost;
       if (trap && see >= lever) {
         const amt = pl.role === "Organizer" ? 2 : 1;
+        out = "defused";
         this.pressure[d] = Math.max(0, this.pressure[d] - amt);
         this.clarity[d] = Math.min(K.WAKE, this.clarity[d] + 1);
         pl.legend += 2;
@@ -373,6 +408,7 @@ export class Game {
             `Squeeze −${amt}, ${d} clarity +1, Props +2.`,
         );
       } else if (trap) {
+        out = "played";
         this.pressure[d] = Math.min(K.CAPTURE, this.pressure[d] + 1);
         this.emit(
           `  NEGOTIATE without the ${LEVER_NAME[lever]} layer (Read ${see}): you got played. ` +
@@ -380,10 +416,12 @@ export class Game {
         );
         if (this.pressure[d] >= K.CAPTURE) this.emit(`  ✖ ${d} CAPTURED.`);
       } else {
+        out = "wasted";
         this.emit(`  NEGOTIATE on an honest deal: you haggled away real help. Trust −${cost}.`);
       }
     }
     pl.trust = Math.min(pl.trust, K.MAX_TRUST);
+    this.signed.push({ who: pl.name, d, out: out!, front: card.front, dollars: card.dollars ?? 0, basis: card.basis ?? "" });
     if (bare) {
       pl.bare.delete(d);
       if (this.pressure[d] < K.CAPTURE) {
@@ -982,6 +1020,20 @@ export class Game {
     }
     if (!this.result) this.timeUp();
     return this.result;
+  }
+  /** The real money behind the game's decisions: what the block signed, read its way out of, and walked away from. */
+  money(): Money {
+    const tot = (o: Signed["out"]) => this.signed.filter((x) => x.out === o).reduce((a, x) => a + x.dollars, 0);
+    const taken = this.signed.filter((x) => x.out === "taken");
+    const played: Record<string, number> = {};
+    for (const x of this.signed) if (x.out === "played") played[x.who] = (played[x.who] ?? 0) + 1;
+    const most = Object.entries(played).length ? maxBy(Object.entries(played), (kv) => kv[1]) : null;
+    return {
+      taken: tot("taken"), played: tot("played"), refused: tot("refused") + tot("wasted"),
+      dodged: tot("dodged"), defused: tot("defused"), help: tot("help"),
+      shortcuts: taken.length, worst: taken.length ? maxBy(taken, (x) => x.dollars) : null,
+      playedMost: most ? { who: most[0], times: most[1] } : null,
+    };
   }
   chapterResult(): ChapterResult {
     const won = this.result === "BLOCK_WIN";

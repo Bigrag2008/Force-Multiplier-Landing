@@ -38,7 +38,7 @@ To run the production build instead: `npm run build && npm start`.
 8. **Stop any time.** The game saves itself in this browser after every move. Close the tab, and **Continue your game** on the home page (or **Play now**) picks up exactly where you left off, deal card and all. One saved game per device; it clears when the game ends.
 9. **The Green Book** opens automatically when a strike would capture a district. Untick the box at the top if you'd rather save it.
 
-**How to play** on the home page has the short rules; [`game/RULES.md`](game/RULES.md) has the full rulebook. Prefer paper? Print [`game/The_Second_Number_PRINT_AND_PLAY.pdf`](game/The_Second_Number_PRINT_AND_PLAY.pdf). **Endless deals** on the home page rolls a fresh deal every press, for practice and classrooms; [`game/BOOK_ONE.md`](game/BOOK_ONE.md) ties the game to the novel and describes the School Edition.
+**How to play** on the home page has the short rules; [`game/RULES.md`](game/RULES.md) has the full rulebook. Prefer paper? Print [`game/The_Second_Number_PRINT_AND_PLAY.pdf`](game/The_Second_Number_PRINT_AND_PLAY.pdf). **Endless deals** on the home page rolls a fresh deal every press, for practice and classrooms; **Read your own deal** works out the second number of a real offer, on the device only; [`game/BOOK_ONE.md`](game/BOOK_ONE.md) ties the game to the novel and describes the School Edition.
 
 ## Play on everyone's phones
 1. On the device that will be the table (a laptop or TV is best), choose **Play now**, set up the game and tick **📱 Play on everyone's phones**. A room opens with a four-letter code.

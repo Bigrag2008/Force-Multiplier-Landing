@@ -66,6 +66,30 @@ describe("Session flow", () => {
     expect(r.g.log).toEqual(s.g.log);
   });
 
+  it("a 'sign now' decision is counted on the move itself, and replays", () => {
+    const config: SessionConfig = { mode: "coop", roster: C.roster.slice(0, 2), scenario: "A Quiet Year", seed: 12 };
+    const s = new Session(config);
+    if (s.phase === "cookout") s.apply({ t: "cookout", call: false });
+    // draw deals in Lending (it has the most rush cards) until one pushes a deadline; walk the rest
+    let rush = null;
+    for (let i = 0; i < 60 && !rush && s.phase === "turn"; i++) {
+      s.apply({ t: "deal", d: "LENDING" });
+      const card = s.pending!.k === "deal" ? s.pending!.cards[0] : null;
+      if (card?.rush) rush = card;
+      else s.apply({ t: "act", a: toWire(s.g, { k: "face", d: "LENDING", choice: "WALK", card: card! }) });
+      while (s.phase !== "turn" && s.phase !== "over") {
+        if (s.phase === "sousou") s.apply({ t: "sousou", hand: false });
+        else if (s.phase === "machine") s.apply({ t: "next" });
+        else if (s.phase === "cookout") s.apply({ t: "cookout", call: false });
+      }
+    }
+    expect(rush).not.toBeNull();
+    const wire = { ...toWire(s.g, { k: "face", d: "LENDING", choice: "TAKE", card: rush! }), clock: "rushed" } as WireAction;
+    expect(s.apply({ t: "act", a: wire })).toBe(true);
+    expect(s.clock).toEqual({ rushed: 1, waited: 0, rushedDollars: rush!.dollars });
+    expect(Session.replay(config, s.moves).clock).toEqual(s.clock);
+  });
+
   it("asks before the Cookout and lets the table decline", () => {
     const s = new Session({ mode: "coop", roster: C.roster.slice(0, 3), scenario: "A Quiet Year", seed: 5 });
     expect(s.phase).toBe("cookout");

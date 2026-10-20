@@ -174,7 +174,12 @@ def deal_card(c,x,y,d,i,card,era="",era_years=""):
     stroke(c,LGREY); c.setLineWidth(0.5); c.setDash(1.5,2)                  # perforation
     c.line(x+8,y+CARD_H-29,x+CARD_W-8,y+CARD_H-29); c.setDash()
     fill(c,GREY); c.setFont("DVB",5.4); c.drawString(ix,y+CARD_H-37,"WHAT YOU SEE")
-    c.setFont("DVI",5.4); c.drawRightString(x+CARD_W-10,y+CARD_H-37,era_years or Dk.DAYTON[d]["sub"])
+    if card.get("rush"):                       # a sign-now pitch: the table counts down from 15 (RULES.md)
+        tw=c.stringWidth("SIGN NOW · count 15","DVB",5.2)+8
+        fill(c,LAYER_COL[1]); c.roundRect(x+CARD_W-10-tw,y+CARD_H-39.5,tw,8,3,stroke=0,fill=1)
+        fill(c,(1,1,1)); c.setFont("DVB",5.2); c.drawCentredString(x+CARD_W-10-tw/2,y+CARD_H-37,"SIGN NOW · count 15")
+    else:
+        c.setFont("DVI",5.4); c.drawRightString(x+CARD_W-10,y+CARD_H-37,era_years or Dk.DAYTON[d]["sub"])
     lines,size=fit_lines(card["front"],"DVB",8.4,iw,3,6.4)
     fill(c,INK); c.setFont("DVB",size); ty=y+CARD_H-47
     for ln in lines: c.drawString(ix,ty,ln); ty-=size+1.6
@@ -787,16 +792,20 @@ def reference_story():
 def key_story():
     s=[PageBreak(),Paragraph("Facilitator answer key",ST["h1"]),
        Paragraph("Every deal, in plain text. For teachers and facilitators, and to settle a hard-to-read card. "
-                 "Players: don't peek. Learning to read the card is the game.",ST["p"])]
+                 "Players: don't peek. Learning to read the card is the game.",ST["p"]),
+       Paragraph("<b>Real money</b> is the end-of-game count: what signing a trap typically costs one household over about a year, "
+                 "or what an honest deal is worth. Rough, typical amounts, not quotes. At the end of a game, add up the traps the table "
+                 "signed and the honest help it walked away from, and say both totals out loud.",ST["p"])]
     for d,cards in Dk.DECK.items():
         s.append(Paragraph(f'<font color="{Dk.DISTRICT_COLORS[d]}">{d}</font>',ST["h2"]))
-        data=[[Paragraph(x,ST["kb"]) for x in ("ID","What you see","Lever","Red — the cost","Amber — the clock","Blue — the connection")]]
+        data=[[Paragraph(x,ST["kb"]) for x in ("ID","What you see","Lever","Red — the cost","Amber — the clock","Blue — the connection","Real money")]]
         for i,c in enumerate(cards):
             lev="HONEST" if not c["trap"] else LEVER_WORD[c["lever"]]
             data.append([Paragraph(f"{DABBR[d]}-{i+1:02d}",ST["kb"]),Paragraph(inline(c["front"]),ST["kb"]),
-                         Paragraph(lev,ST["kb"])]+[Paragraph(inline(c[k]),ST["k"]) for k in ("red","amber","blue")])
+                         Paragraph(lev,ST["kb"])]+[Paragraph(inline(c[k]),ST["k"]) for k in ("red","amber","blue")]
+                        +[Paragraph(f"<b>${c['dollars']:,}</b> {inline(c['basis'])}",ST["k"])])
         w=PAGE_W-1.5*inch
-        t=Table(data,repeatRows=1,colWidths=[0.58*inch,1.4*inch,0.62*inch]+[(w-2.6*inch)/3]*3)
+        t=Table(data,repeatRows=1,colWidths=[0.5*inch,1.2*inch,0.55*inch]+[(w-3.35*inch)/3]*3+[1.1*inch])
         t.setStyle(TableStyle([("GRID",(0,0),(-1,-1),0.3,colors.Color(*LGREY)),("VALIGN",(0,0),(-1,-1),"TOP"),
             ("BACKGROUND",(0,0),(-1,0),colors.Color(*DCOL[d])),("TEXTCOLOR",(0,0),(-1,0),colors.white),
             ("LEFTPADDING",(0,0),(-1,-1),3),("RIGHTPADDING",(0,0),(-1,-1),3)]))

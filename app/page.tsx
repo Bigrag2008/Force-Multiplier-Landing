@@ -36,6 +36,9 @@ export default function Home() {
         <Link href="/deals" className="rounded-xl border border-white/30 px-6 py-3 text-lg font-bold hover:bg-white/10">
           ♾ Endless deals
         </Link>
+        <Link href="/my-deal" className="rounded-xl border border-white/30 px-6 py-3 text-lg font-bold hover:bg-white/10">
+          🔍 Read your own deal
+        </Link>
       </div>
       <ul className="mt-12 grid gap-4 sm:grid-cols-3">
         {[

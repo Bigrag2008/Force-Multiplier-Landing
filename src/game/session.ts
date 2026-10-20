@@ -5,7 +5,7 @@
  */
 import { K, type Card, type District } from "../engine/content";
 import { newGame, type Action, type Game, type Player } from "../engine/engine";
-import { cardFromWire, fromWire, type Move } from "./moves";
+import { cardFromWire, fromWire, type Move, type WireAction } from "./moves";
 
 export type Mode = "coop" | "overlord" | "chapter" | "party";
 export type Phase =
@@ -31,6 +31,8 @@ export interface SessionConfig {
   endless?: boolean;
   /** the math variant: at Read 1, work out an endless deal's second number before you see it */
   math?: boolean;
+  /** "sign now" deals count down while you decide (on unless turned off) */
+  clocks?: boolean;
 }
 
 /** a card drawn and waiting on the current player: kept in the session, so a reload can't redraw it */
@@ -57,6 +59,8 @@ export class Session {
   seenLessons = new Set<string>();
   /** online: the room this game is hosted in (kept in the save, so a continued game reopens it) */
   room?: string;
+  /** "sign now" deals: decisions made with the fake clock running, deadlines waited out, and traps signed in the rush */
+  clock = { rushed: 0, waited: 0, rushedDollars: 0 };
 
   constructor(public config: SessionConfig) {
     // fix the seed now, so a save or another phone can rebuild this exact game
@@ -114,7 +118,7 @@ export class Session {
     const g = this.g;
     switch (m.t) {
       case "cookout": this.cookout(m.call, m.picks); break;
-      case "act": this.pending = null; this.act(fromWire(g, m.a)); break;
+      case "act": this.pending = null; this.countClock(m.a); this.act(fromWire(g, m.a)); break;
       case "end": this.pending = null; this.endTurn(); break;
       case "deal": this.pending = { k: "deal", d: m.d, cards: g.dealsFor(this.player, m.d) }; break;
       case "teachCard": this.pending = { k: "teach", to: m.to, d: m.d, card: g.draw(m.d) }; break;
@@ -126,6 +130,14 @@ export class Session {
     }
     this.moves.push(m);
     return true;
+  }
+
+  /** the record of "sign now" clocks, carried on the decision itself so every phone and every save agrees */
+  private countClock(a: WireAction) {
+    if (a.k !== "face" || !a.clock) return;
+    this.clock[a.clock] += 1;
+    const card = a.card ? cardFromWire(this.g, a.card) : null;
+    if (a.clock === "rushed" && a.choice === "TAKE" && card?.trap) this.clock.rushedDollars += card.dollars ?? 0;
   }
 
   get player(): Player {

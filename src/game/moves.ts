@@ -6,6 +6,9 @@
 import type { Card, Choice, District, PlaceKey } from "../engine/content";
 import type { Action, Game } from "../engine/engine";
 
+/** a "sign now" deal's fake clock when the choice was made: still running, or waited out */
+export type ClockTag = "rushed" | "waited";
+
 /** a card, as its index in g.deck[d], or (rolled or dressed by the fine-print die) as x, its index in g.dealt */
 export type WireCard = { d: District; i: number } | { d: District; x: number };
 
@@ -19,7 +22,7 @@ export function cardFromWire(g: Game, w: WireCard): Card {
 
 export type WireAction =
   | { k: "study" | "history" | "trace"; d: District }
-  | { k: "face"; d: District; choice: Choice; card?: WireCard }
+  | { k: "face"; d: District; choice: Choice; card?: WireCard; clock?: ClockTag }
   | { k: "teach"; t: string; d: District; response?: boolean }
   | { k: "commons"; place: PlaceKey }
   | { k: "reach"; t: string }

@@ -87,6 +87,7 @@ class Game:
         self.ds=list(BP_DISTRICTS) if self.party else list(DISTRICTS)
         self.max_rounds=BP_ROUNDS if self.party else MAX_ROUNDS
         self.dealt=[]                                               # every card drawn, in order
+        self.signed=[]                                              # every deal decision, with its real money
         self.chapter=CH.CHAPTERS[chapter] if chapter else None
         self.overlord = overlord; self.verbose = verbose
         self.clarity  = {d:0 for d in DISTRICTS}
@@ -132,6 +133,7 @@ class Game:
     def captured(self): return sum(1 for d in self.ds if self.pressure[d]>=CAPTURE)
     def gripped(self,d): return self.pressure[d]>=GRIP
     def active_patterns(self):
+        if self.party: return []                  # no Patterns in Block Party
         return [(c,n,l) for c,n,l in PATTERNS if all(self.gripped(d) for d in c)]
     def threads_needed(self): return THREADS_TO_WIN
     def can_trace(self,pl,d):
@@ -224,14 +226,15 @@ class Game:
         """Face a live deal. choice in TAKE/WALK/NEGOTIATE."""
         card=card or self.draw(d); trap=card["trap"]; lever=self.lever(d,card); see=pl.sight[d]
         self.emit(f"{pl.name} faces a deal in {d}: \"{card['front']}\"  → {choice}")
+        out=None                                   # what happened, for the money count (money())
         if "die" in card: self.emit(f"  (The fine print: rolled {card['die']}, so the lever sits in {LEVER_NAME[card['lever']]}.)")
         bare=self.terrell and trap and d in pl.bare and choice!="WALK"
         if choice=="TAKE":
             if not trap:
-                pl.trust+=2; self.clarity[d]=min(WAKE,self.clarity[d]+1); pl.legend+=1
+                pl.trust+=2; self.clarity[d]=min(WAKE,self.clarity[d]+1); pl.legend+=1; out="help"
                 self.emit(f"  It was an HONEST deal — real help. Trust +2, {d} clarity +1, Props +1.")
             else:
-                cost=self.take_cost(); pl.corruption+=cost
+                cost=self.take_cost(); pl.corruption+=cost; out="taken"
                 if self.pressure[d]>0:
                     self.pressure[d]=max(0,self.pressure[d]-2)
                     self.emit(f"  TAKE the trap to patch {d} NOW: Squeeze −2… Shady +{cost} on you. (Props +0)")
@@ -240,6 +243,7 @@ class Game:
                     self.clarity[d]=min(WAKE,self.clarity[d]+rush)
                     self.emit(f"  TAKE the trap for fast power: {d} clarity +{rush}… Shady +{cost} on you. (Props +0)")
         elif choice=="WALK":
+            out="dodged" if trap else "refused"
             if trap: self.emit(f"  WALK: you dodged a trap. Safe, nothing gained.")
             else:
                 pl.trust=max(0,pl.trust-1)
@@ -251,19 +255,22 @@ class Game:
             # (no Trust spent, no confrontation: the Terrell rule doesn't bite)
             pl.trust-=cost
             if trap and see>=lever:
-                amt=2 if pl.role=="Organizer" else 1
+                amt=2 if pl.role=="Organizer" else 1; out="defused"
                 self.pressure[d]=max(0,self.pressure[d]-amt); self.clarity[d]=min(WAKE,self.clarity[d]+1)
                 pl.legend+=2
                 self.emit(f"  NEGOTIATE on the {LEVER_NAME[lever]} lever (Read {see}): defused. "
                           f"Squeeze −{amt}, {d} clarity +1, Props +2.")
             elif trap:
-                self.pressure[d]=min(CAPTURE,self.pressure[d]+1)
+                out="played"; self.pressure[d]=min(CAPTURE,self.pressure[d]+1)
                 self.emit(f"  NEGOTIATE without the {LEVER_NAME[lever]} layer (Read {see}): you got played. "
                           f"Squeeze +1, Trust −{cost}.")
                 if self.pressure[d]>=CAPTURE: self.emit(f"  ✖ {d} CAPTURED.")
             else:
+                out="wasted"
                 self.emit(f"  NEGOTIATE on an honest deal: you haggled away real help. Trust −{cost}.")
         pl.trust=min(pl.trust,MAX_TRUST)
+        self.signed.append(dict(who=pl.name, d=d, out=out, front=card["front"],
+                                dollars=card.get("dollars",0), basis=card.get("basis","")))
         if bare:                                   # the Terrell rule: seeing it isn't covering it
             pl.bare.discard(d)
             if self.pressure[d]<CAPTURE:
@@ -729,6 +736,20 @@ class Game:
             if self.machine_phase(): break
         if not self.result: self.time_up()
         return self.result
+
+    def money(self):
+        """The real money behind the game's decisions, for the end screen: what the block signed,
+        what it read its way out of, and what it walked away from."""
+        tot=lambda o: sum(x["dollars"] for x in self.signed if x["out"]==o)
+        taken=[x for x in self.signed if x["out"]=="taken"]
+        worst=max(taken,key=lambda x:x["dollars"]) if taken else None    # the first, on a tie
+        played={}
+        for x in self.signed:
+            if x["out"]=="played": played[x["who"]]=played.get(x["who"],0)+1
+        most=max(played.items(),key=lambda kv:kv[1]) if played else None
+        return dict(taken=tot("taken"), played=tot("played"), refused=tot("refused")+tot("wasted"),
+                    dodged=tot("dodged"), defused=tot("defused"), help=tot("help"),
+                    shortcuts=len(taken), worst=worst, playedMost=dict(who=most[0],times=most[1]) if most else None)
 
     def chapter_result(self):
         """What this game writes into the Family Ledger (CAMPAIGN.md)."""

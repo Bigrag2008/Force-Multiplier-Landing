@@ -21,7 +21,7 @@ function snapshot(g: Game) {
     result: g.result, round: g.round, scenario: g.scenario, owner: g.owner, ownerFace: g.ownerFace,
     pressure: g.pressure, clarity: g.clarity, threads: [...g.threads].sort(), pot: g.pot, circle: g.circle,
     uwOpen: g.uwOpen, greenBook: g.greenBook, cookoutUsed: g.cookoutUsed, kitchenUsed: g.kitchenUsed,
-    leagueFormed: g.leagueFormed,
+    leagueFormed: g.leagueFormed, money: g.money(),
     players: g.players.map((p) => ({
       name: p.name, role: p.role, trust: p.trust, corruption: p.corruption, legend: p.legend,
       flipped: p.flipped, shields: p.shields, sight: p.sight, bare: [...p.bare].sort(), benched: p.benched,
