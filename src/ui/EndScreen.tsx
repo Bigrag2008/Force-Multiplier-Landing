@@ -8,6 +8,7 @@ import { describeStickers, FLAG_WORDS, recordChapter, type CampaignKey, type Fam
 import { CopyFamilyCode } from "./FamilyCode";
 import { MoneyCount } from "./MoneyCount";
 import { ResultCode } from "./ResultCode";
+import { FeedbackCard } from "./FeedbackCard";
 import { t, useLang } from "../i18n";
 import { titleCase } from "./theme";
 
@@ -35,6 +36,7 @@ export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
       )}
       <BlockMemoryNote s={s} />
       <MoneyCount s={s} />
+      <FeedbackCard s={s} />
       {g.ed.resources.length > 0 && (
         <div className="mt-5 rounded-xl border border-[#7CFFB2]/40 bg-[#7CFFB2]/10 p-4">
           <h3 className="font-black text-[#7CFFB2]">{t("Real help in {city}", { city: g.ed.city })}</h3>
