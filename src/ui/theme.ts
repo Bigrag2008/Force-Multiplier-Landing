@@ -1,10 +1,15 @@
 import { C, type District } from "../engine/content";
+import { DISTRICT_NAMES_ES, getLang } from "../i18n";
 
 export const DISTRICT_COLOR = C.districtColors;
 export const LAYER_COLOR: Record<number, string> = { 1: "#E63946", 2: "#E0A526", 3: "#2F8FD8" };
 export const LAYER_LABEL: Record<number, string> = { 1: "The cost", 2: "The clock", 3: "The connection" };
 export const LEVER_WORD: Record<number, string> = { 1: "RED", 2: "AMBER", 3: "BLUE" };
-export const titleCase = (d: District | string) => d.charAt(0) + d.slice(1).toLowerCase();
+/** "LENDING" → "Lending" (or "Préstamos" in Spanish): a district key, shown as a name */
+export const titleCase = (d: District | string) => {
+  const s = getLang() === "es" && d in DISTRICT_NAMES_ES ? DISTRICT_NAMES_ES[d as District] : d;
+  return s.charAt(0) + s.slice(1).toLowerCase();
+};
 
 /** WCAG relative luminance of a #rrggbb color */
 function luminance(hex: string) {

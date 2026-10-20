@@ -30,6 +30,8 @@ export interface Card {
   counterfeit?: boolean;
   /** a Your City edition's own deal */
   local?: boolean;
+  /** endless deals: the template and the rolled numbers, so the card can be shown in another language */
+  tpl?: { d: District; i: number; v: Record<string, number | string> };
 }
 /** a deal with blanks (game/deal_gen.py): rolled into a fresh Card for endless deals */
 export interface DealTemplate {

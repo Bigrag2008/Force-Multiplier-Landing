@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
+import { LangSwitch } from "@/ui/LangSwitch";
 
 // Links shared from the live site need its full address for the preview card. Vercel sets this one itself;
 // on another host, set SITE_URL (e.g. https://thesecondnumber.org).
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {TOLERATE_REWRITTEN_TEXT}
         </Script>
         {children}
+        <LangSwitch />
       </body>
     </html>
   );

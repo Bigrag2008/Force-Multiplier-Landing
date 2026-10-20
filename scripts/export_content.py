@@ -39,6 +39,12 @@ ref=dict(v=1, id="west-dayton", name=D.EDITION, city="Dayton, Ohio", area="the W
          history={}, historyMode="add", resources=[])
 os.makedirs(os.path.join(GAME,"editions"),exist_ok=True)
 with open(os.path.join(GAME,"editions","west-dayton.json"),"w",encoding="utf-8") as f: json.dump(ref,f,ensure_ascii=False,indent=1)
+# the Spanish edition: every game/i18n/es_*.json (English → Spanish) merged for the website
+import glob
+es={}
+for f in sorted(glob.glob(os.path.join(GAME,"i18n","es_*.json"))):
+    with open(f,encoding="utf-8") as fh: es.update(json.load(fh))
+with open(os.path.join(os.path.dirname(HERE),"src","content","es.json"),"w",encoding="utf-8") as f: json.dump(es,f,ensure_ascii=False,indent=0)
 out=os.path.join(os.path.dirname(HERE),"src","content","content.json")
 with open(out,"w",encoding="utf-8") as f: json.dump(jsonable(content),f,ensure_ascii=False,indent=1)
 print(f"wrote {out}: {sum(len(v) for v in D.DECK.values())} deals, {len(CH.CHAPTERS)} chapter(s)")

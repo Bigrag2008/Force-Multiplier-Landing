@@ -29,5 +29,6 @@ export function makeDeal(d: District, rng: Rng): Card {
     dollars: trap ? n(t.usd ?? ("over" in v ? "over" : "total")) : (t.worth as number),
     basis: trap ? "the numbers on this deal" : "what the real help is worth",
     rush: !!t.rush,
+    tpl: { d, i: C.dealTemplates[d].indexOf(t), v },
   };
 }
