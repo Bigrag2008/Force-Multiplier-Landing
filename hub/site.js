@@ -27,7 +27,7 @@
   var root = document.documentElement;
   if (root.hasAttribute("data-lang")) {
     var pick = /[?&]lang=es\b/.test(location.search) ? "es" : null;
-    try { pick = pick || localStorage.getItem("sn-lang"); } catch (e) {}
+    try { pick = pick || localStorage.getItem("sn-lang"); } catch { /* no storage */ }
     if (!pick) pick = (navigator.language || "").slice(0, 2) === "es" ? "es" : "en";
     var set = function (l) {
       root.setAttribute("data-lang", l);
@@ -35,7 +35,7 @@
       document.querySelectorAll(".lang button").forEach(function (b) {
         b.setAttribute("aria-pressed", String(b.value === l));
       });
-      try { localStorage.setItem("sn-lang", l); } catch (e) {}
+      try { localStorage.setItem("sn-lang", l); } catch { /* no storage */ }
     };
     set(pick === "es" ? "es" : "en");
     document.querySelectorAll(".lang button").forEach(function (b) {
