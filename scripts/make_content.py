@@ -224,17 +224,17 @@ def schedule(lib, start, weeks):
                 p = take(fmt, lang, district)
             rows.append(dict(date=day.isoformat(), time=time, timezone=TZ, format=p["format"],
                              platforms=PLATFORMS[p["format"]], lang=p["lang"], pillar=p["pillar"], theme=why,
-                             post_id=p["id"], image=image_of(p), text=p["text"], video_script=p["script"]))
+                             post_id=p["id"], image=image_of(p), reel=reel_of(p), text=p["text"], video_script=p["script"]))
         # every other Sunday: teachers and groups; every other Thursday morning: the email
         sun = start + dt.timedelta(days=7 * w + 6)
         if w % 2 == 0:
             ev = [x for x in lib if x["id"].startswith("EVG")][(w // 2) % len(EVERGREEN)]
             rows.append(dict(date=sun.isoformat(), time="15:00", timezone=TZ, format="feed", platforms=PLATFORMS["feed"],
                              lang="en", pillar=ev["pillar"], theme="Teachers, churches and groups plan on Sunday",
-                             post_id=ev["id"], image="", text=ev["text"], video_script=""))
+                             post_id=ev["id"], image="", reel="", text=ev["text"], video_script=""))
             thu = start + dt.timedelta(days=7 * w + 3)
             rows.append(dict(date=thu.isoformat(), time="10:00", timezone=TZ, format="email", platforms="Email list",
-                             lang="en", pillar="email", theme=THEMES[thu.month][1], post_id=f"EMAIL-{w // 2 + 1:02d}", image="",
+                             lang="en", pillar="email", theme=THEMES[thu.month][1], post_id=f"EMAIL-{w // 2 + 1:02d}", image="", reel="",
                              text="Newsletter: see launch/content/emails/newsletter_template.md", video_script=""))
     rows.sort(key=lambda r: (r["date"], r["time"]))
     return rows
@@ -245,6 +245,13 @@ def image_of(p):
     if p["format"] == "short" or not re.fullmatch(r"(LEN|HOU|LAB|HEA|EDU|HIS)\d\d", p["card"]):
         return ""
     return f"images/{p['card']}-{p['lang']}.png"
+
+
+def reel_of(p):
+    """the finished video made by scripts/make_reels.py, for a trap card's video slot"""
+    if p["format"] != "video" or p["pillar"] != "read-the-machine":
+        return ""
+    return f"reels/{p['card']}-{p['lang']}.mp4"
 
 
 def ics(rows):

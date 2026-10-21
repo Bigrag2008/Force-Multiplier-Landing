@@ -6,6 +6,7 @@ Everything to promote Civic Armor, built from the game's own fact-checked cards,
 |---|---|
 | `library.csv` | **528 posts.** Each deal card as a feed post, a 30-second video script and a short post (X, Bluesky), in English and Spanish; the History deck; Long Ledger era cards; and evergreen posts for teachers, churches, the book and the guide. |
 | `images/` | **176 pictures**, 1080×1350, one per deal card and history card, in English and Spanish. The `image` column says which one goes with which post. |
+| `reels/` | **Finished vertical videos**, made on demand by `python3 scripts/make_reels.py` (about 15 seconds of work per reel; all 60 trap cards in both languages is about half an hour). Each reel has sound and a `.txt` voiceover script timed to it. The `reel` column in `calendar.csv` names the file for each video slot. They're not stored in git (too big): render them on your computer. |
 | `calendar.csv` | **The schedule:** 12 weeks, about 8 posts a week, each with its date, time, platforms, text, picture and video script. |
 | `calendar.ics` | The same schedule for Google Calendar or your phone's calendar (File → Import), so each post shows up as a reminder with its text inside. |
 | `emails/` | The welcome sequence (3 emails), the launch-day email, and the every-other-week newsletter template. |
@@ -39,8 +40,20 @@ The default times are Eastern (Dayton) and are a starting point. After four week
 - **October and November, open enrollment, then Black Friday:** health, then rent-to-own and buy-now-pay-later.
 - **December, holiday loans:** the January bill.
 
+## The reels
+`python3 scripts/make_reels.py` turns every trap card into a 15 to 25 second vertical video (1080×1920), in English and Spanish:
+1. **The offer** stamps in: "Would you take this deal?"
+2. **The second number:** the red lens sweeps the static, and the dollar figure resolves, with the red line under it.
+3. **The clock and the connection:** one hit each, with a clock ticking under the amber.
+4. **The door:** what to ask or do, written to be true for every card in that district.
+5. **Teach one:** "Now teach one person." and the link.
+
+The cards come from the game itself, so a number corrected in the game is corrected in the reels the next time you render. One card: `python3 scripts/make_reels.py LEN01`; one language: add `--lang en`. Needs ffmpeg and numpy; the fonts are bundled in `scripts/fonts/`.
+
+**Your voice is the part nobody can copy.** The reels carry a quiet sound bed so they work as they are. To add your voice, open the reel's `.txt`, read it once in your own words while the video plays, and lay the recording over the video in the app (Instagram and TikTok both let you add a voiceover). Turn the sound bed down under your voice.
+
 ## The monthly routine (one afternoon a month)
-1. **Film the month's videos in one sitting:** about 12, at 30 seconds each, from the scripts in `calendar.csv`. Phone, natural light, the card picture on screen or in your hand. The script is a guide, not lines to memorize: say it your way.
+1. **Voice the month's reels in one sitting:** about 12, from their `.txt` scripts. Mix in a few clips of real hands, like your actual red decoder card on a kitchen table, so the feed isn't all motion graphics.
 2. **Load the next four weeks** into the scheduler.
 3. **Look at last month's numbers:** saves, shares, link clicks, sign-ups. Do more of whatever got saved and shared.
 4. **Write the two newsletters** from the best posts.

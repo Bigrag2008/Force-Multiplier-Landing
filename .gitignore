@@ -10,3 +10,6 @@ __pycache__/
 
 # copied from game/ at build time (scripts/copy_pdfs.mjs)
 public/*.pdf
+
+# rendered reels (python3 scripts/make_reels.py): too big for git, made on demand
+launch/content/reels/

@@ -6,7 +6,7 @@ X-WR-CALNAME:Civic Armor posts
 X-WR-TIMEZONE:America/New_York
 BEGIN:VEVENT
 UID:HEA01-en-feed-2026-11-02@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261102T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HEA01-en-feed
@@ -23,7 +23,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA02-en-video-2026-11-03@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261103T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HEA02-en-video
@@ -42,7 +42,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA03-en-feed-2026-11-04@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261104T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HEA03-en-feed
@@ -59,7 +59,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:EMAIL-01-2026-11-05@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261105T100000
 DURATION:PT15M
 SUMMARY:EMAIL · email · EMAIL-01
@@ -69,7 +69,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA04-en-video-2026-11-05@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261105T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HEA04-en-video
@@ -88,7 +88,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA05-en-feed-2026-11-06@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261106T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HEA05-en-feed
@@ -104,7 +104,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA06-es-video-2026-11-07@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261107T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HEA06-es-video
@@ -124,7 +124,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:EVG01-en-2026-11-08@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261108T150000
 DURATION:PT15M
 SUMMARY:FEED · groups · EVG01-en
@@ -136,7 +136,7 @@ DESCRIPTION:Teachers\, churches and groups plan on Sunday\nInstagram\, Face
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS01-en-2026-11-08@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261108T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS01-en
@@ -152,7 +152,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA07-en-feed-2026-11-09@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261109T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HEA07-en-feed
@@ -168,7 +168,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA08-en-video-2026-11-10@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261110T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HEA08-en-video
@@ -187,7 +187,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA09-en-feed-2026-11-11@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261111T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HEA09-en-feed
@@ -204,7 +204,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA10-en-video-2026-11-12@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261112T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HEA10-en-video
@@ -223,7 +223,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN01-en-feed-2026-11-13@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261113T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LEN01-en-feed
@@ -240,7 +240,7 @@ DESCRIPTION:Payday: Open enrollment\, then Black Friday rent-to-own and buy
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA11-es-video-2026-11-14@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261114T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HEA11-es-video
@@ -259,7 +259,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS02-en-2026-11-15@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261115T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS02-en
@@ -275,7 +275,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA12-en-feed-2026-11-16@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261116T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HEA12-en-feed
@@ -293,7 +293,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN02-en-video-2026-11-17@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261117T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LEN02-en-video
@@ -313,7 +313,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN03-en-feed-2026-11-18@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261118T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LEN03-en-feed
@@ -330,7 +330,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:EMAIL-02-2026-11-19@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261119T100000
 DURATION:PT15M
 SUMMARY:EMAIL · email · EMAIL-02
@@ -340,7 +340,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN04-en-video-2026-11-19@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261119T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LEN04-en-video
@@ -360,7 +360,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN05-en-feed-2026-11-20@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261120T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LEN05-en-feed
@@ -377,7 +377,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN06-es-video-2026-11-21@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261121T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LEN06-es-video
@@ -397,7 +397,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:EVG02-en-2026-11-22@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261122T150000
 DURATION:PT15M
 SUMMARY:FEED · groups · EVG02-en
@@ -409,7 +409,7 @@ DESCRIPTION:Teachers\, churches and groups plan on Sunday\nInstagram\, Face
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS03-en-2026-11-22@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261122T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS03-en
@@ -425,7 +425,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN07-en-feed-2026-11-23@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261123T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LEN07-en-feed
@@ -442,7 +442,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN08-en-video-2026-11-24@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261124T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LEN08-en-video
@@ -462,7 +462,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN09-en-feed-2026-11-25@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261125T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LEN09-en-feed
@@ -479,7 +479,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN10-en-video-2026-11-26@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261126T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LEN10-en-video
@@ -499,7 +499,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN13-en-feed-2026-11-27@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261127T121500
 DURATION:PT15M
 SUMMARY:FEED · real-help · LEN13-en-feed
@@ -516,7 +516,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN11-es-video-2026-11-28@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261128T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LEN11-es-video
@@ -536,7 +536,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS04-en-2026-11-29@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261129T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS04-en
@@ -552,7 +552,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN12-en-feed-2026-11-30@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261130T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LEN12-en-feed
@@ -569,7 +569,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU01-en-video-2026-12-01@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261201T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HOU01-en-video
@@ -588,7 +588,7 @@ DESCRIPTION:Payday: Holiday loans and layaway: the January bill\nTikTok\, I
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU02-en-feed-2026-12-02@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261202T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HOU02-en-feed
@@ -605,7 +605,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:EMAIL-03-2026-12-03@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261203T100000
 DURATION:PT15M
 SUMMARY:EMAIL · email · EMAIL-03
@@ -614,7 +614,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nEmail list\n\nNews
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU03-en-video-2026-12-03@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261203T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HOU03-en-video
@@ -634,7 +634,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU04-en-feed-2026-12-04@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261204T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HOU04-en-feed
@@ -650,7 +650,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU05-es-video-2026-12-05@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261205T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HOU05-es-video
@@ -669,7 +669,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
 END:VEVENT
 BEGIN:VEVENT
 UID:EVG03-en-2026-12-06@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261206T150000
 DURATION:PT15M
 SUMMARY:FEED · groups · EVG03-en
@@ -682,7 +682,7 @@ DESCRIPTION:Teachers\, churches and groups plan on Sunday\nInstagram\, Face
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS05-en-2026-12-06@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261206T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS05-en
@@ -697,7 +697,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU06-en-feed-2026-12-07@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261207T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HOU06-en-feed
@@ -713,7 +713,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU07-en-video-2026-12-08@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261208T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HOU07-en-video
@@ -732,7 +732,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU08-en-feed-2026-12-09@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261209T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HOU08-en-feed
@@ -748,7 +748,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU09-en-video-2026-12-10@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261210T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HOU09-en-video
@@ -768,7 +768,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN14-en-feed-2026-12-11@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261211T121500
 DURATION:PT15M
 SUMMARY:FEED · real-help · LEN14-en-feed
@@ -784,7 +784,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU10-es-video-2026-12-12@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261212T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HOU10-es-video
@@ -803,7 +803,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS06-en-2026-12-13@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261213T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS06-en
@@ -818,7 +818,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU11-en-feed-2026-12-14@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261214T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HOU11-en-feed
@@ -834,7 +834,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU12-en-video-2026-12-15@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261215T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HOU12-en-video
@@ -853,7 +853,7 @@ DESCRIPTION:Payday: Holiday loans and layaway: the January bill\nTikTok\, I
 END:VEVENT
 BEGIN:VEVENT
 UID:LAB01-en-feed-2026-12-16@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261216T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LAB01-en-feed
@@ -869,7 +869,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:EMAIL-04-2026-12-17@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261217T100000
 DURATION:PT15M
 SUMMARY:EMAIL · email · EMAIL-04
@@ -878,7 +878,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nEmail list\n\nNews
 END:VEVENT
 BEGIN:VEVENT
 UID:LAB02-en-video-2026-12-17@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261217T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LAB02-en-video
@@ -897,7 +897,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
 END:VEVENT
 BEGIN:VEVENT
 UID:LAB03-en-feed-2026-12-18@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261218T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LAB03-en-feed
@@ -915,7 +915,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:LAB04-es-video-2026-12-19@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261219T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LAB04-es-video
@@ -934,7 +934,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
 END:VEVENT
 BEGIN:VEVENT
 UID:EVG04-en-2026-12-20@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261220T150000
 DURATION:PT15M
 SUMMARY:FEED · method · EVG04-en
@@ -946,7 +946,7 @@ DESCRIPTION:Teachers\, churches and groups plan on Sunday\nInstagram\, Face
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS07-en-2026-12-20@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261220T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS07-en
@@ -961,7 +961,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:LAB05-en-feed-2026-12-21@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261221T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LAB05-en-feed
@@ -978,7 +978,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:LAB06-en-video-2026-12-22@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261222T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LAB06-en-video
@@ -996,7 +996,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
 END:VEVENT
 BEGIN:VEVENT
 UID:LAB07-en-feed-2026-12-23@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261223T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LAB07-en-feed
@@ -1012,7 +1012,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:LAB08-en-video-2026-12-24@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261224T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LAB08-en-video
@@ -1030,7 +1030,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN15-en-feed-2026-12-25@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261225T121500
 DURATION:PT15M
 SUMMARY:FEED · real-help · LEN15-en-feed
@@ -1047,7 +1047,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:LAB09-es-video-2026-12-26@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261226T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LAB09-es-video
@@ -1066,7 +1066,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS08-en-2026-12-27@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261227T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS08-en
@@ -1081,7 +1081,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:LAB10-en-feed-2026-12-28@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261228T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LAB10-en-feed
@@ -1098,7 +1098,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:LAB11-en-video-2026-12-29@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261229T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LAB11-en-video
@@ -1117,7 +1117,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
 END:VEVENT
 BEGIN:VEVENT
 UID:LAB12-en-feed-2026-12-30@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261230T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LAB12-en-feed
@@ -1133,7 +1133,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
 END:VEVENT
 BEGIN:VEVENT
 UID:EMAIL-05-2026-12-31@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261231T100000
 DURATION:PT15M
 SUMMARY:EMAIL · email · EMAIL-05
@@ -1142,7 +1142,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nEmail list\n\nNews
 END:VEVENT
 BEGIN:VEVENT
 UID:EDU01-en-video-2026-12-31@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20261231T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · EDU01-en-video
@@ -1161,7 +1161,7 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
 END:VEVENT
 BEGIN:VEVENT
 UID:EDU02-en-feed-2027-01-01@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270101T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · EDU02-en-feed
@@ -1178,7 +1178,7 @@ DESCRIPTION:Payday: Tax season opens: fast-refund loans and fee-heavy tax p
 END:VEVENT
 BEGIN:VEVENT
 UID:EDU03-es-video-2027-01-02@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270102T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · EDU03-es-video
@@ -1197,7 +1197,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
 END:VEVENT
 BEGIN:VEVENT
 UID:EVG05-en-2027-01-03@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270103T150000
 DURATION:PT15M
 SUMMARY:FEED · method · EVG05-en
@@ -1209,7 +1209,7 @@ DESCRIPTION:Teachers\, churches and groups plan on Sunday\nInstagram\, Face
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS09-en-2027-01-03@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270103T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS09-en
@@ -1224,7 +1224,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
 END:VEVENT
 BEGIN:VEVENT
 UID:EDU04-en-feed-2027-01-04@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270104T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · EDU04-en-feed
@@ -1240,7 +1240,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
 END:VEVENT
 BEGIN:VEVENT
 UID:EDU05-en-video-2027-01-05@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270105T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · EDU05-en-video
@@ -1259,7 +1259,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
 END:VEVENT
 BEGIN:VEVENT
 UID:EDU06-en-feed-2027-01-06@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270106T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · EDU06-en-feed
@@ -1275,7 +1275,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
 END:VEVENT
 BEGIN:VEVENT
 UID:EDU07-en-video-2027-01-07@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270107T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · EDU07-en-video
@@ -1294,7 +1294,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU13-en-feed-2027-01-08@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270108T121500
 DURATION:PT15M
 SUMMARY:FEED · real-help · HOU13-en-feed
@@ -1310,7 +1310,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
 END:VEVENT
 BEGIN:VEVENT
 UID:EDU08-es-video-2027-01-09@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270109T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · EDU08-es-video
@@ -1329,7 +1329,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS10-en-2027-01-10@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270110T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS10-en
@@ -1345,7 +1345,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
 END:VEVENT
 BEGIN:VEVENT
 UID:EDU09-en-feed-2027-01-11@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270111T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · EDU09-en-feed
@@ -1361,7 +1361,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
 END:VEVENT
 BEGIN:VEVENT
 UID:EDU10-en-video-2027-01-12@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270112T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · EDU10-en-video
@@ -1380,7 +1380,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
 END:VEVENT
 BEGIN:VEVENT
 UID:EDU11-en-feed-2027-01-13@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270113T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · EDU11-en-feed
@@ -1397,7 +1397,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
 END:VEVENT
 BEGIN:VEVENT
 UID:EMAIL-06-2027-01-14@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270114T100000
 DURATION:PT15M
 SUMMARY:EMAIL · email · EMAIL-06
@@ -1406,7 +1406,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nEma
 END:VEVENT
 BEGIN:VEVENT
 UID:EDU12-en-video-2027-01-14@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270114T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · EDU12-en-video
@@ -1425,7 +1425,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN01-en-feed-2027-01-15@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270115T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LEN01-en-feed
@@ -1442,7 +1442,7 @@ DESCRIPTION:Payday: Tax season opens: fast-refund loans and fee-heavy tax p
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN02-es-video-2027-01-16@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270116T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LEN02-es-video
@@ -1462,7 +1462,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
 END:VEVENT
 BEGIN:VEVENT
 UID:EVG06-en-2027-01-17@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270117T150000
 DURATION:PT15M
 SUMMARY:FEED · story · EVG06-en
@@ -1475,7 +1475,7 @@ DESCRIPTION:Teachers\, churches and groups plan on Sunday\nInstagram\, Face
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS11-en-2027-01-17@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270117T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS11-en
@@ -1489,7 +1489,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN03-en-feed-2027-01-18@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270118T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LEN03-en-feed
@@ -1505,7 +1505,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN04-en-video-2027-01-19@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270119T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LEN04-en-video
@@ -1525,7 +1525,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN05-en-feed-2027-01-20@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270120T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LEN05-en-feed
@@ -1542,7 +1542,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN06-en-video-2027-01-21@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270121T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LEN06-en-video
@@ -1562,7 +1562,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU14-en-feed-2027-01-22@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270122T121500
 DURATION:PT15M
 SUMMARY:FEED · real-help · HOU14-en-feed
@@ -1579,7 +1579,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN07-es-video-2027-01-23@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270123T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · LEN07-es-video
@@ -1599,7 +1599,7 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS12-en-2027-01-24@getcivicarmor.com
-DTSTAMP:20261021T231846Z
+DTSTAMP:20261021T233245Z
 DTSTART;TZID=America/New_York:20270124T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS12-en
