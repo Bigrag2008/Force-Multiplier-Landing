@@ -3,6 +3,7 @@ import Link from "next/link";
 import { C } from "@/engine/content";
 import { ContinueLink } from "@/ui/ContinueCard";
 import { t, useLang } from "@/i18n";
+import { WhereNext } from "@/ui/WhereNext";
 
 export default function Home() {
   useLang();
@@ -59,6 +60,7 @@ export default function Home() {
           </li>
         ))}
       </ul>
+      <WhereNext className="mt-12" />
     </main>
   );
 }

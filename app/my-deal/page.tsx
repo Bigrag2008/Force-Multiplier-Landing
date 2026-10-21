@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { WhereNext } from "@/ui/WhereNext";
 import { useEffect, useState } from "react";
 import type { Card } from "@/engine/content";
 import { LAST_EDITION, loadEditions, type Edition } from "@/engine/edition";
@@ -208,6 +209,8 @@ export default function MyDealPage() {
           </ul>
         </section>
       )}
+
+      {shown && <WhereNext lead="work" className="mt-6" />}
 
       {saved.length > 0 && (
         <section className="mt-8">

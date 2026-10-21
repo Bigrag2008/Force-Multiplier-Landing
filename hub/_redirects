@@ -1,0 +1,7 @@
+# Cloudflare Pages (and Netlify) read this file. Short addresses for print, flyers and the back of the books.
+/play      https://play.getcivicarmor.com  302
+/game      https://play.getcivicarmor.com  302
+/teachers  https://play.getcivicarmor.com/teacher/  302
+/guide     /third-option/  301
+/novel     /book/  301
+/es        /next/?lang=es  302

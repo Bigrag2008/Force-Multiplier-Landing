@@ -9,9 +9,12 @@ The answers go to **a Google Sheet you own**. Until you connect one, nothing lea
 2. In the Sheet: **Extensions → Apps Script**. Delete what's there, paste in all of [`feedback/Code.gs`](feedback/Code.gs), and press **Save**.
 3. **Deploy → New deployment**. Click the gear next to *Select type* and choose **Web app**. Set **Execute as: Me** and **Who has access: Anyone**. Press **Deploy**, and allow access when Google asks (it's your own script, writing to your own Sheet).
 4. Copy the **Web app URL** (it ends in `/exec`). Open it in a browser once: it should say *The Second Number feedback is listening.*
-5. In **Vercel → your project → Settings → Environment Variables**, add `NEXT_PUBLIC_FEEDBACK_URL` with that URL, then **Redeploy** (the address is built into the site). Running it yourself: put `NEXT_PUBLIC_FEEDBACK_URL=…` in a `.env.local` file next to `package.json` and rebuild.
+5. In your host's project settings (**Cloudflare Pages → Settings → Variables and Secrets**, or **Vercel → Settings → Environment Variables**), add `NEXT_PUBLIC_FEEDBACK_URL` with that URL, then deploy again (the address is built into the site). Running it yourself: put `NEXT_PUBLIC_FEEDBACK_URL=…` in a `.env.local` file next to `package.json` and rebuild.
 
 Play a game to the end and send an answer: a **Feedback** tab appears in the Sheet with one row per game. The same game answered twice replaces its row.
+
+## The Civic Armor email list uses the same Sheet
+The hub at getcivicarmor.com (`hub/`) sends its sign-ups to this same web app. Paste the same `/exec` URL into `signupUrl` in [`hub/config.js`](../hub/config.js) and push: a **Signups** tab appears with one row per email (signing up again updates the row). That tab holds people's email addresses, so keep the Sheet private and don't share it.
 
 ## Reading it
 - **Fun** and **Play again** by **Mode**, **Players** and **Chapter**: where the game is landing and where it isn't.

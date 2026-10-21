@@ -9,6 +9,7 @@ import { CopyFamilyCode } from "./FamilyCode";
 import { MoneyCount } from "./MoneyCount";
 import { ResultCode } from "./ResultCode";
 import { FeedbackCard } from "./FeedbackCard";
+import { WhereNext } from "./WhereNext";
 import { t, useLang } from "../i18n";
 import { titleCase } from "./theme";
 
@@ -23,6 +24,8 @@ export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
   const ch = g.chapter;
   const r = ch ? g.chapterResult() : null;
   const porch = ch?.throne && won;
+  // a table the machine caught at work hears about the job guide first
+  const work = g.signed.filter((x) => x.d === "LABOR" && (x.out === "taken" || x.out === "conned")).length >= 2;
   return (
     <section className={`rounded-2xl border-2 p-6 ${won ? "border-gold bg-gold/10" : "border-[#E63946] bg-[#E63946]/10"}`}>
       <h2 className={`text-3xl font-black ${won ? "text-gold" : "text-[#ff8a8a]"}`}>{won ? t("The block wins.") : t("The Machine holds the block.")}</h2>
@@ -50,6 +53,7 @@ export function EndScreen({ s, onAgain }: { s: Session; onAgain: () => void }) {
           {g.ed.credits && <p className="mt-2 text-xs text-program/60">{t("From the {name}, made by {credits}.", { name: t(g.ed.name), credits: g.ed.credits })}</p>}
         </div>
       )}
+      <WhereNext lead={work ? "work" : "novel"} className="mt-5" />
       <ResultCode s={s} />
       {!won && fallen.length > 0 && (
         <p className="mt-3 text-[#ff9b9b]">{t("{name} won the board as the Machine, and earned 0 Props. You win nothing by becoming it.", { name: fallen[0].name })}</p>

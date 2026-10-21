@@ -4,7 +4,7 @@ import "./globals.css";
 import { LangSwitch } from "@/ui/LangSwitch";
 
 // Links shared from the live site need its full address for the preview card. Vercel sets this one itself;
-// on another host, set SITE_URL (e.g. https://thesecondnumber.org).
+// on another host, set SITE_URL (e.g. https://play.getcivicarmor.com).
 const SITE = process.env.SITE_URL ?? (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000");
 
 export const metadata: Metadata = {

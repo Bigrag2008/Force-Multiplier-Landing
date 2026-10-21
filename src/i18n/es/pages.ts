@@ -494,4 +494,13 @@ export const pages: Record<string, string> = {
   "pick which layer beats it (red, amber or blue).": "escoge qué capa la vence (rojo, ámbar o azul).",
   "Pictures: say who made them (and that they said yes to them being used here).": "Imágenes: di quién las hizo (y que dieron permiso para usarlas aquí).",
   "📄 The easy guide to print: the rules in plain words, with examples and a cheat sheet (PDF)": "📄 La guía fácil para imprimir: las reglas en palabras sencillas, con ejemplos y una hoja de repaso (PDF, en inglés)",
+"📖 Read the novel": "📖 Lee la novela",
+  "The Second Number, Book One: Marcus Ellison's story, the world this game comes from.": "The Second Number, Libro Uno: la historia de Marcus Ellison, el mundo de donde viene este juego.",
+  "🛡 The Third Option": "🛡 The Third Option (La Tercera Opción)",
+  "The real-life version: how to recognize, document and prove what's happening at your job. A Civic Armor guide.": "La versión de la vida real: cómo reconocer, documentar y probar lo que pasa en tu trabajo. Una guía de Civic Armor (en inglés).",
+  "Where this goes next": "A dónde lleva esto",
+  "You read the machine at the table. Now read it in your own life.": "Leíste la máquina en la mesa. Ahora léela en tu propia vida.",
+  "✉ Stay in the loop": "✉ Mantente al tanto",
+  "New chapters, the boxed game, and the Civic Armor course. A few emails a year.": "Capítulos nuevos, el juego en caja y el curso de Civic Armor. Unos pocos correos al año.",
+  "A Civic Armor game": "Un juego de Civic Armor",
 };

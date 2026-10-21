@@ -4,6 +4,7 @@ import { ImageResponse } from "next/og";
 export const alt = "The Second Number: a cooperative game about the hidden cost in every deal";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+export const dynamic = "force-static";
 
 const DISTRICTS = ["#1E9E78", "#E03C31", "#1F7AE0", "#8E3BB8", "#F28C1B"];
 

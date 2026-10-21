@@ -1,0 +1,3 @@
+# Cloudflare Pages: the share card is written without a file extension, so name its type
+/opengraph-image
+  Content-Type: image/png

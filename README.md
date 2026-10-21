@@ -55,15 +55,20 @@ To run the production build instead: `npm run build && npm start`.
 **How it connects:** phones talk directly to the table device (WebRTC, through [PeerJS](https://peerjs.com)). PeerJS's free public server only introduces them, so there's nothing to sign up for or run. The table device is the referee: phones send moves, it checks each one and passes it on, and every device replays the same moves (`src/net/`). Most home and phone networks connect fine; a few strict networks (some workplaces and schools) block direct connections, and then playing on one device still works. To use your own PeerJS server, add `?peer=host:port` to the page address.
 
 ## Put it online
-Every page is static (no server code, no database), so it runs on any free host.
+Every page is static (no server code, no database), so it runs on any free host. The plan is to serve it at **play.getcivicarmor.com**, beside the Civic Armor hub at getcivicarmor.com (`hub/`, see [`hub/README.md`](hub/README.md)).
 
-**Vercel (simplest):**
-1. Sign in at [vercel.com](https://vercel.com) with GitHub and choose **Add New → Project**.
-2. Import **The-Second-Number**. Vercel detects Next.js; leave every setting as it is and press **Deploy**.
-3. In about two minutes you get a link like `the-second-number.vercel.app`. Every push to `main` updates it, and each pull request gets its own preview link.
-4. Optional: **Settings → Domains** adds your own address (e.g. `thesecondnumber.org`).
+**Cloudflare Pages (free, and allowed for a site that sells things):**
+1. Sign in at [dash.cloudflare.com](https://dash.cloudflare.com) and choose **Workers & Pages → Create → Pages → Connect to Git**, then pick **The-Second-Number**.
+2. Framework preset **None**. Build command `npm run build:static`. Build output directory `out`.
+3. Environment variables: `SITE_URL` = `https://play.getcivicarmor.com` (so shared links show the preview card). Optional: `NEXT_PUBLIC_FEEDBACK_URL` (game/FEEDBACK.md) and `NEXT_PUBLIC_HUB_URL` if the hub isn't at getcivicarmor.com yet.
+4. **Save and Deploy.** You get a `*.pages.dev` link in a few minutes; every push to `main` updates it.
+5. **Custom domains → Set up a domain →** `play.getcivicarmor.com`. With the domain's DNS on Cloudflare, it adds the record itself.
 
-Vercel's free plan is for non-commercial projects. If the site will sell the book or the game, use Vercel Pro, or **Cloudflare Pages** or **Netlify** (both free for commercial sites): import the repo, build command `npm run build`, and set `SITE_URL` to the site's address so shared links show the preview card.
+`npm run build:static` writes the whole site to `out/` as plain files, so any static host works (Netlify: same build command, publish directory `out`).
+
+**Vercel** also works with no settings at all (import the repo, press **Deploy**), but its free plan is for non-commercial sites only; selling the book or the game from it needs Vercel Pro.
+
+The links out of the game (the novel, *The Third Option*, the email list) all live in [`src/links.ts`](src/links.ts).
 
 The build copies the PDFs in `game/` into the site (`scripts/copy_pdfs.mjs`), so the print-and-play kit and the teacher's guide download from the live site at `/The_Second_Number_PRINT_AND_PLAY.pdf` and `/The_Second_Number_TEACHER_GUIDE.pdf`.
 

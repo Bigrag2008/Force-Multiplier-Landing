@@ -2,6 +2,8 @@
  * The Second Number: receives players' end-of-game feedback into this Google Sheet.
  * Setup (about 5 minutes): game/FEEDBACK.md. Paste this whole file into Extensions → Apps Script, then Deploy.
  *
+ * It also receives the Civic Armor hub's email list (hub/site.js): those go to a "Signups" tab, one row per email.
+ *
  * Each answer becomes one row. Answers are checked and trimmed here too (anyone can post to a public web app),
  * and the same game answered twice replaces its row instead of adding a second one.
  */
@@ -9,6 +11,9 @@ const SHEET = "Feedback";
 const HEAD = ["Received", "Game id", "Fun (1-4)", "Confusing", "Play again", "Note", "Mode", "Chapter", "Players",
               "Won", "Rounds", "Language", "Coach on", "Fooled by", "Edition"];
 const CONFUSING = ["glasses", "choices", "lever", "machine", "underworld", "teaching", "nothing"];
+const SIGNUPS = "Signups";
+const SIGNUP_HEAD = ["Received", "Email", "Interested in", "Signed up on", "Language"];
+const INTERESTS = ["guide", "course", "novel", "game", "groups"];
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
@@ -19,6 +24,7 @@ function doPost(e) {
     const str = (x, n) => String(x == null ? "" : x).replace(/[\r\n\t]+/g, " ").slice(0, n);
     // a leading = + - @ would make the Sheet treat a player's note as a formula
     const safe = (x, n) => str(x, n).replace(/^[=+\-@]/, "'$&");
+    if (fb.kind === "signup") return signup(fb, safe);
     const row = [
       new Date(),
       safe(fb.id, 40),
@@ -43,6 +49,25 @@ function doPost(e) {
   } finally {
     lock.releaseLock();
   }
+}
+
+/** the hub's email list: one row per email, signing up again updates it */
+function signup(fb, safe) {
+  const email = String(fb.email || "").trim().toLowerCase().slice(0, 120);
+  if (!/^[^\s@=+\-][^\s@]*@[^\s@]+\.[^\s@]+$/.test(email)) return ContentService.createTextOutput("bad request");
+  const row = [
+    new Date(), email,
+    (Array.isArray(fb.interests) ? fb.interests : []).filter((k) => INTERESTS.indexOf(k) >= 0).join(", "),
+    safe(fb.page, 40), fb.lang === "es" ? "es" : "en",
+  ];
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(SIGNUPS) || ss.insertSheet(SIGNUPS);
+  if (sh.getLastRow() === 0) { sh.appendRow(SIGNUP_HEAD); sh.setFrozenRows(1); }
+  const emails = sh.getLastRow() > 1 ? sh.getRange(2, 2, sh.getLastRow() - 1, 1).getValues().map((r) => r[0]) : [];
+  const at = emails.indexOf(email);
+  if (at >= 0) sh.getRange(at + 2, 1, 1, row.length).setValues([row]);
+  else sh.appendRow(row);
+  return ContentService.createTextOutput("ok");
 }
 
 /** open the web app's address in a browser to check it's live */

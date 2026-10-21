@@ -10,6 +10,7 @@
     "dev": "next dev",
     "prebuild": "node scripts/copy_pdfs.mjs",
     "build": "next build",
+    "build:static": "node scripts/copy_pdfs.mjs && STATIC_EXPORT=1 next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
