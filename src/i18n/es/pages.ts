@@ -315,8 +315,8 @@ export const pages: Record<string, string> = {
   "<b>The Machine.</b> The blue layers showed traps sharing owners. Is that true in our town? How could you find out?":
     "<b>La Máquina.</b> Las capas azules mostraron trampas con los mismos dueños. ¿Pasa eso en nuestra ciudad? ¿Cómo podrías averiguarlo?",
   "Quick math (answer key)": "Cuentas rápidas (clave de respuestas)",
-  "<b>Payday loan.</b> $56.25 on $375 for 14 days = 15% every two weeks. 15% × about 26 two-week periods = <b>391% a year</b>. The typical borrower rolls over 8 times: 8 × $56 = <b>$448 in fees</b> on a $375 loan.":
-    "<b>Préstamo de día de pago.</b> $56.25 sobre $375 por 14 días = 15% cada dos semanas. 15% × unos 26 periodos de dos semanas = <b>391% al año</b>. El prestatario típico lo renueva 8 veces: 8 × $56 = <b>$448 en cargos</b> por $375.",
+  "<b>Payday loan.</b> $56.25 on $375 for 14 days = 15% every two weeks. 15% × about 26 two-week periods = <b>391% a year</b>. The typical borrower pays that fee 8 times: 8 × $56.25 = <b>$450 in fees</b> on a $375 loan.":
+    "<b>Préstamo de día de pago.</b> $56.25 sobre $375 por 14 días = 15% cada dos semanas. 15% × unos 26 periodos de dos semanas = <b>391% al año</b>. El prestatario típico paga esa tarifa 8 veces: 8 × $56.25 = <b>$450 en cargos</b> por $375.",
   "<b>Rent-to-own.</b> $20 a week × 78 weeks = <b>$1,560</b> for a couch that retails around $500, about 3× the price.":
     "<b>Renta con opción a compra.</b> $20 a la semana × 78 semanas = <b>$1,560</b> por un sofá que en tienda cuesta unos $500, como 3× el precio.",
   "<b>Overdraft.</b> A $4 coffee plus a ~$35 fee = <b>$39</b>: an extra 875%, from one swipe.": "<b>Sobregiro.</b> Un café de $4 más un cargo de ~$35 = <b>$39</b>: un 875% extra, por una sola pasada de tarjeta.",

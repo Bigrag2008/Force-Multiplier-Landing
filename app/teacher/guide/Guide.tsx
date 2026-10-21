@@ -128,7 +128,7 @@ export function Guide() {
         <section>
           <h2>{t("Quick math (answer key)")}</h2>
           <ul className="list-disc pl-6 text-[14px]">
-            <li>{r("<b>Payday loan.</b> $56.25 on $375 for 14 days = 15% every two weeks. 15% × about 26 two-week periods = <b>391% a year</b>. The typical borrower rolls over 8 times: 8 × $56 = <b>$448 in fees</b> on a $375 loan.")}</li>
+            <li>{r("<b>Payday loan.</b> $56.25 on $375 for 14 days = 15% every two weeks. 15% × about 26 two-week periods = <b>391% a year</b>. The typical borrower pays that fee 8 times: 8 × $56.25 = <b>$450 in fees</b> on a $375 loan.")}</li>
             <li>{r("<b>Rent-to-own.</b> $20 a week × 78 weeks = <b>$1,560</b> for a couch that retails around $500, about 3× the price.")}</li>
             <li>{r("<b>Overdraft.</b> A $4 coffee plus a ~$35 fee = <b>$39</b>: an extra 875%, from one swipe.")}</li>
           </ul>

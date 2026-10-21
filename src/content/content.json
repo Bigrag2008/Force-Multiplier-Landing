@@ -41,12 +41,12 @@
    {
     "front": "Quick Cash: $375 today. One flat fee — $56.25.",
     "red": "That fee is a 391% APR. The fee is the product, not a favor.",
-    "amber": "Due in full in 14 days. Can't pay? You 'reroll' and owe $56 again.",
+    "amber": "Due in full in 14 days. Can't pay? You 'reroll' and owe $56.25 again.",
     "blue": "The storefront and the debt buyer that hounds you later share one owner.",
     "trap": true,
     "lever": 1,
-    "dollars": 448,
-    "basis": "a $56 fee rolled over 8 times, like the typical payday borrower",
+    "dollars": 450,
+    "basis": "a $56.25 fee paid 8 times, like the typical payday borrower",
     "rush": true
    },
    {
@@ -56,8 +56,8 @@
     "blue": "The lender holds a stake in the repo lot that resells your car.",
     "trap": true,
     "lever": 2,
-    "dollars": 1200,
-    "basis": "about 300% a year on $1,000 over a few months"
+    "dollars": 1250,
+    "basis": "25% a month on $1,000, for 5 months"
    },
    {
     "front": "Pawn: cash now for your item, buy it back anytime.",
@@ -67,7 +67,7 @@
     "trap": true,
     "lever": 2,
     "dollars": 150,
-    "basis": "120%+ a year on a pawn, or the item gone"
+    "basis": "20% a month on a $250 pawn, for 3 months"
    },
    {
     "front": "Buy Now, Pay Later: 4 easy payments, 0% interest!",
@@ -77,7 +77,7 @@
     "trap": true,
     "lever": 2,
     "dollars": 70,
-    "basis": "late fees across a few overdue plans"
+    "basis": "seven $10 late fees across overdue plans"
    },
    {
     "front": "Overdraft Protection: we'll cover your card if you're short.",
@@ -129,7 +129,7 @@
     "trap": true,
     "lever": 1,
     "dollars": 180,
-    "basis": "a year of fees for a loan you can't touch",
+    "basis": "$15 a month in fees for a year, on a loan you can't touch",
     "rush": true
    },
    {
@@ -139,8 +139,8 @@
     "blue": "The 'nonprofit' is funded by fees from the lenders it deals with.",
     "trap": true,
     "lever": 3,
-    "dollars": 2000,
-    "basis": "a longer term and more interest on a typical balance"
+    "dollars": 2100,
+    "basis": "a $10,000 balance stretched from 3 years to 5, at 17%"
    },
    {
     "front": "Drive It Home Today — financing approved!",
@@ -161,7 +161,7 @@
     "trap": true,
     "lever": 1,
     "dollars": 400,
-    "basis": "about 2% of every paycheck, for a year"
+    "basis": "2% of a $20,000-a-year paycheck, for a year"
    },
    {
     "front": "Credit-union personal loan: fixed low rate.",
@@ -265,7 +265,7 @@
     "trap": true,
     "lever": 3,
     "dollars": 120,
-    "basis": "a marked-up policy, for a year"
+    "basis": "a $10-a-month markup on the policy, for a year"
    },
    {
     "front": "Welcome! Great intro rent.",
@@ -285,7 +285,7 @@
     "trap": true,
     "lever": 1,
     "dollars": 6000,
-    "basis": "a reset rate that doubles the payment, for a year"
+    "basis": "a $500 payment that resets to $1,000, for a year"
    },
    {
     "front": "All utilities included — simple!",
@@ -295,7 +295,7 @@
     "trap": true,
     "lever": 1,
     "dollars": 600,
-    "basis": "a flat 'utility' charge above real usage, for a year"
+    "basis": "$50 a month above real usage, for a year"
    },
    {
     "front": "Standard lease, just sign here.",
@@ -410,7 +410,7 @@
     "trap": true,
     "lever": 1,
     "dollars": 120,
-    "basis": "a day of unpaid work"
+    "basis": "an unpaid 8-hour day at $15 an hour"
    },
    {
     "front": "Flexible hours — we'll text you!",

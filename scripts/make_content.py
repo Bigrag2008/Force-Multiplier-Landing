@@ -68,8 +68,8 @@ def deal_posts():
                 dn = DISTRICT[d] if lang == "en" else DISTRICT_ES[d]
                 over = ""
                 if trap and card.get("dollars"):
-                    over = (f"The second number: {money(card['dollars'])}. ({card['basis']}.)" if lang == "en"
-                            else f"El segundo número: {money(card['dollars'])}.")
+                    over = (f"The second number: {money(card['dollars'])}. That's {card['basis']}." if lang == "en"
+                            else f"El segundo número: {money(card['dollars'])}. Es {es(card['basis'])}.")
                 if trap:
                     feed = (f"THE OFFER: “{f}”\n\n"
                             f"🔴 {'The cost' if lang == 'en' else 'El costo'}: {r}\n"
@@ -143,14 +143,14 @@ def history_posts():
 
 
 EVERGREEN = [
-    ("groups", "For teachers: The Second Number fits one class period. Free teacher's guide, learning goals, and questions for after. No accounts, nothing to install. play.getcivicarmor.com/teacher"),
+    ("groups", "For teachers: The Second Number fits one class period. Free teacher's guide, learning goals, and questions for after. No accounts, nothing to install. getcivicarmor.com/teachers"),
     ("groups", "Church game night idea: a cooperative game where your youth group reads predatory deals together and teaches each other to spot them. Free to play, free to print. getcivicarmor.com/play"),
     ("groups", "Librarians and community centers: a free print-and-play game about reading the fine print, in English and Spanish, 1 to 5 players, about 25 minutes for the short version. getcivicarmor.com/play"),
     ("method", "Swallow it. Blow up. Or find out. When something happens at work, there's a third option: recognize it, document it, prove it. Before you ever see a lawyer. getcivicarmor.com/guide"),
     ("method", "A bad feeling isn't evidence. A dated note, written the same day, is. The Third Option: the Civic Armor method for your own job. getcivicarmor.com/guide"),
     ("story", "At eighteen, Marcus Ellison signed a plea so he could go home. Then he wakes up on graduation day able to see the second number in every deal on his block. The Second Number, Book One. getcivicarmor.com/book"),
     ("story", "“Armor, ’cause it covers you. Civic, ’cause it ain’t yours. It’s everybody’s that lives here.” Gloria, in The Second Number. getcivicarmor.com"),
-    ("method", "Read your own deal: paste in the numbers from a real offer and the site works out the second number, on your phone, never uploaded. play.getcivicarmor.com/my-deal"),
+    ("method", "Read your own deal: paste in the numbers from a real offer and the site works out the second number, on your phone, never uploaded. getcivicarmor.com/my-deal"),
 ]
 
 
@@ -180,7 +180,7 @@ WEEK = [
     (0, "12:15", "feed", "en", "deal"),
     (1, "19:30", "video", "en", "deal"),
     (2, "12:15", "feed", "en", "deal"),
-    (3, "19:30", "video", "en", "deal"),
+    (3, "19:30", "video", "es", "deal"),   # Spanish twice a week: the households these traps hit hardest
     (4, "12:15", "feed", "en", "deal"),
     (5, "19:30", "video", "es", "deal"),
     (6, "17:00", "feed", "en", "history"),
@@ -254,6 +254,45 @@ def reel_of(p):
     return f"reels/{p['card']}-{p['lang']}.mp4"
 
 
+# The arithmetic behind each trap card's dollar figure, for anyone who checks it. A card not listed here is an
+# estimate (a typical amount, per its basis): it needs a cited source before it goes out as a post or a reel.
+MATH = {
+    "a $56.25 fee paid 8 times, like the typical payday borrower": "8 × $56.25 = $450",
+    "25% a month on $1,000, for 5 months": "$1,000 × 25% × 5 = $1,250",
+    "20% a month on a $250 pawn, for 3 months": "$250 × 20% × 3 = $150",
+    "seven $10 late fees across overdue plans": "7 × $10 = $70",
+    "five $35 overdraft fees in a month": "5 × $35 = $175",
+    "a $14 tip-and-fee, eight times a year": "8 × $14 = $112",
+    "about 100% a year on $2,000 over 18 months": "amortized: 18 payments of about $218 = $3,931, so about $1,931 in interest (≈ $1,900)",
+    "$15 a month in fees for a year, on a loan you can't touch": "12 × $15 = $180",
+    "a $10,000 balance stretched from 3 years to 5, at 17%": "36 payments of $356.53 = $12,835 vs 60 of $248.53 = $14,912: about $2,077 more (≈ $2,100)",
+    "2% of a $20,000-a-year paycheck, for a year": "2% × $20,000 = $400",
+    "$25 a week for a year, for a couch that sells for about $400": "52 × $25 = $1,300, minus the $400 couch = $900",
+    "$100 a month in junk fees, for a year": "12 × $100 = $1,200",
+    "five $50 applications": "5 × $50 = $250",
+    "a $10-a-month markup on the policy, for a year": "12 × $10 = $120",
+    "a 20% renewal hike on $1,000 rent, for a year": "$1,000 × 20% × 12 = $2,400",
+    "a $500 payment that resets to $1,000, for a year": "12 × ($1,000 − $500) = $6,000",
+    "$50 a month above real usage, for a year": "12 × $50 = $600",
+    "an unpaid 8-hour day at $15 an hour": "8 × $15 = $120",
+    "a copay above the cash price": "the card: a $60 copay vs a $30 cash price = $30",
+}
+
+
+def audit():
+    """every trap card's number: the math that closes it, or a flag that it needs a source"""
+    rows = []
+    for d, cards in C["deck"].items():
+        for i, card in enumerate(cards):
+            if not card.get("trap", True):
+                continue
+            m = MATH.get(card["basis"], "")
+            rows.append(dict(card=f"{d[:3]}{i + 1:02d}", district=DISTRICT[d], offer=card["front"], number=money(card["dollars"]),
+                             basis=card["basis"], check="math closes" if m else "ESTIMATE: needs a cited source before posting",
+                             math=m, source=""))
+    return rows
+
+
 def ics(rows):
     def esc(s):
         return s.replace("\\", "\\\\").replace("\n", "\\n").replace(",", "\\,").replace(";", "\\;")
@@ -310,6 +349,12 @@ def main():
         w.writerows(rows)
     with open(os.path.join(OUT, "calendar.ics"), "w", newline="", encoding="utf-8") as f:
         f.write(ics(rows))
+    au = audit()
+    with open(os.path.join(OUT, "NUMBERS_AUDIT.csv"), "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=list(au[0].keys()))
+        w.writeheader()
+        w.writerows(au)
+    print(f"numbers: {sum(1 for r in au if r['math'])} of {len(au)} close with arithmetic; the rest are flagged in NUMBERS_AUDIT.csv")
     n = {}
     for p in lib:
         n[p["format"]] = n.get(p["format"], 0) + 1

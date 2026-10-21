@@ -14,6 +14,6 @@ In the game, you read every deal through three colored lenses. They work on real
 Next time somebody slides a paper across a table at you, put on all three before you pick up the pen.
 
 Want to practice? Read your own deal: type in the numbers from a real offer and the site works out the second number. It stays on your phone; nothing is uploaded.
-play.getcivicarmor.com/my-deal
+getcivicarmor.com/my-deal
 
 Lamont

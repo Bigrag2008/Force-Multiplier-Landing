@@ -5,7 +5,7 @@ Hey,
 
 Today's the day. Everything is live at getcivicarmor.com:
 
-- **The Second Number, the game**: free, in English and Spanish, on any phone or laptop. play.getcivicarmor.com
+- **The Second Number, the game**: free, in English and Spanish, on any phone or laptop. getcivicarmor.com/play
 - **The Second Number, Book One**: [where to buy]
 - **The Third Option**: [where to buy]
 

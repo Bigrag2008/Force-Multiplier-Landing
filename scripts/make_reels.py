@@ -18,6 +18,8 @@ Five beats, timed to how long each part takes to read:
 Needs ffmpeg and numpy. Fonts are bundled in scripts/fonts/ (Inter, SIL Open Font License).
 """
 import json, math, os, subprocess, sys, wave
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from make_content import MATH  # noqa: E402  the arithmetic behind each number
 import numpy as np
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
@@ -119,15 +121,15 @@ class Reel:
     def __init__(self, district, idx, card, lang):
         self.d, self.idx, self.card, self.lang = district, idx, card, lang
         t = (lambda s: s) if lang == "en" else (lambda s: ES.get(s) or "")
-        self.front, self.red, self.amber, self.blue = (t(card[k]) for k in ("front", "red", "amber", "blue"))
-        self.ok = all((self.front, self.red, self.amber, self.blue))
+        self.front, self.red, self.amber, self.blue, self.basis = (t(card[k]) for k in ("front", "red", "amber", "blue", "basis"))
+        self.ok = all((self.front, self.red, self.amber, self.blue, self.basis))
         self.wd = WORDS[lang]
         self.id = f"{district[:3]}{idx + 1:02d}-{lang}"
         self.dollars = f"${card['dollars']:,}"
         # the timeline, from how long each part takes to read (about 4 words a second, a beat to land)
         rd = lambda s, lo, extra: max(lo, words(s) / 4.0 + extra)
         self.t_offer = rd(self.front, 2.3, 0.9)
-        self.t_reveal = 2.3 + rd(self.red, 1.8, 0.4)          # sweep and settle, then the red line
+        self.t_reveal = 2.3 + rd(self.basis + " " + self.red, 2.6, 0.5)   # sweep and settle, then what it's made of
         self.t_clock = rd(self.amber, 2.0, 0.3)
         self.t_conn = rd(self.blue, 2.0, 0.3)
         self.t_door = rd(DOORS[lang][district], 2.4, 0.4)
@@ -157,7 +159,9 @@ class Reel:
         self.sign, self.sign_h = text_layer(self.wd["sign"], "Bold", 58, GOLD)
         self.offer, self.offer_h = text_layer(f"“{self.front}”", "Black", 112, CREAM, lead=1.08, max_h=700, min_size=64)
         self.num, self.num_h = text_layer(self.dollars, "Black", 250, RED, lead=1.0)
-        self.redline, self.redline_h = text_layer(self.red, "Bold", 64, CREAM, lead=1.22, max_h=520, min_size=44)
+        # what the number is made of, so anyone with a calculator lands where we landed
+        self.basisline, self.basis_h = text_layer("= " + self.basis, "SemiBold", 50, GOLDL, lead=1.2, max_h=260, min_size=38)
+        self.redline, self.redline_h = text_layer(self.red, "Bold", 60, CREAM, lead=1.2, max_h=420, min_size=42)
         self.lens_hint = text_layer(self.wd["lens"], "SemiBold", 34, MUTED)[0]
         self.amberline, self.amber_h = text_layer(self.amber, "Bold", 80, CREAM, width=TW - 44, lead=1.18, max_h=900, min_size=50)
         self.blueline, self.blue_h = text_layer(self.blue, "Bold", 80, CREAM, width=TW - 44, lead=1.18, max_h=900, min_size=50)
@@ -213,7 +217,7 @@ class Reel:
                 self.put(im, self.sign, y + self.offer_h + 50, ease((u - 0.7) / 0.25), dy=30 * (1 - ease((u - 0.7) / 0.25)))
         elif t < b[2]:  # 2 THE SECOND NUMBER
             u = t - b[1]
-            top = self.y0(120 + self.num_h + 60 + self.redline_h)
+            top = self.y0(120 + self.num_h + 30 + self.basis_h + 50 + self.redline_h)
             self.put(im, self.lab["second"], top)
             ny = top + 120
             sweep0, sweep1 = 0.35, 1.85
@@ -250,9 +254,12 @@ class Reel:
                 im.alpha_composite(ring)
             if u < sweep0 + 0.4:
                 self.put(im, self.lens_hint, ny + self.num_h + 40, 1 - ease((u - sweep0) / 0.4))
-            if u > sweep1 + 0.3:
-                k = ease((u - sweep1 - 0.3) / 0.3)
-                self.put(im, self.redline, ny + self.num_h + 60, k, dy=30 * (1 - k))
+            if u > sweep1 + 0.25:
+                k = ease((u - sweep1 - 0.25) / 0.3)
+                self.put(im, self.basisline, ny + self.num_h + 30, k, dy=20 * (1 - k))
+            if u > sweep1 + 0.9:
+                k = ease((u - sweep1 - 0.9) / 0.3)
+                self.put(im, self.redline, ny + self.num_h + 30 + self.basis_h + 50, k, dy=30 * (1 - k))
         elif t < b[4]:  # 3 THE CLOCK, then THE CONNECTION
             clock = t < b[3]
             u = t - (b[2] if clock else b[3])
@@ -326,19 +333,22 @@ class Reel:
         en = lang == "en"
         door = DOORS[lang][self.d].replace("\n", " ")
         lines = [
-            (b[0], b[1], (f"Somebody's offering you this: {self.front} Would you take this deal?" if en
-                          else f"Alguien te ofrece esto: {self.front} ¿Aceptarías este trato?")),
-            (b[1], b[2], (f"Put on the red glasses. {self.red} The second number: {self.dollars}." if en
-                          else f"Ponte los lentes rojos. {self.red} El segundo número: {self.dollars}.")),
+            (b[0], b[1], (f"The offer: {self.front} Would you take this deal?" if en
+                          else f"La oferta: {self.front} ¿Aceptarías este trato?")),
+            (b[1], b[2], (f"Put on the red glasses. The second number: {self.dollars}. That's {self.basis}. {self.red}" if en
+                          else f"Ponte los lentes rojos. El segundo número: {self.dollars}. Es {self.basis}. {self.red}")),
             (b[2], b[3], (f"The clock: {self.amber}" if en else f"El reloj: {self.amber}")),
-            (b[3], b[4], (f"Follow the money: {self.blue}" if en else f"Sigue el dinero: {self.blue}")),
-            (b[4], b[5], door),
+            (b[3], b[4], (f"The connection: {self.blue}" if en else f"La conexión: {self.blue}")),
+            (b[4], b[5], ("The door: " if en else "La puerta: ") + door),
             (b[5], b[6], (f"Now teach one person. That's the price of the lesson." if en
                           else "Ahora enséñale a una persona. Ese es el precio de la lección.")),
         ]
         head = (f"{self.id}  ·  {self.total:.1f} seconds  ·  "
-                + ("read it once, in your own words; the screen carries the rest" if en
-                   else "léelo una vez, con tus palabras; la pantalla lleva el resto"))
+                + ("say only what's on screen (people watch muted, so nothing lives only in the audio)" if en
+                   else "di solo lo que está en pantalla (la gente mira sin sonido)"))
+        if self.card["basis"] not in MATH:
+            head += ("\nCHECK BEFORE POSTING: this number is an estimate. Add its source in NUMBERS_AUDIT.csv first."
+                     if en else "\nREVISA ANTES DE PUBLICAR: este número es un estimado. Agrega su fuente en NUMBERS_AUDIT.csv.")
         return head + "\n\n" + "\n\n".join(f"[{a:4.1f}–{z:4.1f}s]  {s}" for a, z, s in lines) + "\n"
 
     # -------------------------------------------------- render

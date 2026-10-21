@@ -9,6 +9,7 @@ Everything to promote Civic Armor, built from the game's own fact-checked cards,
 | `reels/` | **Finished vertical videos**, made on demand by `python3 scripts/make_reels.py` (about 15 seconds of work per reel; all 60 trap cards in both languages is about half an hour). Each reel has sound and a `.txt` voiceover script timed to it. The `reel` column in `calendar.csv` names the file for each video slot. They're not stored in git (too big): render them on your computer. |
 | `calendar.csv` | **The schedule:** 12 weeks, about 8 posts a week, each with its date, time, platforms, text, picture and video script. |
 | `calendar.ics` | The same schedule for Google Calendar or your phone's calendar (File → Import), so each post shows up as a reminder with its text inside. |
+| `NUMBERS_AUDIT.csv` | **Every trap card's number, checked.** 19 of the 60 close with plain arithmetic, shown in the `math` column. The other 41 are typical-cost estimates: each needs a cited source in the `source` column before its post or reel goes out. |
 | `emails/` | The welcome sequence (3 emails), the launch-day email, and the every-other-week newsletter template. |
 
 ## Go live in four steps
@@ -23,7 +24,7 @@ Everything to promote Civic Armor, built from the game's own fact-checked cards,
 The default times are Eastern (Dayton) and are a starting point. After four weeks, move them to whatever your own numbers say.
 
 - **Feed posts: Mon, Wed, Fri at 12:15.** Lunch break: working adults scrolling with a few free minutes.
-- **Videos: Tue, Thu, Sat at 7:30 p.m.** The evening wind-down, when short video gets watched. Saturday's is in Spanish.
+- **Videos: Tue, Thu, Sat at 7:30 p.m.** The evening wind-down, when short video gets watched. Thursday's and Saturday's are in Spanish: the households payday loans, rent-to-own and surprise medical bills hit hardest are disproportionately Spanish-first. Once the Spanish videos find an audience, give them their own account.
 - **History: Sunday at 5 p.m.** Slower Sunday reading. It's the Long Ledger, every card true.
 - **Teachers and groups: every other Sunday at 3 p.m.** Teachers, pastors and youth leaders plan their week on Sunday afternoon.
 - **The email: every other Thursday at 10 a.m.**
@@ -59,7 +60,9 @@ The cards come from the game itself, so a number corrected in the game is correc
 4. **Write the two newsletters** from the best posts.
 
 ## Rules that protect the brand
-- **Every number comes from a card.** The cards are fact-checked, and their sources are in the `source` column. If you change a number, check it again.
+- **One public address: getcivicarmor.com.** Every post, reel, email, book page and QR code says `getcivicarmor.com/...` (`/play`, `/juega`, `/teachers`, `/my-deal`, `/guide`, `/book`, `/next`). Those short addresses forward to wherever things actually live, so a printed or spoken link never has to change.
+- **Every number shows its math.** Each reel and picture puts what the number is made of right under it ("= a $56.25 fee paid 8 times, like the typical payday borrower"), so a teacher or a skeptic with a calculator lands where you did. Before a card goes out, check it in `NUMBERS_AUDIT.csv`: if it says ESTIMATE, add a source first. The reel's `.txt` script says so at the top.
+- **Nothing lives only in the audio.** Most people watch muted. The voiceover scripts say only what's on screen; if you ad-lib, add it as on-screen text too.
 - **Say "information, not legal or financial advice"** in your bio and on anything about someone's own job or case.
 - **When people DM you their situation:** listen, point them to *The Third Option* and real help (legal aid, the EEOC, a credit union), and never tell them what their case is worth or whether they'll win.
 - **Honest deals too.** Every other Friday is an honest-deal post. It's what makes the traps believable, and it's what the credit unions and CDFIs you want as partners need to see.

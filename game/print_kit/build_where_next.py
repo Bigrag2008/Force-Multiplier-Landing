@@ -138,7 +138,7 @@ def main():
             c.showPage()
     c.save(); print(f"wrote {OUT}")
     os.makedirs(QR_DIR,exist_ok=True)
-    for name,url in (("qr_next.png",NEXT_URL),("qr_play.png","https://play.getcivicarmor.com"),
+    for name,url in (("qr_next.png",NEXT_URL),("qr_play.png",f"https://{HUB}/play"),
                      ("qr_book.png",f"https://{HUB}/book"),("qr_third_option.png",f"https://{HUB}/third-option"),("qr_course.png",f"https://{HUB}/course")):
         qr_png(url,os.path.join(QR_DIR,name))
     print(f"wrote {QR_DIR}/")

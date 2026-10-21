@@ -90,7 +90,7 @@ def deal_image(dk, card, lang):
     y = 150
     d.text((M, y), w["offer"] if trap else w["honest"], font=font(True, 28), fill=GREY)
     y = block(d, M, y + 52, f"“{t(card['front'])}”", True, 60, W - 2 * M, CREAM, lead=1.18, max_h=330) + 40
-    bottom = H - 170 - (150 if trap and card.get("dollars") else 0)
+    bottom = H - 170 - (240 if trap and card.get("dollars") else 0)
     room = (bottom - y) // 3
     for k in ("red", "amber", "blue"):
         d.rounded_rectangle([M, y + 6, M + 10, y + room - 30], radius=5, fill=LAYER[k])
@@ -98,8 +98,9 @@ def deal_image(dk, card, lang):
         block(d, M + 34, y + 36, t(card[k]), False, 34, W - 2 * M - 34, CREAM, lead=1.3, max_h=room - 70)
         y += room
     if trap and card.get("dollars"):
-        d.text((M, H - 300), w["second"], font=font(False, 32), fill=GOLDL)
-        d.text((M, H - 258), f"${card['dollars']:,}", font=font(True, 96), fill=GOLD)
+        d.text((M, H - 400), w["second"], font=font(False, 32), fill=GOLDL)
+        d.text((M, H - 360), f"${card['dollars']:,}", font=font(True, 96), fill=GOLD)
+        block(d, M, H - 238, "= " + t(card["basis"]), False, 30, W - 2 * M, GOLDL, lead=1.25, max_h=84, min_size=22)  # what it's made of
     return im
 
 
