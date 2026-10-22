@@ -20,6 +20,9 @@ OUT = os.path.join(ROOT, "launch", "content")
 C = json.load(open(os.path.join(ROOT, "src", "content", "content.json"), encoding="utf-8"))
 ES = json.load(open(os.path.join(ROOT, "src", "content", "es.json"), encoding="utf-8"))
 TZ = "America/New_York"  # Dayton
+# where each estimated number comes from (game/NUMBER_SOURCES.json); "unsupported" cards stay out of posts and reels
+SOURCES = json.load(open(os.path.join(ROOT, "game", "NUMBER_SOURCES.json"), encoding="utf-8"))
+UNSUPPORTED = {cid for cid, x in SOURCES.items() if x["status"] == "unsupported"}
 
 HUB = "getcivicarmor.com"
 LINK = {"play": f"{HUB}/play", "juega": f"{HUB}/juega", "guide": f"{HUB}/guide", "book": f"{HUB}/book", "list": HUB}
@@ -60,6 +63,8 @@ def deal_posts():
         for i, card in enumerate(cards):
             cid = f"{d[:3]}{i + 1:02d}"
             trap = card.get("trap", True)
+            if cid in UNSUPPORTED:
+                continue  # no credible source for its number yet
             for lang in ("en", "es"):
                 f, r, a, b = (card["front"], card["red"], card["amber"], card["blue"]) if lang == "en" else \
                              (es(card["front"]), es(card["red"]), es(card["amber"]), es(card["blue"]))
@@ -280,16 +285,26 @@ MATH = {
 
 
 def audit():
-    """every trap card's number: the math that closes it, or a flag that it needs a source"""
+    """every trap card's number: the arithmetic that closes it, its sources, or a flag that it has none"""
     rows = []
     for d, cards in C["deck"].items():
         for i, card in enumerate(cards):
             if not card.get("trap", True):
                 continue
-            m = MATH.get(card["basis"], "")
-            rows.append(dict(card=f"{d[:3]}{i + 1:02d}", district=DISTRICT[d], offer=card["front"], number=money(card["dollars"]),
-                             basis=card["basis"], check="math closes" if m else "ESTIMATE: needs a cited source before posting",
-                             math=m, source=""))
+            cid = f"{d[:3]}{i + 1:02d}"
+            src = SOURCES.get(cid)
+            if src:
+                assert src["front"] == card["front"], f"{cid}: NUMBER_SOURCES.json is out of step with the deck"
+            m = MATH.get(card["basis"]) or (src or {}).get("math", "")
+            if src and src["status"] == "unsupported":
+                check = "UNSUPPORTED: no credible source; kept out of posts and reels"
+            elif src:
+                check = "sourced" + (" (math closes)" if m else "") + ": open each link and confirm the figure before posting"
+            else:
+                check = "math closes"
+            rows.append(dict(card=cid, district=DISTRICT[d], offer=card["front"], number=money(card["dollars"]),
+                             basis=card["basis"], check=check, math=m,
+                             sources=" | ".join((src or {}).get("sources", [])), evidence=(src or {}).get("evidence", "")))
     return rows
 
 
@@ -354,7 +369,8 @@ def main():
         w = csv.DictWriter(f, fieldnames=list(au[0].keys()))
         w.writeheader()
         w.writerows(au)
-    print(f"numbers: {sum(1 for r in au if r['math'])} of {len(au)} close with arithmetic; the rest are flagged in NUMBERS_AUDIT.csv")
+    n = lambda k: sum(1 for r in au if r["check"].startswith(k))
+    print(f"numbers: {n('math')} close with arithmetic, {n('sourced')} sourced, {n('UNSUPPORTED')} unsupported (kept out)")
     n = {}
     for p in lib:
         n[p["format"]] = n.get(p["format"], 0) + 1

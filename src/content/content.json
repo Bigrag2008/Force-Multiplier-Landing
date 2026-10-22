@@ -101,13 +101,13 @@
    },
    {
     "front": "Refund Advance: your tax refund NOW, don't wait weeks.",
-    "red": "Fees + interest eat a refund you'd get free in a few days.",
+    "red": "Fees eat a refund you'd get free in a few days.",
     "amber": "Due when the IRS pays — any delay becomes your problem.",
     "blue": "The preparer, the bank, and the loan are one packaged product.",
     "trap": true,
     "lever": 1,
-    "dollars": 60,
-    "basis": "advance and filing fees on a refund that was coming anyway",
+    "dollars": 40,
+    "basis": "a $40 fee to run your refund through the preparer's bank, no faster than free e-file",
     "rush": true
    },
    {
@@ -149,8 +149,8 @@
     "blue": "The dealer and the finance arm split the markup on your rate.",
     "trap": true,
     "lever": 2,
-    "dollars": 2500,
-    "basis": "re-signed at a worse rate after the 'financing fell through'",
+    "dollars": 1300,
+    "basis": "a rate 5 points higher on a $26,000 car loan, for the first year",
     "rush": true
    },
    {
@@ -212,8 +212,8 @@
     "blue": "The 'management co.' is a shell of the same landlord group.",
     "trap": true,
     "lever": 2,
-    "dollars": 1200,
-    "basis": "a big deposit and a 'risk' markup in the first year",
+    "dollars": 800,
+    "basis": "a nonrefundable 'high-risk' fee as big as a month's $800 deposit",
     "rush": true
    },
    {
@@ -224,7 +224,7 @@
     "trap": true,
     "lever": 3,
     "dollars": 15000,
-    "basis": "years of payments on a house you never own, gone with one late payment"
+    "basis": "a $6,500 down payment plus ten months of $850 payments, forfeited on one missed payment"
    },
    {
     "front": "Rent is only $950!",
@@ -243,8 +243,8 @@
     "blue": "A 'turnover' vendor profits from every withheld deposit.",
     "trap": true,
     "lever": 2,
-    "dollars": 1500,
-    "basis": "a deposit kept for invented move-out charges"
+    "dollars": 800,
+    "basis": "a typical $800 deposit kept for invented move-out charges"
    },
    {
     "front": "$50 to apply — refundable if you're not approved!",
@@ -305,7 +305,7 @@
     "trap": true,
     "lever": 1,
     "dollars": 500,
-    "basis": "attorney fees added to one late rent",
+    "basis": "attorney and filing fees added to one late rent",
     "rush": true
    },
    {
@@ -316,7 +316,7 @@
     "trap": true,
     "lever": 2,
     "dollars": 1500,
-    "basis": "the 'free' month paid back, plus a penalty",
+    "basis": "the 'free' month, about $1,500 at median rent, billed back when you leave early",
     "rush": true
    },
    {
@@ -358,8 +358,8 @@
     "blue": "The arbitration firm is chosen and paid by the employer.",
     "trap": true,
     "lever": 2,
-    "dollars": 1500,
-    "basis": "a wage claim you signed away",
+    "dollars": 3300,
+    "basis": "a year of minimum-wage theft you can no longer take to court",
     "rush": true
    },
    {
@@ -369,8 +369,8 @@
     "blue": "Used to hold wages down across an entire local industry.",
     "trap": true,
     "lever": 3,
-    "dollars": 5000,
-    "basis": "a year kept out of better pay in your field"
+    "dollars": 500,
+    "basis": "about $500 a year in lower pay under a non-compete, per the FTC"
    },
    {
     "front": "You're an independent contractor — be your own boss!",
@@ -379,8 +379,8 @@
     "blue": "The staffing agency pockets what your protections would've cost.",
     "trap": true,
     "lever": 1,
-    "dollars": 3500,
-    "basis": "the employer's half of payroll tax, overtime and benefits, on $35,000"
+    "dollars": 7000,
+    "basis": "lost payroll tax, benefits and protections: 20% of $35,000"
    },
    {
     "front": "Tips pooled and shared fairly, trust us.",
@@ -390,7 +390,7 @@
     "trap": true,
     "lever": 1,
     "dollars": 1500,
-    "basis": "skimmed tips and unpaid off-clock work, over a year"
+    "basis": "$30 a week in skimmed tips and off-clock work, for 50 weeks"
    },
    {
     "front": "Free training to start your career!",
@@ -419,8 +419,8 @@
     "blue": "Scheduling software optimizes you to part-time, no benefits.",
     "trap": true,
     "lever": 2,
-    "dollars": 2000,
-    "basis": "called-off shifts over a year"
+    "dollars": 960,
+    "basis": "one called-off 5-hour shift a month at $16, for a year"
    },
    {
     "front": "Get paid on a convenient card!",
@@ -429,8 +429,8 @@
     "blue": "The card issuer and employer split the fee revenue.",
     "trap": true,
     "lever": 1,
-    "dollars": 250,
-    "basis": "card fees over a year"
+    "dollars": 130,
+    "basis": "a $1.50 ATM fee and a $1 balance check each week, for a year"
    },
    {
     "front": "Shop at our store with your staff discount!",
@@ -449,8 +449,8 @@
     "blue": "The platform tunes your pay to the lowest you'll still accept.",
     "trap": true,
     "lever": 3,
-    "dollars": 3000,
-    "basis": "car costs and falling per-job pay, over a year"
+    "dollars": 2900,
+    "basis": "4,000 work miles at the IRS rate of 72.5 cents a mile, for a year"
    },
    {
     "front": "Congrats, you're salaried now — a manager!",
@@ -459,8 +459,8 @@
     "blue": "Your unpaid overtime is pure profit upstream.",
     "trap": true,
     "lever": 1,
-    "dollars": 8000,
-    "basis": "unpaid overtime on 60-hour weeks, for a year"
+    "dollars": 26000,
+    "basis": "20 overtime hours a week at $25 (time-and-a-half on the $684-a-week minimum salary), for a year"
    },
    {
     "front": "Quick team meeting after your shift.",
@@ -469,8 +469,8 @@
     "blue": "Union-avoidance consultants are paid to keep you quiet.",
     "trap": true,
     "lever": 3,
-    "dollars": 300,
-    "basis": "off-clock meetings over a year"
+    "dollars": 312,
+    "basis": "a 30-minute unpaid meeting every week at $12, for a year"
    },
    {
     "front": "A real W-2 job: overtime, benefits, clear pay.",
@@ -507,12 +507,12 @@
    {
     "front": "In-network hospital — you're covered.",
     "red": "An out-of-network doctor inside it bills you the gap.",
-    "amber": "Since 2022 the No Surprises Act bans this for ER/emergency care — dispute it.",
+    "amber": "Since 2022 the No Surprises Act bans this for emergencies and most in-network hospital stays — dispute it.",
     "blue": "Staffing firms place out-of-network docs in in-network ERs on purpose.",
     "trap": true,
     "lever": 2,
     "dollars": 2000,
-    "basis": "an out-of-network surprise bill"
+    "basis": "the average out-of-network surprise bill after surgery, before the 2022 law"
    },
    {
     "front": "Amount due: $8,400. FINAL.",
@@ -521,8 +521,8 @@
     "blue": "Hospital, biller, and collector are one revenue chain.",
     "trap": true,
     "lever": 1,
-    "dollars": 5000,
-    "basis": "paying the opening price instead of the charity or cash rate"
+    "dollars": 3024,
+    "basis": "paying the $8,400 list price instead of a cash price at 64% of it"
    },
    {
     "front": "Medical card: 0% interest if paid in 12 months!",
@@ -531,8 +531,8 @@
     "blue": "The clinic earns a cut for every patient it signs up.",
     "trap": true,
     "lever": 2,
-    "dollars": 600,
-    "basis": "deferred interest backdated on a $2,500 bill"
+    "dollars": 575,
+    "basis": "deferred interest (about 23%) backdated on a $2,500 bill"
    },
    {
     "front": "Just a routine clinic visit.",
@@ -541,8 +541,8 @@
     "blue": "Hospitals buy up clinics just to attach facility fees.",
     "trap": true,
     "lever": 3,
-    "dollars": 300,
-    "basis": "a facility fee on top of the visit"
+    "dollars": 101,
+    "basis": "a facility fee: $217 for a primary-care visit at a hospital clinic vs $116 at a doctor's office"
    },
    {
     "front": "Please pay your balance today.",
@@ -551,8 +551,8 @@
     "blue": "Nonprofits owe charity care but profit by collecting instead.",
     "trap": true,
     "lever": 1,
-    "dollars": 2000,
-    "basis": "paying a bill charity care would have cut",
+    "dollars": 2255,
+    "basis": "the average hospital bill paid out of pocket, which charity care could have cut",
     "rush": true
    },
    {
@@ -562,8 +562,8 @@
     "blue": "The broker earns a fat commission on junk plans.",
     "trap": true,
     "lever": 1,
-    "dollars": 3000,
-    "basis": "a denied claim after a year of premiums"
+    "dollars": 3641,
+    "basis": "a year of $99 premiums plus a denied $2,453 ER visit"
    },
    {
     "front": "We can set up a payment plan.",
@@ -572,8 +572,8 @@
     "blue": "The debt is sold for pennies; the collector profits on the spread.",
     "trap": true,
     "lever": 2,
-    "dollars": 800,
-    "basis": "a payment plan sent to collections"
+    "dollars": 774,
+    "basis": "the median medical bill sent to collections"
    },
    {
     "front": "Your copay is $60.",
@@ -592,8 +592,8 @@
     "blue": "Private-equity-owned ambulance firms balance-bill on purpose.",
     "trap": true,
     "lever": 3,
-    "dollars": 1200,
-    "basis": "an out-of-network ambulance bill"
+    "dollars": 450,
+    "basis": "the median out-of-network ground ambulance bill"
    },
    {
     "front": "Here's your total, pay at the desk.",
@@ -612,19 +612,19 @@
     "blue": "The provider is paid upfront; you're left owing the lender.",
     "trap": true,
     "lever": 1,
-    "dollars": 800,
-    "basis": "deferred interest on dental financing",
+    "dollars": 805,
+    "basis": "deferred interest (about 23%) backdated on a $3,500 dental plan",
     "rush": true
    },
    {
     "front": "We'll airlift you — don't worry about the cost.",
-    "red": "Air-ambulance bills run $30k–$50k — but the No Surprises Act (2022) now shields most of it.",
+    "red": "Air-ambulance bills run $30k–$50k; if you're insured, the No Surprises Act (2022) caps you at your in-network share.",
     "amber": "You still can't consent to the price mid-emergency, so know your protection.",
     "blue": "PE-owned air fleets long relied on balance billing as the business model.",
     "trap": true,
     "lever": 3,
-    "dollars": 1000,
-    "basis": "what's left after the No Surprises Act covers most of it"
+    "dollars": 1886,
+    "basis": "your in-network share, about one average deductible; the law bars billing insured patients the rest"
    },
    {
     "front": "Charity-care application at a nonprofit hospital.",
@@ -675,8 +675,8 @@
     "blue": "The school and the loan servicer are one owner.",
     "trap": true,
     "lever": 2,
-    "dollars": 15000,
-    "basis": "for-profit tuition for a credential that doesn't lead to the career",
+    "dollars": 18700,
+    "basis": "a year of for-profit tuition and fees (average $18,700), for a credential that doesn't pay off",
     "rush": true
    },
    {
@@ -686,8 +686,8 @@
     "blue": "The servicer profits the longer you stay in debt.",
     "trap": true,
     "lever": 1,
-    "dollars": 6000,
-    "basis": "extra interest over a federal loan",
+    "dollars": 5784,
+    "basis": "$20,000 at 11% vs the 6.52% federal rate, over 10 years",
     "rush": true
    },
    {
@@ -697,8 +697,8 @@
     "blue": "Investors bought a slice of your future paycheck.",
     "trap": true,
     "lever": 2,
-    "dollars": 10000,
-    "basis": "income-share payments above a normal loan, if you do well",
+    "dollars": 9362,
+    "basis": "a 2.3x cap on a $10,000 ISA ($23,000) vs $13,638 repaid on a 6.52% federal loan",
     "rush": true
    },
    {
@@ -709,7 +709,7 @@
     "trap": true,
     "lever": 2,
     "dollars": 5000,
-    "basis": "a cosigned loan that defaults"
+    "basis": "a cosigner repaying the $5,000 left on a defaulted loan, before late fees"
    },
    {
     "front": "Can't pay? Just defer — no worries!",
@@ -718,8 +718,8 @@
     "blue": "A bigger balance means more servicer profit.",
     "trap": true,
     "lever": 1,
-    "dollars": 2000,
-    "basis": "interest added to the loan while it was deferred"
+    "dollars": 1956,
+    "basis": "a year of 6.52% interest on $30,000 in unsubsidized loans"
    },
    {
     "front": "6 weeks to a high-paying certification!",
@@ -728,8 +728,8 @@
     "blue": "The 'accreditor' is paid by the schools it blesses.",
     "trap": true,
     "lever": 3,
-    "dollars": 3000,
-    "basis": "fees for a credential employers don't recognize"
+    "dollars": 3500,
+    "basis": "a $3,500 online certificate few enrollees turned into a job in the field"
    },
    {
     "front": "Start here, transfer anywhere later!",
@@ -738,8 +738,8 @@
     "blue": "Non-transferable credits lock you into one paying school.",
     "trap": true,
     "lever": 1,
-    "dollars": 4000,
-    "basis": "paying to retake credits that didn't transfer"
+    "dollars": 3980,
+    "basis": "10 of a year's 24 credits lost in transfer (GAO: 43%), retaken at $398 a credit"
    },
    {
     "front": "Tuition is all-inclusive!",
@@ -749,7 +749,7 @@
     "trap": true,
     "lever": 1,
     "dollars": 1500,
-    "basis": "lab, tech and book fees on 'all-inclusive' tuition"
+    "basis": "a year of books and supplies (about $1,300) plus lab and tech fees"
    },
    {
     "front": "A counselor will help you apply today!",
@@ -758,8 +758,8 @@
     "blue": "Recruiters are paid per signed enrollment, not per graduate.",
     "trap": true,
     "lever": 3,
-    "dollars": 8000,
-    "basis": "a commissioned sale into the wrong program",
+    "dollars": 9350,
+    "basis": "half a year of for-profit tuition (average $18,700), in a program you were sold and then leave",
     "rush": true
    },
    {
@@ -770,7 +770,7 @@
     "trap": true,
     "lever": 1,
     "dollars": 1000,
-    "basis": "fees for free federal programs"
+    "basis": "upfront fees for free federal programs"
    },
    {
     "front": "No cost until you're hired at $70k+! (Bootcamp ISA)",
@@ -779,8 +779,8 @@
     "blue": "Financiers bundle and securitize cohorts of students like bonds.",
     "trap": true,
     "lever": 3,
-    "dollars": 8000,
-    "basis": "income-share payments on low pay"
+    "dollars": 17000,
+    "basis": "17% of a $50,000 salary for 24 months"
    },
    {
     "front": "Keep your license current — easy subscription.",

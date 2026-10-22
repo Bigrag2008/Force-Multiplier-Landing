@@ -1,0 +1,468 @@
+{
+ "EDU01": {
+  "front": "Enroll now — job placement guaranteed!",
+  "dollars": 18700,
+  "basis": "a year of for-profit tuition and fees (average $18,700), for a credential that doesn't pay off",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "NCES/IES, Total number of higher education institutions decreases 2 percent (2023-24 data) — https://ies.ed.gov/learn/press-release/total-number-higher-education-institutions-decreases-2-percent",
+   "Brookings (Cellini & Turner), Gainfully employed? ... for-profit certificate students — https://www.brookings.edu/articles/gainfully-employed-new-evidence-on-the-earnings-employment-and-debt-of-for-profit-certificate-students/"
+  ],
+  "evidence": "Average for-profit tuition and fees were about $18,700 (2023-24); for-profit certificate students don't earn enough to offset their debt."
+ },
+ "EDU02": {
+  "front": "Approved! A private loan to cover your whole tuition.",
+  "dollars": 5784,
+  "basis": "$20,000 at 11% vs the 6.52% federal rate, over 10 years",
+  "status": "sourced",
+  "math": "interest at 11%: $13,060; at 6.52%: $7,276; difference $5,784",
+  "sources": [
+   "Federal Student Aid, Interest Rates for Federal Direct Loans, 2026-27 — https://fsapartners.ed.gov/knowledge-center/library/electronic-announcements/2026-06-04/interest-rates-federal-direct-loans-first-disbursed-between-july-1-2026-and-june-30-2027",
+   "TICAS, Private loan interest rates average about 10% today, 2006 — https://ticas.org/affordability-2/private-loan-interest-rates-average-about-10-today/"
+  ],
+  "evidence": "The 2026-27 undergraduate Direct Loan rate is 6.52%. The 11% private rate is an illustration (no current authoritative average found)."
+ },
+ "EDU03": {
+  "front": "Pay $0 now — just a % of your future income! (ISA)",
+  "dollars": 9362,
+  "basis": "a 2.3x cap on a $10,000 ISA ($23,000) vs $13,638 repaid on a 6.52% federal loan",
+  "status": "sourced",
+  "math": "$23,000 − $13,638 = $9,362",
+  "sources": [
+   "Purdue Research Foundation / Social Finance, Workforce Realigned: Back a Boiler, 2022 — https://socialfinance.org/wp-content/uploads/2022/11/Workforce-Realigned-Back-a-Boiler-Brian-Edelman.pdf"
+  ],
+  "evidence": "Purdue's ISA capped repayment at about 2.3 times the amount funded."
+ },
+ "EDU04": {
+  "front": "Just have a family member cosign.",
+  "dollars": 5000,
+  "basis": "a cosigner repaying the $5,000 left on a defaulted loan, before late fees",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "FTC Credit Practices Rule, cosigner notice, 16 CFR 444.3 — https://www.govinfo.gov/content/pkg/CFR-2016-title16-vol1/pdf/CFR-2016-title16-vol1-sec444-3.pdf",
+   "CFPB, 90 percent of private student loan borrowers who applied for co-signer release were rejected, 2015 — https://www.consumerfinance.gov/about-us/newsroom/cfpb-finds-90-percent-of-private-student-loan-borrowers-who-applied-for-co-signer-release-were-rejected"
+  ],
+  "evidence": "The required notice: a cosigner may have to pay the full debt plus late fees and collection costs. $5,000 is an illustrative balance."
+ },
+ "EDU05": {
+  "front": "Can't pay? Just defer — no worries!",
+  "dollars": 1956,
+  "basis": "a year of 6.52% interest on $30,000 in unsubsidized loans",
+  "status": "sourced",
+  "math": "$30,000 × 6.52% = $1,956",
+  "sources": [
+   "Federal Student Aid, Interest Rates for Federal Direct Loans, 2026-27 — https://fsapartners.ed.gov/knowledge-center/library/electronic-announcements/2026-06-04/interest-rates-federal-direct-loans-first-disbursed-between-july-1-2026-and-june-30-2027"
+  ],
+  "evidence": "Interest is always charged during deferment on unsubsidized loans and is added to the balance at the end."
+ },
+ "EDU06": {
+  "front": "6 weeks to a high-paying certification!",
+  "dollars": 3500,
+  "basis": "a $3,500 online certificate few enrollees turned into a job in the field",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "FTC, Career Step to pay $43.5 million in cash and debt cancellation, 2024 — https://ftc.gov/news-events/news/press-releases/2024/07/career-step-pay-435-million-cash-debt-cancellation-resolve-charges-it-used-deceptive-advertising"
+  ],
+  "evidence": "The FTC alleged only about 25% of Career Step enrollees completed and about 8% of those found jobs; programs listed at $3,399–$3,699."
+ },
+ "EDU07": {
+  "front": "Start here, transfer anywhere later!",
+  "dollars": 3980,
+  "basis": "10 of a year's 24 credits lost in transfer (GAO: 43%), retaken at $398 a credit",
+  "status": "sourced",
+  "math": "10 × $398 = $3,980",
+  "sources": [
+   "GAO, Students Need More Information to Help Reduce Challenges in Transferring College Credits (GAO-17-574), 2017 — https://www.gao.gov/products/GAO-17-574",
+   "College Board, Trends in College Pricing and Student Aid 2025 — https://research.collegeboard.org/media/pdf/Trends-in-College-Pricing-and-Student-Aid-2025-final_0.pdf"
+  ],
+  "evidence": "GAO: transfer students lost 43% of credits on average (94% from for-profit to public). In-state public tuition $11,950 ÷ 30 credits ≈ $398."
+ },
+ "EDU08": {
+  "front": "Tuition is all-inclusive!",
+  "dollars": 1500,
+  "basis": "a year of books and supplies (about $1,300) plus lab and tech fees",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "NCES, Digest of Education Statistics Table 330.40 — https://nces.ed.gov/programs/digest/d24/tables/dt24_330.40.asp",
+   "College Board, Trends in College Pricing and Student Aid 2025 — https://research.collegeboard.org/media/pdf/Trends-in-College-Pricing-and-Student-Aid-2025-final_0.pdf"
+  ],
+  "evidence": "Books-and-supplies budgets run about $1,200–$1,400 a year. Read the exact 2023-24 figure from the NCES table before printing it."
+ },
+ "EDU09": {
+  "front": "A counselor will help you apply today!",
+  "dollars": 9350,
+  "basis": "half a year of for-profit tuition (average $18,700), in a program you were sold and then leave",
+  "status": "sourced",
+  "math": "$18,700 ÷ 2 = $9,350",
+  "sources": [
+   "GAO, For-Profit Colleges: Undercover Testing Finds Colleges Encouraged Fraud (GAO-10-948T), 2010 — https://www.gao.gov/products/gao-10-948t",
+   "NCES/IES 2023-24 for-profit tuition release — https://ies.ed.gov/learn/press-release/total-number-higher-education-institutions-decreases-2-percent"
+  ],
+  "evidence": "All 15 for-profit colleges GAO tested made deceptive or questionable statements to applicants."
+ },
+ "EDU10": {
+  "front": "We'll erase your student loans — for a fee!",
+  "dollars": 1000,
+  "basis": "upfront fees for free federal programs",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "FTC, Operators of student loan debt relief schemes settle FTC charges, 2018 — https://www.ftc.gov/news-events/news/press-releases/2018/05/operators-student-loan-debt-relief-schemes-settle-ftc-charges",
+   "CFPB, Don't give money or information to scammers promising student loan forgiveness, 2022 — https://www.consumerfinance.gov/archive/newsroom/consumer-advisory-dont-give-money-or-information-to-scammers-promising-student-loan-forgiveness/"
+  ],
+  "evidence": "FTC cases cite upfront fees of $899 to $1,200 and more; forgiveness, consolidation and deferment are free through your servicer."
+ },
+ "EDU11": {
+  "front": "No cost until you're hired at $70k+! (Bootcamp ISA)",
+  "dollars": 17000,
+  "basis": "17% of a $50,000 salary for 24 months",
+  "status": "sourced",
+  "math": "17% × $50,000 × 2 years = $17,000",
+  "sources": [
+   "CFPB, CFPB Takes Action Against Coding Boot Camp BloomTech, 2024 — https://www.consumerfinance.gov/about-us/newsroom/cfpb-takes-action-against-coding-boot-camp-bloomtech-and-ceo-austen-allred-for-deceiving-students-and-hiding-loan-costs/"
+  ],
+  "evidence": "Graduates earning over $50,000 paid 17% of income for up to 24 payments; real placement was 30–50% against 86% advertised."
+ },
+ "EDU12": {
+  "front": "Keep your license current — easy subscription.",
+  "dollars": null,
+  "basis": null,
+  "status": "unsupported",
+  "math": "",
+  "sources": [],
+  "evidence": "No government or research source prices auto-renewal hikes on license or continuing-education subscriptions."
+ },
+ "HEA01": {
+  "front": "In-network hospital — you're covered.",
+  "dollars": 2000,
+  "basis": "the average out-of-network surprise bill after surgery, before the 2022 law",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "JAMA (Chhabra et al.), Out-of-Network Bills for Privately Insured Patients Undergoing Elective Surgery..., 2020 — https://jamanetwork.com/journals/jama/fullarticle/2760735"
+  ],
+  "evidence": "20.5% of in-network elective surgeries produced an out-of-network bill, averaging $2,011 (2012–17). The No Surprises Act now bans most of these."
+ },
+ "HEA02": {
+  "front": "Amount due: $8,400. FINAL.",
+  "dollars": 3024,
+  "basis": "paying the $8,400 list price instead of a cash price at 64% of it",
+  "status": "sourced",
+  "math": "$8,400 × 36% = $3,024",
+  "sources": [
+   "Health Affairs (Johns Hopkins study of 2,379 hospitals), 2023, reported by Fierce Healthcare — https://www.fiercehealthcare.com/payers/study-finds-half-cash-prices-below-commercial-rates-more-2000-hospitals"
+  ],
+  "evidence": "Hospitals' cash prices averaged 64% of their chargemaster (list) prices."
+ },
+ "HEA03": {
+  "front": "Medical card: 0% interest if paid in 12 months!",
+  "dollars": 575,
+  "basis": "deferred interest (about 23%) backdated on a $2,500 bill",
+  "status": "sourced",
+  "math": "23% × $2,500 = $575",
+  "sources": [
+   "CFPB, Medical Credit Cards and Financing Plans, 2023 — https://files.consumerfinance.gov/f/documents/cfpb_medical-credit-cards-and-financing-plans_2023-05.pdf"
+  ],
+  "evidence": "Patients charged deferred interest paid about 23% of the original purchase amount; the typical APR is 26.99%."
+ },
+ "HEA04": {
+  "front": "Just a routine clinic visit.",
+  "dollars": 101,
+  "basis": "a facility fee: $217 for a primary-care visit at a hospital clinic vs $116 at a doctor's office",
+  "status": "sourced",
+  "math": "$217 − $116 = $101",
+  "sources": [
+   "Health Care Cost Institute, Facility Fees: What are they and how do they impact health care prices?, 2022 data — https://healthcostinstitute.org/all-hcci-reports/facility-fees-what-are-they-and-how-do-they-impact-health-care-prices/"
+  ],
+  "evidence": "A primary-care visit averaged $116 in a doctor's office and $217 in a hospital outpatient setting."
+ },
+ "HEA05": {
+  "front": "Please pay your balance today.",
+  "dollars": 2255,
+  "basis": "the average hospital bill paid out of pocket, which charity care could have cut",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "Peterson-KFF Health System Tracker, out-of-pocket cost-sharing for employer plans (2023 data) — https://www.healthsystemtracker.org/chart-collection/how-much-do-people-with-employer-plans-spend-out-of-pocket-on-cost-sharing/",
+   "KFF Health News, Patients Eligible For Charity Care Instead Get Big Bills, 2019 — https://kffhealthnews.org/news/patients-eligible-for-charity-care-instead-get-big-bills"
+  ],
+  "evidence": "Average out-of-pocket hospital spending was $2,255 (2023); 45% of nonprofit hospital systems routinely bill charity-eligible patients."
+ },
+ "HEA06": {
+  "front": "Health coverage for just $99/mo! (Short-term plan)",
+  "dollars": 3641,
+  "basis": "a year of $99 premiums plus a denied $2,453 ER visit",
+  "status": "sourced",
+  "math": "12 × $99 + $2,453 = $3,641",
+  "sources": [
+   "Peterson-KFF Health System Tracker, Emergency department visits exceed affordability threshold..., 2019 data — https://www.healthsystemtracker.org/brief/emergency-department-visits-exceed-affordability-thresholds-for-many-consumers-with-private-insurance/",
+   "House Energy & Commerce Committee (Democratic staff), Shortchanged, 2020 — https://democrats-energycommerce.house.gov/newsroom/press-releases/ec-investigation-finds-millions-of-americans-enrolled-in-junk-health"
+  ],
+  "evidence": "An average ER visit cost $2,453; the House investigation found short-term plans routinely deny claims after care."
+ },
+ "HEA07": {
+  "front": "We can set up a payment plan.",
+  "dollars": 774,
+  "basis": "the median medical bill sent to collections",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "Urban Institute, Medical Debt Fell during the Pandemic, 2022 — https://www.urban.org/sites/default/files/2022-05/Medical%20Debt%20Fell%20during%20the%20Pandemic%20How%20Can%20the%20Decline%20Be%20Sustained.pdf"
+  ],
+  "evidence": "The median medical debt in collections was $774 (August 2021)."
+ },
+ "HEA09": {
+  "front": "We'll get you to the hospital. (Ambulance)",
+  "dollars": 450,
+  "basis": "the median out-of-network ground ambulance bill",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "Health Affairs (Chhabra et al.), Most Patients Undergoing Ground And Air Ambulance Transportation Receive Sizable Out-Of-Network Bills, 2020 — https://www.healthaffairs.org/doi/10.1377/hlthaff.2019.01484",
+   "Peterson-KFF Health System Tracker, Ground ambulance rides and potential for surprise billing, 2021 — https://www.healthsystemtracker.org/brief/ground-ambulance-rides-and-potential-for-surprise-billing/"
+  ],
+  "evidence": "The median potential surprise bill for a ground ambulance was $450; 51% of emergency rides included an out-of-network charge."
+ },
+ "HEA10": {
+  "front": "Here's your total, pay at the desk.",
+  "dollars": null,
+  "basis": null,
+  "status": "unsupported",
+  "math": "",
+  "sources": [],
+  "evidence": "KFF (2022): 43% of adults got a bill they believed had an error, but no credible typical dollar amount exists."
+ },
+ "HEA11": {
+  "front": "Get the dental work done now — finance it!",
+  "dollars": 805,
+  "basis": "deferred interest (about 23%) backdated on a $3,500 dental plan",
+  "status": "sourced",
+  "math": "23% × $3,500 = $805",
+  "sources": [
+   "CFPB, Medical Credit Cards and Financing Plans, 2023 — https://files.consumerfinance.gov/f/documents/cfpb_medical-credit-cards-and-financing-plans_2023-05.pdf"
+  ],
+  "evidence": "Deferred interest costs about 23% of the purchase for those charged it; dental care is a main use. The $3,500 bill is an illustration."
+ },
+ "HEA12": {
+  "front": "We'll airlift you — don't worry about the cost.",
+  "dollars": 1886,
+  "basis": "your in-network share, about one average deductible; the law bars billing insured patients the rest",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "CMS, The No Surprises Act's Prohibitions on Balance Billing — https://www.cms.gov/files/document/a274577-1a-training-1-balancing-billingfinal508.pdf",
+   "KFF, 2025 Employer Health Benefits Survey — https://www.kff.org/health-costs/2025-employer-health-benefits-survey/"
+  ],
+  "evidence": "The Act limits insured patients to in-network cost sharing; the average single deductible is $1,886 (KFF 2025). Uninsured patients aren't protected."
+ },
+ "HOU02": {
+  "front": "No-Credit-Check Lease: bad credit? Move in today.",
+  "dollars": 800,
+  "basis": "a nonrefundable 'high-risk' fee as big as a month's $800 deposit",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "National Consumer Law Center, 2023 Consumer Reform Priorities to Protect Tenants — https://www.nclc.org/wp-content/uploads/2023/02/2023-Consumer-Reform-Priorities-to-Protect-Tenants.pdf",
+   "HUD, Junk Fees memo, 2023 — https://archives.hud.gov/news/2023/Junk_Fees_Memo_SOHUD_signed.pdf"
+  ],
+  "evidence": "NCLC documents nonrefundable 'high-risk' fees from $100 up to a full month's deposit; HUD lists high-risk fees as rental junk fees. $800 is Zillow's median deposit (see HOU05): illustrative, at the top of NCLC's range."
+ },
+ "HOU03": {
+  "front": "Own Your Home — no bank, no mortgage! (Contract-for-Deed)",
+  "dollars": 15000,
+  "basis": "a $6,500 down payment plus ten months of $850 payments, forfeited on one missed payment",
+  "status": "sourced",
+  "math": "$6,500 + 10 × $850 = $15,000",
+  "sources": [
+   "CFPB, Report on Contract for Deed Lending, 2024 — https://files.consumerfinance.gov/f/documents/cfpb_contract-for-deed_report_2024-08.pdf",
+   "Pew Charitable Trusts, Land Contracts Emerge as a Tool for Thousands of Iowans to Buy Homes, 2026 — https://www.pew.org/en/research-and-analysis/fact-sheets/2026/08/land-contracts-emerge-as-a-tool-for-thousands-of-iowans-to-buy-homes"
+  ],
+  "evidence": "CFPB: forfeiture lets sellers keep the buyer's payments, sometimes after a single missed payment. Pew (Iowa): median price about $131,000, about 5% down, 6.9% rate, roughly $820 a month."
+ },
+ "HOU05": {
+  "front": "Just first month + deposit to move in.",
+  "dollars": 800,
+  "basis": "a typical $800 deposit kept for invented move-out charges",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "Zillow Research, Renters: Zillow Consumer Housing Trends Report 2024 — https://www.zillow.com/research/renters-housing-trends-report-2024-34387/",
+   "National Consumer Law Center, 2023 Consumer Reform Priorities to Protect Tenants — https://www.nclc.org/wp-content/uploads/2023/02/2023-Consumer-Reform-Priorities-to-Protect-Tenants.pdf"
+  ],
+  "evidence": "Zillow: median security deposit $800 among renters who paid one; NCLC flags uniform or invented damage charges."
+ },
+ "HOU11": {
+  "front": "Standard lease, just sign here.",
+  "dollars": 500,
+  "basis": "attorney and filing fees added to one late rent",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "Virginia Poverty Law Center & RVA Eviction Lab, “Unreasonable”: The Dramatic Rise in Attorney Fees Charged to Tenants, 2025 — https://www.vplc.org/content/uploads/2025/10/VPLC-Eviction-Atty-Fees-Report-9_25_25-1.pdf",
+   "Denverite, Tschetter Sulzer lawsuit, 2023 — https://denverite.com/2023/06/13/tschetter-sulzer-lawsuit-tenants/"
+  ],
+  "evidence": "Virginia tenants were charged hundreds to thousands in landlord attorney fees per case; a Colorado complaint alleges $300–$500 in attorney and court fees even after back rent was paid."
+ },
+ "HOU12": {
+  "front": "First month FREE!",
+  "dollars": 1500,
+  "basis": "the 'free' month, about $1,500 at median rent, billed back when you leave early",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "CFPB/DOJ, Servicemembers Civil Relief Act landlord letter, 2021 — https://files.consumerfinance.gov/f/documents/cfpb_military-renter-protections_doj-landlord-letter_2021-12.pdf",
+   "U.S. Census Bureau, American Community Survey 2024, median gross rent (table B25064) — https://www.census.gov/quickfacts/fact/note/US/HSG860221"
+  ],
+  "evidence": "DOJ treats clawing back rent concessions on early termination as a prohibited fee for servicemembers, showing the practice is real; 2024 median gross rent about $1,487."
+ },
+ "LAB01": {
+  "front": "Sign here to start Monday.",
+  "dollars": 3300,
+  "basis": "a year of minimum-wage theft you can no longer take to court",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "Economic Policy Institute, Employers steal billions from workers' paychecks each year, 2017 — https://www.epi.org/publication/employers-steal-billions-from-workers-paychecks-each-year/",
+   "Cornell Chronicle on EPI's forced-arbitration study (Colvin) — https://news.cornell.edu/node/309586"
+  ],
+  "evidence": "Year-round workers hit by minimum-wage violations lose about $3,300 a year; about 60 million private non-union workers are covered by forced arbitration."
+ },
+ "LAB02": {
+  "front": "Standard new-hire paperwork. (Non-compete)",
+  "dollars": 500,
+  "basis": "about $500 a year in lower pay under a non-compete, per the FTC",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "Federal Trade Commission, FTC Announces Rule Banning Noncompetes, 2024 — https://www.ftc.gov/news-events/news/press-releases/2024/04/ftc-announces-rule-banning-noncompetes"
+  ],
+  "evidence": "The FTC estimated the average worker would earn an extra $524 a year without non-competes. (The rule itself was set aside by a court in 2024; the estimate stands.)"
+ },
+ "LAB03": {
+  "front": "You're an independent contractor — be your own boss!",
+  "dollars": 7000,
+  "basis": "lost payroll tax, benefits and protections: 20% of $35,000",
+  "status": "sourced",
+  "math": "20% × $35,000 = $7,000",
+  "sources": [
+   "Economic Policy Institute, Misclassifying workers as independent contractors is costly for workers and states, 2025 update — https://www.epi.org/publication/misclassifying-workers-2025-update/"
+  ],
+  "evidence": "EPI puts misclassification at about $7,228–$10,215 a year for janitors earning about $35,020: more than 20% of pay."
+ },
+ "LAB04": {
+  "front": "Tips pooled and shared fairly, trust us.",
+  "dollars": 1500,
+  "basis": "$30 a week in skimmed tips and off-clock work, for 50 weeks",
+  "status": "sourced",
+  "math": "50 × $30 = $1,500",
+  "sources": [
+   "Bernhardt et al., Broken Laws, Unprotected Workers, 2009 (NELP summary) — https://www.nelp.org/app/uploads/2015/03/WinningWageJusticeSummaryofResearchonWageTheft.pdf",
+   "US DOL Wage and Hour Division, tip pool violations near Austin, 2026 — https://www.dol.gov/newsroom/releases/whd/whd20260406"
+  ],
+  "evidence": "Low-wage workers lost an average of $51 a week to wage violations; 12% of tipped workers had tips stolen. $30 a week is conservative."
+ },
+ "LAB05": {
+  "front": "Free training to start your career!",
+  "dollars": 4000,
+  "basis": "paying back 'free' training after quitting early",
+  "status": "sourced",
+  "math": "",
+  "sources": [
+   "CFPB, Issue Spotlight: Consumer risks posed by employer-driven debt, 2023 — https://www.consumerfinance.gov/data-research/research-reports/issue-spotlight-consumer-risks-posed-by-employer-driven-debt/full-report/"
+  ],
+  "evidence": "The CFPB cites a $4,000 repayment agreement for a nurse residency; retail trainees owing $500–$5,500."
+ },
+ "LAB07": {
+  "front": "Flexible hours — we'll text you!",
+  "dollars": 960,
+  "basis": "one called-off 5-hour shift a month at $16, for a year",
+  "status": "sourced",
+  "math": "12 × 5 × $16 = $960",
+  "sources": [
+   "The Shift Project (Harknett & Schneider), Health Affairs policy brief, 2020 — https://www.healthaffairs.org/cms/10.1377/hpb20200206.806111/asset/media/brief_workforce_health_harknett.pdf"
+  ],
+  "evidence": "14–16% of service workers had a shift cancelled in the past month. The $16 wage and one-a-month frequency are stated assumptions."
+ },
+ "LAB08": {
+  "front": "Get paid on a convenient card!",
+  "dollars": 130,
+  "basis": "a $1.50 ATM fee and a $1 balance check each week, for a year",
+  "status": "sourced",
+  "math": "52 × ($1.50 + $1) = $130",
+  "sources": [
+   "NY Attorney General, Pinched by Plastic: The Impact of Payroll Cards on Low-Wage Workers, 2014 — https://stateag.org/policy-areas/labor/labor-resources/category/Reports"
+  ],
+  "evidence": "About 75% of payroll-card holders paid fees; $1.50 ATM and $0.50–$1 balance-inquiry fees."
+ },
+ "LAB09": {
+  "front": "Shop at our store with your staff discount!",
+  "dollars": null,
+  "basis": null,
+  "status": "unsupported",
+  "math": "",
+  "sources": [],
+  "evidence": "No modern government or research estimate of wages flowing back through employer stores was found."
+ },
+ "LAB10": {
+  "front": "Set your own schedule, earn per job!",
+  "dollars": 2900,
+  "basis": "4,000 work miles at the IRS rate of 72.5 cents a mile, for a year",
+  "status": "sourced",
+  "math": "4,000 × $0.725 = $2,900",
+  "sources": [
+   "IRS, IRS sets 2026 business standard mileage rate at 72.5 cents per mile, 2026 — https://www.irs.gov/newsroom/irs-sets-2026-business-standard-mileage-rate-at-725-cents-per-mile-up-25-cents",
+   "Economic Policy Institute, Uber drivers earn the equivalent of $9.21 in hourly wages, 2018 — https://www.epi.org/press/uber-drivers-earn-the-equivalent-of-9-21-in-hourly-wages-uber-and-other-gig-platforms-account-for-far-less-of-the-economy-than-many-estimates-suggest/"
+  ],
+  "evidence": "The IRS rate is what it costs to run a car per business mile; EPI found drivers net about $9.21 an hour after vehicle costs. 4,000 miles (about 80 a week) is a stated assumption."
+ },
+ "LAB11": {
+  "front": "Congrats, you're salaried now — a manager!",
+  "dollars": 26000,
+  "basis": "20 overtime hours a week at $25 (time-and-a-half on the $684-a-week minimum salary), for a year",
+  "status": "sourced",
+  "math": "$684 ÷ 40 = $17.10, × 1.5 = $25.65 (rounded down to $25); 20 × $25 × 52 = $26,000",
+  "sources": [
+   "US DOL Wage and Hour Division, Earnings thresholds for the Executive, Administrative, and Professional exemption — https://www.dol.gov/agencies/whd/overtime/salary-levels"
+  ],
+  "evidence": "The federal minimum salary for exempt status is $684 a week; below it, or misclassified, overtime is owed at time-and-a-half."
+ },
+ "LAB12": {
+  "front": "Quick team meeting after your shift.",
+  "dollars": 312,
+  "basis": "a 30-minute unpaid meeting every week at $12, for a year",
+  "status": "sourced",
+  "math": "52 × 0.5 × $12 = $312",
+  "sources": [
+   "US DOL Wage and Hour Division, Fact Sheet #22: Hours Worked Under the FLSA — https://www.dol.gov/agencies/whd/fact-sheets/22-flsa-hours-worked"
+  ],
+  "evidence": "A required meeting is work time under the FLSA. The $12 wage is a stated assumption."
+ },
+ "LEN07": {
+  "front": "Refund Advance: your tax refund NOW, don't wait weeks.",
+  "dollars": 40,
+  "basis": "a $40 fee to run your refund through the preparer's bank, no faster than free e-file",
+  "status": "sourced",
+  "math": "TIGTA: about $842 million in fees ÷ about 21 million refund checks ≈ $40",
+  "sources": [
+   "Treasury Inspector General for Tax Administration, Assessment of Tax Refund-Related Products, 2024 — https://www.tigta.gov/sites/default/files/reports/2024-11/20254S0003fr.pdf",
+   "CFPB, Tax refund tips: Understanding refund advance loans and checks — https://www.consumerfinance.gov/archive/blog/tax-refund-tips-understanding-refund-advance-loans-and-checks/"
+  ],
+  "evidence": "TIGTA estimated more than $842M in refund-check fees on about 21M checks; CFPB says these fees typically run $30–$50 and don't speed up your refund."
+ },
+ "LEN11": {
+  "front": "Drive It Home Today — financing approved!",
+  "dollars": 1300,
+  "basis": "a rate 5 points higher on a $26,000 car loan, for the first year",
+  "status": "sourced",
+  "math": "$26,000 × 5% = $1,300",
+  "sources": [
+   "Center for Responsible Lending, Auto Lending Abuses in Dealer-Financed Loans — https://www.responsiblelending.org/research-publication/auto-lending-abuses-dealer-financed-loans",
+   "Experian, Q4 2025 Auto Quarterly Trends Report summary — https://www.experian.com/content/dam/noindex/na/us/automotive/summary-report/2025/q4-2025-auto-quarterly-trends-report-summary.pdf"
+  ],
+  "evidence": "CRL: yo-yo financing victims paid on average a rate 5 points higher; Experian: average used-car loan about $27,500."
+ }
+}

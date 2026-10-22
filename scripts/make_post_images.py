@@ -122,8 +122,11 @@ def history_image(card, lang, label):
 def main():
     os.makedirs(OUT, exist_ok=True)
     n = 0
+    skip = {cid for cid, x in json.load(open(os.path.join(ROOT, "game", "NUMBER_SOURCES.json"))).items() if x["status"] == "unsupported"}
     for dk, cards in C["deck"].items():
         for i, card in enumerate(cards):
+            if f"{dk[:3]}{i + 1:02d}" in skip:
+                continue  # no credible source for its number yet
             for lang in ("en", "es"):
                 im = deal_image(dk, card, lang)
                 if im:

@@ -19,7 +19,7 @@ Needs ffmpeg and numpy. Fonts are bundled in scripts/fonts/ (Inter, SIL Open Fon
 """
 import json, math, os, subprocess, sys, wave
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from make_content import MATH  # noqa: E402  the arithmetic behind each number
+from make_content import MATH, SOURCES, UNSUPPORTED  # noqa: E402  the arithmetic and sources behind each number
 import numpy as np
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
@@ -346,9 +346,10 @@ class Reel:
         head = (f"{self.id}  ·  {self.total:.1f} seconds  ·  "
                 + ("say only what's on screen (people watch muted, so nothing lives only in the audio)" if en
                    else "di solo lo que está en pantalla (la gente mira sin sonido)"))
-        if self.card["basis"] not in MATH:
-            head += ("\nCHECK BEFORE POSTING: this number is an estimate. Add its source in NUMBERS_AUDIT.csv first."
-                     if en else "\nREVISA ANTES DE PUBLICAR: este número es un estimado. Agrega su fuente en NUMBERS_AUDIT.csv.")
+        src = SOURCES.get(self.id[:5])
+        if src:
+            head += ("\nSOURCE (open it and confirm the figure before posting): " if en
+                     else "\nFUENTE (ábrela y confirma la cifra antes de publicar): ") + src["sources"][0]
         return head + "\n\n" + "\n\n".join(f"[{a:4.1f}–{z:4.1f}s]  {s}" for a, z, s in lines) + "\n"
 
     # -------------------------------------------------- render
@@ -376,7 +377,7 @@ class Reel:
 def cards():
     for d, cs in C["deck"].items():
         for i, c in enumerate(cs):
-            if c.get("trap", True) and c.get("dollars"):
+            if c.get("trap", True) and c.get("dollars") and f"{d[:3]}{i + 1:02d}" not in UNSUPPORTED:
                 yield d, i, c
 
 

@@ -6,7 +6,7 @@ X-WR-CALNAME:Civic Armor posts
 X-WR-TIMEZONE:America/New_York
 BEGIN:VEVENT
 UID:HEA01-en-feed-2026-11-02@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261102T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HEA01-en-feed
@@ -14,16 +14,17 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  -later\nInstagram\, Facebook\, Threads\, LinkedIn (short version: X\, Blue
  sky)\n\nTHE OFFER: “In-network hospital — you're covered.”\n\n🔴 T
  he cost: An out-of-network doctor inside it bills you the gap.\n🟡 The c
- lock: Since 2022 the No Surprises Act bans this for ER/emergency care — 
- dispute it.\n🔵 The connection: Staffing firms place out-of-network docs
-  in in-network ERs on purpose.\n\nThe second number: $2\,000. That's an ou
- t-of-network surprise bill.\nRead the machine. Don't become it.\nRead deal
+ lock: Since 2022 the No Surprises Act bans this for emergencies and most i
+ n-network hospital stays — dispute it.\n🔵 The connection: Staffing fi
+ rms place out-of-network docs in in-network ERs on purpose.\n\nThe second 
+ number: $2\,000. That's the average out-of-network surprise bill after sur
+ gery\, before the 2022 law.\nRead the machine. Don't become it.\nRead deal
  s like this in the free game: getcivicarmor.com/play\n\n#ReadTheMachine #C
  ivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA02-en-video-2026-11-03@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261103T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HEA02-en-video
@@ -37,12 +38,13 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  ow fast do they want you to sign? Negotiate before it hits collections or 
  the number hardens.\n[16–22s BLUE] Blue: follow the money. Hospital\, bi
  ller\, and collector are one revenue chain.\n[22–27s PAYOFF] The second 
- number: $5\,000. That's paying the opening price instead of the charity or
-  cash rate.\n[27–30s CTA] This is one card from a free game. Link in bio.
+ number: $3\,024. That's paying the $8\,400 list price instead of a cash pr
+ ice at 64% of it.\n[27–30s CTA] This is one card from a free game. Link 
+ in bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA03-en-feed-2026-11-04@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261104T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HEA03-en-feed
@@ -52,14 +54,14 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  \n🔴 The cost: Deferred interest — miss the date and they backdate ALL
   of it.\n🟡 The clock: The 0% clock ends quietly on a date you'll forget
  .\n🔵 The connection: The clinic earns a cut for every patient it signs 
- up.\n\nThe second number: $600. That's deferred interest backdated on a $2
- \,500 bill.\nRead the machine. Don't become it.\nRead deals like this in t
- he free game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSe
- condNumber
+ up.\n\nThe second number: $575. That's deferred interest (about 23%) backd
+ ated on a $2\,500 bill.\nRead the machine. Don't become it.\nRead deals li
+ ke this in the free game: getcivicarmor.com/play\n\n#ReadTheMachine #Civic
+ Armor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
 UID:EMAIL-01-2026-11-05@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261105T100000
 DURATION:PT15M
 SUMMARY:EMAIL · email · EMAIL-01
@@ -69,7 +71,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA04-es-video-2026-11-05@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261105T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HEA04-es-video
@@ -83,13 +85,14 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  .\n[10–16s AMBER] Ahora los ámbar: ¿qué tan rápido quieren que firme
  s? Llega semanas después como una segunda factura sorpresa.\n[16–22s BL
  UE] Azul: sigue el dinero. Los hospitales compran clínicas solo para agre
- gar tarifas de instalación.\n[22–27s PAYOFF] El segundo número: $300. 
- Es una tarifa de instalación además de la visita.\n[27–30s CTA] Es una
-  carta de un juego gratis. Enlace en la bio.
+ gar tarifas de instalación.\n[22–27s PAYOFF] El segundo número: $101. 
+ Es un cargo por instalación: $217 por una consulta en una clínica del ho
+ spital contra $116 en un consultorio.\n[27–30s CTA] Es una carta de un j
+ uego gratis. Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA05-en-feed-2026-11-06@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261106T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HEA05-en-feed
@@ -99,13 +102,14 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  You likely qualify for charity care they never mentioned.\n🟡 The clock:
   Eligibility windows close while they push you to pay.\n🔵 The connectio
  n: Nonprofits owe charity care but profit by collecting instead.\n\nThe se
- cond number: $2\,000. That's paying a bill charity care would have cut.\nR
- ead the machine. Don't become it.\nRead deals like this in the free game: 
- getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
+ cond number: $2\,255. That's the average hospital bill paid out of pocket\
+ , which charity care could have cut.\nRead the machine. Don't become it.\n
+ Read deals like this in the free game: getcivicarmor.com/play\n\n#ReadTheM
+ achine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA06-es-video-2026-11-07@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261107T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HEA06-es-video
@@ -120,13 +124,13 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  rápido quieren que firmes? Rechazan reclamos después de la atención\, y
   los plazos para apelar son cortos.\n[16–22s BLUE] Azul: sigue el dinero
  . El corredor gana una comisión gorda con planes basura.\n[22–27s PAYOF
- F] El segundo número: $3\,000. Es un reclamo rechazado después de un añ
- o de primas.\n[27–30s CTA] Es una carta de un juego gratis. Enlace en la
-  bio.
+ F] El segundo número: $3\,641. Es un año de primas de $99 más una visit
+ a a emergencias de $2\,453 rechazada.\n[27–30s CTA] Es una carta de un j
+ uego gratis. Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:EVG01-en-2026-11-08@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261108T150000
 DURATION:PT15M
 SUMMARY:FEED · groups · EVG01-en
@@ -138,7 +142,7 @@ DESCRIPTION:Teachers\, churches and groups plan on Sunday\nInstagram\, Face
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS01-en-2026-11-08@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261108T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS01-en
@@ -154,7 +158,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA07-en-feed-2026-11-09@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261109T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HEA07-en-feed
@@ -164,13 +168,14 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  he plan reports to credit and can lead to liens or garnishment.\n🟡 The 
  clock: Statute-of-limitations tricks restart the debt clock.\n🔵 The con
  nection: The debt is sold for pennies\; the collector profits on the sprea
- d.\n\nThe second number: $800. That's a payment plan sent to collections.\
- nRead the machine. Don't become it.\nRead deals like this in the free game
- : getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
+ d.\n\nThe second number: $774. That's the median medical bill sent to coll
+ ections.\nRead the machine. Don't become it.\nRead deals like this in the 
+ free game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecon
+ dNumber
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA08-en-video-2026-11-10@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261110T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HEA08-en-video
@@ -189,7 +194,7 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
 END:VEVENT
 BEGIN:VEVENT
 UID:HEA09-en-feed-2026-11-11@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261111T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · HEA09-en-feed
@@ -199,34 +204,35 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  🔴 The cost: Ground ambulances are often out-of-network — and still ex
  empt from the No Surprises Act.\n🟡 The clock: The bill arrives later\; 
  you had no way to choose in the moment.\n🔵 The connection: Private-equi
- ty-owned ambulance firms balance-bill on purpose.\n\nThe second number: $1
- \,200. That's an out-of-network ambulance bill.\nRead the machine. Don't b
- ecome it.\nRead deals like this in the free game: getcivicarmor.com/play\n
- \n#ReadTheMachine #CivicArmor #TheSecondNumber
+ ty-owned ambulance firms balance-bill on purpose.\n\nThe second number: $4
+ 50. That's the median out-of-network ground ambulance bill.\nRead the mach
+ ine. Don't become it.\nRead deals like this in the free game: getcivicarmo
+ r.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:HEA10-es-video-2026-11-12@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HEA11-es-video-2026-11-12@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261112T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · HEA10-es-video
+SUMMARY:VIDEO · read-the-machine · HEA11-es-video
 DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
- -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“A
- quí está tu total\, paga en el mostrador.” El segundo número\, en 30 
- segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0
- –3s HOOK\, card on screen] Alguien te ofrece esto: “Aquí está tu tot
- al\, paga en el mostrador.”\n[3–10s RED] Ponte los lentes rojos. Error
- es y cargos duplicados se esconden en el desglose que no viste.\n[10–16s
-  AMBER] Ahora los ámbar: ¿qué tan rápido quieren que firmes? Pide la f
- actura detallada rápido\, antes de que la marquen como “final”.\n[16
- –22s BLUE] Azul: sigue el dinero. Los códigos inflados suben la factura
- \; la cadena se queda con el sobrecobro.\n[22–27s PAYOFF] El segundo nú
- mero: $400. Es errores y cargos duplicados.\n[27–30s CTA] Es una carta d
- e un juego gratis. Enlace en la bio.
+ -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“H
+ azte el trabajo dental ya\, ¡financíalo!” El segundo número\, en 30 s
+ egundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0
+ –3s HOOK\, card on screen] Alguien te ofrece esto: “Hazte el trabajo d
+ ental ya\, ¡financíalo!”\n[3–10s RED] Ponte los lentes rojos. Financ
+ iamiento en el consultorio con interés diferido alto.\n[10–16s AMBER] A
+ hora los ámbar: ¿qué tan rápido quieren que firmes? La promoción term
+ ina a mitad del tratamiento y la tasa se dispara.\n[16–22s BLUE] Azul: s
+ igue el dinero. Al proveedor le pagan por adelantado\; tú le quedas debie
+ ndo al prestamista.\n[22–27s PAYOFF] El segundo número: $805. Es intere
+ ses diferidos (cerca del 23%) cobrados retroactivamente sobre un plan dent
+ al de $3\,500.\n[27–30s CTA] Es una carta de un juego gratis. Enlace en 
+ la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN01-en-feed-2026-11-13@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261113T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LEN01-en-feed
@@ -242,28 +248,31 @@ DESCRIPTION:Payday: Open enrollment\, then Black Friday rent-to-own and buy
  etcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:HEA11-es-video-2026-11-14@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HEA12-es-video-2026-11-14@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261114T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · HEA11-es-video
+SUMMARY:VIDEO · read-the-machine · HEA12-es-video
 DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
- -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“H
- azte el trabajo dental ya\, ¡financíalo!” El segundo número\, en 30 s
- egundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0
- –3s HOOK\, card on screen] Alguien te ofrece esto: “Hazte el trabajo d
- ental ya\, ¡financíalo!”\n[3–10s RED] Ponte los lentes rojos. Financ
- iamiento en el consultorio con interés diferido alto.\n[10–16s AMBER] A
- hora los ámbar: ¿qué tan rápido quieren que firmes? La promoción term
- ina a mitad del tratamiento y la tasa se dispara.\n[16–22s BLUE] Azul: s
- igue el dinero. Al proveedor le pagan por adelantado\; tú le quedas debie
- ndo al prestamista.\n[22–27s PAYOFF] El segundo número: $800. Es inter
- és diferido en financiamiento dental.\n[27–30s CTA] Es una carta de un 
- juego gratis. Enlace en la bio.
+ -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“T
+ e llevamos en helicóptero\, no te preocupes por el costo.” El segundo n
+ úmero\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVI
+ DEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece esto: “Te 
+ llevamos en helicóptero\, no te preocupes por el costo.”\n[3–10s RED]
+  Ponte los lentes rojos. Las ambulancias aéreas cobran $30k–$50k\; si t
+ ienes seguro\, la Ley No Surprises (2022) te limita a tu parte dentro de l
+ a red.\n[10–16s AMBER] Ahora los ámbar: ¿qué tan rápido quieren que 
+ firmes? Igual no puedes aceptar el precio en plena emergencia\, así que c
+ onoce tu protección.\n[16–22s BLUE] Azul: sigue el dinero. Las flotas a
+ éreas de capital privado vivieron mucho tiempo de cobrar la diferencia.\n
+ [22–27s PAYOFF] El segundo número: $1\,886. Es tu parte dentro de la re
+ d\, cerca de un deducible promedio\; la ley prohíbe cobrarle el resto a q
+ uien tiene seguro.\n[27–30s CTA] Es una carta de un juego gratis. Enlace
+  en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS02-en-2026-11-15@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261115T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS02-en
@@ -278,63 +287,62 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
   #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:HEA12-en-feed-2026-11-16@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN02-en-feed-2026-11-16@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261116T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · HEA12-en-feed
+SUMMARY:FEED · read-the-machine · LEN02-en-feed
 DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  -later\nInstagram\, Facebook\, Threads\, LinkedIn (short version: X\, Blue
- sky)\n\nTHE OFFER: “We'll airlift you — don't worry about the cost.”
- \n\n🔴 The cost: Air-ambulance bills run $30k–$50k — but the No Surp
- rises Act (2022) now shields most of it.\n🟡 The clock: You still can't 
- consent to the price mid-emergency\, so know your protection.\n🔵 The co
- nnection: PE-owned air fleets long relied on balance billing as the busine
- ss model.\n\nThe second number: $1\,000. That's what's left after the No S
- urprises Act covers most of it.\nRead the machine. Don't become it.\nRead 
+ sky)\n\nTHE OFFER: “Title Loan: borrow $1\,000 on your car title\, keep 
+ driving.”\n\n🔴 The cost: ~300% APR\, and the loan is a fraction of th
+ e car's real value.\n🟡 The clock: One missed payment = repossession\, o
+ ften with no grace period.\n🔵 The connection: The lender holds a stake 
+ in the repo lot that resells your car.\n\nThe second number: $1\,250. That
+ 's 25% a month on $1\,000\, for 5 months.\nRead the machine. Don't become 
+ it.\nRead deals like this in the free game: getcivicarmor.com/play\n\n#Rea
+ dTheMachine #CivicArmor #TheSecondNumber
+END:VEVENT
+BEGIN:VEVENT
+UID:LEN03-en-video-2026-11-17@getcivicarmor.com
+DTSTAMP:20261022T000545Z
+DTSTART;TZID=America/New_York:20261117T193000
+DURATION:PT15M
+SUMMARY:VIDEO · read-the-machine · LEN03-en-video
+DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
+ -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“P
+ awn: cash now for your item\, buy it back anytime.” The second number\, 
+ read in 30 seconds. #ReadTheMachine #CivicArmor #TheSecondNumber\n\nVIDEO 
+ SCRIPT:\n[0–3s HOOK\, card on screen] Somebody's offering you this: “P
+ awn: cash now for your item\, buy it back anytime.”\n[3–10s RED] Put o
+ n the red glasses. Effective APR 120–240%\; most items are never redeeme
+ d.\n[10–16s AMBER] Now the amber ones: how fast do they want you to sign
+ ? The redemption window is short — miss it and it's sold.\n[16–22s BLU
+ E] Blue: follow the money. Resale profit flows to the same chain that wrot
+ e the loan.\n[22–27s PAYOFF] The second number: $150. That's 20% a month
+  on a $250 pawn\, for 3 months.\n[27–30s CTA] This is one card from a fr
+ ee game. Link in bio.
+END:VEVENT
+BEGIN:VEVENT
+UID:LEN04-en-feed-2026-11-18@getcivicarmor.com
+DTSTAMP:20261022T000545Z
+DTSTART;TZID=America/New_York:20261118T121500
+DURATION:PT15M
+SUMMARY:FEED · read-the-machine · LEN04-en-feed
+DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
+ -later\nInstagram\, Facebook\, Threads\, LinkedIn (short version: X\, Blue
+ sky)\n\nTHE OFFER: “Buy Now\, Pay Later: 4 easy payments\, 0% interest!
+ ”\n\n🔴 The cost: Late fees pile on\, and it stacks across apps till y
+ ou lose track.\n🟡 The clock: Autopay hits whether the money's there or 
+ not → overdraft.\n🔵 The connection: The BNPL firm sells your payment 
+ data and routes late fees up.\n\nThe second number: $70. That's seven $10 
+ late fees across overdue plans.\nRead the machine. Don't become it.\nRead 
  deals like this in the free game: getcivicarmor.com/play\n\n#ReadTheMachin
  e #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN02-en-video-2026-11-17@getcivicarmor.com
-DTSTAMP:20261021T235058Z
-DTSTART;TZID=America/New_York:20261117T193000
-DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LEN02-en-video
-DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
- -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“T
- itle Loan: borrow $1\,000 on your car title\, keep driving.” The second 
- number\, read in 30 seconds. #ReadTheMachine #CivicArmor #TheSecondNumber\
- n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Somebody's offering you t
- his: “Title Loan: borrow $1\,000 on your car title\, keep driving.”\n[
- 3–10s RED] Put on the red glasses. ~300% APR\, and the loan is a fractio
- n of the car's real value.\n[10–16s AMBER] Now the amber ones: how fast 
- do they want you to sign? One missed payment = repossession\, often with n
- o grace period.\n[16–22s BLUE] Blue: follow the money. The lender holds 
- a stake in the repo lot that resells your car.\n[22–27s PAYOFF] The seco
- nd number: $1\,250. That's 25% a month on $1\,000\, for 5 months.\n[27–3
- 0s CTA] This is one card from a free game. Link in bio.
-END:VEVENT
-BEGIN:VEVENT
-UID:LEN03-en-feed-2026-11-18@getcivicarmor.com
-DTSTAMP:20261021T235058Z
-DTSTART;TZID=America/New_York:20261118T121500
-DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LEN03-en-feed
-DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
- -later\nInstagram\, Facebook\, Threads\, LinkedIn (short version: X\, Blue
- sky)\n\nTHE OFFER: “Pawn: cash now for your item\, buy it back anytime.
- ”\n\n🔴 The cost: Effective APR 120–240%\; most items are never rede
- emed.\n🟡 The clock: The redemption window is short — miss it and it's
-  sold.\n🔵 The connection: Resale profit flows to the same chain that wr
- ote the loan.\n\nThe second number: $150. That's 20% a month on a $250 paw
- n\, for 3 months.\nRead the machine. Don't become it.\nRead deals like thi
- s in the free game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor 
- #TheSecondNumber
-END:VEVENT
-BEGIN:VEVENT
 UID:EMAIL-02-2026-11-19@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261119T100000
 DURATION:PT15M
 SUMMARY:EMAIL · email · EMAIL-02
@@ -343,67 +351,68 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  plate.md
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN04-es-video-2026-11-19@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN05-es-video-2026-11-19@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261119T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LEN04-es-video
+SUMMARY:VIDEO · read-the-machine · LEN05-es-video
 DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
- -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“C
- ompra Ahora\, Paga Después: ¡4 pagos fáciles\, 0% de interés!” El se
- gundo número\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumbe
- r\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece esto:
-  “Compra Ahora\, Paga Después: ¡4 pagos fáciles\, 0% de interés!”\
- n[3–10s RED] Ponte los lentes rojos. Los cargos por atraso se acumulan\,
-  y se suman entre apps hasta que pierdes la cuenta.\n[10–16s AMBER] Ahor
- a los ámbar: ¿qué tan rápido quieren que firmes? El pago automático c
- obra haya dinero o no → sobregiro.\n[16–22s BLUE] Azul: sigue el diner
- o. La empresa BNPL vende tus datos de pago y manda los cargos por atraso h
- acia arriba.\n[22–27s PAYOFF] El segundo número: $70. Es siete cargos p
- or atraso de $10 entre planes vencidos.\n[27–30s CTA] Es una carta de un
-  juego gratis. Enlace en la bio.
+ -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“P
+ rotección contra Sobregiros: ¡cubrimos tu tarjeta si te falta!” El seg
+ undo número\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber
+ \n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece esto: 
+ “Protección contra Sobregiros: ¡cubrimos tu tarjeta si te falta!”\n[
+ 3–10s RED] Ponte los lentes rojos. Hasta ~$35 por compra: un café de $4
+  puede costar ~$39 (muchos bancos ya cobran $0–$15).\n[10–16s AMBER] A
+ hora los ámbar: ¿qué tan rápido quieren que firmes? Reordenan los carg
+ os del más grande al más chico para cobrar más tarifas.\n[16–22s BLUE
+ ] Azul: sigue el dinero. Los sobregiros son una de las mayores ganancias d
+ el banco detrás.\n[22–27s PAYOFF] El segundo número: $175. Es cinco ca
+ rgos por sobregiro de $35 en un mes.\n[27–30s CTA] Es una carta de un ju
+ ego gratis. Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN05-en-feed-2026-11-20@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN06-en-feed-2026-11-20@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261120T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LEN05-en-feed
+SUMMARY:FEED · read-the-machine · LEN06-en-feed
 DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  -later\nInstagram\, Facebook\, Threads\, LinkedIn (short version: X\, Blue
- sky)\n\nTHE OFFER: “Overdraft Protection: we'll cover your card if you'r
- e short.”\n\n🔴 The cost: Up to ~$35 per swipe — a $4 coffee can cos
- t ~$39 (many banks now $0–$15).\n🟡 The clock: Charges reordered large
- st-first to trigger the most fees.\n🔵 The connection: Overdraft fees ar
- e a top profit line for the bank behind it.\n\nThe second number: $175. Th
- at's five $35 overdraft fees in a month.\nRead the machine. Don't become i
- t.\nRead deals like this in the free game: getcivicarmor.com/play\n\n#Read
- TheMachine #CivicArmor #TheSecondNumber
+ sky)\n\nTHE OFFER: “Cash Advance App: get $100 early. No interest — ju
+ st tip!”\n\n🔴 The cost: A $14 'tip' + fee on $100 for a week ≈ 300%
+ + APR.\n🟡 The clock: Auto-debits on payday\; bad timing sets off an ove
+ rdraft cascade.\n🔵 The connection: The 'tip' dodges lending law\; the a
+ pp sells your bank data.\n\nThe second number: $112. That's a $14 tip-and-
+ fee\, eight times a year.\nRead the machine. Don't become it.\nRead deals 
+ like this in the free game: getcivicarmor.com/play\n\n#ReadTheMachine #Civ
+ icArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN06-es-video-2026-11-21@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN07-es-video-2026-11-21@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261121T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LEN06-es-video
+SUMMARY:VIDEO · read-the-machine · LEN07-es-video
 DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“A
- pp de Adelantos: recibe $100 antes. Sin interés\, ¡solo deja propina!”
-  El segundo número\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecon
- dNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece
-  esto: “App de Adelantos: recibe $100 antes. Sin interés\, ¡solo deja 
- propina!”\n[3–10s RED] Ponte los lentes rojos. Una “propina” de $1
- 4 + tarifa sobre $100 por una semana ≈ 300%+ de APR.\n[10–16s AMBER] A
- hora los ámbar: ¿qué tan rápido quieren que firmes? Se cobra solo el d
- ía de pago\; un mal momento desata una cascada de sobregiros.\n[16–22s 
- BLUE] Azul: sigue el dinero. La “propina” esquiva la ley de préstamos
- \; la app vende tus datos bancarios.\n[22–27s PAYOFF] El segundo número
- : $112. Es una propina más tarifa de $14\, ocho veces al año.\n[27–30s
-  CTA] Es una carta de un juego gratis. Enlace en la bio.
+ delanto de Reembolso: tu reembolso de impuestos YA\, sin esperar semanas.
+ ” El segundo número\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSe
+ condNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofr
+ ece esto: “Adelanto de Reembolso: tu reembolso de impuestos YA\, sin esp
+ erar semanas.”\n[3–10s RED] Ponte los lentes rojos. Las tarifas se com
+ en un reembolso que te llegaría gratis en unos días.\n[10–16s AMBER] A
+ hora los ámbar: ¿qué tan rápido quieren que firmes? Se paga cuando el 
+ IRS pague: cualquier retraso es tu problema.\n[16–22s BLUE] Azul: sigue 
+ el dinero. El preparador\, el banco y el préstamo son un solo producto em
+ paquetado.\n[22–27s PAYOFF] El segundo número: $40. Es una tarifa de $4
+ 0 por pasar tu reembolso por el banco del preparador\, sin llegar más rá
+ pido que la declaración electrónica gratis.\n[27–30s CTA] Es una carta
+  de un juego gratis. Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:EVG02-en-2026-11-22@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261122T150000
 DURATION:PT15M
 SUMMARY:FEED · groups · EVG02-en
@@ -415,7 +424,7 @@ DESCRIPTION:Teachers\, churches and groups plan on Sunday\nInstagram\, Face
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS03-en-2026-11-22@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261122T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS03-en
@@ -430,83 +439,83 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  ber
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN07-en-feed-2026-11-23@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN08-en-feed-2026-11-23@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261123T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LEN07-en-feed
+SUMMARY:FEED · read-the-machine · LEN08-en-feed
 DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  -later\nInstagram\, Facebook\, Threads\, LinkedIn (short version: X\, Blue
- sky)\n\nTHE OFFER: “Refund Advance: your tax refund NOW\, don't wait wee
- ks.”\n\n🔴 The cost: Fees + interest eat a refund you'd get free in a 
- few days.\n🟡 The clock: Due when the IRS pays — any delay becomes you
- r problem.\n🔵 The connection: The preparer\, the bank\, and the loan ar
- e one packaged product.\n\nThe second number: $60. That's advance and fili
- ng fees on a refund that was coming anyway.\nRead the machine. Don't becom
- e it.\nRead deals like this in the free game: getcivicarmor.com/play\n\n#R
- eadTheMachine #CivicArmor #TheSecondNumber
+ sky)\n\nTHE OFFER: “Online Installment Loan: need $2\,000? Easy approval
+ .”\n\n🔴 The cost: 100%+ APR by renting an out-of-state bank to dodge 
+ your state's cap.\n🟡 The clock: Balloon structure — early payments ba
+ rely touch the principal.\n🔵 The connection: A fintech fronts it\; a fa
+ r-off bank lends its charter for a cut.\n\nThe second number: $1\,900. Tha
+ t's about 100% a year on $2\,000 over 18 months.\nRead the machine. Don't 
+ become it.\nRead deals like this in the free game: getcivicarmor.com/play\
+ n\n#ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN08-en-video-2026-11-24@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN09-en-video-2026-11-24@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261124T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LEN08-en-video
-DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
- -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“O
- nline Installment Loan: need $2\,000? Easy approval.” The second number\
- , read in 30 seconds. #ReadTheMachine #CivicArmor #TheSecondNumber\n\nVIDE
- O SCRIPT:\n[0–3s HOOK\, card on screen] Somebody's offering you this: 
- “Online Installment Loan: need $2\,000? Easy approval.”\n[3–10s RED]
-  Put on the red glasses. 100%+ APR by renting an out-of-state bank to dodg
- e your state's cap.\n[10–16s AMBER] Now the amber ones: how fast do they
-  want you to sign? Balloon structure — early payments barely touch the p
- rincipal.\n[16–22s BLUE] Blue: follow the money. A fintech fronts it\; a
-  far-off bank lends its charter for a cut.\n[22–27s PAYOFF] The second n
- umber: $1\,900. That's about 100% a year on $2\,000 over 18 months.\n[27
- –30s CTA] This is one card from a free game. Link in bio.
-END:VEVENT
-BEGIN:VEVENT
-UID:LEN09-en-feed-2026-11-25@getcivicarmor.com
-DTSTAMP:20261021T235058Z
-DTSTART;TZID=America/New_York:20261125T121500
-DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LEN09-en-feed
-DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
- -later\nInstagram\, Facebook\, Threads\, LinkedIn (short version: X\, Blue
- sky)\n\nTHE OFFER: “Credit Builder: build your credit — guaranteed app
- roval!”\n\n🔴 The cost: You pay fees for a 'loan' you can't touch\; it
-  may not even report.\n🟡 The clock: Cancel late and you eat months of f
- ees for nothing.\n🔵 The connection: The fees are the business\; your 'c
- redit building' is the bait.\n\nThe second number: $180. That's $15 a mont
- h in fees for a year\, on a loan you can't touch.\nRead the machine. Don't
-  become it.\nRead deals like this in the free game: getcivicarmor.com/play
- \n\n#ReadTheMachine #CivicArmor #TheSecondNumber
-END:VEVENT
-BEGIN:VEVENT
-UID:LEN10-es-video-2026-11-26@getcivicarmor.com
-DTSTAMP:20261021T235058Z
-DTSTART;TZID=America/New_York:20261126T193000
-DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LEN10-es-video
+SUMMARY:VIDEO · read-the-machine · LEN09-en-video
 DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“C
- onsolidación de Deudas: ¡un solo pago mensual bajo\, libre de deudas!”
-  El segundo número\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecon
- dNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece
-  esto: “Consolidación de Deudas: ¡un solo pago mensual bajo\, libre de
-  deudas!”\n[3–10s RED] Ponte los lentes rojos. Pago más bajo = plazo 
- más largo = más interés pagado en total.\n[10–16s AMBER] Ahora los á
- mbar: ¿qué tan rápido quieren que firmes? Deja de pagar a tus acreedore
- s como te dicen y tu crédito se hunde primero.\n[16–22s BLUE] Azul: sig
- ue el dinero. La “organización sin fines de lucro” se financia con ta
- rifas de los mismos prestamistas.\n[22–27s PAYOFF] El segundo número: $
- 2\,100. Es un saldo de $10\,000 estirado de 3 a 5 años\, al 17%.\n[27–3
- 0s CTA] Es una carta de un juego gratis. Enlace en la bio.
+ redit Builder: build your credit — guaranteed approval!” The second nu
+ mber\, read in 30 seconds. #ReadTheMachine #CivicArmor #TheSecondNumber\n\
+ nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Somebody's offering you thi
+ s: “Credit Builder: build your credit — guaranteed approval!”\n[3–
+ 10s RED] Put on the red glasses. You pay fees for a 'loan' you can't touch
+ \; it may not even report.\n[10–16s AMBER] Now the amber ones: how fast 
+ do they want you to sign? Cancel late and you eat months of fees for nothi
+ ng.\n[16–22s BLUE] Blue: follow the money. The fees are the business\; y
+ our 'credit building' is the bait.\n[22–27s PAYOFF] The second number: $
+ 180. That's $15 a month in fees for a year\, on a loan you can't touch.\n[
+ 27–30s CTA] This is one card from a free game. Link in bio.
+END:VEVENT
+BEGIN:VEVENT
+UID:LEN10-en-feed-2026-11-25@getcivicarmor.com
+DTSTAMP:20261022T000545Z
+DTSTART;TZID=America/New_York:20261125T121500
+DURATION:PT15M
+SUMMARY:FEED · read-the-machine · LEN10-en-feed
+DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
+ -later\nInstagram\, Facebook\, Threads\, LinkedIn (short version: X\, Blue
+ sky)\n\nTHE OFFER: “Debt Consolidation: one low monthly payment\, be deb
+ t-free!”\n\n🔴 The cost: Lower payment = longer term = more interest p
+ aid in total.\n🟡 The clock: Stop paying creditors as told and your cred
+ it craters first.\n🔵 The connection: The 'nonprofit' is funded by fees 
+ from the lenders it deals with.\n\nThe second number: $2\,100. That's a $1
+ 0\,000 balance stretched from 3 years to 5\, at 17%.\nRead the machine. Do
+ n't become it.\nRead deals like this in the free game: getcivicarmor.com/p
+ lay\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
+END:VEVENT
+BEGIN:VEVENT
+UID:LEN11-es-video-2026-11-26@getcivicarmor.com
+DTSTAMP:20261022T000545Z
+DTSTART;TZID=America/New_York:20261126T193000
+DURATION:PT15M
+SUMMARY:VIDEO · read-the-machine · LEN11-es-video
+DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
+ -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“
+ ¡Llévatelo Hoy\, financiamiento aprobado!” El segundo número\, en 30 
+ segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0
+ –3s HOOK\, card on screen] Alguien te ofrece esto: “¡Llévatelo Hoy\,
+  financiamiento aprobado!”\n[3–10s RED] Ponte los lentes rojos. Días 
+ después: “se cayó el financiamiento” y firmas de nuevo a una tasa pe
+ or.\n[10–16s AMBER] Ahora los ámbar: ¿qué tan rápido quieren que fir
+ mes? Retienen tu carro de intercambio y tu enganche para obligarte a volve
+ r a firmar.\n[16–22s BLUE] Azul: sigue el dinero. El concesionario y su 
+ financiera se reparten el sobreprecio de tu tasa.\n[22–27s PAYOFF] El se
+ gundo número: $1\,300. Es una tasa 5 puntos más alta en un préstamo de 
+ carro de $26\,000\, durante el primer año.\n[27–30s CTA] Es una carta d
+ e un juego gratis. Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN13-en-feed-2026-11-27@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261127T121500
 DURATION:PT15M
 SUMMARY:FEED · real-help · LEN13-en-feed
@@ -522,29 +531,28 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  ndNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN11-es-video-2026-11-28@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN12-es-video-2026-11-28@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261128T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LEN11-es-video
+SUMMARY:VIDEO · read-the-machine · LEN12-es-video
 DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
- -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“
- ¡Llévatelo Hoy\, financiamiento aprobado!” El segundo número\, en 30 
- segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0
- –3s HOOK\, card on screen] Alguien te ofrece esto: “¡Llévatelo Hoy\,
-  financiamiento aprobado!”\n[3–10s RED] Ponte los lentes rojos. Días 
- después: “se cayó el financiamiento” y firmas de nuevo a una tasa pe
- or.\n[10–16s AMBER] Ahora los ámbar: ¿qué tan rápido quieren que fir
- mes? Retienen tu carro de intercambio y tu enganche para obligarte a volve
- r a firmar.\n[16–22s BLUE] Azul: sigue el dinero. El concesionario y su 
- financiera se reparten el sobreprecio de tu tasa.\n[22–27s PAYOFF] El se
- gundo número: $2\,500. Es volver a firmar a una tasa peor después de que
-  “se cayó el financiamiento”.\n[27–30s CTA] Es una carta de un jueg
- o gratis. Enlace en la bio.
+ -later\nTikTok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“C
+ ambio de Cheques: cobra tu cheque al instante\, sin banco.” El segundo n
+ úmero\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVI
+ DEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece esto: “Cam
+ bio de Cheques: cobra tu cheque al instante\, sin banco.”\n[3–10s RED]
+  Ponte los lentes rojos. 1–5% por cheque: cientos al año para tocar tu 
+ propio dinero.\n[10–16s AMBER] Ahora los ámbar: ¿qué tan rápido quie
+ ren que firmes? Cada día de pago\, cada vez. Nunca se acaba.\n[16–22s B
+ LUE] Azul: sigue el dinero. La cadena también vende los préstamos de dí
+ a de pago que vas a “necesitar” después.\n[22–27s PAYOFF] El segund
+ o número: $400. Es 2% de un sueldo de $20\,000 al año\, durante un año.
+ \n[27–30s CTA] Es una carta de un juego gratis. Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS04-en-2026-11-29@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261129T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS04-en
@@ -559,61 +567,62 @@ DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  heMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN12-en-feed-2026-11-30@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HOU01-en-feed-2026-11-30@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261130T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LEN12-en-feed
+SUMMARY:FEED · read-the-machine · HOU01-en-feed
 DESCRIPTION:Open enrollment\, then Black Friday rent-to-own and buy-now-pay
  -later\nInstagram\, Facebook\, Threads\, LinkedIn (short version: X\, Blue
- sky)\n\nTHE OFFER: “Check Cashing: cash your check instantly\, no bank n
- eeded.”\n\n🔴 The cost: 1–5% per check — hundreds a year to reach 
- your own money.\n🟡 The clock: Every payday\, every time. It never stops
- .\n🔵 The connection: The chain also sells the payday loans you'll 'need
- ' next.\n\nThe second number: $400. That's 2% of a $20\,000-a-year paychec
- k\, for a year.\nRead the machine. Don't become it.\nRead deals like this 
- in the free game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #T
- heSecondNumber
+ sky)\n\nTHE OFFER: “Rent-to-Own: $25/week and the couch is yours!”\n\n
+ 🔴 The cost: Total paid = 2–4x the retail price.\n🟡 The clock: Miss
+  one week late in the term and they take it — you keep nothing.\n🔵 Th
+ e connection: The store and the lease company are one holding company.\n\n
+ The second number: $900. That's $25 a week for a year\, for a couch that s
+ ells for about $400.\nRead the machine. Don't become it.\nRead deals like 
+ this in the free game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArm
+ or #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:HOU01-en-video-2026-12-01@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HOU02-en-video-2026-12-01@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261201T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · HOU01-en-video
+SUMMARY:VIDEO · read-the-machine · HOU02-en-video
 DESCRIPTION:Payday: Holiday loans and layaway: the January bill\nTikTok\, I
- nstagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Rent-to-Own: $25/we
- ek and the couch is yours!” The second number\, read in 30 seconds. #Rea
- dTheMachine #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, 
- card on screen] Somebody's offering you this: “Rent-to-Own: $25/week and
-  the couch is yours!”\n[3–10s RED] Put on the red glasses. Total paid 
- = 2–4x the retail price.\n[10–16s AMBER] Now the amber ones: how fast 
- do they want you to sign? Miss one week late in the term and they take it 
- — you keep nothing.\n[16–22s BLUE] Blue: follow the money. The store a
- nd the lease company are one holding company.\n[22–27s PAYOFF] The secon
- d number: $900. That's $25 a week for a year\, for a couch that sells for 
- about $400.\n[27–30s CTA] This is one card from a free game. Link in bio.
+ nstagram Reels\, YouTube Shorts\, Facebook Reels\n\n“No-Credit-Check Lea
+ se: bad credit? Move in today.” The second number\, read in 30 seconds. 
+ #ReadTheMachine #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOO
+ K\, card on screen] Somebody's offering you this: “No-Credit-Check Lease
+ : bad credit? Move in today.”\n[3–10s RED] Put on the red glasses. Hug
+ e deposit + junk fees\; rent set above market for 'risk'.\n[10–16s AMBER
+ ] Now the amber ones: how fast do they want you to sign? A 60-day move-out
+  notice is buried inside — miss it\, it auto-renews.\n[16–22s BLUE] Bl
+ ue: follow the money. The 'management co.' is a shell of the same landlord
+  group.\n[22–27s PAYOFF] The second number: $800. That's a nonrefundable
+  'high-risk' fee as big as a month's $800 deposit.\n[27–30s CTA] This is
+  one card from a free game. Link in bio.
 END:VEVENT
 BEGIN:VEVENT
-UID:HOU02-en-feed-2026-12-02@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HOU03-en-feed-2026-12-02@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261202T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · HOU02-en-feed
+SUMMARY:FEED · read-the-machine · HOU03-en-feed
 DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
- ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “No-C
- redit-Check Lease: bad credit? Move in today.”\n\n🔴 The cost: Huge de
- posit + junk fees\; rent set above market for 'risk'.\n🟡 The clock: A 6
- 0-day move-out notice is buried inside — miss it\, it auto-renews.\n🔵
-  The connection: The 'management co.' is a shell of the same landlord grou
- p.\n\nThe second number: $1\,200. That's a big deposit and a 'risk' markup
-  in the first year.\nRead the machine. Don't become it.\nRead deals like t
- his in the free game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmo
- r #TheSecondNumber
+ ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Own 
+ Your Home — no bank\, no mortgage! (Contract-for-Deed)”\n\n🔴 The co
+ st: You build no equity\; miss a payment late and lose it all.\n🟡 The c
+ lock: One default — even near the end — forfeits everything you paid.\
+ n🔵 The connection: The seller reclaims and resells the same house again
+  and again.\n\nThe second number: $15\,000. That's a $6\,500 down payment 
+ plus ten months of $850 payments\, forfeited on one missed payment.\nRead 
+ the machine. Don't become it.\nRead deals like this in the free game: getc
+ ivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
 UID:EMAIL-03-2026-12-03@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261203T100000
 DURATION:PT15M
 SUMMARY:EMAIL · email · EMAIL-03
@@ -621,64 +630,64 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nEmail list\n\nNews
  letter: see launch/content/emails/newsletter_template.md
 END:VEVENT
 BEGIN:VEVENT
-UID:HOU03-es-video-2026-12-03@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HOU04-es-video-2026-12-03@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261203T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · HOU03-es-video
+SUMMARY:VIDEO · read-the-machine · HOU04-es-video
 DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
-  Reels\, YouTube Shorts\, Facebook Reels\n\n“¡Ten Tu Casa\, sin banco n
- i hipoteca! (Contrato de compraventa a plazos)” El segundo número\, en 
- 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\
- n[0–3s HOOK\, card on screen] Alguien te ofrece esto: “¡Ten Tu Casa\,
-  sin banco ni hipoteca! (Contrato de compraventa a plazos)”\n[3–10s RE
- D] Ponte los lentes rojos. No acumulas patrimonio\; atrásate en un pago y
-  lo pierdes todo.\n[10–16s AMBER] Ahora los ámbar: ¿qué tan rápido q
- uieren que firmes? Un solo incumplimiento\, aunque sea cerca del final\, t
- e quita todo lo que pagaste.\n[16–22s BLUE] Azul: sigue el dinero. El ve
- ndedor recupera y revende la misma casa una y otra vez.\n[22–27s PAYOFF]
-  El segundo número: $15\,000. Es años de pagos por una casa que nunca es
-  tuya\, perdidos con un pago atrasado.\n[27–30s CTA] Es una carta de un 
- juego gratis. Enlace en la bio.
+  Reels\, YouTube Shorts\, Facebook Reels\n\n“¡La renta es de solo $950!
+ ” El segundo número\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSe
+ condNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofr
+ ece esto: “¡La renta es de solo $950!”\n[3–10s RED] Ponte los lente
+ s rojos. “Tarifa de tecnología”\, “tarifa de conveniencia”\, “b
+ asura a domicilio”: +$100 al mes.\n[10–16s AMBER] Ahora los ámbar: ¿
+ qué tan rápido quieren que firmes? Las tarifas suben al renovar mientras
+  la renta base sigue “igual”.\n[16–22s BLUE] Azul: sigue el dinero. 
+ Un procesador de tarifas externo se reparte la ganancia con el casero.\n[2
+ 2–27s PAYOFF] El segundo número: $1\,200. Es $100 al mes en tarifas bas
+ ura\, por un año.\n[27–30s CTA] Es una carta de un juego gratis. Enlace
+  en la bio.
 END:VEVENT
 BEGIN:VEVENT
-UID:HOU04-en-feed-2026-12-04@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HOU05-en-feed-2026-12-04@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261204T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · HOU04-en-feed
+SUMMARY:FEED · read-the-machine · HOU05-en-feed
 DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
- ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Rent
-  is only $950!”\n\n🔴 The cost: 'Technology fee\,' 'convenience fee\,'
-  'valet trash' add $100+/mo.\n🟡 The clock: Fees climb at renewal while 
- the base rent stays 'the same'.\n🔵 The connection: A third-party fee pr
- ocessor splits the take with the landlord.\n\nThe second number: $1\,200. 
- That's $100 a month in junk fees\, for a year.\nRead the machine. Don't be
- come it.\nRead deals like this in the free game: getcivicarmor.com/play\n\
- n#ReadTheMachine #CivicArmor #TheSecondNumber
+ ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Just
+  first month + deposit to move in.”\n\n🔴 The cost: Move-out charges g
+ et invented to keep your whole deposit.\n🟡 The clock: The dispute windo
+ w is tight — miss it and it's gone.\n🔵 The connection: A 'turnover' v
+ endor profits from every withheld deposit.\n\nThe second number: $800. Tha
+ t's a typical $800 deposit kept for invented move-out charges.\nRead the m
+ achine. Don't become it.\nRead deals like this in the free game: getcivica
+ rmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:HOU05-es-video-2026-12-05@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HOU06-es-video-2026-12-05@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261205T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · HOU05-es-video
+SUMMARY:VIDEO · read-the-machine · HOU06-es-video
 DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
-  Reels\, YouTube Shorts\, Facebook Reels\n\n“Solo primer mes + depósito
-  para mudarte.” El segundo número\, en 30 segundos. #LeeLaMáquina #Civ
- icArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] 
- Alguien te ofrece esto: “Solo primer mes + depósito para mudarte.”\n[
- 3–10s RED] Ponte los lentes rojos. Inventan cargos de salida para quedar
- se con todo tu depósito.\n[10–16s AMBER] Ahora los ámbar: ¿qué tan r
- ápido quieren que firmes? El plazo para reclamar es corto: si se te pasa\
- , lo pierdes.\n[16–22s BLUE] Azul: sigue el dinero. Un proveedor de “r
- otación” gana con cada depósito retenido.\n[22–27s PAYOFF] El segund
- o número: $1\,500. Es un depósito retenido por cargos de salida inventad
- os.\n[27–30s CTA] Es una carta de un juego gratis. Enlace en la bio.
+  Reels\, YouTube Shorts\, Facebook Reels\n\n“$50 por solicitar: ¡reembo
+ lsable si no te aprueban!” El segundo número\, en 30 segundos. #LeeLaM
+ áquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card
+  on screen] Alguien te ofrece esto: “$50 por solicitar: ¡reembolsable s
+ i no te aprueban!”\n[3–10s RED] Ponte los lentes rojos. Casi nunca lo 
+ devuelven\; le cobran a docenas por una sola unidad libre.\n[10–16s AMBE
+ R] Ahora los ámbar: ¿qué tan rápido quieren que firmes? Tu respuesta s
+ igue “pendiente” hasta que pasa el plazo de reembolso.\n[16–22s BLUE
+ ] Azul: sigue el dinero. La empresa de evaluación y el casero se reparten
+  las tarifas.\n[22–27s PAYOFF] El segundo número: $250. Es cinco solici
+ tudes de $50.\n[27–30s CTA] Es una carta de un juego gratis. Enlace en l
+ a bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:EVG03-en-2026-12-06@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261206T150000
 DURATION:PT15M
 SUMMARY:FEED · groups · EVG03-en
@@ -691,7 +700,7 @@ DESCRIPTION:Teachers\, churches and groups plan on Sunday\nInstagram\, Face
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS05-en-2026-12-06@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261206T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS05-en
@@ -705,96 +714,61 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
  TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:HOU06-en-feed-2026-12-07@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HOU07-en-feed-2026-12-07@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261207T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · HOU06-en-feed
+SUMMARY:FEED · read-the-machine · HOU07-en-feed
 DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
- ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “$50 
- to apply — refundable if you're not approved!”\n\n🔴 The cost: Rarel
- y refunded\; they collect from dozens for one open unit.\n🟡 The clock: 
- Your decision stays 'pending' past the refund window.\n🔵 The connection
- : The screening company and the landlord share the fee pool.\n\nThe second
-  number: $250. That's five $50 applications.\nRead the machine. Don't beco
- me it.\nRead deals like this in the free game: getcivicarmor.com/play\n\n#
- ReadTheMachine #CivicArmor #TheSecondNumber
+ ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Rent
+ ers insurance included for your protection.”\n\n🔴 The cost: A marked-
+ up policy that mostly protects the landlord\, not you.\n🟡 The clock: Au
+ to-added monthly\; opting out is hidden and time-boxed.\n🔵 The connecti
+ on: The landlord earns a commission on every policy.\n\nThe second number:
+  $120. That's a $10-a-month markup on the policy\, for a year.\nRead the m
+ achine. Don't become it.\nRead deals like this in the free game: getcivica
+ rmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:HOU07-en-video-2026-12-08@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HOU08-en-video-2026-12-08@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261208T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · HOU07-en-video
+SUMMARY:VIDEO · read-the-machine · HOU08-en-video
 DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
-  Reels\, YouTube Shorts\, Facebook Reels\n\n“Renters insurance included 
- for your protection.” The second number\, read in 30 seconds. #ReadTheMa
- chine #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card o
- n screen] Somebody's offering you this: “Renters insurance included for 
- your protection.”\n[3–10s RED] Put on the red glasses. A marked-up pol
- icy that mostly protects the landlord\, not you.\n[10–16s AMBER] Now the
-  amber ones: how fast do they want you to sign? Auto-added monthly\; optin
- g out is hidden and time-boxed.\n[16–22s BLUE] Blue: follow the money. T
- he landlord earns a commission on every policy.\n[22–27s PAYOFF] The sec
- ond number: $120. That's a $10-a-month markup on the policy\, for a year.\
- n[27–30s CTA] This is one card from a free game. Link in bio.
+  Reels\, YouTube Shorts\, Facebook Reels\n\n“Welcome! Great intro rent.
+ ” The second number\, read in 30 seconds. #ReadTheMachine #CivicArmor #T
+ heSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Somebody's
+  offering you this: “Welcome! Great intro rent.”\n[3–10s RED] Put on
+  the red glasses. Renewal jumps 15–30%\; moving costs trap you into payi
+ ng it.\n[10–16s AMBER] Now the amber ones: how fast do they want you to 
+ sign? Your notice to leave is due before you even learn the new rate.\n[16
+ –22s BLUE] Blue: follow the money. Rent-setting software coordinates the
+  hike across the whole area.\n[22–27s PAYOFF] The second number: $2\,400
+ . That's a 20% renewal hike on $1\,000 rent\, for a year.\n[27–30s CTA] 
+ This is one card from a free game. Link in bio.
 END:VEVENT
 BEGIN:VEVENT
-UID:HOU08-en-feed-2026-12-09@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HOU09-en-feed-2026-12-09@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261209T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · HOU08-en-feed
+SUMMARY:FEED · read-the-machine · HOU09-en-feed
 DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
- ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Welc
- ome! Great intro rent.”\n\n🔴 The cost: Renewal jumps 15–30%\; movin
- g costs trap you into paying it.\n🟡 The clock: Your notice to leave is 
- due before you even learn the new rate.\n🔵 The connection: Rent-setting
-  software coordinates the hike across the whole area.\n\nThe second number
- : $2\,400. That's a 20% renewal hike on $1\,000 rent\, for a year.\nRead t
- he machine. Don't become it.\nRead deals like this in the free game: getci
- vicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
+ ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Low 
+ payment to get you in the door! (ARM mortgage)”\n\n🔴 The cost: The te
+ aser rate resets far higher — your payment can double.\n🟡 The clock: 
+ The reset date was set on day one\; the clock always ran.\n🔵 The connec
+ tion: The loan is sold upstream\; the servicer profits when you struggle.\
+ n\nThe second number: $6\,000. That's a $500 payment that resets to $1\,00
+ 0\, for a year.\nRead the machine. Don't become it.\nRead deals like this 
+ in the free game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #T
+ heSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:HOU09-es-video-2026-12-10@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HOU10-es-video-2026-12-10@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261210T193000
-DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · HOU09-es-video
-DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
-  Reels\, YouTube Shorts\, Facebook Reels\n\n“¡Pago bajo para que entres
- ! (Hipoteca ARM)” El segundo número\, en 30 segundos. #LeeLaMáquina #C
- ivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen
- ] Alguien te ofrece esto: “¡Pago bajo para que entres! (Hipoteca ARM)
- ”\n[3–10s RED] Ponte los lentes rojos. La tasa gancho se reajusta much
- o más alta: tu pago puede duplicarse.\n[10–16s AMBER] Ahora los ámbar:
-  ¿qué tan rápido quieren que firmes? La fecha del reajuste se fijó el 
- primer día\; el reloj siempre corrió.\n[16–22s BLUE] Azul: sigue el di
- nero. El préstamo se vende hacia arriba\; el administrador gana cuando te
-  cuesta pagar.\n[22–27s PAYOFF] El segundo número: $6\,000. Es un pago 
- de $500 que se reajusta a $1\,000\, durante un año.\n[27–30s CTA] Es un
- a carta de un juego gratis. Enlace en la bio.
-END:VEVENT
-BEGIN:VEVENT
-UID:LEN14-en-feed-2026-12-11@getcivicarmor.com
-DTSTAMP:20261021T235058Z
-DTSTART;TZID=America/New_York:20261211T121500
-DURATION:PT15M
-SUMMARY:FEED · real-help · LEN14-en-feed
-DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
- ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nNOT EVERY DEAL IS 
- A TRAP.\n\n“Layaway: pay it off first\, then take it home.”\n\n🔴 No
-  interest and no debt — you only pay the sticker price.\n🟡 Miss payme
- nts and you just get your money back\, minus a small fee.\n🔵 Old-school
-  model with nobody profiting off your debt.\n\nThis one is real help. Read
- ing the machine means knowing the difference\, and walking away from real 
- help costs you too.\nRead deals like this in the free game: getcivicarmor.
- com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
-END:VEVENT
-BEGIN:VEVENT
-UID:HOU10-es-video-2026-12-12@getcivicarmor.com
-DTSTAMP:20261021T235058Z
-DTSTART;TZID=America/New_York:20261212T193000
 DURATION:PT15M
 SUMMARY:VIDEO · read-the-machine · HOU10-es-video
 DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
@@ -811,8 +785,44 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
   año.\n[27–30s CTA] Es una carta de un juego gratis. Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
+UID:LEN14-en-feed-2026-12-11@getcivicarmor.com
+DTSTAMP:20261022T000545Z
+DTSTART;TZID=America/New_York:20261211T121500
+DURATION:PT15M
+SUMMARY:FEED · real-help · LEN14-en-feed
+DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
+ ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nNOT EVERY DEAL IS 
+ A TRAP.\n\n“Layaway: pay it off first\, then take it home.”\n\n🔴 No
+  interest and no debt — you only pay the sticker price.\n🟡 Miss payme
+ nts and you just get your money back\, minus a small fee.\n🔵 Old-school
+  model with nobody profiting off your debt.\n\nThis one is real help. Read
+ ing the machine means knowing the difference\, and walking away from real 
+ help costs you too.\nRead deals like this in the free game: getcivicarmor.
+ com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
+END:VEVENT
+BEGIN:VEVENT
+UID:HOU11-es-video-2026-12-12@getcivicarmor.com
+DTSTAMP:20261022T000545Z
+DTSTART;TZID=America/New_York:20261212T193000
+DURATION:PT15M
+SUMMARY:VIDEO · read-the-machine · HOU11-es-video
+DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
+  Reels\, YouTube Shorts\, Facebook Reels\n\n“Contrato estándar\, solo f
+ irma aquí.” El segundo número\, en 30 segundos. #LeeLaMáquina #CivicA
+ rmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alg
+ uien te ofrece esto: “Contrato estándar\, solo firma aquí.”\n[3–10
+ s RED] Ponte los lentes rojos. Renuncias a tu aviso y te agregan “honora
+ rios de abogado” en cualquier renta atrasada.\n[10–16s AMBER] Ahora lo
+ s ámbar: ¿qué tan rápido quieren que firmes? Un día de atraso → emp
+ ieza la demanda y las tarifas se pegan al instante.\n[16–22s BLUE] Azul:
+  sigue el dinero. Un bufete de desalojos en masa cobra por cada demanda qu
+ e le paga el grupo.\n[22–27s PAYOFF] El segundo número: $500. Es honora
+ rios de abogado y costos de tribunal sumados a una renta atrasada.\n[27–
+ 30s CTA] Es una carta de un juego gratis. Enlace en la bio.
+END:VEVENT
+BEGIN:VEVENT
 UID:HIS06-en-2026-12-13@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261213T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS06-en
@@ -826,59 +836,60 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
  ine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:HOU11-en-feed-2026-12-14@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:HOU12-en-feed-2026-12-14@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261214T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · HOU11-en-feed
+SUMMARY:FEED · read-the-machine · HOU12-en-feed
 DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
- ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Stan
- dard lease\, just sign here.”\n\n🔴 The cost: Waives your notice and a
- uto-adds 'attorney fees' on any late rent.\n🟡 The clock: Late by a day 
- → filing starts and fees attach immediately.\n🔵 The connection: A hig
- h-volume eviction law firm is paid per filing by the group.\n\nThe second 
- number: $500. That's attorney fees added to one late rent.\nRead the machi
- ne. Don't become it.\nRead deals like this in the free game: getcivicarmor
- .com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
+ ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Firs
+ t month FREE!”\n\n🔴 The cost: Leave early and you repay the 'free' mo
+ nth plus a penalty.\n🟡 The clock: The clawback triggers on any break be
+ fore month 13.\n🔵 The connection: Concessions are booked as debt you ow
+ e the property fund.\n\nThe second number: $1\,500. That's the 'free' mont
+ h\, about $1\,500 at median rent\, billed back when you leave early.\nRead
+  the machine. Don't become it.\nRead deals like this in the free game: get
+ civicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:HOU12-en-video-2026-12-15@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LAB01-en-video-2026-12-15@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261215T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · HOU12-en-video
+SUMMARY:VIDEO · read-the-machine · LAB01-en-video
 DESCRIPTION:Payday: Holiday loans and layaway: the January bill\nTikTok\, I
- nstagram Reels\, YouTube Shorts\, Facebook Reels\n\n“First month FREE!
- ” The second number\, read in 30 seconds. #ReadTheMachine #CivicArmor #T
- heSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Somebody's
-  offering you this: “First month FREE!”\n[3–10s RED] Put on the red 
- glasses. Leave early and you repay the 'free' month plus a penalty.\n[10
- –16s AMBER] Now the amber ones: how fast do they want you to sign? The c
- lawback triggers on any break before month 13.\n[16–22s BLUE] Blue: foll
- ow the money. Concessions are booked as debt you owe the property fund.\n[
- 22–27s PAYOFF] The second number: $1\,500. That's the 'free' month paid 
- back\, plus a penalty.\n[27–30s CTA] This is one card from a free game. 
- Link in bio.
+ nstagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Sign here to start 
+ Monday.” The second number\, read in 30 seconds. #ReadTheMachine #CivicA
+ rmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Som
+ ebody's offering you this: “Sign here to start Monday.”\n[3–10s RED]
+  Put on the red glasses. You waive your right to sue or join a class actio
+ n.\n[10–16s AMBER] Now the amber ones: how fast do they want you to sign
+ ? The 30-day opt-out is buried on page 9 — the clock starts now.\n[16–
+ 22s BLUE] Blue: follow the money. The arbitration firm is chosen and paid 
+ by the employer.\n[22–27s PAYOFF] The second number: $3\,300. That's a y
+ ear of minimum-wage theft you can no longer take to court.\n[27–30s CTA]
+  This is one card from a free game. Link in bio.
 END:VEVENT
 BEGIN:VEVENT
-UID:LAB01-en-feed-2026-12-16@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LAB02-en-feed-2026-12-16@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261216T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LAB01-en-feed
+SUMMARY:FEED · read-the-machine · LAB02-en-feed
 DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
- ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Sign
-  here to start Monday.”\n\n🔴 The cost: You waive your right to sue or
-  join a class action.\n🟡 The clock: The 30-day opt-out is buried on pag
- e 9 — the clock starts now.\n🔵 The connection: The arbitration firm i
- s chosen and paid by the employer.\n\nThe second number: $1\,500. That's a
-  wage claim you signed away.\nRead the machine. Don't become it.\nIs this 
- happening at your job? The Third Option shows you how to document it: getc
- ivicarmor.com/guide\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
+ ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Stan
+ dard new-hire paperwork. (Non-compete)”\n\n🔴 The cost: Can block you 
+ from your whole field for a year+ (enforceability varies by state).\n🟡 
+ The clock: Signed at hire\; enforced exactly when you try to leave.\n🔵 
+ The connection: Used to hold wages down across an entire local industry.\n
+ \nThe second number: $500. That's about $500 a year in lower pay under a n
+ on-compete\, per the FTC.\nRead the machine. Don't become it.\nIs this hap
+ pening at your job? The Third Option shows you how to document it: getcivi
+ carmor.com/guide\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
 UID:EMAIL-04-2026-12-17@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261217T100000
 DURATION:PT15M
 SUMMARY:EMAIL · email · EMAIL-04
@@ -886,66 +897,66 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nEmail list\n\nNews
  letter: see launch/content/emails/newsletter_template.md
 END:VEVENT
 BEGIN:VEVENT
-UID:LAB02-es-video-2026-12-17@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LAB03-es-video-2026-12-17@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261217T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LAB02-es-video
+SUMMARY:VIDEO · read-the-machine · LAB03-es-video
 DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
-  Reels\, YouTube Shorts\, Facebook Reels\n\n“Papeles estándar de nuevo 
- empleado. (Acuerdo de no competencia)” El segundo número\, en 30 segund
- os. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s 
- HOOK\, card on screen] Alguien te ofrece esto: “Papeles estándar de nue
- vo empleado. (Acuerdo de no competencia)”\n[3–10s RED] Ponte los lente
- s rojos. Puede bloquearte de todo tu campo por un año o más (su validez 
- varía por estado).\n[10–16s AMBER] Ahora los ámbar: ¿qué tan rápido
-  quieren que firmes? Se firma al contratarte\; se hace valer justo cuando 
- intentas irte.\n[16–22s BLUE] Azul: sigue el dinero. Se usa para mantene
- r bajos los salarios en toda una industria local.\n[22–27s PAYOFF] El se
- gundo número: $5\,000. Es un año fuera de mejores sueldos en tu campo.\n
- [27–30s CTA] Es una carta de un juego gratis. Enlace en la bio.
+  Reels\, YouTube Shorts\, Facebook Reels\n\n“Eres contratista independie
+ nte: ¡sé tu propio jefe!” El segundo número\, en 30 segundos. #LeeLaM
+ áquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card
+  on screen] Alguien te ofrece esto: “Eres contratista independiente: ¡s
+ é tu propio jefe!”\n[3–10s RED] Ponte los lentes rojos. Sin horas ext
+ ra ni beneficios\; pagas las dos mitades del impuesto de nómina.\n[10–1
+ 6s AMBER] Ahora los ámbar: ¿qué tan rápido quieren que firmes? Los rec
+ lamos de salario atrasado y beneficios vencen si no los presentas a tiempo
+ .\n[16–22s BLUE] Azul: sigue el dinero. La agencia de personal se embols
+ a lo que costarían tus protecciones.\n[22–27s PAYOFF] El segundo númer
+ o: $7\,000. Es impuestos de nómina\, beneficios y protecciones perdidos: 
+ el 20% de $35\,000.\n[27–30s CTA] Es una carta de un juego gratis. Enlac
+ e en la bio.
 END:VEVENT
 BEGIN:VEVENT
-UID:LAB03-en-feed-2026-12-18@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LAB04-en-feed-2026-12-18@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261218T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LAB03-en-feed
+SUMMARY:FEED · read-the-machine · LAB04-en-feed
 DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
- ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “You'
- re an independent contractor — be your own boss!”\n\n🔴 The cost: No
-  overtime\, no benefits\; you pay both halves of payroll tax.\n🟡 The cl
- ock: Back-pay and benefit claims expire if you don't file in time.\n🔵 T
- he connection: The staffing agency pockets what your protections would've 
- cost.\n\nThe second number: $3\,500. That's the employer's half of payroll
-  tax\, overtime and benefits\, on $35\,000.\nRead the machine. Don't becom
- e it.\nIs this happening at your job? The Third Option shows you how to do
- cument it: getcivicarmor.com/guide\n\n#ReadTheMachine #CivicArmor #TheSeco
- ndNumber
+ ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Tips
+  pooled and shared fairly\, trust us.”\n\n🔴 The cost: Managers skim t
+ he pool\; off-clock work goes unpaid.\n🟡 The clock: Wage claims have a 
+ filing deadline\, and proof fades fast.\n🔵 The connection: Skimmed wage
+ s become the owner's margin.\n\nThe second number: $1\,500. That's $30 a w
+ eek in skimmed tips and off-clock work\, for 50 weeks.\nRead the machine. 
+ Don't become it.\nIs this happening at your job? The Third Option shows yo
+ u how to document it: getcivicarmor.com/guide\n\n#ReadTheMachine #CivicArm
+ or #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LAB04-es-video-2026-12-19@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LAB05-es-video-2026-12-19@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261219T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LAB04-es-video
+SUMMARY:VIDEO · read-the-machine · LAB05-es-video
 DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
-  Reels\, YouTube Shorts\, Facebook Reels\n\n“Propinas juntas y repartida
- s justo\, confía en nosotros.” El segundo número\, en 30 segundos. #Le
- eLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, 
- card on screen] Alguien te ofrece esto: “Propinas juntas y repartidas ju
- sto\, confía en nosotros.”\n[3–10s RED] Ponte los lentes rojos. Los g
- erentes se sirven del bote\; el trabajo fuera de horario no se paga.\n[10
- –16s AMBER] Ahora los ámbar: ¿qué tan rápido quieren que firmes? Los
-  reclamos de salario tienen fecha límite\, y las pruebas se pierden rápi
- do.\n[16–22s BLUE] Azul: sigue el dinero. Los salarios robados se vuelve
- n el margen del dueño.\n[22–27s PAYOFF] El segundo número: $1\,500. Es
-  propinas robadas y trabajo fuera de horario sin pagar\, en un año.\n[27
- –30s CTA] Es una carta de un juego gratis. Enlace en la bio.
+  Reels\, YouTube Shorts\, Facebook Reels\n\n“¡Entrenamiento gratis para
+  empezar tu carrera!” El segundo número\, en 30 segundos. #LeeLaMáquin
+ a #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on sc
+ reen] Alguien te ofrece esto: “¡Entrenamiento gratis para empezar tu ca
+ rrera!”\n[3–10s RED] Ponte los lentes rojos. Renuncia antes de 2 años
+  y debes miles por ese “entrenamiento”.\n[10–16s AMBER] Ahora los á
+ mbar: ¿qué tan rápido quieren que firmes? El reloj de la deuda empieza 
+ el primer día y te sigue al salir.\n[16–22s BLUE] Azul: sigue el dinero
+ . La “deuda” se vende a un cobrador en cuanto te vas.\n[22–27s PAYOF
+ F] El segundo número: $4\,000. Es devolver la capacitación “gratis” 
+ al renunciar antes de tiempo.\n[27–30s CTA] Es una carta de un juego gra
+ tis. Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:EVG04-en-2026-12-20@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261220T150000
 DURATION:PT15M
 SUMMARY:FEED · method · EVG04-en
@@ -957,7 +968,7 @@ DESCRIPTION:Teachers\, churches and groups plan on Sunday\nInstagram\, Face
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS07-en-2026-12-20@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261220T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS07-en
@@ -971,79 +982,80 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
   #ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LAB05-en-feed-2026-12-21@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LAB06-en-feed-2026-12-21@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261221T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LAB05-en-feed
+SUMMARY:FEED · read-the-machine · LAB06-en-feed
 DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
- ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Free
-  training to start your career!”\n\n🔴 The cost: Quit within 2 years a
- nd owe thousands for that 'training'.\n🟡 The clock: The debt clock star
- ts day one and follows you out the door.\n🔵 The connection: The 'debt' 
- is sold to a collector the moment you leave.\n\nThe second number: $4\,000
- . That's paying back 'free' training after quitting early.\nRead the machi
- ne. Don't become it.\nIs this happening at your job? The Third Option show
- s you how to document it: getcivicarmor.com/guide\n\n#ReadTheMachine #Civi
- cArmor #TheSecondNumber
+ ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Come
+  do a working interview!”\n\n🔴 The cost: Hours of real labor with no 
+ pay — and often no job after.\n🟡 The clock: 'We'll decide later' — 
+ payday never comes.\n🔵 The connection: Serial trial shifts quietly staf
+ f the floor for free.\n\nThe second number: $120. That's an unpaid 8-hour 
+ day at $15 an hour.\nRead the machine. Don't become it.\nIs this happening
+  at your job? The Third Option shows you how to document it: getcivicarmor
+ .com/guide\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LAB06-en-video-2026-12-22@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LAB07-en-video-2026-12-22@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261222T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LAB06-en-video
+SUMMARY:VIDEO · read-the-machine · LAB07-en-video
 DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
-  Reels\, YouTube Shorts\, Facebook Reels\n\n“Come do a working interview
- !” The second number\, read in 30 seconds. #ReadTheMachine #CivicArmor #
- TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Somebody'
- s offering you this: “Come do a working interview!”\n[3–10s RED] Put
-  on the red glasses. Hours of real labor with no pay — and often no job 
- after.\n[10–16s AMBER] Now the amber ones: how fast do they want you to 
- sign? 'We'll decide later' — payday never comes.\n[16–22s BLUE] Blue: 
- follow the money. Serial trial shifts quietly staff the floor for free.\n[
- 22–27s PAYOFF] The second number: $120. That's an unpaid 8-hour day at $
- 15 an hour.\n[27–30s CTA] This is one card from a free game. Link in bio.
+  Reels\, YouTube Shorts\, Facebook Reels\n\n“Flexible hours — we'll te
+ xt you!” The second number\, read in 30 seconds. #ReadTheMachine #CivicA
+ rmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Som
+ ebody's offering you this: “Flexible hours — we'll text you!”\n[3–
+ 10s RED] Put on the red glasses. You hold the day open\, get called off\, 
+ and earn nothing.\n[10–16s AMBER] Now the amber ones: how fast do they w
+ ant you to sign? Hours cut just below the benefits threshold on purpose.\n
+ [16–22s BLUE] Blue: follow the money. Scheduling software optimizes you 
+ to part-time\, no benefits.\n[22–27s PAYOFF] The second number: $960. Th
+ at's one called-off 5-hour shift a month at $16\, for a year.\n[27–30s C
+ TA] This is one card from a free game. Link in bio.
 END:VEVENT
 BEGIN:VEVENT
-UID:LAB07-en-feed-2026-12-23@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LAB08-en-feed-2026-12-23@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261223T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LAB07-en-feed
+SUMMARY:FEED · read-the-machine · LAB08-en-feed
 DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
- ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Flex
- ible hours — we'll text you!”\n\n🔴 The cost: You hold the day open\
- , get called off\, and earn nothing.\n🟡 The clock: Hours cut just below
-  the benefits threshold on purpose.\n🔵 The connection: Scheduling softw
- are optimizes you to part-time\, no benefits.\n\nThe second number: $2\,00
- 0. That's called-off shifts over a year.\nRead the machine. Don't become i
- t.\nIs this happening at your job? The Third Option shows you how to docum
- ent it: getcivicarmor.com/guide\n\n#ReadTheMachine #CivicArmor #TheSecondN
- umber
+ ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Get 
+ paid on a convenient card!”\n\n🔴 The cost: Fees to check your balance
+ \, to withdraw\, even to stay active.\n🟡 The clock: Inactivity fees dra
+ in it if you don't cash out fast.\n🔵 The connection: The card issuer an
+ d employer split the fee revenue.\n\nThe second number: $130. That's a $1.
+ 50 ATM fee and a $1 balance check each week\, for a year.\nRead the machin
+ e. Don't become it.\nIs this happening at your job? The Third Option shows
+  you how to document it: getcivicarmor.com/guide\n\n#ReadTheMachine #Civic
+ Armor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LAB08-es-video-2026-12-24@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LAB10-es-video-2026-12-24@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261224T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LAB08-es-video
+SUMMARY:VIDEO · read-the-machine · LAB10-es-video
 DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
-  Reels\, YouTube Shorts\, Facebook Reels\n\n“¡Te pagamos en una tarjeta
-  práctica!” El segundo número\, en 30 segundos. #LeeLaMáquina #CivicA
- rmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alg
- uien te ofrece esto: “¡Te pagamos en una tarjeta práctica!”\n[3–10
- s RED] Ponte los lentes rojos. Tarifas por ver tu saldo\, por retirar\, ha
- sta por mantenerla activa.\n[10–16s AMBER] Ahora los ámbar: ¿qué tan 
- rápido quieren que firmes? Las tarifas por inactividad la vacían si no s
- acas el dinero rápido.\n[16–22s BLUE] Azul: sigue el dinero. El emisor 
- de la tarjeta y el empleador se reparten las tarifas.\n[22–27s PAYOFF] E
- l segundo número: $250. Es tarifas de la tarjeta en un año.\n[27–30s C
- TA] Es una carta de un juego gratis. Enlace en la bio.
+  Reels\, YouTube Shorts\, Facebook Reels\n\n“¡Haz tu propio horario\, g
+ ana por trabajo!” El segundo número\, en 30 segundos. #LeeLaMáquina #C
+ ivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen
+ ] Alguien te ofrece esto: “¡Haz tu propio horario\, gana por trabajo!
+ ”\n[3–10s RED] Ponte los lentes rojos. El pago por tarea baja cuando y
+ a dependes de él\; los gastos son todos tuyos.\n[10–16s AMBER] Ahora lo
+ s ámbar: ¿qué tan rápido quieren que firmes? Los incentivos vencen\; e
+ l “bono” siempre se aleja.\n[16–22s BLUE] Azul: sigue el dinero. La 
+ plataforma ajusta tu pago a lo mínimo que todavía aceptas.\n[22–27s PA
+ YOFF] El segundo número: $2\,900. Es 4\,000 millas de trabajo a la tarifa
+  del IRS de 72.5 centavos por milla\, durante un año.\n[27–30s CTA] Es 
+ una carta de un juego gratis. Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:LEN15-en-feed-2026-12-25@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261225T121500
 DURATION:PT15M
 SUMMARY:FEED · real-help · LEN15-en-feed
@@ -1059,27 +1071,29 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
  mber
 END:VEVENT
 BEGIN:VEVENT
-UID:LAB09-es-video-2026-12-26@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LAB11-es-video-2026-12-26@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261226T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LAB09-es-video
+SUMMARY:VIDEO · read-the-machine · LAB11-es-video
 DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
-  Reels\, YouTube Shorts\, Facebook Reels\n\n“¡Compra en nuestra tienda 
- con tu descuento de empleado!” El segundo número\, en 30 segundos. #Lee
- LaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, c
- ard on screen] Alguien te ofrece esto: “¡Compra en nuestra tienda con t
- u descuento de empleado!”\n[3–10s RED] Ponte los lentes rojos. El sala
- rio regresa al empleador a precios inflados.\n[10–16s AMBER] Ahora los 
- ámbar: ¿qué tan rápido quieren que firmes? Los adelantos de sueldo te 
- dejan siempre un ciclo atrás.\n[16–22s BLUE] Azul: sigue el dinero. El 
- pueblo de la compañía moderno: le debes el alma a la tienda.\n[22–27s 
- PAYOFF] El segundo número: $600. Es salario gastado de vuelta a precios i
- nflados.\n[27–30s CTA] Es una carta de un juego gratis. Enlace en la bio.
+  Reels\, YouTube Shorts\, Facebook Reels\n\n“¡Felicidades\, ya eres asa
+ lariado: gerente!” El segundo número\, en 30 segundos. #LeeLaMáquina #
+ CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on scree
+ n] Alguien te ofrece esto: “¡Felicidades\, ya eres asalariado: gerente!
+ ”\n[3–10s RED] Ponte los lentes rojos. Un título de “gerente” par
+ a no pagar horas extra en semanas de 60 horas.\n[10–16s AMBER] Ahora los
+  ámbar: ¿qué tan rápido quieren que firmes? Tus tareas nunca correspon
+ den al título\; los reclamos vencen en silencio.\n[16–22s BLUE] Azul: s
+ igue el dinero. Tus horas extra sin pagar son pura ganancia para los de ar
+ riba.\n[22–27s PAYOFF] El segundo número: $26\,000. Es 20 horas extra a
+  la semana a $25 (tiempo y medio sobre el salario mínimo de $684 semanale
+ s)\, durante un año.\n[27–30s CTA] Es una carta de un juego gratis. Enl
+ ace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS08-en-2026-12-27@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261227T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS08-en
@@ -1093,45 +1107,9 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
  r #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LAB10-en-feed-2026-12-28@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LAB12-en-feed-2026-12-28@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261228T121500
-DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LAB10-en-feed
-DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
- ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Set 
- your own schedule\, earn per job!”\n\n🔴 The cost: Pay per task drops 
- as you come to rely on it\; costs are all yours.\n🟡 The clock: Incentiv
- es expire\; the 'bonus' always moves out of reach.\n🔵 The connection: T
- he platform tunes your pay to the lowest you'll still accept.\n\nThe secon
- d number: $3\,000. That's car costs and falling per-job pay\, over a year.
- \nRead the machine. Don't become it.\nIs this happening at your job? The T
- hird Option shows you how to document it: getcivicarmor.com/guide\n\n#Read
- TheMachine #CivicArmor #TheSecondNumber
-END:VEVENT
-BEGIN:VEVENT
-UID:LAB11-en-video-2026-12-29@getcivicarmor.com
-DTSTAMP:20261021T235058Z
-DTSTART;TZID=America/New_York:20261229T193000
-DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LAB11-en-video
-DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
-  Reels\, YouTube Shorts\, Facebook Reels\n\n“Congrats\, you're salaried 
- now — a manager!” The second number\, read in 30 seconds. #ReadTheMach
- ine #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on 
- screen] Somebody's offering you this: “Congrats\, you're salaried now 
- — a manager!”\n[3–10s RED] Put on the red glasses. A 'manager' title
-  used to dodge overtime on 60-hour weeks.\n[10–16s AMBER] Now the amber 
- ones: how fast do they want you to sign? Your duties never match the title
- \; claims expire quietly.\n[16–22s BLUE] Blue: follow the money. Your un
- paid overtime is pure profit upstream.\n[22–27s PAYOFF] The second numbe
- r: $8\,000. That's unpaid overtime on 60-hour weeks\, for a year.\n[27–3
- 0s CTA] This is one card from a free game. Link in bio.
-END:VEVENT
-BEGIN:VEVENT
-UID:LAB12-en-feed-2026-12-30@getcivicarmor.com
-DTSTAMP:20261021T235058Z
-DTSTART;TZID=America/New_York:20261230T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · LAB12-en-feed
 DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
@@ -1139,14 +1117,52 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
  k team meeting after your shift.”\n\n🔴 The cost: Off-clock captive me
  etings\, with anti-organizing pressure.\n🟡 The clock: Attendance is tra
  cked\; refusing is quietly punished.\n🔵 The connection: Union-avoidance
-  consultants are paid to keep you quiet.\n\nThe second number: $300. That'
- s off-clock meetings over a year.\nRead the machine. Don't become it.\nIs 
- this happening at your job? The Third Option shows you how to document it:
-  getcivicarmor.com/guide\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
+  consultants are paid to keep you quiet.\n\nThe second number: $312. That'
+ s a 30-minute unpaid meeting every week at $12\, for a year.\nRead the mac
+ hine. Don't become it.\nIs this happening at your job? The Third Option sh
+ ows you how to document it: getcivicarmor.com/guide\n\n#ReadTheMachine #Ci
+ vicArmor #TheSecondNumber
+END:VEVENT
+BEGIN:VEVENT
+UID:EDU01-en-video-2026-12-29@getcivicarmor.com
+DTSTAMP:20261022T000545Z
+DTSTART;TZID=America/New_York:20261229T193000
+DURATION:PT15M
+SUMMARY:VIDEO · read-the-machine · EDU01-en-video
+DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
+  Reels\, YouTube Shorts\, Facebook Reels\n\n“Enroll now — job placemen
+ t guaranteed!” The second number\, read in 30 seconds. #ReadTheMachine #
+ CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on scree
+ n] Somebody's offering you this: “Enroll now — job placement guarantee
+ d!”\n[3–10s RED] Put on the red glasses. Low grad rates\; 'placement' 
+ counts any job\, not the career.\n[10–16s AMBER] Now the amber ones: how
+  fast do they want you to sign? The enrollment deadline pushes you past th
+ e refund date.\n[16–22s BLUE] Blue: follow the money. The school and the
+  loan servicer are one owner.\n[22–27s PAYOFF] The second number: $18\,7
+ 00. That's a year of for-profit tuition and fees (average $18\,700)\, for 
+ a credential that doesn't pay off.\n[27–30s CTA] This is one card from a
+  free game. Link in bio.
+END:VEVENT
+BEGIN:VEVENT
+UID:EDU02-en-feed-2026-12-30@getcivicarmor.com
+DTSTAMP:20261022T000545Z
+DTSTART;TZID=America/New_York:20261230T121500
+DURATION:PT15M
+SUMMARY:FEED · read-the-machine · EDU02-en-feed
+DESCRIPTION:Holiday loans and layaway: the January bill\nInstagram\, Facebo
+ ok\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE OFFER: “Appr
+ oved! A private loan to cover your whole tuition.”\n\n🔴 The cost: Var
+ iable rate\, fewer protections than federal — take federal first.\n🟡 
+ The clock: The rate resets on a schedule you don't control.\n🔵 The conn
+ ection: The servicer profits the longer you stay in debt.\n\nThe second nu
+ mber: $5\,784. That's $20\,000 at 11% vs the 6.52% federal rate\, over 10 
+ years.\nRead the machine. Don't become it.\nRead deals like this in the fr
+ ee game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondN
+ umber
 END:VEVENT
 BEGIN:VEVENT
 UID:EMAIL-05-2026-12-31@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261231T100000
 DURATION:PT15M
 SUMMARY:EMAIL · email · EMAIL-05
@@ -1154,65 +1170,66 @@ DESCRIPTION:Holiday loans and layaway: the January bill\nEmail list\n\nNews
  letter: see launch/content/emails/newsletter_template.md
 END:VEVENT
 BEGIN:VEVENT
-UID:EDU01-es-video-2026-12-31@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:EDU03-es-video-2026-12-31@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20261231T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · EDU01-es-video
+SUMMARY:VIDEO · read-the-machine · EDU03-es-video
 DESCRIPTION:Holiday loans and layaway: the January bill\nTikTok\, Instagram
-  Reels\, YouTube Shorts\, Facebook Reels\n\n“¡Inscríbete ya\, empleo g
- arantizado!” El segundo número\, en 30 segundos. #LeeLaMáquina #CivicA
- rmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alg
- uien te ofrece esto: “¡Inscríbete ya\, empleo garantizado!”\n[3–10
- s RED] Ponte los lentes rojos. Pocos se gradúan\; la “colocación” cu
- enta cualquier trabajo\, no la carrera.\n[10–16s AMBER] Ahora los ámbar
- : ¿qué tan rápido quieren que firmes? La fecha de inscripción te empuj
- a más allá de la fecha de reembolso.\n[16–22s BLUE] Azul: sigue el din
- ero. La escuela y el administrador del préstamo tienen el mismo dueño.\n
- [22–27s PAYOFF] El segundo número: $15\,000. Es colegiatura de una escu
- ela con fines de lucro por un título que no lleva a la carrera.\n[27–30
- s CTA] Es una carta de un juego gratis. Enlace en la bio.
+  Reels\, YouTube Shorts\, Facebook Reels\n\n“Paga $0 ahora\, ¡solo un %
+  de tus ingresos futuros! (ISA)” El segundo número\, en 30 segundos. #L
+ eeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\,
+  card on screen] Alguien te ofrece esto: “Paga $0 ahora\, ¡solo un % de
+  tus ingresos futuros! (ISA)”\n[3–10s RED] Ponte los lentes rojos. Pue
+ de costar mucho más que un préstamo normal si te va bien.\n[10–16s AMB
+ ER] Ahora los ámbar: ¿qué tan rápido quieren que firmes? El porcentaje
+  y el plazo se fijan antes de que sepas tu sueldo.\n[16–22s BLUE] Azul: 
+ sigue el dinero. Unos inversionistas compraron una tajada de tu sueldo fut
+ uro.\n[22–27s PAYOFF] El segundo número: $9\,362. Es un tope de 2.3 vec
+ es sobre un ISA de $10\,000 ($23\,000) contra $13\,638 pagados en un prés
+ tamo federal al 6.52%.\n[27–30s CTA] Es una carta de un juego gratis. En
+ lace en la bio.
 END:VEVENT
 BEGIN:VEVENT
-UID:EDU02-en-feed-2027-01-01@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:EDU04-en-feed-2027-01-01@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270101T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · EDU02-en-feed
+SUMMARY:FEED · read-the-machine · EDU04-en-feed
 DESCRIPTION:Payday: Tax season opens: fast-refund loans and fee-heavy tax p
  rep\nInstagram\, Facebook\, Threads\, LinkedIn (short version: X\, Bluesky
- )\n\nTHE OFFER: “Approved! A private loan to cover your whole tuition.
- ”\n\n🔴 The cost: Variable rate\, fewer protections than federal — t
- ake federal first.\n🟡 The clock: The rate resets on a schedule you don'
- t control.\n🔵 The connection: The servicer profits the longer you stay 
- in debt.\n\nThe second number: $6\,000. That's extra interest over a feder
- al loan.\nRead the machine. Don't become it.\nRead deals like this in the 
- free game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecon
- dNumber
+ )\n\nTHE OFFER: “Just have a family member cosign.”\n\n🔴 The cost: 
+ The cosigner is fully liable\; default wrecks their credit too.\n🟡 The 
+ clock: The 'release' option has conditions almost no one ever meets.\n🔵
+  The connection: Binding family debt is a feature\, not a bug\, for the le
+ nder.\n\nThe second number: $5\,000. That's a cosigner repaying the $5\,00
+ 0 left on a defaulted loan\, before late fees.\nRead the machine. Don't be
+ come it.\nRead deals like this in the free game: getcivicarmor.com/play\n\
+ n#ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:EDU03-es-video-2027-01-02@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:EDU05-es-video-2027-01-02@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270102T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · EDU03-es-video
+SUMMARY:VIDEO · read-the-machine · EDU05-es-video
 DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
- Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Paga $0 ahor
- a\, ¡solo un % de tus ingresos futuros! (ISA)” El segundo número\, en 
- 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\
- n[0–3s HOOK\, card on screen] Alguien te ofrece esto: “Paga $0 ahora\,
-  ¡solo un % de tus ingresos futuros! (ISA)”\n[3–10s RED] Ponte los le
- ntes rojos. Puede costar mucho más que un préstamo normal si te va bien.
- \n[10–16s AMBER] Ahora los ámbar: ¿qué tan rápido quieren que firmes
- ? El porcentaje y el plazo se fijan antes de que sepas tu sueldo.\n[16–2
- 2s BLUE] Azul: sigue el dinero. Unos inversionistas compraron una tajada d
- e tu sueldo futuro.\n[22–27s PAYOFF] El segundo número: $10\,000. Es pa
- gos de ingresos compartidos por encima de un préstamo normal\, si te va b
- ien.\n[27–30s CTA] Es una carta de un juego gratis. Enlace en la bio.
+ Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“¿No puedes 
+ pagar? Solo aplázalo\, ¡tranquilo!” El segundo número\, en 30 segundo
+ s. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s H
+ OOK\, card on screen] Alguien te ofrece esto: “¿No puedes pagar? Solo a
+ plázalo\, ¡tranquilo!”\n[3–10s RED] Ponte los lentes rojos. El inter
+ és sin pagar se suma al capital\; la deuda crece mientras esperas.\n[10
+ –16s AMBER] Ahora los ámbar: ¿qué tan rápido quieren que firmes? La 
+ capitalización cae en una fecha escondida en los términos.\n[16–22s BL
+ UE] Azul: sigue el dinero. Un saldo más grande significa más ganancia pa
+ ra el administrador.\n[22–27s PAYOFF] El segundo número: $1\,956. Es un
+  año de interés al 6.52% sobre $30\,000 en préstamos sin subsidio.\n[27
+ –30s CTA] Es una carta de un juego gratis. Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:EVG05-en-2027-01-03@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270103T150000
 DURATION:PT15M
 SUMMARY:FEED · method · EVG05-en
@@ -1224,7 +1241,7 @@ DESCRIPTION:Teachers\, churches and groups plan on Sunday\nInstagram\, Face
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS09-en-2027-01-03@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270103T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS09-en
@@ -1238,44 +1255,9 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
  ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:EDU04-en-feed-2027-01-04@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:EDU06-en-feed-2027-01-04@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270104T121500
-DURATION:PT15M
-SUMMARY:FEED · read-the-machine · EDU04-en-feed
-DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
- tagram\, Facebook\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE
-  OFFER: “Just have a family member cosign.”\n\n🔴 The cost: The cosi
- gner is fully liable\; default wrecks their credit too.\n🟡 The clock: T
- he 'release' option has conditions almost no one ever meets.\n🔵 The con
- nection: Binding family debt is a feature\, not a bug\, for the lender.\n\
- nThe second number: $5\,000. That's a cosigned loan that defaults.\nRead t
- he machine. Don't become it.\nRead deals like this in the free game: getci
- vicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
-END:VEVENT
-BEGIN:VEVENT
-UID:EDU05-en-video-2027-01-05@getcivicarmor.com
-DTSTAMP:20261021T235058Z
-DTSTART;TZID=America/New_York:20270105T193000
-DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · EDU05-en-video
-DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
- Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Can't pay? J
- ust defer — no worries!” The second number\, read in 30 seconds. #Read
- TheMachine #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, c
- ard on screen] Somebody's offering you this: “Can't pay? Just defer — 
- no worries!”\n[3–10s RED] Put on the red glasses. Unpaid interest is a
- dded to principal\; the debt grows while you wait.\n[10–16s AMBER] Now t
- he amber ones: how fast do they want you to sign? Capitalization hits on a
-  date buried in the terms.\n[16–22s BLUE] Blue: follow the money. A bigg
- er balance means more servicer profit.\n[22–27s PAYOFF] The second numbe
- r: $2\,000. That's interest added to the loan while it was deferred.\n[27
- –30s CTA] This is one card from a free game. Link in bio.
-END:VEVENT
-BEGIN:VEVENT
-UID:EDU06-en-feed-2027-01-06@getcivicarmor.com
-DTSTAMP:20261021T235058Z
-DTSTART;TZID=America/New_York:20270106T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · EDU06-en-feed
 DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
@@ -1283,34 +1265,72 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
   OFFER: “6 weeks to a high-paying certification!”\n\n🔴 The cost: A 
  credential employers don't recognize\, with sky-high fees.\n🟡 The clock
  : No refund once the first module 'starts'.\n🔵 The connection: The 'acc
- reditor' is paid by the schools it blesses.\n\nThe second number: $3\,000.
-  That's fees for a credential employers don't recognize.\nRead the machine
- . Don't become it.\nRead deals like this in the free game: getcivicarmor.c
- om/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
+ reditor' is paid by the schools it blesses.\n\nThe second number: $3\,500.
+  That's a $3\,500 online certificate few enrollees turned into a job in th
+ e field.\nRead the machine. Don't become it.\nRead deals like this in the 
+ free game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecon
+ dNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:EDU07-es-video-2027-01-07@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:EDU07-en-video-2027-01-05@getcivicarmor.com
+DTSTAMP:20261022T000545Z
+DTSTART;TZID=America/New_York:20270105T193000
+DURATION:PT15M
+SUMMARY:VIDEO · read-the-machine · EDU07-en-video
+DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
+ Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Start here\,
+  transfer anywhere later!” The second number\, read in 30 seconds. #Read
+ TheMachine #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, c
+ ard on screen] Somebody's offering you this: “Start here\, transfer anyw
+ here later!”\n[3–10s RED] Put on the red glasses. The credits don't tr
+ ansfer\; you pay to retake them.\n[10–16s AMBER] Now the amber ones: how
+  fast do they want you to sign? You find out only after you've enrolled an
+ d paid.\n[16–22s BLUE] Blue: follow the money. Non-transferable credits 
+ lock you into one paying school.\n[22–27s PAYOFF] The second number: $3\
+ ,980. That's 10 of a year's 24 credits lost in transfer (GAO: 43%)\, retak
+ en at $398 a credit.\n[27–30s CTA] This is one card from a free game. Li
+ nk in bio.
+END:VEVENT
+BEGIN:VEVENT
+UID:EDU08-en-feed-2027-01-06@getcivicarmor.com
+DTSTAMP:20261022T000545Z
+DTSTART;TZID=America/New_York:20270106T121500
+DURATION:PT15M
+SUMMARY:FEED · read-the-machine · EDU08-en-feed
+DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
+ tagram\, Facebook\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE
+  OFFER: “Tuition is all-inclusive!”\n\n🔴 The cost: Mandatory 'lab\,
+ ' 'tech\,' and book fees stack up fast.\n🟡 The clock: Fees are billed p
+ er term and rise each year.\n🔵 The connection: A captive bookstore/vend
+ or shares in the markup.\n\nThe second number: $1\,500. That's a year of b
+ ooks and supplies (about $1\,300) plus lab and tech fees.\nRead the machin
+ e. Don't become it.\nRead deals like this in the free game: getcivicarmor.
+ com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
+END:VEVENT
+BEGIN:VEVENT
+UID:EDU09-es-video-2027-01-07@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270107T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · EDU07-es-video
+SUMMARY:VIDEO · read-the-machine · EDU09-es-video
 DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
- Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“¡Empieza aq
- uí y transfiérete a donde quieras después!” El segundo número\, en 3
- 0 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n
- [0–3s HOOK\, card on screen] Alguien te ofrece esto: “¡Empieza aquí 
- y transfiérete a donde quieras después!”\n[3–10s RED] Ponte los lent
- es rojos. Los créditos no se transfieren\; pagas para volver a cursarlos.
- \n[10–16s AMBER] Ahora los ámbar: ¿qué tan rápido quieren que firmes
- ? Te enteras solo después de inscribirte y pagar.\n[16–22s BLUE] Azul: 
- sigue el dinero. Los créditos no transferibles te amarran a una sola escu
- ela que cobra.\n[22–27s PAYOFF] El segundo número: $4\,000. Es pagar pa
- ra repetir créditos que no se transfirieron.\n[27–30s CTA] Es una carta
-  de un juego gratis. Enlace en la bio.
+ Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“¡Un conseje
+ ro te ayuda a inscribirte hoy!” El segundo número\, en 30 segundos. #Le
+ eLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, 
+ card on screen] Alguien te ofrece esto: “¡Un consejero te ayuda a inscr
+ ibirte hoy!”\n[3–10s RED] Ponte los lentes rojos. Los "consejeros" son
+  vendedores a comisión con cuotas de inscripción.\n[10–16s AMBER] Ahor
+ a los ámbar: ¿qué tan rápido quieren que firmes? Mucha presión: "insc
+ ríbete hoy o pierdes tu lugar".\n[16–22s BLUE] Azul: sigue el dinero. A
+  los reclutadores les pagan por inscripción firmada\, no por graduado.\n[
+ 22–27s PAYOFF] El segundo número: $9\,350. Es medio año de matrícula 
+ con fines de lucro (promedio $18\,700)\, en un programa que te vendieron y
+  luego dejas.\n[27–30s CTA] Es una carta de un juego gratis. Enlace en l
+ a bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU13-en-feed-2027-01-08@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270108T121500
 DURATION:PT15M
 SUMMARY:FEED · real-help · HOU13-en-feed
@@ -1325,28 +1345,29 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
  me: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:EDU08-es-video-2027-01-09@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:EDU10-es-video-2027-01-09@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270109T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · EDU08-es-video
+SUMMARY:VIDEO · read-the-machine · EDU10-es-video
 DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
- Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“¡La colegia
- tura lo incluye todo!” El segundo número\, en 30 segundos. #LeeLaMáqui
- na #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on s
- creen] Alguien te ofrece esto: “¡La colegiatura lo incluye todo!”\n[3
- –10s RED] Ponte los lentes rojos. Las cuotas obligatorias de "laboratori
- o"\, "tecnología" y libros se acumulan rápido.\n[10–16s AMBER] Ahora l
- os ámbar: ¿qué tan rápido quieren que firmes? Las cuotas se cobran por
-  periodo y suben cada año.\n[16–22s BLUE] Azul: sigue el dinero. Una li
- brería o proveedor cautivo se lleva parte del sobreprecio.\n[22–27s PAY
- OFF] El segundo número: $1\,500. Es cuotas de laboratorio\, tecnología y
-  libros en una colegiatura "todo incluido".\n[27–30s CTA] Es una carta d
- e un juego gratis. Enlace en la bio.
+ Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“¡Borramos t
+ us préstamos estudiantiles\, por una cuota!” El segundo número\, en 30
+  segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[
+ 0–3s HOOK\, card on screen] Alguien te ofrece esto: “¡Borramos tus pr
+ éstamos estudiantiles\, por una cuota!”\n[3–10s RED] Ponte los lentes
+  rojos. Te cobra por programas federales gratuitos\; puedes perder protecc
+ iones.\n[10–16s AMBER] Ahora los ámbar: ¿qué tan rápido quieren que 
+ firmes? Pagas por adelantado y luego el "trámite" se alarga hasta que pas
+ an tus opciones reales.\n[16–22s BLUE] Azul: sigue el dinero. Una fábri
+ ca de cuotas revende tus datos a la siguiente estafa de la fila.\n[22–27
+ s PAYOFF] El segundo número: $1\,000. Es cargos por adelantado por progra
+ mas federales gratis.\n[27–30s CTA] Es una carta de un juego gratis. Enl
+ ace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS10-en-2027-01-10@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270110T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS10-en
@@ -1361,44 +1382,9 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
  Number
 END:VEVENT
 BEGIN:VEVENT
-UID:EDU09-en-feed-2027-01-11@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:EDU11-en-feed-2027-01-11@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270111T121500
-DURATION:PT15M
-SUMMARY:FEED · read-the-machine · EDU09-en-feed
-DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
- tagram\, Facebook\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE
-  OFFER: “A counselor will help you apply today!”\n\n🔴 The cost: 'Co
- unselors' are commissioned salespeople hitting enrollment quotas.\n🟡 Th
- e clock: High pressure: 'enroll today or lose your spot.'\n🔵 The connec
- tion: Recruiters are paid per signed enrollment\, not per graduate.\n\nThe
-  second number: $8\,000. That's a commissioned sale into the wrong program
- .\nRead the machine. Don't become it.\nRead deals like this in the free ga
- me: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
-END:VEVENT
-BEGIN:VEVENT
-UID:EDU10-en-video-2027-01-12@getcivicarmor.com
-DTSTAMP:20261021T235058Z
-DTSTART;TZID=America/New_York:20270112T193000
-DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · EDU10-en-video
-DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
- Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“We'll erase 
- your student loans — for a fee!” The second number\, read in 30 second
- s. #ReadTheMachine #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s 
- HOOK\, card on screen] Somebody's offering you this: “We'll erase your s
- tudent loans — for a fee!”\n[3–10s RED] Put on the red glasses. Char
- ges you for free federal programs\; can forfeit protections.\n[10–16s AM
- BER] Now the amber ones: how fast do they want you to sign? Pay upfront\, 
- then 'processing' drags past your real options.\n[16–22s BLUE] Blue: fol
- low the money. A fee-mill resells your info to the next scam in line.\n[22
- –27s PAYOFF] The second number: $1\,000. That's fees for free federal pr
- ograms.\n[27–30s CTA] This is one card from a free game. Link in bio.
-END:VEVENT
-BEGIN:VEVENT
-UID:EDU11-en-feed-2027-01-13@getcivicarmor.com
-DTSTAMP:20261021T235058Z
-DTSTART;TZID=America/New_York:20270113T121500
 DURATION:PT15M
 SUMMARY:FEED · read-the-machine · EDU11-en-feed
 DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
@@ -1407,14 +1393,51 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
  The cost: Broad definitions of 'hired' trigger payments even on low pay.\n
  🟡 The clock: The clock and salary floor are written to favor the school
  .\n🔵 The connection: Financiers bundle and securitize cohorts of studen
- ts like bonds.\n\nThe second number: $8\,000. That's income-share payments
-  on low pay.\nRead the machine. Don't become it.\nRead deals like this in 
- the free game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheS
- econdNumber
+ ts like bonds.\n\nThe second number: $17\,000. That's 17% of a $50\,000 sa
+ lary for 24 months.\nRead the machine. Don't become it.\nRead deals like t
+ his in the free game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmo
+ r #TheSecondNumber
+END:VEVENT
+BEGIN:VEVENT
+UID:LEN01-en-video-2027-01-12@getcivicarmor.com
+DTSTAMP:20261022T000545Z
+DTSTART;TZID=America/New_York:20270112T193000
+DURATION:PT15M
+SUMMARY:VIDEO · read-the-machine · LEN01-en-video
+DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
+ Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Quick Cash: 
+ $375 today. One flat fee — $56.25.” The second number\, read in 30 sec
+ onds. #ReadTheMachine #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–
+ 3s HOOK\, card on screen] Somebody's offering you this: “Quick Cash: $37
+ 5 today. One flat fee — $56.25.”\n[3–10s RED] Put on the red glasses
+ . That fee is a 391% APR. The fee is the product\, not a favor.\n[10–16s
+  AMBER] Now the amber ones: how fast do they want you to sign? Due in full
+  in 14 days. Can't pay? You 'reroll' and owe $56.25 again.\n[16–22s BLUE
+ ] Blue: follow the money. The storefront and the debt buyer that hounds yo
+ u later share one owner.\n[22–27s PAYOFF] The second number: $450. That'
+ s a $56.25 fee paid 8 times\, like the typical payday borrower.\n[27–30s
+  CTA] This is one card from a free game. Link in bio.
+END:VEVENT
+BEGIN:VEVENT
+UID:LEN02-en-feed-2027-01-13@getcivicarmor.com
+DTSTAMP:20261022T000545Z
+DTSTART;TZID=America/New_York:20270113T121500
+DURATION:PT15M
+SUMMARY:FEED · read-the-machine · LEN02-en-feed
+DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
+ tagram\, Facebook\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE
+  OFFER: “Title Loan: borrow $1\,000 on your car title\, keep driving.”
+ \n\n🔴 The cost: ~300% APR\, and the loan is a fraction of the car's rea
+ l value.\n🟡 The clock: One missed payment = repossession\, often with n
+ o grace period.\n🔵 The connection: The lender holds a stake in the repo
+  lot that resells your car.\n\nThe second number: $1\,250. That's 25% a mo
+ nth on $1\,000\, for 5 months.\nRead the machine. Don't become it.\nRead d
+ eals like this in the free game: getcivicarmor.com/play\n\n#ReadTheMachine
+  #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
 UID:EMAIL-06-2027-01-14@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270114T100000
 DURATION:PT15M
 SUMMARY:EMAIL · email · EMAIL-06
@@ -1422,66 +1445,67 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nEma
  il list\n\nNewsletter: see launch/content/emails/newsletter_template.md
 END:VEVENT
 BEGIN:VEVENT
-UID:EDU12-es-video-2027-01-14@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN03-es-video-2027-01-14@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270114T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · EDU12-es-video
+SUMMARY:VIDEO · read-the-machine · LEN03-es-video
 DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
- Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Mantén tu l
- icencia al día: suscripción fácil.” El segundo número\, en 30 segund
- os. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0–3s 
- HOOK\, card on screen] Alguien te ofrece esto: “Mantén tu licencia al d
- ía: suscripción fácil.”\n[3–10s RED] Ponte los lentes rojos. Se ren
- ueva sola cada año a un precio más alto\, por créditos que estás oblig
- ado a tener.\n[10–16s AMBER] Ahora los ámbar: ¿qué tan rápido quiere
- n que firmes? El plazo para cancelar es diminuto y cae justo antes de la r
- enovación.\n[16–22s BLUE] Azul: sigue el dinero. Un proveedor cautivo t
- iene el monopolio de los créditos obligatorios.\n[22–27s PAYOFF] El seg
- undo número: $200. Es aumentos de precio por renovación automática.\n[2
- 7–30s CTA] Es una carta de un juego gratis. Enlace en la bio.
+ Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Empeño: efe
+ ctivo ya por tu artículo\, recupéralo cuando quieras.” El segundo núm
+ ero\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO
+  SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece esto: “Empeñ
+ o: efectivo ya por tu artículo\, recupéralo cuando quieras.”\n[3–10s
+  RED] Ponte los lentes rojos. APR efectivo de 120–240%\; la mayoría de 
+ los artículos nunca se recuperan.\n[10–16s AMBER] Ahora los ámbar: ¿q
+ ué tan rápido quieren que firmes? El plazo para recuperarlo es corto: si
+  se te pasa\, lo venden.\n[16–22s BLUE] Azul: sigue el dinero. La gananc
+ ia de la reventa va a la misma cadena que te hizo el préstamo.\n[22–27s
+  PAYOFF] El segundo número: $150. Es 20% al mes sobre un empeño de $250\
+ , durante 3 meses.\n[27–30s CTA] Es una carta de un juego gratis. Enlace
+  en la bio.
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN01-en-feed-2027-01-15@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN04-en-feed-2027-01-15@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270115T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LEN01-en-feed
+SUMMARY:FEED · read-the-machine · LEN04-en-feed
 DESCRIPTION:Payday: Tax season opens: fast-refund loans and fee-heavy tax p
  rep\nInstagram\, Facebook\, Threads\, LinkedIn (short version: X\, Bluesky
- )\n\nTHE OFFER: “Quick Cash: $375 today. One flat fee — $56.25.”\n\n
- 🔴 The cost: That fee is a 391% APR. The fee is the product\, not a favo
- r.\n🟡 The clock: Due in full in 14 days. Can't pay? You 'reroll' and ow
- e $56.25 again.\n🔵 The connection: The storefront and the debt buyer th
- at hounds you later share one owner.\n\nThe second number: $450. That's a 
- $56.25 fee paid 8 times\, like the typical payday borrower.\nRead the mach
- ine. Don't become it.\nRead deals like this in the free game: getcivicarmo
- r.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNumber
+ )\n\nTHE OFFER: “Buy Now\, Pay Later: 4 easy payments\, 0% interest!”\
+ n\n🔴 The cost: Late fees pile on\, and it stacks across apps till you l
+ ose track.\n🟡 The clock: Autopay hits whether the money's there or not 
+ → overdraft.\n🔵 The connection: The BNPL firm sells your payment data
+  and routes late fees up.\n\nThe second number: $70. That's seven $10 late
+  fees across overdue plans.\nRead the machine. Don't become it.\nRead deal
+ s like this in the free game: getcivicarmor.com/play\n\n#ReadTheMachine #C
+ ivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN02-es-video-2027-01-16@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN05-es-video-2027-01-16@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270116T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LEN02-es-video
+SUMMARY:VIDEO · read-the-machine · LEN05-es-video
 DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
- Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Préstamo po
- r Título: pide $1\,000 con el título de tu carro y sigue manejando.” E
- l segundo número\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondN
- umber\n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece e
- sto: “Préstamo por Título: pide $1\,000 con el título de tu carro y s
- igue manejando.”\n[3–10s RED] Ponte los lentes rojos. ~300% de APR\, y
-  el préstamo es una fracción del valor real del carro.\n[10–16s AMBER]
-  Ahora los ámbar: ¿qué tan rápido quieren que firmes? Un pago atrasado
-  = te quitan el carro\, a menudo sin periodo de gracia.\n[16–22s BLUE] A
- zul: sigue el dinero. El prestamista es socio del lote que revende tu carr
- o embargado.\n[22–27s PAYOFF] El segundo número: $1\,250. Es 25% al mes
-  sobre $1\,000\, durante 5 meses.\n[27–30s CTA] Es una carta de un juego
-  gratis. Enlace en la bio.
+ Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Protección 
+ contra Sobregiros: ¡cubrimos tu tarjeta si te falta!” El segundo númer
+ o\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\nVIDEO S
+ CRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece esto: “Protecci
+ ón contra Sobregiros: ¡cubrimos tu tarjeta si te falta!”\n[3–10s RED
+ ] Ponte los lentes rojos. Hasta ~$35 por compra: un café de $4 puede cost
+ ar ~$39 (muchos bancos ya cobran $0–$15).\n[10–16s AMBER] Ahora los á
+ mbar: ¿qué tan rápido quieren que firmes? Reordenan los cargos del más
+  grande al más chico para cobrar más tarifas.\n[16–22s BLUE] Azul: sig
+ ue el dinero. Los sobregiros son una de las mayores ganancias del banco de
+ trás.\n[22–27s PAYOFF] El segundo número: $175. Es cinco cargos por so
+ bregiro de $35 en un mes.\n[27–30s CTA] Es una carta de un juego gratis.
+  Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:EVG06-en-2027-01-17@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270117T150000
 DURATION:PT15M
 SUMMARY:FEED · story · EVG06-en
@@ -1494,7 +1518,7 @@ DESCRIPTION:Teachers\, churches and groups plan on Sunday\nInstagram\, Face
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS11-en-2027-01-17@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270117T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS11-en
@@ -1507,83 +1531,83 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
  com/play\n\n#BlackHistory #ReadTheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN03-en-feed-2027-01-18@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN06-en-feed-2027-01-18@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270118T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LEN03-en-feed
+SUMMARY:FEED · read-the-machine · LEN06-en-feed
 DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
  tagram\, Facebook\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE
-  OFFER: “Pawn: cash now for your item\, buy it back anytime.”\n\n🔴 
- The cost: Effective APR 120–240%\; most items are never redeemed.\n🟡 
- The clock: The redemption window is short — miss it and it's sold.\n🔵
-  The connection: Resale profit flows to the same chain that wrote the loan
- .\n\nThe second number: $150. That's 20% a month on a $250 pawn\, for 3 mo
- nths.\nRead the machine. Don't become it.\nRead deals like this in the fre
- e game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor #TheSecondNu
- mber
+  OFFER: “Cash Advance App: get $100 early. No interest — just tip!”\
+ n\n🔴 The cost: A $14 'tip' + fee on $100 for a week ≈ 300%+ APR.\n
+ 🟡 The clock: Auto-debits on payday\; bad timing sets off an overdraft c
+ ascade.\n🔵 The connection: The 'tip' dodges lending law\; the app sells
+  your bank data.\n\nThe second number: $112. That's a $14 tip-and-fee\, ei
+ ght times a year.\nRead the machine. Don't become it.\nRead deals like thi
+ s in the free game: getcivicarmor.com/play\n\n#ReadTheMachine #CivicArmor 
+ #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN04-en-video-2027-01-19@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN07-en-video-2027-01-19@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270119T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LEN04-en-video
+SUMMARY:VIDEO · read-the-machine · LEN07-en-video
 DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
- Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Buy Now\, Pa
- y Later: 4 easy payments\, 0% interest!” The second number\, read in 30 
- seconds. #ReadTheMachine #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:\n[0
- –3s HOOK\, card on screen] Somebody's offering you this: “Buy Now\, Pa
- y Later: 4 easy payments\, 0% interest!”\n[3–10s RED] Put on the red g
- lasses. Late fees pile on\, and it stacks across apps till you lose track.
- \n[10–16s AMBER] Now the amber ones: how fast do they want you to sign? 
- Autopay hits whether the money's there or not → overdraft.\n[16–22s BL
- UE] Blue: follow the money. The BNPL firm sells your payment data and rout
- es late fees up.\n[22–27s PAYOFF] The second number: $70. That's seven $
- 10 late fees across overdue plans.\n[27–30s CTA] This is one card from a
-  free game. Link in bio.
+ Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Refund Advan
+ ce: your tax refund NOW\, don't wait weeks.” The second number\, read in
+  30 seconds. #ReadTheMachine #CivicArmor #TheSecondNumber\n\nVIDEO SCRIPT:
+ \n[0–3s HOOK\, card on screen] Somebody's offering you this: “Refund A
+ dvance: your tax refund NOW\, don't wait weeks.”\n[3–10s RED] Put on t
+ he red glasses. Fees eat a refund you'd get free in a few days.\n[10–16s
+  AMBER] Now the amber ones: how fast do they want you to sign? Due when th
+ e IRS pays — any delay becomes your problem.\n[16–22s BLUE] Blue: foll
+ ow the money. The preparer\, the bank\, and the loan are one packaged prod
+ uct.\n[22–27s PAYOFF] The second number: $40. That's a $40 fee to run yo
+ ur refund through the preparer's bank\, no faster than free e-file.\n[27
+ –30s CTA] This is one card from a free game. Link in bio.
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN05-en-feed-2027-01-20@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN08-en-feed-2027-01-20@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270120T121500
 DURATION:PT15M
-SUMMARY:FEED · read-the-machine · LEN05-en-feed
+SUMMARY:FEED · read-the-machine · LEN08-en-feed
 DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
  tagram\, Facebook\, Threads\, LinkedIn (short version: X\, Bluesky)\n\nTHE
-  OFFER: “Overdraft Protection: we'll cover your card if you're short.”
- \n\n🔴 The cost: Up to ~$35 per swipe — a $4 coffee can cost ~$39 (man
- y banks now $0–$15).\n🟡 The clock: Charges reordered largest-first to
-  trigger the most fees.\n🔵 The connection: Overdraft fees are a top pro
- fit line for the bank behind it.\n\nThe second number: $175. That's five $
- 35 overdraft fees in a month.\nRead the machine. Don't become it.\nRead de
- als like this in the free game: getcivicarmor.com/play\n\n#ReadTheMachine 
- #CivicArmor #TheSecondNumber
+  OFFER: “Online Installment Loan: need $2\,000? Easy approval.”\n\n
+ 🔴 The cost: 100%+ APR by renting an out-of-state bank to dodge your sta
+ te's cap.\n🟡 The clock: Balloon structure — early payments barely tou
+ ch the principal.\n🔵 The connection: A fintech fronts it\; a far-off ba
+ nk lends its charter for a cut.\n\nThe second number: $1\,900. That's abou
+ t 100% a year on $2\,000 over 18 months.\nRead the machine. Don't become i
+ t.\nRead deals like this in the free game: getcivicarmor.com/play\n\n#Read
+ TheMachine #CivicArmor #TheSecondNumber
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN06-es-video-2027-01-21@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN09-es-video-2027-01-21@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270121T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LEN06-es-video
+SUMMARY:VIDEO · read-the-machine · LEN09-es-video
 DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
- Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“App de Adela
- ntos: recibe $100 antes. Sin interés\, ¡solo deja propina!” El segundo
-  número\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\n
- VIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece esto: “A
- pp de Adelantos: recibe $100 antes. Sin interés\, ¡solo deja propina!”
- \n[3–10s RED] Ponte los lentes rojos. Una “propina” de $14 + tarifa 
- sobre $100 por una semana ≈ 300%+ de APR.\n[10–16s AMBER] Ahora los á
- mbar: ¿qué tan rápido quieren que firmes? Se cobra solo el día de pago
- \; un mal momento desata una cascada de sobregiros.\n[16–22s BLUE] Azul:
-  sigue el dinero. La “propina” esquiva la ley de préstamos\; la app v
- ende tus datos bancarios.\n[22–27s PAYOFF] El segundo número: $112. Es 
- una propina más tarifa de $14\, ocho veces al año.\n[27–30s CTA] Es un
+ Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Constructor 
+ de Crédito: ¡construye tu crédito\, aprobación garantizada!” El segu
+ ndo número\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\
+ n\nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece esto: 
+ “Constructor de Crédito: ¡construye tu crédito\, aprobación garantiz
+ ada!”\n[3–10s RED] Ponte los lentes rojos. Pagas tarifas por un “pr
+ éstamo” que no puedes tocar\; puede que ni lo reporten.\n[10–16s AMBE
+ R] Ahora los ámbar: ¿qué tan rápido quieren que firmes? Cancela tarde 
+ y te comes meses de tarifas por nada.\n[16–22s BLUE] Azul: sigue el dine
+ ro. Las tarifas son el negocio\; “construir tu crédito” es la carnada
+ .\n[22–27s PAYOFF] El segundo número: $180. Es $15 al mes en cargos dur
+ ante un año\, por un préstamo que no puedes tocar.\n[27–30s CTA] Es un
  a carta de un juego gratis. Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:HOU14-en-feed-2027-01-22@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270122T121500
 DURATION:PT15M
 SUMMARY:FEED · real-help · HOU14-en-feed
@@ -1599,29 +1623,29 @@ DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nIns
  ber
 END:VEVENT
 BEGIN:VEVENT
-UID:LEN07-es-video-2027-01-23@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+UID:LEN10-es-video-2027-01-23@getcivicarmor.com
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270123T193000
 DURATION:PT15M
-SUMMARY:VIDEO · read-the-machine · LEN07-es-video
+SUMMARY:VIDEO · read-the-machine · LEN10-es-video
 DESCRIPTION:Tax season opens: fast-refund loans and fee-heavy tax prep\nTik
- Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Adelanto de 
- Reembolso: tu reembolso de impuestos YA\, sin esperar semanas.” El segun
- do número\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n
- \nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece esto: 
- “Adelanto de Reembolso: tu reembolso de impuestos YA\, sin esperar seman
- as.”\n[3–10s RED] Ponte los lentes rojos. Las tarifas + intereses se c
- omen un reembolso que te llegaría gratis en pocos días.\n[10–16s AMBER
- ] Ahora los ámbar: ¿qué tan rápido quieren que firmes? Se paga cuando 
- el IRS pague: cualquier retraso es tu problema.\n[16–22s BLUE] Azul: sig
- ue el dinero. El preparador\, el banco y el préstamo son un solo producto
-  empaquetado.\n[22–27s PAYOFF] El segundo número: $60. Es tarifas de ad
- elanto y de declaración sobre un reembolso que iba a llegar de todos modo
- s.\n[27–30s CTA] Es una carta de un juego gratis. Enlace en la bio.
+ Tok\, Instagram Reels\, YouTube Shorts\, Facebook Reels\n\n“Consolidaci
+ ón de Deudas: ¡un solo pago mensual bajo\, libre de deudas!” El segund
+ o número\, en 30 segundos. #LeeLaMáquina #CivicArmor #TheSecondNumber\n\
+ nVIDEO SCRIPT:\n[0–3s HOOK\, card on screen] Alguien te ofrece esto: “
+ Consolidación de Deudas: ¡un solo pago mensual bajo\, libre de deudas!
+ ”\n[3–10s RED] Ponte los lentes rojos. Pago más bajo = plazo más lar
+ go = más interés pagado en total.\n[10–16s AMBER] Ahora los ámbar: ¿
+ qué tan rápido quieren que firmes? Deja de pagar a tus acreedores como t
+ e dicen y tu crédito se hunde primero.\n[16–22s BLUE] Azul: sigue el di
+ nero. La “organización sin fines de lucro” se financia con tarifas de
+  los mismos prestamistas.\n[22–27s PAYOFF] El segundo número: $2\,100. 
+ Es un saldo de $10\,000 estirado de 3 a 5 años\, al 17%.\n[27–30s CTA] 
+ Es una carta de un juego gratis. Enlace en la bio.
 END:VEVENT
 BEGIN:VEVENT
 UID:HIS12-en-2027-01-24@getcivicarmor.com
-DTSTAMP:20261021T235058Z
+DTSTAMP:20261022T000545Z
 DTSTART;TZID=America/New_York:20270124T170000
 DURATION:PT15M
 SUMMARY:FEED · history · HIS12-en

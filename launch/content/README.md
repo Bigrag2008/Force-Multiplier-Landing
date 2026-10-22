@@ -9,7 +9,7 @@ Everything to promote Civic Armor, built from the game's own fact-checked cards,
 | `reels/` | **Finished vertical videos**, made on demand by `python3 scripts/make_reels.py` (about 15 seconds of work per reel; all 60 trap cards in both languages is about half an hour). Each reel has sound and a `.txt` voiceover script timed to it. The `reel` column in `calendar.csv` names the file for each video slot. They're not stored in git (too big): render them on your computer. |
 | `calendar.csv` | **The schedule:** 12 weeks, about 8 posts a week, each with its date, time, platforms, text, picture and video script. |
 | `calendar.ics` | The same schedule for Google Calendar or your phone's calendar (File → Import), so each post shows up as a reminder with its text inside. |
-| `NUMBERS_AUDIT.csv` | **Every trap card's number, checked.** 19 of the 60 close with plain arithmetic, shown in the `math` column. The other 41 are typical-cost estimates: each needs a cited source in the `source` column before its post or reel goes out. |
+| `NUMBERS_AUDIT.csv` | **Every trap card's number, checked.** 19 close with plain arithmetic; 38 more have sources (government, research, journalism) with the figure each one supports; 3 have no credible source yet and are kept out of posts and reels. Built from `game/NUMBER_SOURCES.json`. The source links came from web searches that couldn't open the pages, so **open each link and confirm the figure before its post goes out**. Each reel's `.txt` names its source at the top. |
 | `emails/` | The welcome sequence (3 emails), the launch-day email, and the every-other-week newsletter template. |
 
 ## Go live in four steps
@@ -61,7 +61,7 @@ The cards come from the game itself, so a number corrected in the game is correc
 
 ## Rules that protect the brand
 - **One public address: getcivicarmor.com.** Every post, reel, email, book page and QR code says `getcivicarmor.com/...` (`/play`, `/juega`, `/teachers`, `/my-deal`, `/guide`, `/book`, `/next`). Those short addresses forward to wherever things actually live, so a printed or spoken link never has to change.
-- **Every number shows its math.** Each reel and picture puts what the number is made of right under it ("= a $56.25 fee paid 8 times, like the typical payday borrower"), so a teacher or a skeptic with a calculator lands where you did. Before a card goes out, check it in `NUMBERS_AUDIT.csv`: if it says ESTIMATE, add a source first. The reel's `.txt` script says so at the top.
+- **Every number shows its math.** Each reel and picture puts what the number is made of right under it ("= a $56.25 fee paid 8 times, like the typical payday borrower"), so a teacher or a skeptic with a calculator lands where you did. Before a card goes out, open its source link in `NUMBERS_AUDIT.csv` and confirm the figure is on the page. Cards marked UNSUPPORTED are already left out; give one a source in `game/NUMBER_SOURCES.json` to bring it back.
 - **Nothing lives only in the audio.** Most people watch muted. The voiceover scripts say only what's on screen; if you ad-lib, add it as on-screen text too.
 - **Say "information, not legal or financial advice"** in your bio and on anything about someone's own job or case.
 - **When people DM you their situation:** listen, point them to *The Third Option* and real help (legal aid, the EEOC, a credit union), and never tell them what their case is worth or whether they'll win.
