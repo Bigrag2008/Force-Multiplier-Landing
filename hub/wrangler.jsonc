@@ -1,0 +1,11 @@
+// The Civic Armor hub as a Cloudflare Worker that only serves these files (no code).
+// In Cloudflare: Workers & Pages -> civic-armor -> Settings -> Build: root directory "hub", deploy command "npx wrangler deploy".
+{
+  "name": "civic-armor",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": ".",
+    // our own 404.html for any address that isn't a page or a short address in _redirects
+    "not_found_handling": "404-page"
+  }
+}

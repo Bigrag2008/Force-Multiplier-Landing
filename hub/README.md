@@ -21,10 +21,11 @@ When a link goes live, paste it in and push. A link left `""` makes its button s
 - `signupUrl`: the Google Apps Script address that writes sign-ups to your Sheet (below)
 - `playUrl`, `email`: the game's address and the contact email
 
-## Put it online (Cloudflare Pages, free)
-1. **Workers & Pages → Create → Pages → Connect to Git**, pick **The-Second-Number** (yes, the same repo as the game; this is a second project).
-2. Project name `civic-armor`. Framework preset **None**. Build command: leave empty. **Build output directory: `hub`**.
-3. **Save and Deploy**, then **Custom domains → Set up a domain →** `getcivicarmor.com`, and again for `www.getcivicarmor.com`.
+## Put it online (Cloudflare, free)
+The hub is a Cloudflare Worker that only serves these files: [`wrangler.jsonc`](wrangler.jsonc) says so, and [`.assetsignore`](.assetsignore) keeps this README and the config off the site.
+1. **Workers & Pages → Create → Import a repository →** The-Second-Number (the same repo as the game; this is a second project), named `civic-armor`.
+2. **Settings → Build:** root directory **`hub`**, build command empty, deploy command **`npx wrangler deploy`**.
+3. **Domains:** add `getcivicarmor.com` and `www.getcivicarmor.com`. Short addresses like `/play` and `/next` are paths on these, not subdomains of their own.
 
 ## The email list
 Until `signupUrl` is set, **Add me** opens the visitor's email app with a message to `hello@getcivicarmor.com`, so no sign-up is lost on day one.
