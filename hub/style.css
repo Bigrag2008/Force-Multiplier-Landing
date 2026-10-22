@@ -24,13 +24,17 @@ img { max-width: 100%; }
 .skip:focus { left: 16px; top: 8px; background: var(--gold); padding: 6px 10px; z-index: 9; }
 
 /* header */
-.top { border-bottom: 1px solid var(--line); }
+.top { background: var(--night); color: var(--paper); border-bottom: 1px solid rgba(246,238,220,.12); }
 .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; flex-wrap: wrap; }
 .brand { display: flex; align-items: center; gap: 10px; font: 800 18px/1 var(--sans); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; }
 .brand svg { width: 30px; height: 30px; flex: none; }
 .nav { display: flex; gap: 4px 18px; flex-wrap: wrap; font-size: 15px; font-weight: 600; }
 .nav a { text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent; }
-.nav a:hover, .nav a[aria-current="page"] { border-color: var(--gold); }
+.nav a { color: rgba(246,238,220,.88); }
+.nav a:hover, .nav a[aria-current="page"] { border-color: var(--gold); color: var(--paper); }
+.top .lang { border-color: rgba(246,238,220,.6); }
+.top .lang button { color: var(--paper); }
+.top .lang button[aria-pressed="true"] { background: var(--paper); color: var(--night); }
 
 /* hero */
 .hero { padding-top: 56px; padding-bottom: 40px; }
@@ -44,6 +48,82 @@ h3 { font-size: 22px; font-weight: 700; }
 .quote cite { display: block; margin-top: 6px; font: 600 14px/1.4 var(--sans); font-style: normal; color: var(--ink-soft); }
 .glasses { display: flex; gap: 6px; margin-top: 30px; }
 .glasses span { height: 6px; flex: 1; border-radius: 3px; }
+
+/* the dark hero */
+.hero-band { background:
+    radial-gradient(900px 520px at 85% 10%, rgba(230,57,70,.16), transparent 60%),
+    radial-gradient(800px 600px at 0% 100%, rgba(47,143,216,.14), transparent 60%),
+    var(--night);
+  color: var(--paper); }
+.hero-band .kicker { color: var(--gold); }
+.hero-band h1 { color: var(--paper); font-size: clamp(42px, 7vw, 74px); }
+.hero-band .gold { color: var(--gold); }
+.hero-band .lead { color: rgba(246,238,220,.84); }
+.hero-grid { display: grid; gap: 44px; grid-template-columns: 1fr; align-items: center; padding-top: 64px; padding-bottom: 72px; }
+@media (min-width: 900px) { .hero-grid { grid-template-columns: 1.15fr .85fr; gap: 56px; } }
+.btn.ghost { border-color: rgba(246,238,220,.7); color: var(--paper); }
+.btn.ghost:hover { background: rgba(246,238,220,.08); }
+.trust { margin: 18px 0 0; font-size: 14px; letter-spacing: .02em; color: rgba(246,238,220,.62); }
+
+/* the deal card, read through the red lens */
+.deal { position: relative; margin: 0; max-width: 420px; justify-self: center; width: 100%; }
+.deal-card { position: relative; background: var(--paper); color: var(--ink); border-radius: 14px; padding: 26px 26px 22px; transform: rotate(-2.2deg);
+  box-shadow: 0 30px 60px rgba(0,0,0,.45), 0 0 0 1px rgba(0,0,0,.05); }
+.deal-tag, .deal-label { font: 800 12px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; margin: 0; }
+.deal-tag { color: var(--ink-soft); }
+.deal-front { font: 700 26px/1.2 var(--serif); margin: 10px 0 18px; }
+.deal-hidden { position: relative; border-top: 2px dashed rgba(27,21,48,.18); padding-top: 16px; }
+.deal-label { color: var(--red); }
+.deal-num { font: 800 72px/1 var(--serif); color: var(--red); margin: 26px 0 24px; letter-spacing: -.01em; }
+.deal-math { margin: 0; font-size: 14px; color: var(--gold-deep); font-weight: 600; }
+/* decoder static over the number, until the lens clears it */
+.deal-hidden::after { content: ""; position: absolute; inset: 40px -8px -6px; border-radius: 6px;
+  background: repeating-linear-gradient(-45deg, rgba(230,57,70,.85) 0 3px, transparent 3px 9px), var(--paper);
+  animation: static-clear 1s ease-out 2.2s forwards; }
+.deal-dots { position: absolute; top: 22px; right: 22px; display: flex; gap: 6px; }
+.deal-dots i, .lenses .dot, .cover-game i { display: block; border-radius: 50%; }
+.deal-dots i { width: 12px; height: 12px; }
+.r { background: var(--red); } .a { background: var(--amber); } .b { background: var(--blue); }
+/* the lens sits in the number's own row: clear of the label above and the math below */
+.lens { position: absolute; z-index: 1; width: 112px; height: 112px; border-radius: 50%; border: 8px solid var(--red);
+  background: rgba(230,57,70,.05); box-shadow: 0 10px 26px rgba(0,0,0,.3); top: 35px; left: -40%;
+  animation: lens-sweep 2.6s ease-in-out .4s forwards; }
+.deal figcaption { margin-top: 22px; text-align: center; font-size: 13px; color: rgba(246,238,220,.6); }
+/* sweep across the card, then settle on the number */
+@keyframes lens-sweep { 0% { left: -40%; } 65% { left: 70%; } 100% { left: -6%; } }
+@keyframes static-clear { to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .lens { animation: none; left: -6%; }
+  .deal-hidden::after { animation: none; opacity: 0; }
+}
+
+/* the three lenses */
+.lenses-band { background: var(--paper-2); }
+.kicker.center { text-align: center; }
+.lenses { display: grid; gap: 18px; grid-template-columns: 1fr; margin-top: 8px; }
+@media (min-width: 760px) { .lenses { grid-template-columns: repeat(3, 1fr); } }
+.lens-item { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+.lens-item .dot { width: 34px; height: 34px; box-shadow: 0 0 0 6px rgba(27,21,48,.05); }
+.lens-item h3 { margin-top: 14px; }
+.lens-item p { margin: 8px 0 0; color: var(--ink-soft); font-size: 15px; }
+
+/* door covers */
+.cover { height: 150px; margin: -22px -22px 18px; border-radius: 14px 14px 0 0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 6px; }
+.cover span { font: 800 10px/1 var(--sans); letter-spacing: .24em; text-transform: uppercase; }
+.cover b { font: 800 26px/1.02 var(--serif); letter-spacing: .02em; }
+.cover-guide { background: linear-gradient(160deg, #241c40, var(--night)); color: var(--gold); }
+.cover-guide span { color: rgba(246,238,220,.75); }
+.cover-novel { background: linear-gradient(160deg, #7c1d26, #3a0f19); color: var(--paper); }
+.cover-novel span { color: rgba(246,238,220,.75); }
+.cover-game { flex-direction: row; gap: 10px; background: radial-gradient(circle at 50% 120%, rgba(242,182,50,.22), transparent 60%), #120e22; border-bottom: 1px solid rgba(246,238,220,.08); }
+.cover-game i { width: 22px; height: 22px; }
+.cover-game b { margin-left: 10px; font-size: 40px; color: var(--red); }
+
+/* Gloria's line */
+.quote-band { background: var(--night); color: var(--paper); text-align: center; }
+.quote-band blockquote { margin: 0 auto; max-width: 34em; }
+.quote-band p { font: italic 400 clamp(24px, 3.6vw, 36px)/1.35 var(--serif); margin: 0; }
+.quote-band cite { display: block; margin-top: 18px; font: 600 14px/1.4 var(--sans); font-style: normal; color: var(--gold); letter-spacing: .04em; }
 
 /* sections */
 section { padding: 44px 0; }
@@ -90,6 +170,8 @@ section + section { border-top: 1px solid var(--line); }
 .about-grid { display: grid; gap: 32px; grid-template-columns: 1fr; align-items: start; }
 @media (min-width: 860px) { .about-grid { grid-template-columns: 260px 1fr; gap: 56px; } .person { position: sticky; top: 32px; } }
 .person { text-align: center; background: var(--night); color: var(--paper); border-radius: 18px; padding: 30px 22px; }
+.portrait { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; margin-bottom: 18px;
+  box-shadow: 0 0 0 3px var(--gold); }
 .monogram { width: 120px; height: 120px; margin: 0 auto 16px; border-radius: 50%; display: grid; place-items: center;
   font: 800 46px/1 var(--serif); color: var(--night); background: var(--gold); box-shadow: 0 0 0 6px var(--night), 0 0 0 9px var(--gold); }
 .person-name { font: 700 22px/1.25 var(--serif); margin: 6px 0 0; }
@@ -135,3 +217,5 @@ footer p { margin: 0; }
 
 :focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .door { transition: none; } .door:hover { transform: none; } }
+/* colored bands meet edge to edge */
+.lenses-band, .quote-band, .about, .quote-band + section, .lenses-band + section { border-top: 0; }
