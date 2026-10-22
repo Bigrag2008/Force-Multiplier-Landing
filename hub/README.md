@@ -7,8 +7,8 @@ Plain HTML, CSS and a little JavaScript: no build step, nothing to install. It's
 | `/` | Civic Armor: the three doors, who's behind it, groups, the email list |
 | `/third-option/` | *The Third Option*, the guide, and the course |
 | `/book/` | *The Second Number*, Book One, the novel |
-| `/next/` | Where the card in the game box points (its QR code). English and Spanish. **Keep this address forever**; change where its doors go instead. |
-| `/play`, `/juega` (the game in Spanish), `/teachers`, `/my-deal`, `/guide`, `/course`, `/book`, `/game`, `/novel`, `/es` | Short addresses for flyers and the backs of the books ([`_redirects`](_redirects)) |
+| `/next/` | Where the card in the game box points (its QR code). English and Spanish (`/es` opens it in Spanish). **Keep this address forever**; change where its doors go instead. |
+| `/play`, `/juega` (the game in Spanish), `/teachers`, `/my-deal`, `/guide`, `/course`, `/book`, `/game`, `/novel` | Short addresses for flyers and the backs of the books ([`_redirects`](_redirects)) |
 
 The game itself lives at **play.getcivicarmor.com** (the rest of this repo; see the main README).
 
