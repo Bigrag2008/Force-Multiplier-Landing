@@ -24,7 +24,7 @@ When a link goes live, paste it in and push. A link left `""` makes its button s
 ## Put it online (Cloudflare, free)
 The hub is a Cloudflare Worker that only serves these files: [`wrangler.jsonc`](wrangler.jsonc) says so, and [`.assetsignore`](.assetsignore) keeps this README and the config off the site.
 1. **Workers & Pages → Create → Import a repository →** The-Second-Number (the same repo as the game; this is a second project), named `civic-armor`.
-2. **Settings → Build:** root directory **`hub`**, build command empty, deploy command **`npx wrangler deploy`**.
+2. **Settings → Build:** root directory **`hub`**, build command empty, deploy command **`npx wrangler deploy`**. Save, then push (or retry the latest build) so a build runs with these settings; it takes seconds, not minutes.
 3. **Domains:** add `getcivicarmor.com` and `www.getcivicarmor.com`. Short addresses like `/play` and `/next` are paths on these, not subdomains of their own.
 
 ## The email list
