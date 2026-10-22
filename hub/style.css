@@ -299,3 +299,22 @@ footer p { margin: 0; }
 .author-line { font: italic 400 clamp(18px, 2.3vw, 23px)/1.45 var(--serif); margin: 6px 0 10px; max-width: 34em; }
 .more { font-weight: 800; }
 .choices-band + section, .excerpt-band + section, .author-strip, .quote-band + section { border-top: 0; }
+
+/* ---------- /next: the page the box's QR code opens ---------- */
+.next-hero { padding-top: 56px; padding-bottom: 60px; }
+.next-hero h1 { font-size: clamp(34px, 6vw, 60px); max-width: 15em; }
+.teach { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: center; justify-content: space-between;
+  background: rgba(246,238,220,.06); border: 1px solid rgba(242,182,50,.45); border-radius: 16px; padding: 22px 24px; max-width: 760px; }
+.teach-title { margin: 0; font: 700 26px/1.2 var(--serif); color: var(--gold); }
+.teach-sub { margin: 6px 0 0; color: rgba(246,238,220,.8); }
+.share-msg { min-height: 1.4em; margin: 12px 0 0; color: var(--gold); font-weight: 700; }
+.paper-band { background: var(--paper-2); border-top: 0; }
+.paper-row { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: center; }
+@media (min-width: 760px) { .paper-row { grid-template-columns: 150px 1fr; gap: 36px; } }
+.paper-icon { position: relative; width: 120px; height: 150px; background: #fff; border-radius: 8px; transform: rotate(-4deg);
+  box-shadow: 0 14px 30px rgba(27,21,48,.18); padding: 22px 16px; display: flex; flex-direction: column; gap: 10px; }
+.paper-icon span { display: block; height: 7px; border-radius: 4px; background: rgba(27,21,48,.14); }
+.paper-icon span:nth-child(2) { width: 70%; } .paper-icon span:nth-child(3) { width: 85%; }
+.paper-icon b { position: absolute; right: -14px; bottom: -14px; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+  border: 6px solid var(--red); background: var(--paper); color: var(--red); font: 800 26px/1 var(--serif); }
+.paper-row .btn { margin-top: 18px; }

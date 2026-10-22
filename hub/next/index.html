@@ -28,50 +28,84 @@
 </header>
 
 <main id="main">
-  <div class="wrap hero">
-    <p class="kicker"><span class="en">You played The Second Number</span><span class="es">Jugaste The Second Number</span></p>
-    <h1><span class="en">Where it goes next</span><span class="es">A dónde lleva</span></h1>
-    <p class="lead">
-      <span class="en">You read the machine at the table. Now read it in your own life.</span>
-      <span class="es">Leíste la máquina en la mesa. Ahora léela en tu propia vida.</span>
-    </p>
-    <blockquote class="quote">
-      <span class="en">“Armor, ’cause it covers you. Civic, ’cause it ain’t yours. It’s everybody’s that lives here.”</span>
-      <span class="es">“Armadura, porque te cubre. Cívica, porque no es tuya. Es de todos los que viven aquí.”</span>
-      <cite><span class="en">Gloria, in</span><span class="es">Gloria, en</span> <i>The Second Number</i></cite>
-    </blockquote>
-
-    <h2 class="skip"><span class="en">Three doors</span><span class="es">Tres puertas</span></h2>
-    <div class="doors">
-      <a class="door" href="/book/">
-        <span class="tag"><span class="en">The novel</span><span class="es">La novela</span></span>
-        <h3>The Second Number, <span class="en">Book One</span><span class="es">Libro Uno</span></h3>
-        <p>
-          <span class="en">Marcus Ellison's story: the world the game comes from, on the same West Dayton blocks.</span>
-          <span class="es">La historia de Marcus Ellison: el mundo de donde viene el juego, en las mismas cuadras de West Dayton. (En inglés.)</span>
-        </p>
-        <span class="go"><span class="en">About the novel →</span><span class="es">Sobre la novela →</span></span>
-      </a>
-      <a class="door" href="/third-option/">
-        <span class="tag"><span class="en">The real-life version</span><span class="es">La versión de la vida real</span></span>
-        <h3>The Third Option</h3>
-        <p>
-          <span class="en">How to recognize, document and prove what's happening at your job, before you ever see a lawyer. A Civic Armor guide.</span>
-          <span class="es">Cómo reconocer, documentar y probar lo que pasa en tu trabajo, antes de ver a un abogado. Una guía de Civic Armor. (En inglés.)</span>
-        </p>
-        <span class="go"><span class="en">About the guide →</span><span class="es">Sobre la guía →</span></span>
-      </a>
-      <a class="door night" data-link="playUrl" href="https://play.getcivicarmor.com">
-        <span class="tag"><span class="en">Play again · free</span><span class="es">Juega otra vez · gratis</span></span>
-        <h3><span class="en">The game, online</span><span class="es">El juego, en línea</span></h3>
-        <p>
-          <span class="en">Every chapter of both campaigns, solo play, phones at the table, and a deal reader for your own paperwork.</span>
-          <span class="es">Todos los capítulos de las dos campañas, juego en solitario, teléfonos en la mesa y un lector para tus propios papeles. En español.</span>
-        </p>
-        <span class="go"><span class="en">Play now →</span><span class="es">Jugar ahora →</span></span>
-      </a>
+  <div class="hero-band">
+    <div class="wrap hero next-hero">
+      <p class="kicker"><span class="en">You played The Second Number</span><span class="es">Jugaste The Second Number</span></p>
+      <h1>
+        <span class="en">You read the machine at the table. <span class="gold">Now read it in your own life.</span></span>
+        <span class="es">Leíste la máquina en la mesa. <span class="gold">Ahora léela en tu propia vida.</span></span>
+      </h1>
+      <div class="teach">
+        <div>
+          <p class="teach-title"><span class="en">Now teach one person.</span><span class="es">Ahora enséñale a una persona.</span></p>
+          <p class="teach-sub"><span class="en">That's the price of the lesson. Send them the game: it's free.</span><span class="es">Ese es el precio de la lección. Mándale el juego: es gratis.</span></p>
+        </div>
+        <button class="btn gold" type="button" data-share>
+          <span class="en">Send it to one person</span><span class="es">Mándaselo a alguien</span>
+        </button>
+      </div>
+      <p class="share-msg" role="status" aria-live="polite"></p>
     </div>
   </div>
+
+  <section>
+    <div class="wrap">
+      <p class="kicker"><span class="en">Three doors</span><span class="es">Tres puertas</span></p>
+      <h2><span class="en">Where it goes next</span><span class="es">A dónde lleva</span></h2>
+      <div class="doors">
+        <a class="door" href="/book/">
+          <div class="cover cover-novel" aria-hidden="true"><span>Book One</span><b>THE<br>SECOND<br>NUMBER</b></div>
+          <span class="tag"><span class="en">The novel</span><span class="es">La novela</span></span>
+          <h3>The Second Number, <span class="en">Book One</span><span class="es">Libro Uno</span></h3>
+          <p>
+            <span class="en">Marcus Ellison's story: the world the game comes from, on the same West Dayton blocks.</span>
+            <span class="es">La historia de Marcus Ellison: el mundo de donde viene el juego, en las mismas cuadras de West Dayton. (En inglés.)</span>
+          </p>
+          <span class="go"><span class="en">About the novel →</span><span class="es">Sobre la novela →</span></span>
+        </a>
+        <a class="door" href="/third-option/">
+          <div class="cover cover-guide" aria-hidden="true"><span>A Civic Armor guide</span><b>THE<br>THIRD<br>OPTION</b></div>
+          <span class="tag"><span class="en">The real-life version</span><span class="es">La versión de la vida real</span></span>
+          <h3>The Third Option</h3>
+          <p>
+            <span class="en">How to recognize, document and prove what's happening at your job, before you ever see a lawyer.</span>
+            <span class="es">Cómo reconocer, documentar y probar lo que pasa en tu trabajo, antes de ver a un abogado. (En inglés.)</span>
+          </p>
+          <span class="go"><span class="en">About the guide →</span><span class="es">Sobre la guía →</span></span>
+        </a>
+        <a class="door night" data-link="playUrl" data-es-href="https://play.getcivicarmor.com/es/" href="https://play.getcivicarmor.com">
+          <div class="cover cover-game" aria-hidden="true"><i class="r"></i><i class="a"></i><i class="b"></i><b>$450</b></div>
+          <span class="tag"><span class="en">Play again · free</span><span class="es">Juega otra vez · gratis</span></span>
+          <h3><span class="en">The game, online</span><span class="es">El juego, en línea</span></h3>
+          <p>
+            <span class="en">Every chapter of both campaigns, solo play, and phones at the table.</span>
+            <span class="es">Todos los capítulos de las dos campañas, juego en solitario y teléfonos en la mesa. En español.</span>
+          </p>
+          <span class="go"><span class="en">Play now →</span><span class="es">Jugar ahora →</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="paper-band">
+    <div class="wrap paper-row">
+      <div class="paper-icon" aria-hidden="true"><span></span><span></span><span></span><b>?</b></div>
+      <div>
+        <h2><span class="en">Got a real offer in your hand?</span><span class="es">¿Tienes una oferta real en la mano?</span></h2>
+        <p class="sub"><span class="en">Type in the numbers from a loan, a lease or a bill, and the game works out its second number. It stays on your phone; nothing is uploaded.</span><span class="es">Escribe los números de un préstamo, un contrato o una factura, y el juego calcula su segundo número. Se queda en tu teléfono; no se sube nada.</span></p>
+        <a class="btn primary" href="/my-deal" data-es-href="https://play.getcivicarmor.com/my-deal/?lang=es"><span class="en">Read your own deal</span><span class="es">Lee tu propio trato</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote-band">
+    <div class="wrap">
+      <blockquote>
+        <p><span class="en">“Armor, ’cause it covers you. Civic, ’cause it ain’t yours. It’s everybody’s that lives here.”</span><span class="es">“Armadura, porque te cubre. Cívica, porque no es tuya. Es de todos los que viven aquí.”</span></p>
+        <cite><span class="en">Gloria, in</span><span class="es">Gloria, en</span> <i>The Second Number</i></cite>
+      </blockquote>
+    </div>
+  </section>
 
   <section id="list">
     <div class="wrap">
@@ -95,6 +129,17 @@
             <span class="es">Solo usamos tu correo para enviarte noticias de Civic Armor. Responde a cualquier correo para salir de la lista.</span>
           </p>
         </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="author-strip">
+    <div class="wrap author-row">
+      <img src="/lamont.jpg" width="640" height="800" alt="Lamont Ragland II" loading="lazy">
+      <div>
+        <p class="kicker"><span class="en">Made by Lamont Ragland II</span><span class="es">Hecho por Lamont Ragland II</span></p>
+        <p class="author-line"><span class="en">“I'm not here to be a hero. I'm just trying to be the change I wish existed when I watched people get hurt and stay stuck.”</span><span class="es">“No estoy aquí para ser un héroe. Solo intento ser el cambio que me hubiera gustado ver cuando veía a la gente salir lastimada y quedarse atrapada.”</span></p>
+        <a class="more" href="/#about"><span class="en">Who's behind Civic Armor →</span><span class="es">Quién está detrás de Civic Armor →</span></a>
       </div>
     </div>
   </section>

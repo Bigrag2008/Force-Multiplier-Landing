@@ -35,6 +35,11 @@
       document.querySelectorAll(".lang button").forEach(function (b) {
         b.setAttribute("aria-pressed", String(b.value === l));
       });
+      // links that have a Spanish address follow the switch
+      document.querySelectorAll("[data-es-href]").forEach(function (a) {
+        if (!a.hasAttribute("data-en-href")) a.setAttribute("data-en-href", a.getAttribute("href"));
+        a.setAttribute("href", l === "es" ? a.getAttribute("data-es-href") : a.getAttribute("data-en-href"));
+      });
       try { localStorage.setItem("sn-lang", l); } catch { /* no storage */ }
     };
     set(pick === "es" ? "es" : "en");
@@ -42,6 +47,26 @@
       b.addEventListener("click", function () { set(b.value); });
     });
   }
+
+  // "Send it to one person": the phone's share sheet, or copy the link
+  document.querySelectorAll("[data-share]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var es = root.getAttribute("data-lang") === "es";
+      var url = "https://getcivicarmor.com/" + (es ? "juega" : "play");
+      var text = es ? "Juega The Second Number conmigo: aprende a ver el segundo número en cualquier trato. Es gratis."
+                    : "Play The Second Number with me: learn to see the second number in any deal. It's free.";
+      var msg = document.querySelector(".share-msg");
+      if (navigator.share) {
+        navigator.share({ title: "The Second Number", text: text, url: url }).catch(function () {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text + " " + url).then(function () {
+          if (msg) msg.textContent = es ? "Enlace copiado. Pégalo en un mensaje." : "Link copied. Paste it into a text.";
+        });
+      } else if (msg) {
+        msg.textContent = url;
+      }
+    });
+  });
 
   // the email list
   document.querySelectorAll("form[data-signup]").forEach(function (form) {
