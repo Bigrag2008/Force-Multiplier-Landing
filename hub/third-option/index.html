@@ -11,7 +11,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;1,9..144,400&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,800;1,9..144,400&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
@@ -32,56 +32,97 @@
 </header>
 
 <main id="main">
-  <div class="wrap hero two">
-    <div>
-      <p class="kicker">A Civic Armor guide</p>
-      <h1>The Third Option</h1>
-      <p class="lead">Recognize it. Document it. Prove it. Before you ever see a lawyer.</p>
-      <p class="sub">Something happened at work, and you can't stop thinking about it. Passed over for something you earned. Write-ups out of nowhere. The sudden chill after you spoke up. Most people feel like they have two options: swallow it, or blow up. There's a third one. Find out.</p>
-      <div class="btns">
-        <a class="btn primary" data-link="guideBuyUrl" data-soon="Coming soon: get told when it's out" href="/#list">Get the book</a>
-        <a class="btn" href="#inside">What's inside</a>
+  <div class="hero-band">
+    <div class="wrap hero hero-grid">
+      <div>
+        <p class="kicker">A Civic Armor guide</p>
+        <h1>The Third Option</h1>
+        <p class="lead big-lead">Swallow it. Blow up. <span class="gold">Or find out.</span></p>
+        <p class="lead">How to recognize, document and prove what's happening at your job, before you ever see a lawyer.</p>
+        <div class="btns">
+          <a class="btn gold" data-link="guideBuyUrl" data-soon="Coming soon: get told when it's out" href="/#list">Get the book</a>
+          <a class="btn ghost" href="#inside">What's inside</a>
+        </div>
+        <p class="trust">By Lamont Ragland II · Educational information, not legal advice</p>
       </div>
-    </div>
-    <div class="bookcover" role="img" aria-label="The cover of The Third Option">
-      <span class="t1">You are not powerless</span>
-      <span class="t2">THE<br>THIRD<br>OPTION</span>
-      <span class="t3">Swallow it. Blow up. Or find out.<br>There's a third option.</span>
-      <span class="t4">Lamont Ragland II</span>
+      <div class="book3d book-guide" role="img" aria-label="The cover of The Third Option">
+        <div class="book3d-cover">
+          <span class="t1">You are not powerless</span>
+          <span class="t2">THE<br>THIRD<br>OPTION</span>
+          <span class="t3">Recognize it. Document it. Prove it.</span>
+          <span class="t4">Lamont Ragland II</span>
+        </div>
+      </div>
     </div>
   </div>
 
+  <section class="choices-band">
+    <div class="wrap">
+      <h2 class="center">Something happened at work. You can't stop thinking about it.</h2>
+      <p class="sub center">Passed over for something you earned. Write-ups out of nowhere. The sudden chill after you spoke up. Most people feel like they have two options.</p>
+      <div class="choices">
+        <div class="choice no"><span>Option one</span><h3>Swallow it</h3><p>Keep your head down and hope it stops. It usually happens again.</p></div>
+        <div class="choice no"><span>Option two</span><h3>Blow up</h3><p>Say what you feel, and hand them the reason they were looking for.</p></div>
+        <div class="choice yes"><span>The third option</span><h3>Find out</h3><p>See it clearly, build the record, judge it honestly, and walk in prepared.</p></div>
+      </div>
+    </div>
+  </section>
+
   <section id="inside">
     <div class="wrap">
-      <h2>What's inside</h2>
-      <p class="sub">Not a book you read once and shelve. A working instrument: every tool in it is something you'll actually do, with your own situation in mind.</p>
-      <ol class="steps">
-        <li><b>See it</b>What actually counts as discrimination: because of who you are, a real harm, and a connection between the two.</li>
-        <li><b>Prove it</b>The ladder of evidence. Turn a bad feeling and a spoken moment into a pattern of small, dated, real pieces that point one way.</li>
-        <li><b>Judge it</b>An honest read of your own case, strengths and weaknesses both. The people who do well saw their case clearly first.</li>
-        <li><b>File it</b>The multi-claim map, and the deadlines you cannot miss.</li>
-        <li><b>After you file</b>What happens next, so the waiting isn't the scary part.</li>
-        <li><b>One case, start to finish</b>Follow Renée from a bad feeling to a prepared case, the whole way through.</li>
+      <p class="kicker">What's inside</p>
+      <h2>A working instrument, not a shelf book</h2>
+      <p class="sub">Every tool in it is something you'll actually do, with your own situation in mind. Take your time. Stop when you need to. Come back.</p>
+      <ol class="path">
+        <li><b>See it</b><span>What actually counts as discrimination: because of who you are, a real harm, and a connection between the two.</span></li>
+        <li><b>Prove it</b><span>The ladder of evidence. Turn a bad feeling and a spoken moment into a pattern of small, dated, real pieces that point one way.</span></li>
+        <li><b>Judge it</b><span>An honest read of your own case, strengths and weaknesses both. The people who do well saw their case clearly first.</span></li>
+        <li><b>File it</b><span>The multi-claim map, and the deadlines you cannot miss.</span></li>
+        <li><b>After you file</b><span>What happens next, so the waiting isn't the scary part.</span></li>
+        <li><b>One case, start to finish</b><span>Everything you built, in one place.</span></li>
       </ol>
-      <div class="box">
-        <b>Educational only, not legal advice.</b> This book helps you understand, document and assess what might be happening to you. It doesn't create an attorney-client relationship and isn't a substitute for a licensed attorney in your state. It helps you see and prepare; a lawyer confirms and acts.
-      </div>
+    </div>
+  </section>
+
+  <section class="quote-band">
+    <div class="wrap">
+      <blockquote>
+        <p>“You'll also meet someone named Renée. She's not a real person. She's a composite, built from the kinds of situations I studied for years. You'll follow her through the whole book.”</p>
+        <cite>The Third Option, How to Use This Book</cite>
+      </blockquote>
     </div>
   </section>
 
   <section id="course">
     <div class="wrap two">
       <div>
-        <h2>The next step: the course</h2>
-        <p class="sub">The book gives you the whole method. The Civic Armor course does what a book can't: it walks through your own situation with hands-on tools, like a case-strength check, a multi-claim map and an evidence sorter, and connects you, when you're ready, to an attorney who understands the preparation you've done.</p>
+        <p class="kicker">The next step</p>
+        <h2>The Civic Armor course</h2>
+        <p class="sub">The book gives you the whole method. The course does what a book can't: it walks through your own situation with hands-on tools, like a case-strength check, a multi-claim map and an evidence sorter, and connects you, when you're ready, to an attorney who understands the preparation you've done.</p>
         <div class="btns">
           <a class="btn primary" data-link="courseUrl" data-soon="Join the course waitlist" href="/#list">Start the course</a>
         </div>
       </div>
-      <div class="box" style="margin-top:0">
-        <h3 style="color:var(--ink)">Learned it at the table first?</h3>
-        <p><i>The Second Number</i> board game is the same idea in a game: read every deal through three colored lenses before you sign it. It's free, and it plays in about 25 minutes.</p>
-        <p><a data-link="playUrl" href="https://play.getcivicarmor.com">Play the game →</a></p>
+      <div class="side-cards">
+        <div class="box" style="margin-top:0">
+          <b>Educational only, not legal advice.</b> This book helps you understand, document and assess what might be happening to you. It doesn't create an attorney-client relationship and isn't a substitute for a licensed attorney in your state. It helps you see and prepare; a lawyer confirms and acts.
+        </div>
+        <a class="door night mini" data-link="playUrl" href="https://play.getcivicarmor.com">
+          <span class="tag">Learned it at the table first?</span>
+          <p><i>The Second Number</i> board game is the same idea: read every deal through three lenses before you sign. Free, about 25 minutes.</p>
+          <span class="go">Play the game →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="author-strip">
+    <div class="wrap author-row">
+      <img src="/lamont.jpg" width="640" height="800" alt="Lamont Ragland II" loading="lazy">
+      <div>
+        <p class="kicker">Written by Lamont Ragland II</p>
+        <p class="author-line">“I'm not a lawyer. I'm the person who helps you understand what happened to you before you ever walk into a lawyer's office.”</p>
+        <a class="more" href="/#about">Who's behind Civic Armor →</a>
       </div>
     </div>
   </section>

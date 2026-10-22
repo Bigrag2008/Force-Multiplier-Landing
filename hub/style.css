@@ -219,3 +219,83 @@ footer p { margin: 0; }
 @media (prefers-reduced-motion: reduce) { .door { transition: none; } .door:hover { transform: none; } }
 /* colored bands meet edge to edge */
 .lenses-band, .quote-band, .about, .quote-band + section, .lenses-band + section { border-top: 0; }
+
+/* ---------- book pages ---------- */
+.hero-red { background:
+    radial-gradient(900px 520px at 85% 10%, rgba(230,57,70,.28), transparent 60%),
+    radial-gradient(700px 500px at 0% 100%, rgba(242,182,50,.10), transparent 60%),
+    #1a1028; }
+.big-lead { font: 700 clamp(24px, 3.4vw, 34px)/1.25 var(--serif); color: var(--paper) !important; }
+.center { text-align: center; margin-left: auto; margin-right: auto; }
+
+/* a book, standing at an angle */
+.book3d { justify-self: center; perspective: 1400px; width: min(300px, 78vw); }
+.book3d-cover { position: relative; aspect-ratio: 2 / 3; border-radius: 4px 10px 10px 4px; padding: 30px 24px; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center; transform: rotateY(-16deg) rotateX(2deg);
+  box-shadow: 18px 26px 50px rgba(0,0,0,.55), inset 10px 0 14px -8px rgba(0,0,0,.6), inset -1px 0 0 rgba(255,255,255,.08); }
+.book3d-cover::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 14px; border-radius: 4px 0 0 4px;
+  background: linear-gradient(90deg, rgba(0,0,0,.45), rgba(255,255,255,.06)); }
+.book3d .t1 { font: 800 11px/1.3 var(--sans); letter-spacing: .26em; text-transform: uppercase; }
+.book3d .t2 { font: 800 clamp(36px, 5vw, 46px)/1 var(--serif); margin: 16px 0; }
+.book3d .t3 { font: italic 14px/1.4 var(--serif); max-width: 15em; }
+.book3d .t4 { font: 700 11px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; margin-top: 26px; }
+.book-guide .book3d-cover { background: linear-gradient(160deg, #2a2148, #140f26); color: var(--paper); border: 1px solid rgba(242,182,50,.35); }
+.book-guide .t1, .book-guide .t2 { color: var(--gold); }
+.book-novel .book3d-cover { background: linear-gradient(160deg, #8a2230, #3a0f19); color: var(--paper); }
+.book-novel .t1 { color: var(--gold-l, #F7CF6B); }
+.book-novel .t2 { color: var(--paper); }
+@media (prefers-reduced-motion: no-preference) { .book3d-cover { transition: transform .4s ease; } .book3d:hover .book3d-cover { transform: rotateY(-6deg); } }
+
+/* swallow it / blow up / find out */
+.choices-band { background: var(--paper-2); }
+.choices { display: grid; gap: 16px; grid-template-columns: 1fr; margin-top: 28px; }
+@media (min-width: 760px) { .choices { grid-template-columns: 1fr 1fr 1.15fr; align-items: stretch; } }
+.choice { border-radius: 14px; padding: 22px; background: #fff; border: 1px solid var(--line); }
+.choice span { font: 800 11px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
+.choice h3 { margin-top: 10px; font-size: 26px; }
+.choice p { margin: 8px 0 0; color: var(--ink-soft); font-size: 15px; }
+.choice.no h3 { text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 3px; color: var(--ink-soft); }
+.choice.yes { background: var(--night); color: var(--paper); border-color: var(--night); box-shadow: 0 0 0 3px var(--gold); }
+.choice.yes span { color: var(--gold); }
+.choice.yes h3 { color: var(--gold); font-size: 30px; }
+.choice.yes p { color: rgba(246,238,220,.85); }
+
+/* the numbered path through the book */
+.path { list-style: none; counter-reset: step; padding: 0; margin: 28px 0 0; display: grid; gap: 14px; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .path { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1000px) { .path { grid-template-columns: 1fr 1fr 1fr; } }
+.path li { counter-increment: step; position: relative; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px 20px 20px 74px; }
+.path li::before { content: counter(step); position: absolute; left: 18px; top: 18px; width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--night); color: var(--gold); font: 800 19px/1 var(--serif); }
+.path b { display: block; font: 700 19px/1.3 var(--serif); }
+.path span { display: block; margin-top: 4px; color: var(--ink-soft); font-size: 15px; }
+
+.side-cards { display: grid; gap: 16px; }
+.door.mini { padding: 20px; }
+.door.mini p { margin: 8px 0 0; }
+
+/* the novel: excerpt, parts, chips */
+.excerpt-band { background: var(--paper); }
+.excerpt { max-width: 760px; }
+.excerpt .ex { font: 400 clamp(22px, 3vw, 30px)/1.4 var(--serif); margin: 14px 0 0; }
+.excerpt .ex.strong { font-weight: 700; color: var(--red); }
+.parts { display: grid; gap: 14px; }
+.part { background: var(--night); color: var(--paper); border-radius: 14px; padding: 22px; }
+.part span { font: 800 11px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+.part h3 { margin-top: 8px; font-size: 26px; }
+.part p { margin: 8px 0 0; color: rgba(246,238,220,.82); font-size: 15px; }
+.chips { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.chips li { padding: 8px 14px; border-radius: 999px; background: #fff; border: 1px solid var(--line); font-size: 14px; font-weight: 600; }
+.chips li:nth-child(3n+1) { box-shadow: inset 4px 0 0 var(--red); }
+.chips li:nth-child(3n+2) { box-shadow: inset 4px 0 0 var(--amber); }
+.chips li:nth-child(3n) { box-shadow: inset 4px 0 0 var(--blue); }
+.two-doors { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 32px; }
+
+/* the author, at the foot of a book page */
+.author-strip { background: var(--paper-2); }
+.author-row { display: grid; grid-template-columns: 96px 1fr; gap: 22px; align-items: center; }
+@media (min-width: 700px) { .author-row { grid-template-columns: 130px 1fr; gap: 30px; } }
+.author-row img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; box-shadow: 0 0 0 3px var(--gold); }
+.author-line { font: italic 400 clamp(18px, 2.3vw, 23px)/1.45 var(--serif); margin: 6px 0 10px; max-width: 34em; }
+.more { font-weight: 800; }
+.choices-band + section, .excerpt-band + section, .author-strip, .quote-band + section { border-top: 0; }
